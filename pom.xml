@@ -22,11 +22,21 @@
 	</parent>
 	<dependencies>
 
-	<!-- Spring boot dependencies -->
+	<!-- Spring boot web for rest services -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+	<!-- Spring data to connect to sql db -->
+       <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
 
 	<!-- Misc dependencies -->
 		<dependency>
@@ -34,7 +44,7 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+		
 	<!-- Testing dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -42,19 +52,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
 			<version>2.0.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.skyscreamer</groupId>
-			<artifactId>jsonassert</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -70,7 +70,7 @@
 							<goal>build</goal>
 						</goals>
 						<configuration>
-							<appClass>org.galatea.starter.App</appClass>
+							<appClass>org.galatea.starter.Application</appClass>
 							<manifest>
 								<entry>
 									<key>JVM-Args</key>
