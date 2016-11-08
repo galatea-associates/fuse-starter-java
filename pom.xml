@@ -26,19 +26,29 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 			<exclusions>
- 				<!-- Exclude so we can use log4j instead  -->
- 				<exclusion>
+				<!-- Exclude so we can use log4j instead -->
+				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-logging</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<!-- Use log4j instead of logback -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
+
+		<!--  Use spring-aop and aspectj for our aspects -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+		</dependency>
+        <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+        </dependency>
 
 		<!-- Spring boot web for rest services -->
 		<dependency>
@@ -46,23 +56,31 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- Spring data to connect to sql db. We use H2 for now to keep things 
-			simple. You'll want to replace h2 with something else -->
+		<!-- Spring data to connect to sql db. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<!-- We use H2 as our database. While this is embedded inside the jvm, 
+			we will treat it like it's an off jvm resource for the purposes of this sample. -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
 
-		<!-- Misc dependencies -->
+		<!-- Lombok for tostring, hashcode, etc -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- Gives us a logging aspect -->
+        <dependency>
+                 <groupId>net.sf.aspect4log</groupId>
+                 <artifactId>aspect4log</artifactId>
+                 <version>1.0.7</version>
+         </dependency>
 
 		<!-- Testing dependencies -->
 		<dependency>
@@ -75,6 +93,11 @@
 			<artifactId>awaitility</artifactId>
 			<version>2.0.0</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>co.paralleluniverse</groupId>
+			<artifactId>capsule</artifactId>
+			<version>1.0.3</version>
 		</dependency>
 	</dependencies>
 	<build>

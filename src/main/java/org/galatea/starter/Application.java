@@ -13,7 +13,8 @@ import org.springframework.context.ApplicationContext;
 public class Application {
 
   /**
-   * Start up the spring context.
+   * Start up the spring context. java -Dcapsule.log=verbose -Dcapsule.mode=uat -jar
+   * target/fuse-starter-java-0.0.1-SNAPSHOT-capsule.jar
    *
    * @param args command line args
    */
