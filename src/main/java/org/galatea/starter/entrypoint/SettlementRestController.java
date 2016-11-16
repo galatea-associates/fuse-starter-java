@@ -1,4 +1,4 @@
-package org.galatea.starter.controllor;
+package org.galatea.starter.entrypoint;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
