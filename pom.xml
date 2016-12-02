@@ -40,15 +40,15 @@
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 
-		<!--  Use spring-aop and aspectj for our aspects -->
+		<!-- Use spring-aop and aspectj for our aspects -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 		</dependency>
-        <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjweaver</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+		</dependency>
 
 		<!-- Spring boot web for rest services -->
 		<dependency>
@@ -61,8 +61,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!-- We use H2 as our database. While this is embedded inside the jvm, 
-			we will treat it like it's an off jvm resource for the purposes of this sample. -->
+		
+		<!-- We use H2 as an EXTERNAL database in the same way as sybase, oracle, 
+			etc. We do not treat it as an embedded database. You should replace this 
+			dependency with your actual database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -74,13 +76,20 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- Gives us a logging aspect -->
-        <dependency>
-                 <groupId>net.sf.aspect4log</groupId>
-                 <artifactId>aspect4log</artifactId>
-                 <version>1.0.7</version>
-         </dependency>
+		<dependency>
+			<groupId>net.sf.aspect4log</groupId>
+			<artifactId>aspect4log</artifactId>
+			<version>1.0.7</version>
+		</dependency>
+
+		<!-- Useful collections -->
+		<dependency>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+			<version>1.0</version>
+		</dependency>
 
 		<!-- Testing dependencies -->
 		<dependency>
