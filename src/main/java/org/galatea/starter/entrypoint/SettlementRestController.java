@@ -42,19 +42,21 @@ public class SettlementRestController {
   @Autowired
   SettlementService settlementService;
 
-  @PostMapping(value = "/settlementEngine", consumes = {MediaType.APPLICATION_JSON_VALUE})
+  public static final String SETTLE_MISSION_PATH = "/settlementEngine";
+  public static final String GET_MISSION_PATH = SETTLE_MISSION_PATH + "/mission/";
+
+  @PostMapping(value = SETTLE_MISSION_PATH, consumes = {MediaType.APPLICATION_JSON_VALUE})
   public ResponseEntity<Set<String>> settleAgreement(
       @RequestBody final List<TradeAgreement> agreements) {
     Set<Long> missionIds = settlementService.spawnMissions(agreements);
-    Set<String> missionIdUris = missionIds.stream().map(id -> "/settlementEngine/mission/" + id)
-        .collect(Collectors.toSet());
+    Set<String> missionIdUris =
+        missionIds.stream().map(id -> GET_MISSION_PATH + id).collect(Collectors.toSet());
 
     return ResponseEntity.accepted().body(missionIdUris);
   }
 
-  @GetMapping(value = "/settlementEngine/mission/{id}",
-      produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<SettlementMission> findMission(@PathVariable final Long id) {
+  @GetMapping(value = GET_MISSION_PATH + "{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+  public ResponseEntity<SettlementMission> getMission(@PathVariable final Long id) {
 
     Optional<SettlementMission> msn = settlementService.findMission(id);
 

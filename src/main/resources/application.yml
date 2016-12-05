@@ -5,7 +5,10 @@ spring:
       driver-class-name: org.h2.Driver
    jpa:
       hibernate:
-         ddl-auto: validate      
+         ddl-auto: validate
+      database-platform: org.hibernate.dialect.MySQLDialect
+jms:
+   listener-concurrency: 1-5      
 ---
 # Dev properties go here
 spring:
