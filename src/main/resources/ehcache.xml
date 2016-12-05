@@ -3,6 +3,8 @@
   xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
   updateCheck="false">
 
+  <!-- Look here for how to configure this file: http://www.ehcache.org/ehcache.xml -->
+
   <diskStore path="java.io.tmpdir" />
 
   <!-- Default Cache Configuration, with name 'default' -->
