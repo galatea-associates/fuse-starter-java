@@ -81,7 +81,10 @@
 		</dependency>
 
 		<!-- Lombok for tostring, hashcode, etc -->
-		<dependency>
+		<!-- See: https://projectlombok.org/ -->
+		<!-- Eclipse plugin to recognizes the Lombok annotations: http://jnb.ociweb.com/jnb/jnbJan2010.html#installation -->
+		<!-- IntelliJ plugin to recognize Lombok annotations: https://plugins.jetbrains.com/plugin/6317 -->	
+			<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
