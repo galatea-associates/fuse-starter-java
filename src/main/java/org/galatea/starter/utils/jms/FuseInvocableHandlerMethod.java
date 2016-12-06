@@ -15,19 +15,9 @@ import java.lang.reflect.Method;
 @EqualsAndHashCode(callSuper = true)
 public class FuseInvocableHandlerMethod extends InvocableHandlerMethod {
 
-
   public FuseInvocableHandlerMethod(final Object bean, final Method method) {
     super(bean, method);
   }
-
-  // @Override
-  // public Object invoke(final Message<?> message, final Object... providedArgs) throws Exception
-  // {
-  // log.info("invoking handler method {}, {}", message, providedArgs);
-  //
-  // // Parsing errors will happen here
-  // return super.invoke(message, providedArgs);
-  // }
 
   @Override
   protected Object doInvoke(final Object... args) throws Exception {

@@ -5,7 +5,7 @@ spring:
       driver-class-name: org.h2.Driver
    jpa:
       hibernate:
-         ddl-auto: validate
+         ddl-auto: update
       database-platform: org.hibernate.dialect.MySQLDialect
 jms:
    listener-concurrency: 1-5
@@ -18,6 +18,9 @@ spring:
    datasource:
       username: sa
       password:
+   jpa:
+      hibernate:
+         ddl-auto: validate
 ---
 # UAT properties go here
 spring:

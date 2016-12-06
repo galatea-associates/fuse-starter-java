@@ -34,11 +34,7 @@ import javax.jms.TextMessage;
 @Slf4j
 public class JmsConfig implements JmsListenerConfigurer {
 
-  // The number of concurrent threads that can pull messages off the queue
-  @Value("${jms.listener-concurrency}")
-  protected String listenerConcurrency;
-
-  // The number of concurrent threads that can pull messages off the queue
+  // Max number of times we are willing to retry a message
   @Value("${jms.max-retry}")
   protected Integer maxRetryCount;
 

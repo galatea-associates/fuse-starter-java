@@ -36,8 +36,5 @@ public class FuseMessageHandlerMethodFactory extends DefaultMessageHandlerMethod
         (HandlerMethodArgumentResolverComposite) ReflectionUtils.getField(f, this));
 
     return handlerMethod;
-
-    // InvocableHandlerMethod h = super.createInvocableHandlerMethod(bean, method);
-    // return new FuseInvocableHandlerMethod(h);
   }
 }
