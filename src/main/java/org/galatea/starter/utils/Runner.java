@@ -12,8 +12,10 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
+import org.galatea.starter.domain.TradeAgreement;
 import org.springframework.util.StopWatch;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.locks.Lock;
 
 /**
@@ -79,4 +81,29 @@ public class Runner {
     };
   }
 
+  public static <T> T setThreadAndCall(final Callable<T> call, final String suffix)
+      throws Exception {
+    if (suffix.isEmpty()) {
+      return call.call();
+    }
+
+    String oldName = Thread.currentThread().getName();
+    Thread.currentThread().setName(oldName + "-" + suffix);
+    try {
+      return call.call();
+    } finally {
+      Thread.currentThread().setName(oldName);
+    }
+  }
+
+  public static String getSuffixFor(final Object... args) {
+
+    String suffix = "";
+    for (int i = 0; i < args.length; i++) {
+      if (args[i] instanceof TradeAgreement) {
+        suffix = ((TradeAgreement) args[i]).getInstrument();
+      }
+    }
+    return suffix;
+  }
 }

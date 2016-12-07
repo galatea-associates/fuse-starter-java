@@ -5,10 +5,12 @@ spring:
       driver-class-name: org.h2.Driver
    jpa:
       hibernate:
-         ddl-auto: validate
+         ddl-auto: update
       database-platform: org.hibernate.dialect.MySQLDialect
 jms:
-   listener-concurrency: 1-5      
+   listener-concurrency: 1-5
+   max-retry: 3
+   agreement-queue: sandbox.agreement      
 ---
 # Dev properties go here
 spring:
@@ -16,6 +18,9 @@ spring:
    datasource:
       username: sa
       password:
+   jpa:
+      hibernate:
+         ddl-auto: validate
 ---
 # UAT properties go here
 spring:
