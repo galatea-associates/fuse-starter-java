@@ -10,7 +10,7 @@ Configuration:
   Properties:
     Property:
       - name: log-file-prefix
-        value: ${sys:application.start-time}.${sys:application.name}
+        value: ${date:yyyyMMddHHmmss}.${sys:application.name}
       - name: log-dir
         value: ${sys:application.log-dir}
       - name: log-archive-dir
@@ -24,14 +24,6 @@ Configuration:
 # Create some appenders
   Appenders:
   
-    # A console appender (should be removed later, or put in a local-testing-only config
-    # Maybe log4j2-test.yml?  
-    Console:
-      name: Console
-      target: SYSTEM_OUT
-      PatternLayout:
-        Pattern: ${log-pattern}
-        
     # Log to a specific file
     # For details of configuration options, see: https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender
     RollingFile:
@@ -51,7 +43,8 @@ Configuration:
           # Should also limit files based on size
           SizeBasedTriggeringPolicy: 
             size: 100 MB
-            
+          # Also, roll on startup
+          OnStartupTriggeringPolicy: {}
             
       # Log all warnings to a specific file
       - name: WarnRollingFileAppender
@@ -65,6 +58,7 @@ Configuration:
             modulate: true
           SizeBasedTriggeringPolicy: 
             size: 100 MB
+          OnStartupTriggeringPolicy: {}
         # Only accept messages logged at the 'WARN' level
         ThresholdFilter:
           level: WARN
@@ -83,6 +77,7 @@ Configuration:
             modulate: true
           SizeBasedTriggeringPolicy: 
             size: 100 MB
+          OnStartupTriggeringPolicy: {}
         # Only accept messages logged at the 'ERROR' level
         ThresholdFilter:
           level: ERROR
@@ -101,11 +96,12 @@ Configuration:
             modulate: true
           SizeBasedTriggeringPolicy: 
             size: 100 MB
+          OnStartupTriggeringPolicy: {}
         
     # Logging should be done asynchronously    
     # TODO: may want to investigate a bit, given this warning:
     # http://logging.apache.org/log4j/2.x/manual/appenders.html#AsyncAppender: 
-    # Note that multi-threaded applications should exercise care when using this appender as such: the blocking queue is susceptible to lock contention and our tests showed performance may become worse when more threads are logging concurrently.
+    # Note that multi-threaded applications should exercise care when using this appender as such the blocking queue is susceptible to lock contention and our tests showed performance may become worse when more threads are logging concurrently.
     Async:
       - name: AsyncAppender
         bufferSize: 50000
@@ -123,10 +119,7 @@ Configuration:
     # Define some defaults
     Root:
       level: info 
-      # log to both the console and file
-      # TODO: log to the console only in TEST 
       AppenderRef:
-        - ref: Console
         - ref: AsyncAppender
         
     # Let's send all messages from a specific logger somewhere else as well

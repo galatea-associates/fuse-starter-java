@@ -13,6 +13,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<!-- So the logging config has the needed system properties when run outside of Capsule (e.g. mvn package) -->
+		<argLine>
+			-Dapplication.name=${project.artifactId}
+			-Dapplication.log-dir=target/logs
+			-Dapplication.log-archive-root-dir=target/logs/archive
+		</argLine>
 	</properties>
 
 	<parent>
@@ -160,7 +166,7 @@
 							<manifest>
 								<entry>
 									<key>JVM-Args</key>
-									<value>-Xms512m -Xmx1024m</value>
+									<value>-Xms512m -Xmx1024m -Dapplication.name=${project.artifactId}</value>
 								</entry>
 								<entry>
 									<key>Min-Java-Version</key>
@@ -179,6 +185,21 @@
 											<key>herp-drop</key>
 											<value>test-value</value>
 										</property>
+										<!-- Need some properties specified to configure logging -->
+										<!-- Will want to replace these with project specific values -->
+										<property>
+											<key>application.log-dir</key>
+											<value>logs/${capsule.mode}</value>
+										</property>
+										<property>
+											<key>application.log-archive-root-dir</key>
+											<value>logs/${capsule.mode}/archive</value>
+										</property>
+										<!-- Enable logging to the console in test -->
+										<property>
+ 											<key>log4j.configurationFile</key>
+ 											<value>log4j2.yml,log4j2.console.yml</value>										
+ 										</property>
 									</properties>
 								</mode>
 								<mode>
@@ -187,6 +208,16 @@
 										<property>
 											<key>herp-drop</key>
 											<value>uat-value</value>
+										</property>
+										<!-- Need some properties specified to configure logging -->
+										<!-- Will want to replace these with project specific values -->
+										<property>
+											<key>application.log-dir</key>
+											<value>logs/${capsule.mode}</value>
+										</property>										
+										<property>
+											<key>application.log-archive-root-dir</key>
+											<value>logs/${capsule.mode}/archive</value>
 										</property>
 									</properties>
 								</mode>
