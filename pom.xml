@@ -80,6 +80,12 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Enable production-ready features with actuator -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<!-- Spring data to connect to sql db. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -97,8 +103,8 @@
 		<!-- Lombok for tostring, hashcode, etc -->
 		<!-- See: https://projectlombok.org/ -->
 		<!-- Eclipse plugin to recognizes the Lombok annotations: http://jnb.ociweb.com/jnb/jnbJan2010.html#installation -->
-		<!-- IntelliJ plugin to recognize Lombok annotations: https://plugins.jetbrains.com/plugin/6317 -->	
-			<dependency>
+		<!-- IntelliJ plugin to recognize Lombok annotations: https://plugins.jetbrains.com/plugin/6317 -->
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
@@ -117,6 +123,12 @@
 			<artifactId>google-collections</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.1</version>
+		</dependency>
+
 
 		<!-- Ehcache for caching -->
 		<dependency>
@@ -129,7 +141,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
-		
+
 		<!-- Testing dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

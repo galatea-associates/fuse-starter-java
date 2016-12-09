@@ -3,10 +3,8 @@ package org.galatea.starter;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.jms.FuseJmsListenerContainerFactory;
-import org.galatea.starter.utils.jms.FuseMessageHandlerMethodFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,28 +14,16 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerEndpointRegistrar;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.converter.MessageConversionException;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 
-import java.util.function.BiConsumer;
-import java.util.function.Predicate;
-
 import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.Session;
-import javax.jms.TextMessage;
 
 @Configuration
 @EnableJms
 @Slf4j
 public class JmsConfig implements JmsListenerConfigurer {
-
-  // Max number of times we are willing to retry a message
-  @Value("${jms.max-retry}")
-  protected Integer maxRetryCount;
-
 
   @Bean
   public MessageConverter jacksonJmsMessageConverter() {
@@ -45,66 +31,52 @@ public class JmsConfig implements JmsListenerConfigurer {
     return converter;
   }
 
+  /**
+   * We provide our own listener container factory since we want to use our own implementation of a
+   * listener container which adds tracing of how the message is handled.
+   *
+   * @param queueConnectionFactory injected by spring
+   * @param configurer injected by spring
+   * @param tracerRpsy injected by spring
+   * @return the factory.
+   */
   @Bean
   public JmsListenerContainerFactory<?> jmsListenerContainerFactory(
       final ConnectionFactory queueConnectionFactory,
-      final DefaultJmsListenerContainerFactoryConfigurer configurer) {
+      final DefaultJmsListenerContainerFactoryConfigurer configurer,
+      final FuseTraceRepository tracerRpsy) {
 
     CachingConnectionFactory cachingQueueConnFactory =
         new CachingConnectionFactory(queueConnectionFactory);
-    FuseJmsListenerContainerFactory listenerFactory = new FuseJmsListenerContainerFactory(
-        maxRetryCount, messageAuditor(), failedMessageConsumer(), isTransientClassifier());
+    FuseJmsListenerContainerFactory listenerFactory =
+        new FuseJmsListenerContainerFactory(tracerRpsy);
 
     // This provides all boot's default to this factory, including the message converter
     configurer.configure(listenerFactory, cachingQueueConnFactory);
 
     // TODO: override any defaults in the listener factory before we return the object
 
-
     return listenerFactory;
   }
 
-  @Override
-  public void configureJmsListeners(final JmsListenerEndpointRegistrar registrar) {
-    registrar.setMessageHandlerMethodFactory(fuseJmsHandlerMethodFactory());
-  }
 
+  /**
+   * @return a new handler factory that uses a different message converter than the default one.
+   */
   @Bean
-  public MessageHandlerMethodFactory fuseJmsHandlerMethodFactory() {
-    DefaultMessageHandlerMethodFactory factory = new FuseMessageHandlerMethodFactory();
+  public MessageHandlerMethodFactory jmsHandlerMethodFactory() {
+    DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
+
+    // Note that we use the spring messaging converter instead of the spring jms converter. The two
+    // behave differently.
     factory.setMessageConverter(jacksonJmsMessageConverter());
     return factory;
   }
 
-  @Bean
-  public Predicate<Exception> isTransientClassifier() {
-    return err -> ExceptionUtils.indexOfThrowable(err, MessageConversionException.class) == -1;
+  @Override
+  public void configureJmsListeners(final JmsListenerEndpointRegistrar registrar) {
+    registrar.setMessageHandlerMethodFactory(jmsHandlerMethodFactory());
   }
-
-  @Bean
-  public BiConsumer<javax.jms.Message, Exception> failedMessageConsumer() {
-    return (msg, err) -> {
-      log.error("Failed to process message {} due to error {}", msg, err);
-    };
-  }
-
-  @Bean
-  public BiConsumer<Session, javax.jms.Message> messageAuditor() {
-    return (session, msg) -> {
-      String dest = "UNKNOWN-DEST";
-      String text = "UNKNOWN-BODY";
-      try {
-        dest = msg.getJMSDestination().toString();
-        if (msg instanceof TextMessage) {
-          text = ((TextMessage) msg).getText();
-        }
-      } catch (JMSException jmse) {
-        log.error("Could not extract useful info from message.  Using unknown", jmse);
-      }
-      log.info("Msg arrived from {}|Body:{}|RawMsg:{}", dest, text, msg);
-    };
-  }
-
 }
 
 

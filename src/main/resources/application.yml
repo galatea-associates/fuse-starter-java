@@ -7,9 +7,10 @@ spring:
       hibernate:
          ddl-auto: update
       database-platform: org.hibernate.dialect.MySQLDialect
+mvc:
+   max-size-trace-payload: 50000
 jms:
    listener-concurrency: 1-5
-   max-retry: 3
    agreement-queue: sandbox.agreement      
 ---
 # Dev properties go here
