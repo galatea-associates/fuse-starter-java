@@ -1,0 +1,132 @@
+# For documentation on log4j2: https://logging.apache.org/log4j/2.x/manual/
+
+# For configuration details: springframework.guru/log4j-2-configuration-using-yaml
+# and: http://logging.apache.org/log4j/2.x/manual/configuration.html
+    
+Configuration:
+  name: Default
+
+# Some properties so we're not tempted to hard-code anything below
+  Properties:
+    Property:
+      - name: log-file-prefix
+        value: ${date:yyyyMMddHHmmss}.${sys:application.name}
+      - name: log-dir
+        value: ${sys:application.log-dir}
+      - name: log-archive-dir
+        value: "${sys:application.log-archive-root-dir}/%d{yyyyMMdd}"
+        # ending the zip-suffix with .gz will cause rolled logs to get gzipped
+      - name: zip-suffix
+        value: "%d{yyyyMMdd.HH}.%i.log.gz"
+      - name: log-pattern
+        value: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+
+# Create some appenders
+  Appenders:
+  
+    # Log to a specific file
+    # For details of configuration options, see: https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender
+    RollingFile:
+      - name: RollingFileAppender
+        filename: ${log-dir}/${log-file-prefix}.log
+        # Define where to put logs when rolling
+        filePattern: ${log-archive-dir}/${log-file-prefix}.${zip-suffix}
+        # Define what the log output will look like 
+        PatternLayout: 
+          Pattern: ${log-pattern}
+        Policies:
+          # Logs should be rolled based on time. Rolled logs should be gz (defined by zip-suffix)
+          TimeBasedTriggeringPolicy:
+            # Interval is based on the 'most specific time unit in the date pattern' (in zip-suffix)
+            interval: 1
+            modulate: true
+          # Should also limit files based on size
+          SizeBasedTriggeringPolicy: 
+            size: 100 MB
+          # Also, roll on startup
+          OnStartupTriggeringPolicy: {}
+            
+      # Log all warnings to a specific file
+      - name: WarnRollingFileAppender
+        filename: ${log-dir}/${log-file-prefix}.warnings.log
+        filePattern: ${log-archive-dir}/${log-file-prefix}.warnings.${zip-suffix}
+        PatternLayout: 
+          Pattern: ${log-pattern}
+        Policies:
+          TimeBasedTriggeringPolicy:
+            interval: 1
+            modulate: true
+          SizeBasedTriggeringPolicy: 
+            size: 100 MB
+          OnStartupTriggeringPolicy: {}
+        # Only accept messages logged at the 'WARN' level
+        ThresholdFilter:
+          level: WARN
+          onMatch: ACCEPT
+          onMismatch: DENY
+
+      # Log all errors to a specific file
+      - name: ErrorRollingFileAppender
+        filename: ${log-dir}/${log-file-prefix}.errors.log
+        filePattern: ${log-archive-dir}/${log-file-prefix}.errors.${zip-suffix}
+        PatternLayout: 
+          Pattern: ${log-pattern}
+        Policies:
+          TimeBasedTriggeringPolicy:
+            interval: 1
+            modulate: true
+          SizeBasedTriggeringPolicy: 
+            size: 100 MB
+          OnStartupTriggeringPolicy: {}
+        # Only accept messages logged at the 'ERROR' level
+        ThresholdFilter:
+          level: ERROR
+          onMatch: ACCEPT
+          onMismatch: DENY
+          
+      # Create an appender to send Rest request logs to their own file
+      - name: RestRequestRollingFileAppender
+        filename: ${log-dir}/${log-file-prefix}.rest.log
+        filePattern: ${log-archive-dir}/${log-file-prefix}.rest.${zip-suffix}
+        PatternLayout: 
+          Pattern: ${log-pattern}
+        Policies:
+          TimeBasedTriggeringPolicy:
+            interval: 1
+            modulate: true
+          SizeBasedTriggeringPolicy: 
+            size: 100 MB
+          OnStartupTriggeringPolicy: {}
+        
+    # Logging should be done asynchronously    
+    # TODO: may want to investigate a bit, given this warning:
+    # http://logging.apache.org/log4j/2.x/manual/appenders.html#AsyncAppender: 
+    # Note that multi-threaded applications should exercise care when using this appender as such the blocking queue is susceptible to lock contention and our tests showed performance may become worse when more threads are logging concurrently.
+    Async:
+      - name: AsyncAppender
+        bufferSize: 50000
+        AppenderRef:
+          - ref: RollingFileAppender
+          - ref: WarnRollingFileAppender
+          - ref: ErrorRollingFileAppender        
+            
+      - name: AsyncRestRequestAppender
+        bufferSize: 50000
+        AppenderRef:
+          - ref: RestRequestRollingFileAppender
+          
+  Loggers:
+    # Define some defaults
+    Root:
+      level: info 
+      AppenderRef:
+        - ref: AsyncAppender
+        
+    # Let's send all messages from a specific logger somewhere else as well
+    Logger:
+      - name: org.galatea.starter.entrypoint.SettlementRestController
+        level: debug
+        AppenderRef:
+          - ref: AsyncRestRequestAppender 
+        
+    
