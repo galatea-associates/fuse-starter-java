@@ -31,6 +31,13 @@ public class SettlementService {
   @NonNull
   IAgreementTransformer agreementTransformer;
 
+
+  /**
+   * Create missions based on the agreements provided.
+   *
+   * @param agreements the agreements used to generate missions
+   * @return the ids of the missions that were created
+   */
   public Set<Long> spawnMissions(final List<TradeAgreement> agreements) {
 
     // Map each agreement to a mission, collect to a list, and then same in bulk
