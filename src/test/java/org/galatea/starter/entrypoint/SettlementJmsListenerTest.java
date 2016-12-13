@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.TextMessage;
@@ -18,6 +19,7 @@ import javax.jms.TextMessage;
 @Slf4j
 @ToString
 @EqualsAndHashCode(callSuper = true)
+@SpringBootTest
 public class SettlementJmsListenerTest extends ASpringTest {
 
   @Autowired
