@@ -1,5 +1,5 @@
 ## Run Unit && Integration tests
-script: "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonarlanguage: java"
+script: "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar"
 language: java
 jdk:
   - oraclejdk8
