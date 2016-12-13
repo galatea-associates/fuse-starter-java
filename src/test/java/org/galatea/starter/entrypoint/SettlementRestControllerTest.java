@@ -61,8 +61,13 @@ public class SettlementRestControllerTest extends ASpringTest {
     String agreementJson = readData("Test_IBM_Agreement.json").replace("\n", "");
     log.info("Agreement json to post {}", agreementJson);
 
+    String expectedResponseJson = "[\"/settlementEngine/mission/" + MISSION_ID + "\"]";
+    log.info("Expected json response {}", expectedResponseJson);
 
+    List<TradeAgreement> agreements = json.parse(agreementJson).getObject();
+    log.info("Agrement objects that the service will expect {}", agreements);
 
+    given(this.mockSettlementService.spawnMissions(agreements))
         .willReturn(Sets.newHashSet(MISSION_ID));
 
     this.mvc
