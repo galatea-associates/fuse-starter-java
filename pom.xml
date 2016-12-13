@@ -155,6 +155,7 @@
 			<version>2.0.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Allows us to run test suites that include/exclude junit categories -->
 		<dependency>
 			<groupId>com.googlecode.junit-toolbox</groupId>
 			<artifactId>junit-toolbox</artifactId>
