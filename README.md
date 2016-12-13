@@ -1,4 +1,4 @@
-# galatea-java-starter
+# fuse-starter-java
 This project serves two functions:
 - Provides reference implementations for various features using our best-practices
 - Provides a starting point for new galatea java projects
