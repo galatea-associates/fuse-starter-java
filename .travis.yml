@@ -1,6 +1,10 @@
 ## Run Unit && Integration tests
-script: "mvn verify"
+script: "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonarlanguage: java"
 language: java
 jdk:
   - oraclejdk8
+addons:
+  sonarqube:
+    token:
+      secure: UlJygD/q3FrrgvB1pjtS3NLDXUYRJasr1RzVKZtu8nDhmOvuUdmVxx3iLH2xG4y/c7WY9PHV8Q0Bllc4ggltIcR0IDzD2ZXOgZR1Sew28RxixYMiR3W5tuULto3FrZQYUiT5jOSPUcp7EJ2OLGgKDXjKoesFi4BhLkOZcNSsdn91im3bIiyLRWA1EQ87pZhPeF+F3P+Ozi1nVbcpUAksIiy1XcvUkncJw2KtOzY1xvJMzBDp8JLKQ0vNOOyY5sTSgwxMlS+uovyJc+Ll0pjMFoJoWX86dad6/+icf6t/AZTkdR4s2qdN6PexHzXAHEndpOgSh0FyU0j8HHS4MOymYGpMagtEA4eZjh3+iB31/eM7ean0oepavPBJ+klMwS5Dd/TpvaibfG7m8Qw/8ntbGYKtKZ5rYR2dQRLFt8lHzlI7Sv4E8k4uL9amAIXOyNEIggsxN6rl/r8bFsKA2WiF2VOrO3ovrjbughs3AJfxTN7gNAM+LS49BNGBQMf5WSmrn8zQ9kOOallA17tYFycbfaX7e0SiRUai8KZ10LQPuIliLQhmOBH6S+70mHgwXt8xNCrlcmayYVfZbdxzEOHcoDJfB5s9Uj55OQv9JKdyjQoBlfUrKaByR1zRozVS2jjJbxZzC6Alq/K/Of8LWHB5gqYQfPSSm4W6myEKiY4H22k=
 
