@@ -25,11 +25,6 @@ public class Tracer {
   public static final String TRACE_END_TIME_UTC = "trace-end-UTC";
   public static final String TRACE_SW_SUMMARY = "trace-timing-ms";
 
-  // We make this one private since we don't want to encourage use of the stop watch outside this
-  // class
-  private static final String STOP_WATCH = "sw";
-
-
   private static final InheritableThreadLocal<Map<MultiKey<String>, Object>> traceInfo =
       new InheritableThreadLocal<Map<MultiKey<String>, Object>>() {
         @Override
@@ -47,9 +42,10 @@ public class Tracer {
         }
       };
 
+  private Tracer() {}
 
   private static MultiKey<String> keyOf(final Class<?> clz, final String key) {
-    return new MultiKey<String>(clz.getSimpleName(), key);
+    return new MultiKey<>(clz.getSimpleName(), key);
   }
 
   public static void addTraceInfo(@NonNull final Class<?> clz, @NonNull final String key,
@@ -71,8 +67,7 @@ public class Tracer {
    *
    */
   public static Map<String, Map<String, Object>> getFlattenedCopyOfTraceInfo() {
-    Map<String, Map<String, Object>> flatMap =
-        new HashMap<>(traceInfo.get().size());
+    Map<String, Map<String, Object>> flatMap = new HashMap<>(traceInfo.get().size());
 
     traceInfo.get().forEach((mk, obj) -> {
       String clzName = mk.getKey(0);
@@ -85,53 +80,6 @@ public class Tracer {
     return flatMap;
   }
 
-  /**
-   * Starts a brand new trace. Will clear any existing data in the trace map to make sure we are
-   * starting with a clean slate.
-   */
-  private static void startTrace() {
-    clearTrace();
-
-    StopWatch sw = new StopWatch();
-    sw.start();
-
-    Map<MultiKey<String>, Object> map = traceInfo.get();
-    map.put(new MultiKey<String>("", STOP_WATCH), sw);
-    map.put(keyOf(Tracer.class, TRACE_START_TIME_UTC), Instant.now().toString());
-  }
-
-  /**
-   * Stops the current trace. You can still add items to the trace context after the trace is
-   * stopped but nothing else will be timed.
-   */
-  private static void stopTrace() {
-    Map<MultiKey<String>, Object> map = traceInfo.get();
-
-    StopWatch sw = getStopWatch();
-    if (sw == null) {
-      log.warn("No stopwatch found.  Are we sure this trace was started?");
-      return;
-    }
-
-    if (sw.isRunning()) {
-      sw.stop();
-    }
-
-    map.put(keyOf(Tracer.class, TRACE_END_TIME_UTC), Instant.now().toString());
-    map.put(keyOf(Tracer.class, TRACE_SW_SUMMARY), sw.getTotalTimeMillis());
-  }
-
-  /**
-   * Deletes all of the data in the current trace.
-   */
-  public static void clearTrace() {
-    traceInfo.get().clear();
-  }
-
-  protected static StopWatch getStopWatch() {
-    return (StopWatch) traceInfo.get()
-        .get(new MultiKey<String>("", STOP_WATCH));
-  }
 
   /**
    * This is a useful class for running a trace. It allows us to use a trace in a try with which
@@ -144,6 +92,7 @@ public class Tracer {
 
     protected FuseTraceRepository rpsy;
     protected Class<?> clz;
+    protected StopWatch sw;
 
     /**
      * Starts a new trace and automatically ends it when we exit the try-with block. Also stores the
@@ -155,6 +104,7 @@ public class Tracer {
     public AutoClosedTrace(final FuseTraceRepository rpsy, final Class<?> clz) {
       this.rpsy = rpsy;
       this.clz = clz;
+      this.sw = new StopWatch();
       startTrace();
     }
 
@@ -191,5 +141,37 @@ public class Tracer {
       }
     }
 
+    /**
+     * Starts a brand new trace. Will clear any existing data in the trace map to make sure we are
+     * starting with a clean slate.
+     */
+    private void startTrace() {
+      clearTrace();
+
+      sw.start();
+
+      Map<MultiKey<String>, Object> map = traceInfo.get();
+      map.put(keyOf(Tracer.class, TRACE_START_TIME_UTC), Instant.now().toString());
+    }
+
+    /**
+     * Stops the current trace. You can still add items to the trace context after the trace is
+     * stopped but nothing else will be timed.
+     */
+    private void stopTrace() {
+      Map<MultiKey<String>, Object> map = traceInfo.get();
+
+      sw.stop();
+
+      map.put(keyOf(Tracer.class, TRACE_END_TIME_UTC), Instant.now().toString());
+      map.put(keyOf(Tracer.class, TRACE_SW_SUMMARY), sw.getTotalTimeMillis());
+    }
+
+    /**
+     * Deletes all of the data in the current trace.
+     */
+    private void clearTrace() {
+      traceInfo.get().clear();
+    }
   }
 }
