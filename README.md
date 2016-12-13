@@ -1,5 +1,7 @@
 # galatea-java-starter
-Starter project for Galatea java projects
+This project serves two functions:
+- Provides reference implementations for various features using our best-practices
+- Provides a starting point for new galatea java projects
 
 This readme will contain an index to features and their location in code.
 
