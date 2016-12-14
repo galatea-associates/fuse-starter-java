@@ -2,6 +2,7 @@
 package org.galatea.starter.entrypoint;
 
 import static org.mockito.BDDMockito.verify;
+import static org.mockito.Mockito.timeout;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -70,7 +71,7 @@ public class SettlementJmsListenerTest extends ASpringTest {
 
     // We use verify since the jms listener doesn't actually do anything with the returns from the
     // service
-    verify(mockSettlementService).spawnMissions(agreements);
+    verify(mockSettlementService,timeout(10000)).spawnMissions(agreements);
 
   }
 
