@@ -1,16 +1,28 @@
 
 package org.galatea.starter.entrypoint;
 
+import static org.mockito.BDDMockito.verify;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.ASpringTest;
+import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.service.SettlementService;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jms.core.JmsTemplate;
+
+import java.util.Arrays;
+import java.util.List;
 
 import javax.jms.TextMessage;
 
@@ -19,34 +31,48 @@ import javax.jms.TextMessage;
 @Slf4j
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@SpringBootTest
 public class SettlementJmsListenerTest extends ASpringTest {
 
   @Autowired
   protected JmsTemplate jmsTemplate;
 
-  @Test
-  public void test() throws InterruptedException {
-    // jmsTemplate.convertAndSend("sandbox.agreement",
-    // "[{" + "\"instrument\": \"IBM\"," + "\"_type\": \"TradeAgreement\","
-    // + "\"internalParty\": \"INT-1\"," + "\"externalParty\": \"EXT-1\","
-    // + "\"buySell\": \"B\"," + "\"qty\": 100" + "}]",
-    // m -> {
-    // m.setStringProperty("_type", "org.galatea.starter.domain.TradeAgreement");
-    // return m;
-    // });
+  private JacksonTester<TradeAgreement> json;
 
-    jmsTemplate.send("sandbox.agreement", s -> {
-      TextMessage msg = s.createTextMessage("{" + "\"instrument\": \"IBM\","
-          + "\"_type\": \"TradeAgreement\"," + "\"internalParty\": \"INT-1\","
-          + "\"externalParty\": \"EXT-1\"," + "\"buySell\": \"B\"," + "\"qty\": 100" + "}");
-      // msg.setStringProperty("_type", "org.galatea.starter.domain.TradeAgreement");
+  @MockBean
+  private SettlementService mockSettlementService;
+
+  @Value("${jms.agreement-queue}")
+  protected String queueName;
+
+  @Before
+  public void setup() {
+    ObjectMapper objectMapper = new ObjectMapper();
+    JacksonTester.initFields(this, objectMapper);
+  }
+
+
+  @Test
+  public void testSettleOneAgreement() throws Exception {
+    // Read the json file but get rid of the array bookends since the jms entry point doesn't
+    // support that
+    String agreementJson =
+        readData("Test_IBM_Agreement.json").replace("\n", "").replace("[", "").replace("]", "");
+
+    log.info("Agreement json to put on queue {}", agreementJson);
+
+    List<TradeAgreement> agreements = Arrays.asList(json.parse(agreementJson).getObject());
+    log.info("Agreement objects that the service will expect {}", agreements);
+
+    jmsTemplate.send(queueName, s -> {
+      TextMessage msg = s.createTextMessage(agreementJson);
       return msg;
     });
 
-
-    Thread.sleep(1 * 1000);
+    // We use verify since the jms listener doesn't actually do anything with the returns from the
+    // service
+    verify(mockSettlementService).spawnMissions(agreements);
 
   }
+
 
 }
