@@ -48,7 +48,9 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   private JacksonTester<List<TradeAgreement>> json;
 
-  protected static final Long MISSION_ID = 1091L;
+  protected static final Long MISSION_ID_1 = 1091L;
+
+  protected static final Long MISSION_ID_2 = 2091L;
 
   @Before
   public void setup() {
@@ -57,18 +59,40 @@ public class SettlementRestControllerTest extends ASpringTest {
   }
 
   @Test
-  public void testSettleAgreement() throws Exception {
-    String agreementJson = readData("Test_IBM_Agreement.json").replace("\n", "");
+  public void testSettleTwoAgreements() throws Exception {
+    String agreementJson = readData("Test_IBM_Two_Agreements.json").replace("\n", "");
     log.info("Agreement json to post {}", agreementJson);
 
-    String expectedResponseJson = "[\"/settlementEngine/mission/" + MISSION_ID + "\"]";
+    String expectedResponseJson = "[\"/settlementEngine/mission/" + MISSION_ID_2
+        + "\",\"/settlementEngine/mission/" + MISSION_ID_1 + "\"]";
     log.info("Expected json response {}", expectedResponseJson);
 
     List<TradeAgreement> agreements = json.parse(agreementJson).getObject();
-    log.info("Agrement objects that the service will expect {}", agreements);
+    log.info("Agreement objects that the service will expect {}", agreements);
 
     given(this.mockSettlementService.spawnMissions(agreements))
-        .willReturn(Sets.newHashSet(MISSION_ID));
+        .willReturn(Sets.newHashSet(MISSION_ID_1, MISSION_ID_2));
+
+    this.mvc
+        .perform(post("/settlementEngine").contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(agreementJson))
+        .andExpect(status().isAccepted()).andExpect(content().string(expectedResponseJson));
+    
+  }
+
+  @Test
+  public void testSettleOneAgreement() throws Exception {
+    String agreementJson = readData("Test_IBM_Agreement.json").replace("\n", "");
+    log.info("Agreement json to post {}", agreementJson);
+
+    String expectedResponseJson = "[\"/settlementEngine/mission/" + MISSION_ID_1 + "\"]";
+    log.info("Expected json response {}", expectedResponseJson);
+
+    List<TradeAgreement> agreements = json.parse(agreementJson).getObject();
+    log.info("Agreement objects that the service will expect {}", agreements);
+
+    given(this.mockSettlementService.spawnMissions(agreements))
+        .willReturn(Sets.newHashSet(MISSION_ID_1));
 
     this.mvc
         .perform(post("/settlementEngine").contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -76,21 +100,22 @@ public class SettlementRestControllerTest extends ASpringTest {
         .andExpect(status().isAccepted()).andExpect(content().string(expectedResponseJson));
 
   }
-
+  
   @Test
   public void testGetMissionFound() throws Exception {
-    SettlementMission testMission = SettlementMission.builder().id(MISSION_ID).depot("DTC")
+    SettlementMission testMission = SettlementMission.builder().id(MISSION_ID_1).depot("DTC")
         .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100.0).build();
     log.info("Test mission: {}", testMission);
 
     String expectedJson = readData("Test_IBM_Mission.json").replace("\n", "");
     log.info("Json expected: {}", expectedJson);
 
-    given(this.mockSettlementService.findMission(MISSION_ID)).willReturn(Optional.of(testMission));
+    given(this.mockSettlementService.findMission(MISSION_ID_1))
+        .willReturn(Optional.of(testMission));
 
     this.mvc
-        .perform(
-            get("/settlementEngine/mission/" + MISSION_ID).accept(MediaType.APPLICATION_JSON_VALUE))
+        .perform(get("/settlementEngine/mission/" + MISSION_ID_1)
+            .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk()).andExpect(content().string(expectedJson));
   }
 
