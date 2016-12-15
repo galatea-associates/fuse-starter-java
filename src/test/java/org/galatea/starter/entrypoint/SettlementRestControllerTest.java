@@ -23,7 +23,7 @@ import org.galatea.starter.service.SettlementService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -37,7 +37,7 @@ import java.util.Optional;
 @Slf4j
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@AutoConfigureMockMvc
+@WebMvcTest(SettlementRestController.class)
 public class SettlementRestControllerTest extends ASpringTest {
 
   @Autowired
@@ -77,7 +77,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .perform(post("/settlementEngine").contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(agreementJson))
         .andExpect(status().isAccepted()).andExpect(content().string(expectedResponseJson));
-    
+
   }
 
   @Test
@@ -100,7 +100,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .andExpect(status().isAccepted()).andExpect(content().string(expectedResponseJson));
 
   }
-  
+
   @Test
   public void testGetMissionFound() throws Exception {
     SettlementMission testMission = SettlementMission.builder().id(MISSION_ID_1).depot("DTC")

@@ -1,8 +1,8 @@
 
 package org.galatea.starter.entrypoint;
 
-import static org.mockito.BDDMockito.verify;
 import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jms.core.JmsTemplate;
@@ -32,6 +33,7 @@ import javax.jms.TextMessage;
 @Slf4j
 @ToString
 @EqualsAndHashCode(callSuper = true)
+@SpringBootTest
 public class SettlementJmsListenerTest extends ASpringTest {
 
   @Autowired
@@ -71,7 +73,7 @@ public class SettlementJmsListenerTest extends ASpringTest {
 
     // We use verify since the jms listener doesn't actually do anything with the returns from the
     // service
-    verify(mockSettlementService,timeout(10000)).spawnMissions(agreements);
+    verify(mockSettlementService, timeout(10000)).spawnMissions(agreements);
 
   }
 
