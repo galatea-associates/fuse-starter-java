@@ -12,7 +12,6 @@ import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.annotation.JmsListenerConfigurer;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerEndpointRegistrar;
-import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
@@ -46,13 +45,13 @@ public class JmsConfig implements JmsListenerConfigurer {
       final DefaultJmsListenerContainerFactoryConfigurer configurer,
       final FuseTraceRepository tracerRpsy) {
 
-    CachingConnectionFactory cachingQueueConnFactory =
-        new CachingConnectionFactory(queueConnectionFactory);
     FuseJmsListenerContainerFactory listenerFactory =
         new FuseJmsListenerContainerFactory(tracerRpsy);
 
     // This provides all boot's default to this factory, including the message converter
-    configurer.configure(listenerFactory, cachingQueueConnFactory);
+    // Note that we don't use a caching connection factory due to this:
+    // http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jms/listener/DefaultMessageListenerContainer.html
+    configurer.configure(listenerFactory, queueConnectionFactory);
 
     // TODO: override any defaults in the listener factory before we return the object
 

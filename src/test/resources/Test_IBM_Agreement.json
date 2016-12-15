@@ -1,0 +1,9 @@
+[
+	{
+		"instrument": "IBM",
+		"internalParty": "INT-1",
+		"externalParty": "EXT-1",
+		"buySell": "B",
+		"qty": 100
+	}
+]

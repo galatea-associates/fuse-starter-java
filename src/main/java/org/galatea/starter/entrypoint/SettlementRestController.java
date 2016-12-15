@@ -8,9 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import net.sf.aspect4log.Log;
-import net.sf.aspect4log.Log.Level;
-
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
@@ -28,6 +25,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import net.sf.aspect4log.Log;
+import net.sf.aspect4log.Log.Level;
 
 @RestController
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
@@ -64,7 +64,7 @@ public class SettlementRestController {
       return ResponseEntity.ok(msn.get());
     }
 
-    return new ResponseEntity<SettlementMission>(HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
 
