@@ -1,17 +1,18 @@
 package org.galatea.starter;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.jms.core.JmsTemplate;
-
-import javax.jms.TextMessage;
 
 
 /**
  * This is the entry point for the application.
  *
  */
+@RequiredArgsConstructor
+@Slf4j
 @SpringBootApplication
 public class Application {
 
@@ -22,19 +23,8 @@ public class Application {
    * @param args command line args
    */
   public static void main(final String[] args) {
-
-    ApplicationContext ctx = SpringApplication.run(Application.class, args);
-
-    // Sends a test message through the system when you start it up.
-    // TODO: Remove this
-    JmsTemplate template = ctx.getBean(JmsTemplate.class);
-    template.send("sandbox.agreement", s -> {
-      TextMessage msg = s.createTextMessage("{" + "\"instrument\": \"IBM\","
-          + "\"_type\": \"TradeAgreement\"," + "\"internalParty\": \"INT-1\","
-          + "\"externalParty\": \"EXT-1\"," + "\"buySell\": \"B\"," + "\"qty\": 100" + "}");
-      return msg;
-    });
-
+    log.info("Starting spring application {}", System.getProperty("application.name"));
+    SpringApplication.run(Application.class, args);
 
   }
 }
