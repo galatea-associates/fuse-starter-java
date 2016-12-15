@@ -31,3 +31,8 @@ FUSE suggests that you break up your application into the following components. 
 - See src/main/resources/log4j2.yml for the main configuration
 - See src/main/resources/log4j2.console.yml for configuration for logging to the console for local testing
 - See pom.xml for required dependencies
+
+## Dev best practices
+- Use constructor based DI outside of your unit tests.  With lombok and spring 4.3, this should be very little work.  You no longer need to add an Autowired annotation for single-constructor classes.  Spring will just figure it out.  See `SettlementRestController` as an example.
+- Use Spring to automatically bind arguments for @Bean methods in your configuration classes. See `MvcConfig.webRequestLoggingFilter` as an example.
+
