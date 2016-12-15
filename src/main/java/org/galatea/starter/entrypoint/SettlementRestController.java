@@ -1,17 +1,17 @@
 package org.galatea.starter.entrypoint;
 
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import net.sf.aspect4log.Log;
+import net.sf.aspect4log.Log.Level;
+
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,20 +26,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.sf.aspect4log.Log;
-import net.sf.aspect4log.Log.Level;
-
-@RestController
-@Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
-@NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring
 @RequiredArgsConstructor
-@Slf4j
 @ToString
 @EqualsAndHashCode
+@Slf4j
+@Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
+@RestController
 public class SettlementRestController {
 
   @NonNull
-  @Autowired
   SettlementService settlementService;
 
   public static final String SETTLE_MISSION_PATH = "/settlementEngine";

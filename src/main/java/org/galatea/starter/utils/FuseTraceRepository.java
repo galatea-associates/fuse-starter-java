@@ -10,11 +10,10 @@ import org.springframework.boot.actuate.trace.InMemoryTraceRepository;
 
 import java.util.Map;
 
-
 @RequiredArgsConstructor
-@Slf4j
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Slf4j
 public class FuseTraceRepository extends InMemoryTraceRepository {
 
   /**

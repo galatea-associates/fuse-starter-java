@@ -20,9 +20,9 @@ import org.springframework.messaging.handler.annotation.support.MessageHandlerMe
 
 import javax.jms.ConnectionFactory;
 
+@Slf4j
 @Configuration
 @EnableJms
-@Slf4j
 public class JmsConfig implements JmsListenerConfigurer {
 
   @Bean

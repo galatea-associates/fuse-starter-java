@@ -16,9 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-@Slf4j
 @ToString
 @EqualsAndHashCode
+@Slf4j
 public class Tracer {
 
   public static final String TRACE_START_TIME_UTC = "trace-start-UTC";

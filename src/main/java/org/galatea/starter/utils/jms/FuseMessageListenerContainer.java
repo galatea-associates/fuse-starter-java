@@ -21,9 +21,9 @@ import javax.jms.TextMessage;
 
 
 @RequiredArgsConstructor
-@Slf4j
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Slf4j
 public class FuseMessageListenerContainer extends DefaultMessageListenerContainer {
 
   @NonNull

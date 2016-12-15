@@ -26,11 +26,11 @@ import java.util.concurrent.locks.Lock;
  * @author rbasu
  *
  */
-@Accessors(fluent = true, chain = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Slf4j
+@Accessors(fluent = true, chain = true)
 @ToString
 @EqualsAndHashCode
+@Slf4j
 public class Runner {
 
   @Setter

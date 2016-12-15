@@ -39,9 +39,9 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * @author rbasu
  *
  */
-@Slf4j
 @ToString
 @EqualsAndHashCode(callSuper = true)
+@Slf4j
 public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
 
   @NonNull

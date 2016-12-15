@@ -13,9 +13,9 @@ import org.springframework.jms.listener.DefaultMessageListenerContainer;
 
 
 @RequiredArgsConstructor
-@Slf4j
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Slf4j
 public class FuseJmsListenerContainerFactory extends DefaultJmsListenerContainerFactory {
 
   @NonNull
