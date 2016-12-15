@@ -13,13 +13,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<!-- So the logging config has the needed system properties when run outside of Capsule (e.g. mvn package) 
+		<!-- So the logging config has the needed system properties when run outside of Capsule (e.g. mvn package) -->
 		<argLine>
 			-Dapplication.name=${project.artifactId}
 			-Dapplication.log-dir=target/logs
 			-Dapplication.log-archive-root-dir=target/logs/archive
 		</argLine>
-		-->
 	</properties>
 
 	<parent>
@@ -211,7 +210,7 @@
 										<!-- Enable logging to the console in test -->
 										<property>
  											<key>log4j.configurationFile</key>
- 											<value>log4j2.base.yml,log4j2.console.yml</value>										
+ 											<value>log4j2.yml,log4j2.console.yml</value>										
  										</property>
 									</properties>
 								</mode>
@@ -232,11 +231,6 @@
 											<key>application.log-archive-root-dir</key>
 											<value>logs/${capsule.mode}/archive</value>
 										</property>
-										<!-- Point to our logging config file-->
-										<property>
- 											<key>log4j.configurationFile</key>
- 											<value>log4j2.base.yml</value>										
- 										</property>
 									</properties>
 								</mode>
 							</modes>
