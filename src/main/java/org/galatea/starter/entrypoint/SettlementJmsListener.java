@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +24,6 @@ import java.util.Set;
 public class SettlementJmsListener {
 
   @NonNull
-  @Autowired
   protected SettlementService settlementService;
 
   @JmsListener(destination = "${jms.agreement-queue}", concurrency = "${jms.listener-concurrency}")
