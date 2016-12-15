@@ -13,6 +13,13 @@ jms:
    listener-concurrency: 1-5
    agreement-queue: sandbox.agreement      
 ---
+# Test properties go here
+spring:
+   profiles: test
+   datasource:
+      username: sa
+      password:
+---
 # Dev properties go here
 spring:
    profiles: dev

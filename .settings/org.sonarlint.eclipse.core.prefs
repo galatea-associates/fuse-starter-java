@@ -1,5 +1,5 @@
 autoEnabled=true
 eclipse.preferences.version=1
 extraProperties=
-moduleKey=org.galatea.fuse-starter-java
+moduleKey=org.galatea\:fuse-starter-java
 serverId=nemo

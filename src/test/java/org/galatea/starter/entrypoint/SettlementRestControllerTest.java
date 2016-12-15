@@ -37,6 +37,7 @@ import java.util.Optional;
 @Slf4j
 @ToString
 @EqualsAndHashCode(callSuper = true)
+// We don't load the entire spring application context for this test.
 @WebMvcTest(SettlementRestController.class)
 public class SettlementRestControllerTest extends ASpringTest {
 
