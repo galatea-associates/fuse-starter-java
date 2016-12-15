@@ -19,7 +19,7 @@ Configuration:
       - name: zip-suffix
         value: "%d{yyyyMMdd.HH}.%i.log.gz"
       - name: log-pattern
-        value: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+        value: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
 
 # Create some appenders
   Appenders:
