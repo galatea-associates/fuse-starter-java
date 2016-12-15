@@ -10,7 +10,13 @@ This readme will contain an index to features and their location in code.
  - fuse-starter-java-app.launch will run that main method that starts the spring application context.  This will start a jms listener and REST services.  
  - fuse-starter-java-tests-unit.launch will run unit tests
  - fuse-starter-java-tests-all.launch will run unit + integration tests
-- Postman
+- Maven
+ - mvn test will run the unit tests
+ - mvn verify will run the unit and integration tests
+- Capsule
+  - Once you've run mvn install, you should have a runnable jar in your target directory.  Run this command to start the jvm:  java -Dcapsule.log=verbose -Dcapsule.mode=[mode] -jar target/fuse-starter-java-[version]-capsule.jar  (e.g. java -Dcapsule.log=verbose -Dcapsule.mode=test -jar target/fuse-starter-java-0.0.1-SNAPSHOT-capsule.jar)
+
+Postman
  - You can import our Postman collection (src/postman/Fuse-Starter-Java.postman_collection.json) for sample REST calls that can be made to the application once it has been started.
 
 ##  Components
