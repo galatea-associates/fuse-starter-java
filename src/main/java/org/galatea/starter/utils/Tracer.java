@@ -92,7 +92,7 @@ public class Tracer {
 
 	/**
 	 * Sets the externally provided request id in the trace info and in MDC for inclusion in log messages.
-	 * 
+	 *
 	 * @param externalRequestId
 	 *            The externally provided request id
 	 */

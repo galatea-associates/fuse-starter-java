@@ -16,15 +16,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
-@Getter
-@Setter
-@Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE) // For builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring and jackson
-@Slf4j
+@Builder
+@Getter
+@Setter
 @ToString
 @EqualsAndHashCode
+@Slf4j
+@Entity
 public class SettlementMission {
 
   @Id

@@ -12,6 +12,7 @@ import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.annotation.JmsListenerConfigurer;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerEndpointRegistrar;
+import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
@@ -19,15 +20,14 @@ import org.springframework.messaging.handler.annotation.support.MessageHandlerMe
 
 import javax.jms.ConnectionFactory;
 
+@Slf4j
 @Configuration
 @EnableJms
-@Slf4j
 public class JmsConfig implements JmsListenerConfigurer {
 
   @Bean
   public MessageConverter jacksonJmsMessageConverter() {
-    MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-    return converter;
+    return new MappingJackson2MessageConverter();
   }
 
   /**
@@ -40,7 +40,7 @@ public class JmsConfig implements JmsListenerConfigurer {
    * @return the factory.
    */
   @Bean
-  public JmsListenerContainerFactory<?> jmsListenerContainerFactory(
+  public JmsListenerContainerFactory<DefaultMessageListenerContainer> jmsListenerContainerFactory(
       final ConnectionFactory queueConnectionFactory,
       final DefaultJmsListenerContainerFactoryConfigurer configurer,
       final FuseTraceRepository tracerRpsy) {

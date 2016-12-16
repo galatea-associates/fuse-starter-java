@@ -31,14 +31,14 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
 
-@RestController
-@Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
-@NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring
 @RequiredArgsConstructor
-@Slf4j
 @ToString
 @EqualsAndHashCode
+@Slf4j
+@Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
+@RestController
 public class SettlementRestController {
+
 
 	@NonNull
 	@Autowired

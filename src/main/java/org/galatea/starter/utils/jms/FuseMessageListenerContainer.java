@@ -29,6 +29,8 @@ public class FuseMessageListenerContainer extends DefaultMessageListenerContaine
 	@NonNull
 	protected final FuseTraceRepository repository;
 
+  public static final String UNK = "UNKNOWN";
+
 	@Override
 	@SneakyThrows
 	protected void invokeListener(final Session session, final Message message) throws JMSException {
@@ -56,9 +58,9 @@ public class FuseMessageListenerContainer extends DefaultMessageListenerContaine
 	 *            The message to grab details from
 	 */
 	protected void addMessageInfoToTracer(final Message msg) {
-		String dest = "UNKNOWN";
-		String text = "UNKNOWN";
-		String msgId = "UNKNOWN";
+    String dest = UNK;
+    String text = UNK;
+    String msgId = UNK;
 		long msgTs = -1;
 		try {
 			dest = msg.getJMSDestination().toString();

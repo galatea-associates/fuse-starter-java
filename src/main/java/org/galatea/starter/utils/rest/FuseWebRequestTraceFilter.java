@@ -39,10 +39,13 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * @author rbasu
  *
  */
-@Slf4j
 @ToString
 @EqualsAndHashCode(callSuper = true)
+<<<<<<< HEAD
 //TODO what is this class meant to do? Why's it exist? How's it work its mojo?
+=======
+@Slf4j
+>>>>>>> upstream/master
 public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
 
   @NonNull

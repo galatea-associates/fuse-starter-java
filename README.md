@@ -10,7 +10,13 @@ This readme will contain an index to features and their location in code.
  - fuse-starter-java-app.launch will run that main method that starts the spring application context.  This will start a jms listener and REST services.  
  - fuse-starter-java-tests-unit.launch will run unit tests
  - fuse-starter-java-tests-all.launch will run unit + integration tests
-- Postman
+- Maven
+ - mvn test will run the unit tests
+ - mvn verify will run the unit and integration tests
+- Capsule
+  - Once you've run mvn install, you should have a runnable jar in your target directory.  Run this command to start the jvm:  `java -Dcapsule.log=verbose -Dcapsule.mode=[mode] -jar target/fuse-starter-java-[version]-capsule.jar`  (e.g. `java -Dcapsule.log=verbose -Dcapsule.mode=test -jar target/fuse-starter-java-0.0.1-SNAPSHOT-capsule.jar`)
+
+Postman
  - You can import our Postman collection (src/postman/Fuse-Starter-Java.postman_collection.json) for sample REST calls that can be made to the application once it has been started.
 
 ## SonarQube integration
@@ -30,8 +36,13 @@ FUSE suggests that you break up your application into the following components. 
 
 
 ## Logging
+
 - For the main configuration see: src/main/resources/log4j2.yml 
 - For configuring logging to the console and selectively enabling debug logging for local testing see: src/main/resources/log4j2.debug.yml 
 - For required dependencies see: pom.xml
 - For creation of internal request id see: Tracer.java
 - For inclusion of internal request id in log statements see: log4j2.yml's log-pattern definition
+
+## Dev best practices
+- Use constructor based DI outside of your unit tests.  With lombok and spring 4.3, this should be very little work.  You no longer need to add an Autowired annotation for single-constructor classes.  Spring will just figure it out.  See `SettlementRestController` as an example.
+- Use Spring to automatically bind arguments for @Bean methods in your configuration classes. See `MvcConfig.webRequestLoggingFilter` as an example.

@@ -164,7 +164,7 @@
 			<artifactId>junit-toolbox</artifactId>
 			<version>2.2</version>
 		</dependency>
-		
+
 		<!-- Deployment dependencies -->
 		<dependency>
 			<groupId>co.paralleluniverse</groupId>
@@ -214,40 +214,53 @@
 							<manifest>
 								<entry>
 									<key>JVM-Args</key>
-									<value>-Xms512m -Xmx1024m
-										-Dapplication.name=${project.artifactId}</value>
+									<value>-Xms512m -Xmx1024m</value>
 								</entry>
 								<entry>
 									<key>Min-Java-Version</key>
-									<value>1.8</value>
+									<value>1.8.0</value>
 								</entry>
 								<entry>
 									<key>Java-Version</key>
 									<value>1.8</value>
 								</entry>
 							</manifest>
+							<properties>
+								<property>
+									<key>application.name</key>
+									<value>${project.artifactId}</value>
+								</property>
+								<!-- Need some properties specified to configure logging -->
+								<!-- Will want to replace these with project specific values -->
+								<property>
+									<key>application.log-dir</key>
+									<value>logs/${capsule.mode}</value>
+								</property>
+								<property>
+									<key>application.log-archive-root-dir</key>
+									<value>logs/${capsule.mode}/archive</value>
+								</property>
+								<property>
+									<key>log4j.configurationFile</key>
+									<value>log4j2.yml</value>
+								</property>
+							</properties>
 							<modes>
 								<mode>
 									<name>test</name>
 									<properties>
 										<property>
-											<key>herp-drop</key>
-											<value>test-value</value>
+											<key>spring.profiles.active</key>
+											<value>test</value>
 										</property>
-										<!-- Need some properties specified to configure logging -->
-										<!-- Will want to replace these with project specific values -->
+									</properties>
+								</mode>
+								<mode>
+									<name>dev</name>
+									<properties>
 										<property>
-											<key>application.log-dir</key>
-											<value>logs/${capsule.mode}</value>
-										</property>
-										<property>
-											<key>application.log-archive-root-dir</key>
-											<value>logs/${capsule.mode}/archive</value>
-										</property>
-										<!-- Enable logging to the console in test -->
-										<property>
-											<key>log4j.configurationFile</key>
-											<value>log4j2.yml,log4j2.console.yml</value>
+											<key>spring.profiles.active</key>
+											<value>dev</value>
 										</property>
 									</properties>
 								</mode>
@@ -255,18 +268,17 @@
 									<name>uat</name>
 									<properties>
 										<property>
-											<key>herp-drop</key>
-											<value>uat-value</value>
+											<key>spring.profiles.active</key>
+											<value>uat</value>
 										</property>
-										<!-- Need some properties specified to configure logging -->
-										<!-- Will want to replace these with project specific values -->
+									</properties>
+								</mode>
+								<mode>
+									<name>prod</name>
+									<properties>
 										<property>
-											<key>application.log-dir</key>
-											<value>logs/${capsule.mode}</value>
-										</property>
-										<property>
-											<key>application.log-archive-root-dir</key>
-											<value>logs/${capsule.mode}/archive</value>
+											<key>spring.profiles.active</key>
+											<value>prod</value>
 										</property>
 									</properties>
 								</mode>
