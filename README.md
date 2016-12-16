@@ -41,7 +41,13 @@ FUSE suggests that you break up your application into the following components. 
 - For configuring logging to the console and selectively enabling debug logging for local testing see: src/main/resources/log4j2.debug.yml 
 - For required dependencies see: pom.xml
 - For creation of internal request id see: Tracer.java
-- For inclusion of internal request id in log statements see: log4j2.yml's log-pattern definition
+- for creation of external request id for Rest requests see: SettlementRestController.java
+- for creation of external request id for JMS requests see: FuseMessageListenerContainer.java
+- For inclusion of internal/external request ids in log statements see: log4j2.yml's log-pattern definition
+
+## Request Audit
+- for creation of standard audit/payload response for REST requests see: SettlementRestController.java and RestResponse.java
+
 
 ## Dev best practices
 - Use constructor based DI outside of your unit tests.  With lombok and spring 4.3, this should be very little work.  You no longer need to add an Autowired annotation for single-constructor classes.  Spring will just figure it out.  See `SettlementRestController` as an example.
