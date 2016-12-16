@@ -22,6 +22,8 @@ FUSE suggests that you break up your application into the following components. 
 
 
 ## Logging
-- See src/main/resources/log4j2.yml for the main configuration
-- See src/main/resources/log4j2.console.yml for configuration for logging to the console for local testing
-- See pom.xml for required dependencies
+- For the main configuration see: src/main/resources/log4j2.yml 
+- For configuring logging to the console and selectively enabling debug logging for local testing see: src/main/resources/log4j2.debug.yml 
+- For required dependencies see: pom.xml
+- For creation of internal request id see: Tracer.java
+- For inclusion of internal request id in log statements see: log4j2.yml's log-pattern definition
