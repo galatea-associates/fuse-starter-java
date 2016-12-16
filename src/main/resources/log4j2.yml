@@ -2,6 +2,8 @@
 
 # For configuration details: springframework.guru/log4j-2-configuration-using-yaml
 # and: http://logging.apache.org/log4j/2.x/manual/configuration.html
+
+# Spring-boot seems to require a file named "log4j2.yml" to determine that we're using log4j2.
     
 Configuration:
   name: Default
@@ -19,7 +21,7 @@ Configuration:
       - name: zip-suffix
         value: "%d{yyyyMMdd.HH}.%i.log.gz"
       - name: log-pattern
-        value: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+        value: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level %logger{1.} - %X{internal-request-id}%msg%n"
 
 # Create some appenders
   Appenders:
@@ -122,8 +124,8 @@ Configuration:
       AppenderRef:
         - ref: AsyncAppender
         
-    # Let's send all messages from a specific logger somewhere else as well
     Logger:
+      # Let's send all messages from a specific logger somewhere else as well
       - name: org.galatea.starter.entrypoint.SettlementRestController
         level: debug
         AppenderRef:
