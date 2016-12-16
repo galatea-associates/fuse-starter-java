@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 @Slf4j
 @ToString
 @EqualsAndHashCode(callSuper = true)
+//TODO what is this class meant to do? Why's it exist? How's it work its mojo?
 public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
 
   @NonNull
@@ -73,7 +74,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     super(repository, properties);
     this.repository = repository;
     this.pathsToSkip = pathsToSkip;
-    this.maxPayloadLength = maxPayloadLength;
+    this.maxPayloadLength = maxPayloadLength; 
   }
 
   @Override
@@ -105,6 +106,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
   }
 
   @SneakyThrows
+  // what's this method responsible for?  
   protected void doFilterInternalHelper(final HttpServletRequest request,
       final HttpServletResponse response, final FilterChain filterChain) {
 
@@ -127,9 +129,10 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
         updateResponse(response);
       }
 
-    }
+    }    
   }
 
+  //TODO: What's this update about the response?
   private void updateResponse(final HttpServletResponse response) throws IOException {
     ContentCachingResponseWrapper responseWrapper =
         WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
@@ -148,6 +151,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     // Get the request and response payload and add to our trace. Note that the request payload is
     // only extracted AFTER the REST method handler has completed. This is intentional and
     // necessary.
+    // TODO: why is it necessary?
     ContentCachingRequestWrapper requestWapper =
         WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
     ContentCachingResponseWrapper responseWrapper =

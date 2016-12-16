@@ -24,11 +24,12 @@ Configuration:
       AppenderRef:
         - ref: Console  
   
-      # Enable debug logging for some specific classes/loggers     
+      # Enable debug logging for all org.galatea.starter classes/loggers     
     Logger:
-      - name: org.galatea.starter.utils.FuseTraceRepository
+      - name: org.galatea.starter
         level: debug
 
-      - name: org.galatea.starter.utils.Tracer
-        level: debug
+      # Can change log levels for individual loggers as below
+#      - name: org.galatea.starter.utils.Tracer
+#        level: debug
         

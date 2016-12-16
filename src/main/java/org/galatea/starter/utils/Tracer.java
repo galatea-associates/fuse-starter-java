@@ -1,22 +1,22 @@
 
 package org.galatea.starter.utils;
 
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.Callable;
+
+import org.apache.commons.collections4.keyvalue.MultiKey;
+import org.slf4j.MDC;
+import org.springframework.util.StopWatch;
+
 import com.google.common.collect.Maps;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.collections4.keyvalue.MultiKey;
-import org.slf4j.MDC;
-import org.springframework.util.StopWatch;
-
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.Callable;
 
 @Slf4j
 @ToString
@@ -27,12 +27,10 @@ public class Tracer {
 	public static final String TRACE_START_TIME_UTC = "trace-start-UTC";
 	public static final String TRACE_END_TIME_UTC = "trace-end-UTC";
 	public static final String TRACE_SW_SUMMARY = "trace-timing-ms";
+	public static final String INTERNAL_REQUEST_ID = "internal-request-id";
+	public static final String EXTERNAL_REQUEST_ID = "external-request-id";
 
-	private static final String INTERNAL_REQUEST_ID = "internal-request-id";
 	private static final Random QUERY_ID_GENERATOR = new Random();
-
-	private Tracer() {
-	}
 
 	// Map of Multi-key -> Object to store thread local state
 	// The first part of the Multi-key is meant to be a namespace-like value
@@ -52,11 +50,14 @@ public class Tracer {
 		}
 	};
 
+	private Tracer() {
+	}
+
 	/**
 	 * Helper method to create a key given a Class and key.
-	 * 
+	 *
 	 * The Class acts as a namespace to reduce the chance of key collision.
-	 * 
+	 *
 	 * @param clz
 	 *            The class to use as the key namespace
 	 * @param key
@@ -64,9 +65,19 @@ public class Tracer {
 	 * @return A multi-key composed of the Class and Key
 	 */
 	private static MultiKey<String> keyOf(final Class<?> clz, final String key) {
-		return new MultiKey<String>(clz.getSimpleName(), key);
+		return new MultiKey<>(clz.getSimpleName(), key);
 	}
 
+	/**
+	 * Convenience method to store a Value object given a Class and Key to use as the key
+	 *
+	 * @param clz
+	 *            The class owning the 'key'
+	 * @param key
+	 *            The key identifier
+	 * @param val
+	 *            The value
+	 */
 	public static void addTraceInfo(@NonNull final Class<?> clz, @NonNull final String key, @NonNull final Object val) {
 		traceInfo.get().put(keyOf(clz, key), val);
 	}
@@ -80,11 +91,27 @@ public class Tracer {
 	}
 
 	/**
-	 * Flatten the trace info into a map of maps. This is useful when you add
-	 * the trace info to a trace repository.
+	 * Sets the externally provided request id in the trace info and in MDC for inclusion in log messages.
+	 * 
+	 * @param externalRequestId
+	 *            The externally provided request id
+	 */
+	public static void setExternalRequestId(String externalRequestId) {
+		// Add request id to Trace
+		addTraceInfo(Tracer.class, EXTERNAL_REQUEST_ID, externalRequestId);
+
+		log.debug("External request id: {}", externalRequestId);
+		log.debug("traceInfo: {}", traceInfo.get());
+
+		// And add to MDC so it will show up in the logs
+		// The key used here must align with the key defined in the logging config's log-pattern
+		MDC.put(EXTERNAL_REQUEST_ID, externalRequestId + " - ");
+	}
+
+	/**
+	 * Flatten the trace info into a map of maps. This is useful when you add the trace info to a trace repository.
 	 *
-	 * Only pulls out entries with a namespace (i.e. skips any elements with a
-	 * null/"" namespace)
+	 * Only pulls out entries with a namespace (i.e. skips any elements with a null/"" namespace)
 	 */
 	public static Map<String, Map<String, Object>> getFlattenedCopyOfTraceInfo() {
 		Map<String, Map<String, Object>> flatMap = new HashMap<>(traceInfo.get().size());
@@ -101,8 +128,8 @@ public class Tracer {
 	}
 
 	/**
-	 * This is a useful class for running a trace. It allows us to use a trace
-	 * in a try with which makes starting/stopping the trace easy.
+	 * This is a useful class for running a trace. It allows us to use a trace in a try with which makes
+	 * starting/stopping the trace easy.
 	 *
 	 * @author rbasu
 	 *
@@ -114,9 +141,8 @@ public class Tracer {
 		protected StopWatch sw;
 
 		/**
-		 * Starts a new trace and automatically ends it when we exit the
-		 * try-with block. Also stores the results to the trace repository
-		 * provided.
+		 * Starts a new trace and automatically ends it when we exit the try-with block. Also stores the results to the
+		 * trace repository provided.
 		 *
 		 * @param rpsy
 		 *            the trace repository for the trace results.
@@ -144,8 +170,8 @@ public class Tracer {
 		}
 
 		/**
-		 * Will run the function provided and track success/failure (along with
-		 * any associated error message) in the current trace.
+		 * Will run the function provided and track success/failure (along with any associated error message) in the
+		 * current trace.
 		 *
 		 * @param traceKeyPrefix
 		 *            the prefix for the trace key
@@ -168,30 +194,27 @@ public class Tracer {
 		}
 
 		/**
-		 * Starts a brand new trace. Will clear any existing data in the trace
-		 * map to make sure we are starting with a clean slate.
+		 * Starts a brand new trace. Will clear any existing data in the trace map to make sure we are starting with a
+		 * clean slate.
 		 */
 		private void startTrace() {
 			clearTrace();
 
 			sw.start();
 
-			Map<MultiKey<String>, Object> map = traceInfo.get();
-			map.put(keyOf(Tracer.class, TRACE_START_TIME_UTC), Instant.now().toString());
+			addTraceInfo(Tracer.class, TRACE_START_TIME_UTC, Instant.now().toString());
 			log.debug("Trace started. traceInfo: {}", traceInfo.get());
 		}
 
 		/**
-		 * Stops the current trace. You can still add items to the trace context
-		 * after the trace is stopped but nothing else will be timed.
+		 * Stops the current trace. You can still add items to the trace context after the trace is stopped but nothing
+		 * else will be timed.
 		 */
 		private void stopTrace() {
-			Map<MultiKey<String>, Object> map = traceInfo.get();
-
 			sw.stop();
 
-			map.put(keyOf(Tracer.class, TRACE_END_TIME_UTC), Instant.now().toString());
-			map.put(keyOf(Tracer.class, TRACE_SW_SUMMARY), sw.getTotalTimeMillis());
+			addTraceInfo(Tracer.class, TRACE_END_TIME_UTC, Instant.now().toString());
+			addTraceInfo(Tracer.class, TRACE_SW_SUMMARY, sw.getTotalTimeMillis());
 		}
 
 		/**
@@ -203,9 +226,8 @@ public class Tracer {
 
 		/**
 		 * Creates an internal id associated with this request.
-		 * 
-		 * Also adds the internal id to the Tracer data captured, and to MDC so
-		 * it will appear in the logs.
+		 *
+		 * Also adds the internal id to the Tracer data captured, and to MDC so it will appear in the logs.
 		 */
 		private void createInternalRequestId() {
 			// generate the internal request Id
@@ -213,8 +235,7 @@ public class Tracer {
 			String internallyGeneratedId = Integer.toString(QUERY_ID_GENERATOR.nextInt(Integer.MAX_VALUE));
 
 			// Add request id to Trace
-			Map<MultiKey<String>, Object> map = traceInfo.get();
-			map.put(keyOf(Tracer.class, INTERNAL_REQUEST_ID), internallyGeneratedId);
+			addTraceInfo(Tracer.class, INTERNAL_REQUEST_ID, internallyGeneratedId);
 			log.debug("Created internal request id: {}", internallyGeneratedId);
 			log.debug("traceInfo: {}", traceInfo.get());
 
