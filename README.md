@@ -13,6 +13,14 @@ This readme will contain an index to features and their location in code.
 - Postman
  - You can import our Postman collection (src/postman/Fuse-Starter-Java.postman_collection.json) for sample REST calls that can be made to the application once it has been started.
 
+## SonarQube integration
+- Sonar: https://sonarqube.com/dashboard?id=org.galatea%3Afuse-starter-java
+- To integrate into eclipse
+ - Install SonarLint
+ - r-click on fuse-starter-java -> SonarLint -> Change binding...
+ - Replace the current binding with 'https://sonarqube.com' in the URL
+ - Search 'fuse-starter-java' and accept
+
 ##  Components
 FUSE suggests that you break up your application into the following components.  Many of these correspond to spring stereotypes:
 - **Entry points**: Components that receive stimuli from the outside world and react to them.  This can include REST requests, JMS messages, files.  You'll find examples of these in the org.galatea.starter.entrypoint package.
