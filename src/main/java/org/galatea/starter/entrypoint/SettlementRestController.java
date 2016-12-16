@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -38,7 +36,6 @@ import net.sf.aspect4log.Log.Level;
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
 @RestController
 public class SettlementRestController {
-
 
 	@NonNull
 	@Autowired
