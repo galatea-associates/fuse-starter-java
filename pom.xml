@@ -81,6 +81,8 @@
 		</dependency>
 
 		<!-- Enable production-ready features with actuator -->
+		<!-- See: http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints -->
+		<!-- and: www.baeldung.com/spring-boot-actuators -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
