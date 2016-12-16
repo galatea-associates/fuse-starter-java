@@ -11,6 +11,7 @@ import net.sf.aspect4log.Log;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.domain.rpsy.ISettlementMissionRpsy;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,7 @@ import java.util.stream.StreamSupport;
 @Slf4j
 @ToString
 @EqualsAndHashCode
+@Service
 public class SettlementService {
 
   @NonNull

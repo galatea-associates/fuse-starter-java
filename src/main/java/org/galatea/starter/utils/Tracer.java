@@ -28,12 +28,11 @@ public class Tracer {
 	public static final String TRACE_END_TIME_UTC = "trace-end-UTC";
 	public static final String TRACE_SW_SUMMARY = "trace-timing-ms";
 
-	// We make this one private since we don't want to encourage use of the stop
-	// watch outside this class
-	private static final String STOP_WATCH = "sw";
 	private static final String INTERNAL_REQUEST_ID = "internal-request-id";
-	private static final Random QUERY_ID_GENERATOR = new Random(); 
-	
+	private static final Random QUERY_ID_GENERATOR = new Random();
+
+	private Tracer() {
+	}
 
 	// Map of Multi-key -> Object to store thread local state
 	// The first part of the Multi-key is meant to be a namespace-like value
@@ -84,7 +83,8 @@ public class Tracer {
 	 * Flatten the trace info into a map of maps. This is useful when you add
 	 * the trace info to a trace repository.
 	 *
-	 * Only pulls out entries with a namespace (i.e. skips any elements with a null/"" namespace)
+	 * Only pulls out entries with a namespace (i.e. skips any elements with a
+	 * null/"" namespace)
 	 */
 	public static Map<String, Map<String, Object>> getFlattenedCopyOfTraceInfo() {
 		Map<String, Map<String, Object>> flatMap = new HashMap<>(traceInfo.get().size());
@@ -101,75 +101,6 @@ public class Tracer {
 	}
 
 	/**
-	 * Starts a brand new trace. Will clear any existing data in the trace map
-	 * to make sure we are starting with a clean slate.
-	 */
-	private static void startTrace() {
-		clearTrace();
-
-		StopWatch sw = new StopWatch();
-		sw.start();
-
-		Map<MultiKey<String>, Object> map = traceInfo.get();
-		map.put(new MultiKey<String>("", STOP_WATCH), sw);
-		map.put(keyOf(Tracer.class, TRACE_START_TIME_UTC), Instant.now().toString());
-		log.debug("Trace started. traceInfo: {}", traceInfo.get());
-	}
-
-	/**
-	 * Creates an internal id associated with this request.
-	 * 
-	 * Also adds the internal id to the Tracer data captured, and to MDC so it will appear in the logs.
-	 */
-	private static void createInternalRequestId() {
-		// generate the internal request Id
-		// we want positive numbers only, so use nextInt(upperBound)
-		String internallyGeneratedId = Integer.toString(QUERY_ID_GENERATOR.nextInt(Integer.MAX_VALUE));
-		
-		// Add request id to Trace
-		Map<MultiKey<String>, Object> map = traceInfo.get();
-		map.put(keyOf(Tracer.class, INTERNAL_REQUEST_ID), internallyGeneratedId);
-		log.debug("Created internal request id: {}", internallyGeneratedId);
-		log.debug("traceInfo: {}", traceInfo.get());
-		
-		// And add to MDC so it will show up in the logs
-		// The key used here must align with the key defined in the logging config's log-pattern
-		MDC.put(INTERNAL_REQUEST_ID, internallyGeneratedId + " - ");
-	}
-
-	/**
-	 * Stops the current trace. You can still add items to the trace context
-	 * after the trace is stopped but nothing else will be timed.
-	 */
-	private static void stopTrace() {
-		Map<MultiKey<String>, Object> map = traceInfo.get();
-
-		StopWatch sw = getStopWatch();
-		if (sw == null) {
-			log.warn("No stopwatch found.  Are we sure this trace was started?");
-			return;
-		}
-
-		if (sw.isRunning()) {
-			sw.stop();
-		}
-
-		map.put(keyOf(Tracer.class, TRACE_END_TIME_UTC), Instant.now().toString());
-		map.put(keyOf(Tracer.class, TRACE_SW_SUMMARY), sw.getTotalTimeMillis());
-	}
-
-	/**
-	 * Deletes all of the data in the current trace.
-	 */
-	public static void clearTrace() {
-		traceInfo.get().clear();
-	}
-
-	protected static StopWatch getStopWatch() {
-		return (StopWatch) traceInfo.get().get(new MultiKey<String>("", STOP_WATCH));
-	}
-
-	/**
 	 * This is a useful class for running a trace. It allows us to use a trace
 	 * in a try with which makes starting/stopping the trace easy.
 	 *
@@ -180,6 +111,7 @@ public class Tracer {
 
 		protected FuseTraceRepository rpsy;
 		protected Class<?> clz;
+		protected StopWatch sw;
 
 		/**
 		 * Starts a new trace and automatically ends it when we exit the
@@ -194,6 +126,7 @@ public class Tracer {
 		public AutoClosedTrace(final FuseTraceRepository rpsy, final Class<?> clz) {
 			this.rpsy = rpsy;
 			this.clz = clz;
+			this.sw = new StopWatch();
 			startTrace();
 			createInternalRequestId();
 		}
@@ -234,5 +167,61 @@ public class Tracer {
 			}
 		}
 
+		/**
+		 * Starts a brand new trace. Will clear any existing data in the trace
+		 * map to make sure we are starting with a clean slate.
+		 */
+		private void startTrace() {
+			clearTrace();
+
+			sw.start();
+
+			Map<MultiKey<String>, Object> map = traceInfo.get();
+			map.put(keyOf(Tracer.class, TRACE_START_TIME_UTC), Instant.now().toString());
+			log.debug("Trace started. traceInfo: {}", traceInfo.get());
+		}
+
+		/**
+		 * Stops the current trace. You can still add items to the trace context
+		 * after the trace is stopped but nothing else will be timed.
+		 */
+		private void stopTrace() {
+			Map<MultiKey<String>, Object> map = traceInfo.get();
+
+			sw.stop();
+
+			map.put(keyOf(Tracer.class, TRACE_END_TIME_UTC), Instant.now().toString());
+			map.put(keyOf(Tracer.class, TRACE_SW_SUMMARY), sw.getTotalTimeMillis());
+		}
+
+		/**
+		 * Deletes all of the data in the current trace.
+		 */
+		private void clearTrace() {
+			traceInfo.get().clear();
+		}
+
+		/**
+		 * Creates an internal id associated with this request.
+		 * 
+		 * Also adds the internal id to the Tracer data captured, and to MDC so
+		 * it will appear in the logs.
+		 */
+		private void createInternalRequestId() {
+			// generate the internal request Id
+			// we want positive numbers only, so use nextInt(upperBound)
+			String internallyGeneratedId = Integer.toString(QUERY_ID_GENERATOR.nextInt(Integer.MAX_VALUE));
+
+			// Add request id to Trace
+			Map<MultiKey<String>, Object> map = traceInfo.get();
+			map.put(keyOf(Tracer.class, INTERNAL_REQUEST_ID), internallyGeneratedId);
+			log.debug("Created internal request id: {}", internallyGeneratedId);
+			log.debug("traceInfo: {}", traceInfo.get());
+
+			// And add to MDC so it will show up in the logs
+			// The key used here must align with the key defined in the logging
+			// config's log-pattern
+			MDC.put(INTERNAL_REQUEST_ID, internallyGeneratedId + " - ");
+		}
 	}
 }

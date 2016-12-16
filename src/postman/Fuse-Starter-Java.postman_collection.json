@@ -1,0 +1,64 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Fuse-Starter-Java",
+		"_postman_id": "efa93ce5-def8-3b21-7224-258348e872c4",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SE - Create missions",
+			"request": {
+				"url": "http://localhost:8080/settlementEngine",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 2V6H4BIS5SBIOG6G6OZMSURROMYEFGKU",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\n\t\t\"instrument\": \"IBM\",\n\t\t\"internalParty\": \"INT-1\",\n\t\t\"externalParty\": \"EXT-1\",\n\t\t\"buySell\": \"B\",\n\t\t\"qty\": 100\n\t}\n]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "SE - Get mission",
+			"request": {
+				"url": "http://localhost:8080/settlementEngine/mission/1",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Run Trace",
+			"request": {
+				"url": "http://localhost:8080/trace",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

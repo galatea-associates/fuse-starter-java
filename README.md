@@ -1,7 +1,17 @@
-# galatea-java-starter
-Starter project for Galatea java projects
+# fuse-starter-java
+This project serves two functions:
+- Provides reference implementations for various features using our best-practices
+- Provides a starting point for new galatea java projects
 
 This readme will contain an index to features and their location in code.
+
+## How to "run" the project
+- Eclipse
+ - fuse-starter-java-app.launch will run that main method that starts the spring application context.  This will start a jms listener and REST services.  
+ - fuse-starter-java-tests-unit.launch will run unit tests
+ - fuse-starter-java-tests-all.launch will run unit + integration tests
+- Postman
+ - You can import our Postman collection (src/postman/Fuse-Starter-Java.postman_collection.json) for sample REST calls that can be made to the application once it has been started.
 
 ##  Components
 FUSE suggests that you break up your application into the following components.  Many of these correspond to spring stereotypes:

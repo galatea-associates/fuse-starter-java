@@ -69,7 +69,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
    */
   public FuseWebRequestTraceFilter(final FuseTraceRepository repository,
       final TraceProperties properties, final Predicate<String> pathsToSkip,
-      final int maxPayloadLength) {
+      final Integer maxPayloadLength) {
     super(repository, properties);
     this.repository = repository;
     this.pathsToSkip = pathsToSkip;
@@ -177,6 +177,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
       payload = new String(buf, 0, length, encoding);
     } catch (UnsupportedEncodingException ex) {
       payload = "[unknown]";
+      log.warn("Couldn't determine payload due to error", ex);
     }
     return payload;
   }
@@ -196,7 +197,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
 
     private final int status;
 
-    private CustomStatusResponseWrapper(final HttpServletResponse response, final int status) {
+    public CustomStatusResponseWrapper(final HttpServletResponse response, final int status) {
       super(response);
       this.status = status;
     }
