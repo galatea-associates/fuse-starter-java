@@ -48,6 +48,14 @@ FUSE suggests that you break up your application into the following components. 
 ## Request Audit
 - for creation of standard audit/payload response for REST requests see: SettlementRestController.java and RestResponse.java
 
+## Testing
+- For testing rest requests/responses see:
+ - SettlementRestControllerTest
+ - For running a request: MockMvc.perform
+ - For assertions based on the response: MockMvc.andExpect along with MockMvcResultMatchers static methods
+ - For easy indexing of json responses: MockMvcResultMatchers.jsonPath and https://github.com/jayway/JsonPath
+ - For convenient tests/matchers: org.hamcrest.Matchers and https://code.google.com/archive/p/hamcrest/wikis/Tutorial.wiki
+
 
 ## Dev best practices
 - Use constructor based DI outside of your unit tests.  With lombok and spring 4.3, this should be very little work.  You no longer need to add an Autowired annotation for single-constructor classes.  Spring will just figure it out.  See `SettlementRestController` as an example.
