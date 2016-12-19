@@ -9,11 +9,15 @@ import org.galatea.starter.utils.Tracer;
 import com.google.common.collect.Maps;
 
 import lombok.Getter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
-@Getter
 /**
  * Ensures some common audit fields for each rest response
  */
+@Getter
+@ToString
+@Slf4j
 public class RestResponse {
 
 	private Map<String, Object> audit;
@@ -34,6 +38,7 @@ public class RestResponse {
 		audit.put("requestReceivedTime", startTime);
 		audit.put("requestElapsedTime",
 				Instant.parse((CharSequence) startTime).until(Instant.now(), ChronoUnit.MILLIS));
+		log.debug("Created response: {}", this);
 	}
 
 }
