@@ -10,6 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.google.common.collect.Sets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
@@ -29,8 +33,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -39,6 +47,7 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 // We don't load the entire spring application context for this test.
 @WebMvcTest(SettlementRestController.class)
+@RunWith(DataProviderRunner.class)  //Use this runner since we want to parameterize certain tests
 public class SettlementRestControllerTest extends ASpringTest {
 
   @Autowired
@@ -53,51 +62,53 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   protected static final Long MISSION_ID_2 = 2091L;
 
+
+  /**
+   * Note that this is a static method.
+   * 
+   * @return each row represents a complete set of inputs to the test.  The first column is the agreement json and the second column has the expected mission ids.
+   * 
+   * @throws IOException if we can't read the input files
+   */
+  @DataProvider
+  public static Object[][] settleAgreementDataProvider() throws IOException {
+    return new Object[][] {
+        {readData("Test_IBM_Two_Agreements.json"), Arrays.asList(MISSION_ID_2, MISSION_ID_1)},
+        {readData("Test_IBM_Agreement.json"), Arrays.asList(MISSION_ID_1)}};
+  }
+
   @Before
   public void setup() {
     ObjectMapper objectMapper = new ObjectMapper();
     JacksonTester.initFields(this, objectMapper);
   }
 
+  /**
+   * Uses the method provided to the "use data provider" annotation to generate the inputs for this
+   * test. This test is run once for each "row" returned by the data provider method.
+   */
   @Test
-  public void testSettleTwoAgreements() throws Exception {
-    String agreementJson = readData("Test_IBM_Two_Agreements.json").replace("\n", "");
-    log.info("Agreement json to post {}", agreementJson);
+  @UseDataProvider("settleAgreementDataProvider")
+  public void testSettleAgreement(final String agreementJson, final List<Long> expectedMissionIds)
+      throws Exception {
+    String agreementJsonNoNl = agreementJson.replace("\n", "");
+    log.info("Agreement json to post {}", agreementJsonNoNl);
 
-    String expectedResponseJson = "[\"/settlementEngine/mission/" + MISSION_ID_2
-        + "\",\"/settlementEngine/mission/" + MISSION_ID_1 + "\"]";
+    String expectedResponseJson =
+        expectedMissionIds.stream().map(id -> "\"/settlementEngine/mission/" + id + "\"")
+            .collect(Collectors.joining(",", "[", "]"));
+
     log.info("Expected json response {}", expectedResponseJson);
 
-    List<TradeAgreement> agreements = json.parse(agreementJson).getObject();
+    List<TradeAgreement> agreements = json.parse(agreementJsonNoNl).getObject();
     log.info("Agreement objects that the service will expect {}", agreements);
 
     given(this.mockSettlementService.spawnMissions(agreements))
-        .willReturn(Sets.newHashSet(MISSION_ID_1, MISSION_ID_2));
+        .willReturn(Sets.newHashSet(expectedMissionIds));
 
     this.mvc
         .perform(post("/settlementEngine").contentType(MediaType.APPLICATION_JSON_VALUE)
-            .content(agreementJson))
-        .andExpect(status().isAccepted()).andExpect(content().string(expectedResponseJson));
-
-  }
-
-  @Test
-  public void testSettleOneAgreement() throws Exception {
-    String agreementJson = readData("Test_IBM_Agreement.json").replace("\n", "");
-    log.info("Agreement json to post {}", agreementJson);
-
-    String expectedResponseJson = "[\"/settlementEngine/mission/" + MISSION_ID_1 + "\"]";
-    log.info("Expected json response {}", expectedResponseJson);
-
-    List<TradeAgreement> agreements = json.parse(agreementJson).getObject();
-    log.info("Agreement objects that the service will expect {}", agreements);
-
-    given(this.mockSettlementService.spawnMissions(agreements))
-        .willReturn(Sets.newHashSet(MISSION_ID_1));
-
-    this.mvc
-        .perform(post("/settlementEngine").contentType(MediaType.APPLICATION_JSON_VALUE)
-            .content(agreementJson))
+            .content(agreementJsonNoNl))
         .andExpect(status().isAccepted()).andExpect(content().string(expectedResponseJson));
 
   }

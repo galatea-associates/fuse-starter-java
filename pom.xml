@@ -150,12 +150,20 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Useful for waiting for an async task to complete -->
 		<dependency>
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
 			<version>2.0.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Allows us to parameterize tests -->
+        <dependency>
+            <groupId>com.tngtech.java</groupId>
+            <artifactId>junit-dataprovider</artifactId>
+            <version>1.10.0</version>
+            <scope>test</scope>
+        </dependency>
 		<!-- Allows us to run test suites that include/exclude junit categories -->
 		<dependency>
 			<groupId>com.googlecode.junit-toolbox</groupId>

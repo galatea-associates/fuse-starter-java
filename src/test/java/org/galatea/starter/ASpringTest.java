@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.jms.config.JmsListenerEndpointRegistry;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.rules.SpringClassRule;
+import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
 import java.io.IOException;
 
 @Slf4j
-@RunWith(SpringRunner.class)
 @ActiveProfiles("dev")
 public abstract class ASpringTest {
+
+  @ClassRule
+  public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
+
+  @Rule
+  public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
   @Autowired
   private ApplicationContext applicationContext;
