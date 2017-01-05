@@ -1,6 +1,7 @@
 
 package org.galatea.starter;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.io.IOUtils;
@@ -17,7 +18,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.util.LinkedList;
+import java.util.List;
+
+import junitparams.JUnitParamsRunner;
+import junitparams.mappers.DataMapper;
 
 @Slf4j
 @ActiveProfiles("dev")
@@ -31,6 +39,33 @@ public abstract class ASpringTest {
 
   @Autowired
   private ApplicationContext applicationContext;
+  
+  /**
+   * Pipe delimited mapper used for parameterized unit tests run by JUnitParamsRunner.class
+   *
+   */
+  public static class JsonTestFileMapper implements DataMapper {
+
+    public static final String DELIM = "\\|";
+    
+    @Override
+    @SneakyThrows
+    public Object[] map(Reader reader) {
+      BufferedReader br = new BufferedReader(reader);
+      String line;
+      List<Object[]> result = new LinkedList<>();
+      while ((line = br.readLine()) != null) {
+        if(line.trim().isEmpty()) {
+          continue;
+        }
+        String[] parts = line.split(DELIM);
+        result.add(parts); 
+      }
+      return result.toArray();
+    }
+
+  }
+
 
   public static String readData(final String fileName) throws IOException {
     return IOUtils.toString(ASpringTest.class.getClassLoader().getResourceAsStream(fileName))
