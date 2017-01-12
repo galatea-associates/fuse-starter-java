@@ -41,7 +41,7 @@ public abstract class ASpringTest {
   public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
   @Autowired
-  private ApplicationContext applicationContext;
+  protected ApplicationContext applicationContext;
 
   /**
    * Pipe delimited mapper used for parameterized unit tests run by JUnitParamsRunner.class
