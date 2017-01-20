@@ -1,6 +1,7 @@
 package org.galatea.starter.entrypoint;
 
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 @RestController
 public class SettlementRestController {
 
+  @NonNull
   SettlementService settlementService;
 
   public static final String SETTLE_MISSION_PATH = "/settlementEngine";
