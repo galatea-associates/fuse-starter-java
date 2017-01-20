@@ -95,12 +95,13 @@ public class SettlementRestControllerTest extends ASpringTest {
     given(this.mockSettlementService.spawnMissions(agreements))
         .willReturn(Sets.newTreeSet(expectedMissionIds));
 
-    this.mvc
+    ResultActions resultActions = this.mvc
         .perform(post("/settlementEngine").contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(agreementJson))
         .andExpect(status().isAccepted())
         .andExpect(jsonPath("$.response", containsInAnyOrder(expectedResponseJsonList.toArray())));
 
+    verifyAuditFields(resultActions);
   }
 
   @Test
