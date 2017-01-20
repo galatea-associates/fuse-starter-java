@@ -11,6 +11,10 @@ import org.galatea.starter.utils.FuseTraceRepository;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 
+import java.util.function.BiConsumer;
+
+import javax.jms.Message;
+
 
 @RequiredArgsConstructor
 @ToString(callSuper = true)
@@ -19,11 +23,14 @@ import org.springframework.jms.listener.DefaultMessageListenerContainer;
 public class FuseJmsListenerContainerFactory extends DefaultJmsListenerContainerFactory {
 
   @NonNull
-  protected final FuseTraceRepository repository;
+  protected FuseTraceRepository repository;
+
+  @NonNull
+  protected BiConsumer<Message, Exception> failedMessageConsumer;
 
   @Override
   protected DefaultMessageListenerContainer createContainerInstance() {
-    return new FuseMessageListenerContainer(repository);
+    return new FuseMessageListenerContainer(repository, failedMessageConsumer);
   }
 
 }

@@ -1,4 +1,3 @@
-
 package org.galatea.starter.entrypoint;
 
 import static org.hamcrest.Matchers.allOf;
