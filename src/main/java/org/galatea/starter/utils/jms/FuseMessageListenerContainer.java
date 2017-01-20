@@ -14,6 +14,8 @@ import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.Tracer.AutoClosedTrace;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 
+import java.util.function.BiConsumer;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
@@ -27,7 +29,10 @@ import javax.jms.TextMessage;
 public class FuseMessageListenerContainer extends DefaultMessageListenerContainer {
 
   @NonNull
-  protected final FuseTraceRepository repository;
+  protected FuseTraceRepository repository;
+
+  @NonNull
+  protected BiConsumer<Message, Exception> failedMessageConsumer;
 
   public static final String UNK = "UNKNOWN";
 
@@ -40,14 +45,24 @@ public class FuseMessageListenerContainer extends DefaultMessageListenerContaine
 
       addMessageInfoToTracer(message);
 
-      t.runAndTraceSuccess("message", () -> {
-        super.invokeListener(session, message);
-        return Void.TYPE;
-      });
+      // We expect the listener to handle any retryable exceptions internally. If the exception
+      // reaches the catch block, then we assume that the message has failed processing and should NOT be
+      // retried. That being said, the failed message consumer could decide to throw a
+      // RuntimeException, which would result in the message being placed back on the queue. While
+      // this is not encouraged, there may be certain circumstances where that is necessary.
+      try {
+        t.runAndTraceSuccess("message", () -> {
+          super.invokeListener(session, message);
+          return Void.TYPE;
+        });
+      } catch (Exception e) {
+        failedMessageConsumer.accept(message, e);
+      }
     }
 
   }
-
+  
+  
   protected void addMessageInfoToTracer(final Message msg) {
     String dest = UNK;
     String text = UNK;

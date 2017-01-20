@@ -67,8 +67,6 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   protected static final Long MISSION_ID_1 = 1091L;
 
-  protected static final Long MISSION_ID_2 = 2091L;
-
   @Before
   public void setup() {
     ObjectMapper objectMapper = new ObjectMapper();
