@@ -46,7 +46,7 @@ public class SettlementRestController {
   // @PostMapping to link http POST requests to this method
   // @RequestBody to have the post request body deserialized into a list of TradeAgreement objects
   @PostMapping(value = SETTLE_MISSION_PATH, consumes = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<RestResponse> settleAgreement(
+  public ResponseEntity<Set<String>> settleAgreement(
       @RequestBody final List<TradeAgreement> agreements,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
@@ -57,15 +57,14 @@ public class SettlementRestController {
     Set<String> missionIdUris =
         missionIds.stream().map(id -> GET_MISSION_PATH + id).collect(Collectors.toSet());
 
-    // wrap response in RestResponse to get nice Audit details in the response
-    return ResponseEntity.accepted().body(new RestResponse(missionIdUris));
+    return ResponseEntity.accepted().body(missionIdUris);
   }
 
   // @GetMapping to link http GET requests to this method
   // @PathVariable to take the id from the path and make it available as a method argument
   // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
   @GetMapping(value = GET_MISSION_PATH + "{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<RestResponse> getMission(@PathVariable final Long id,
+  public ResponseEntity<SettlementMission> getMission(@PathVariable final Long id,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
     // if an external request id was provided, grab it
@@ -74,8 +73,7 @@ public class SettlementRestController {
     Optional<SettlementMission> msn = settlementService.findMission(id);
 
     if (msn.isPresent()) {
-      // wrap response in RestResponse to get nice Audit details in the response
-      return ResponseEntity.ok(new RestResponse(msn.get()));
+      return ResponseEntity.ok(msn.get());
     }
 
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
