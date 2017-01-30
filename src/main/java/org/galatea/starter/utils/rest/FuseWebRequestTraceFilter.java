@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.galatea.starter.utils.FuseTraceRepository;
+import org.galatea.starter.utils.Tracer;
 import org.galatea.starter.utils.Tracer.AutoClosedTrace;
 import org.springframework.boot.actuate.trace.TraceProperties;
 import org.springframework.boot.actuate.trace.WebRequestTraceFilter;
@@ -21,6 +22,8 @@ import org.springframework.web.util.WebUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -124,10 +127,42 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
       } finally {
         enhanceTrace(springTraceInfo, request, status.intValue() == response.getStatus() ? response
             : new CustomStatusResponseWrapper(response, status.intValue()));
+        addAuditHeaders(response);
         updateResponse(response);
       }
 
     }
+  }
+
+  /**
+   * Adds audit information about the request/response to the response headers.
+   * 
+   * @param response
+   */
+  private void addAuditHeaders(final HttpServletResponse response) {
+    log.info("Attempting to add audit headers");
+    String internalQueryId = (String) Tracer.get(Tracer.class, Tracer.INTERNAL_REQUEST_ID);
+    String externalQueryId = (String) Tracer.get(Tracer.class, Tracer.EXTERNAL_REQUEST_ID);
+    String requestReceivedTime = (String) Tracer.get(Tracer.class, Tracer.TRACE_START_TIME_UTC);
+    String requestElapsedTimeMillis =
+        String.valueOf(Instant.parse(requestReceivedTime).until(Instant.now(), ChronoUnit.MILLIS));
+
+    logAndAddAuditHeader(response, "internalQueryId", internalQueryId);
+    logAndAddAuditHeader(response, "externalQueryId", externalQueryId);
+    logAndAddAuditHeader(response, "requestReceivedTime", requestReceivedTime);
+    logAndAddAuditHeader(response, "requestElapsedTimeMillis", requestElapsedTimeMillis);
+  }
+
+  /**
+   * Logs header name/value and adds them to the response.
+   * 
+   * @param headerName
+   * @param headerValue
+   */
+  private void logAndAddAuditHeader(HttpServletResponse response, String headerName,
+      String headerValue) {
+    log.debug("Adding audit header {}={}", headerName, headerValue);
+    response.addHeader(headerName, headerValue);
   }
 
   // TODO: What's this update about the response?
