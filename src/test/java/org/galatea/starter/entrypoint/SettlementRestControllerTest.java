@@ -1,13 +1,15 @@
 package org.galatea.starter.entrypoint;
 
-import static org.hamcrest.Matchers.allOf;
+
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -95,10 +97,10 @@ public class SettlementRestControllerTest extends ASpringTest {
         .willReturn(Sets.newTreeSet(expectedMissionIds));
 
     ResultActions resultActions = this.mvc
-        .perform(post("/settlementEngine").contentType(MediaType.APPLICATION_JSON_VALUE)
-            .content(agreementJson))
+        .perform(post("/settlementEngine?requestId=1234")
+            .contentType(MediaType.APPLICATION_JSON_VALUE).content(agreementJson))
         .andExpect(status().isAccepted())
-        .andExpect(jsonPath("$.response", containsInAnyOrder(expectedResponseJsonList.toArray())));
+        .andExpect(jsonPath("$", containsInAnyOrder(expectedResponseJsonList.toArray())));
 
     verifyAuditFields(resultActions);
   }
@@ -119,15 +121,15 @@ public class SettlementRestControllerTest extends ASpringTest {
     given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(testMission));
 
-    ResultActions resultActions = this.mvc
-        .perform(get("/settlementEngine/mission/" + MISSION_ID_1)
-            .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.response.id", is(MISSION_ID_1.intValue())))
-        .andExpect(jsonPath("$.response.externalParty", is(externapParty)))
-        .andExpect(jsonPath("$.response.instrument", is(instrument)))
-        .andExpect(jsonPath("$.response.direction", is(direction)))
-        .andExpect(jsonPath("$.response.qty", is(qty)));
+    ResultActions resultActions =
+        this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+            .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk())
+
+            .andExpect(jsonPath("$.id", is(MISSION_ID_1.intValue())))
+            .andExpect(jsonPath("$.externalParty", is(externapParty)))
+            .andExpect(jsonPath("$.instrument", is(instrument)))
+            .andExpect(jsonPath("$.direction", is(direction)))
+            .andExpect(jsonPath("$.qty", is(qty)));
 
     verifyAuditFields(resultActions);
   }
@@ -138,9 +140,11 @@ public class SettlementRestControllerTest extends ASpringTest {
 
     given(this.mockSettlementService.findMission(msnId)).willReturn(Optional.empty());
 
-    this.mvc
-        .perform(get("/settlementEngine/mission/" + msnId).accept(MediaType.APPLICATION_JSON_VALUE))
+    ResultActions resultActions = this.mvc
+        .perform(get("/settlementEngine/mission/" + msnId + "?requestId=1234")
+            .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound()).andExpect(content().string(""));
+    verifyAuditFields(resultActions);
   }
 
   /**
@@ -150,8 +154,11 @@ public class SettlementRestControllerTest extends ASpringTest {
    * @throws Exception On any validation exception
    */
   private void verifyAuditFields(ResultActions resultActions) throws Exception {
-    resultActions.andExpect(jsonPath("$.audit", allOf(hasKey("requestReceivedTime"),
-        hasKey("requestElapsedTime"), hasKey("externalQueryId"), hasKey("internalQueryId"))));
+    resultActions.andExpect(header().string("requestReceivedTime", not(isEmptyOrNullString())));
+    resultActions
+        .andExpect(header().string("requestElapsedTimeMillis", not(isEmptyOrNullString())));
+    resultActions.andExpect(header().string("externalQueryId", not(isEmptyOrNullString())));
+    resultActions.andExpect(header().string("internalQueryId", not(isEmptyOrNullString())));
   }
 
 }

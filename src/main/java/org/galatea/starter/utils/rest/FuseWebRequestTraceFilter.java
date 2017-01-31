@@ -141,14 +141,14 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
    */
   private void addAuditHeaders(final HttpServletResponse response) {
     log.info("Attempting to add audit headers");
-    String internalQueryId = (String) Tracer.get(Tracer.class, Tracer.INTERNAL_REQUEST_ID);
-    String externalQueryId = (String) Tracer.get(Tracer.class, Tracer.EXTERNAL_REQUEST_ID);
     String requestReceivedTime = (String) Tracer.get(Tracer.class, Tracer.TRACE_START_TIME_UTC);
     String requestElapsedTimeMillis =
         String.valueOf(Instant.parse(requestReceivedTime).until(Instant.now(), ChronoUnit.MILLIS));
 
-    logAndAddAuditHeader(response, "internalQueryId", internalQueryId);
-    logAndAddAuditHeader(response, "externalQueryId", externalQueryId);
+    logAndAddAuditHeader(response, "internalQueryId",
+        (String) Tracer.get(Tracer.class, Tracer.INTERNAL_REQUEST_ID));
+    logAndAddAuditHeader(response, "externalQueryId",
+        (String) Tracer.get(Tracer.class, Tracer.EXTERNAL_REQUEST_ID));
     logAndAddAuditHeader(response, "requestReceivedTime", requestReceivedTime);
     logAndAddAuditHeader(response, "requestElapsedTimeMillis", requestElapsedTimeMillis);
   }
@@ -162,7 +162,11 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
   private void logAndAddAuditHeader(HttpServletResponse response, String headerName,
       String headerValue) {
     log.debug("Adding audit header {}={}", headerName, headerValue);
-    response.addHeader(headerName, headerValue);
+    if (headerValue == null) {
+      log.debug("Not adding header {} with null value", headerName);
+    } else {
+      response.addHeader(headerName, headerValue);
+    }
   }
 
   // TODO: What's this update about the response?
