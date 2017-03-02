@@ -8,7 +8,7 @@
 	<packaging>jar</packaging>
 
 	<name>starter-java</name>
-	<url>http://maven.apache.org</url>
+	<url>https://github.com/GalateaRaj/fuse-starter-java</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,7 +19,7 @@
 			-Dapplication.name=${project.artifactId}
 			-Dapplication.log-dir=target/logs
 			-Dapplication.log-archive-root-dir=target/logs/archive
-			-Dlog4j.configurationFile=log4j2.yml,log4j2.console.yml
+			-Dlog4j.configurationFile=log4j2.yml,log4j2.debug.yml
 		</argLine>
 	</properties>
 
@@ -83,6 +83,8 @@
 		</dependency>
 
 		<!-- Enable production-ready features with actuator -->
+		<!-- See: http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints -->
+		<!-- and: www.baeldung.com/spring-boot-actuators -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>

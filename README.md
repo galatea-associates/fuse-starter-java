@@ -19,6 +19,14 @@ This readme will contain an index to features and their location in code.
 Postman
  - You can import our Postman collection (src/postman/Fuse-Starter-Java.postman_collection.json) for sample REST calls that can be made to the application once it has been started.
 
+## SonarQube integration
+- Sonar: https://sonarqube.com/dashboard?id=org.galatea%3Afuse-starter-java
+- To integrate into eclipse
+ - Install SonarLint
+ - r-click on fuse-starter-java -> SonarLint -> Change binding...
+ - Replace the current binding with 'https://sonarqube.com' in the URL
+ - Search 'fuse-starter-java' and accept
+
 ##  Components
 FUSE suggests that you break up your application into the following components.  Many of these correspond to spring stereotypes:
 - **Entry points**: Components that receive stimuli from the outside world and react to them.  This can include REST requests, JMS messages, files.  You'll find examples of these in the org.galatea.starter.entrypoint package.
@@ -40,9 +48,16 @@ FUSE currently shows how to read from a queue (not a topic).
 `org.galatea.starter.entrypoint.SettlementJmsListenerTest` - shows you how to test a jms listener.  SpringBoot fires up an embedded ActiveMQ broker for the test.  It's important to look at the mentiod annotated with @After in ASpringTest.  You'll see that we tear down the jms connection after each test to ensure isolation between tests.  This is important.
 
 ## Logging
-- See src/main/resources/log4j2.yml for the main configuration
-- See src/main/resources/log4j2.console.yml for configuration for logging to the console for local testing
-- See pom.xml for required dependencies
+- For the main configuration see: src/main/resources/log4j2.yml 
+- For configuring logging to the console and selectively enabling debug logging for local testing see: src/main/resources/log4j2.debug.yml 
+- For required dependencies see: pom.xml
+- For creation of internal request id see: Tracer.java
+- For creation of external request id for Rest requests see: SettlementRestController.java
+- For creation of external request id for JMS requests see: FuseMessageListenerContainer.java
+- For inclusion of internal/external request ids in log statements see: log4j2.yml's log-pattern definition
+
+## Request Audit
+For inclusion of audit details in the response headers see: FuseWebRequestTraceFilter.addAuditHeaders()
 
 ## Testing
 This section will cover some high level principles that we want to follow.  Specifics about testing a feature (e.g. JMS) will be covered in the section relevant to that topic.
@@ -55,4 +70,11 @@ We often struggle with the terms unit vs integration test.  For the purposes of 
 
 Mocking is a good way to unit test (keeping in mind that your mock needs to be used in conjuction with a integration test).  FUSE has plenty of examples of how to use @MockBean.  See `org.galatea.starter.entrypoint.SettlementJmsListenerTest` and `org.galatea.starter.entrypoint.SettlementRestControllerTest` for some examples of how to mock.  Both of those tests mock out the settlement service using `given(...)` or `verify(...)` 
 
+For testing rest requests/responses see:
+- SettlementRestControllerTest
+- For running a request: MockMvc.perform
+- For assertions based on the response: MockMvc.andExpect along with MockMvcResultMatchers static methods
+- For easy indexing of json responses: MockMvcResultMatchers.jsonPath and https://github.com/jayway/JsonPath
+- For assertions on response headers: SettlementRestControllerTest.verifyAuditHeaders()
+- For convenient tests/matchers: org.hamcrest.Matchers and https://code.google.com/archive/p/hamcrest/wikis/Tutorial.wiki
 

@@ -1,0 +1,35 @@
+# Defines the console appender and links it to the root logger
+# Defines some logger level overrides, useful when debugging/testing locally
+
+# Can specify using this configuration along with log4j2.yml via: -Dlog4j.configurationFile=log4j2.yml,log4j2.debug.yml
+
+Configuration:
+  name: Default  
+  # "status: trace" to print out logging configuration debug messages
+  status: trace
+  
+  Appenders:
+  
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: ${log-pattern}
+        
+  Loggers:
+
+    # Attach the root logger to the console appender
+    Root:
+      level: info 
+      AppenderRef:
+        - ref: Console  
+  
+      # Enable debug logging for all org.galatea.starter classes/loggers     
+    Logger:
+      - name: org.galatea.starter
+        level: debug
+
+      # Can change log levels for individual loggers as below
+#      - name: org.galatea.starter.utils.Tracer
+#        level: debug
+        

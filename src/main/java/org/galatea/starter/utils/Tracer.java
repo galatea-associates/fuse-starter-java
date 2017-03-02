@@ -9,22 +9,32 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.collections4.keyvalue.MultiKey;
+import org.slf4j.MDC;
 import org.springframework.util.StopWatch;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.Callable;
 
+@Slf4j
 @ToString
 @EqualsAndHashCode
-@Slf4j
+// TODO: What's the point of this class? Why's it exist? How's it work its mojo?
 public class Tracer {
 
   public static final String TRACE_START_TIME_UTC = "trace-start-UTC";
   public static final String TRACE_END_TIME_UTC = "trace-end-UTC";
   public static final String TRACE_SW_SUMMARY = "trace-timing-ms";
+  public static final String INTERNAL_REQUEST_ID = "internal-request-id";
+  public static final String EXTERNAL_REQUEST_ID = "external-request-id";
 
+  private static final Random QUERY_ID_GENERATOR = new Random();
+
+  // Map of Multi-key -> Object to store thread local state
+  // The first part of the Multi-key is meant to be a namespace-like value
+  // (e.g. Class) to reduce the chance of collisions
   private static final InheritableThreadLocal<Map<MultiKey<String>, Object>> traceInfo =
       new InheritableThreadLocal<Map<MultiKey<String>, Object>>() {
         @Override
@@ -44,10 +54,26 @@ public class Tracer {
 
   private Tracer() {}
 
+  /**
+   * Helper method to create a key given a Class and key.
+   *
+   * The Class acts as a namespace to reduce the chance of key collision.
+   *
+   * @param clz The class to use as the key namespace
+   * @param key The key portion of the MultiKey
+   * @return A multi-key composed of the Class and Key
+   */
   private static MultiKey<String> keyOf(final Class<?> clz, final String key) {
     return new MultiKey<>(clz.getSimpleName(), key);
   }
 
+  /**
+   * Convenience method to store a Value object given a Class and Key to use as the key
+   *
+   * @param clz The class owning the 'key'
+   * @param key The key identifier
+   * @param val The value
+   */
   public static void addTraceInfo(@NonNull final Class<?> clz, @NonNull final String key,
       @NonNull final Object val) {
     traceInfo.get().put(keyOf(clz, key), val);
@@ -62,9 +88,28 @@ public class Tracer {
   }
 
   /**
+   * Sets the externally provided request id in the trace info and in MDC for inclusion in log
+   * messages.
+   *
+   * @param externalRequestId The externally provided request id
+   */
+  public static void setExternalRequestId(String externalRequestId) {
+    // Add request id to Trace
+    addTraceInfo(Tracer.class, EXTERNAL_REQUEST_ID, externalRequestId);
+
+    log.debug("External request id: {}", externalRequestId);
+    log.debug("traceInfo: {}", traceInfo.get());
+
+    // And add to MDC so it will show up in the logs
+    // The key used here must align with the key defined in the logging config's log-pattern
+    MDC.put(EXTERNAL_REQUEST_ID, externalRequestId + " - ");
+  }
+
+  /**
    * Flatten the trace info into a map of maps. This is useful when you add the trace info to a
    * trace repository.
    *
+   * Only pulls out entries with a namespace (i.e. skips any elements with a null/"" namespace)
    */
   public static Map<String, Map<String, Object>> getFlattenedCopyOfTraceInfo() {
     Map<String, Map<String, Object>> flatMap = new HashMap<>(traceInfo.get().size());
@@ -79,7 +124,6 @@ public class Tracer {
 
     return flatMap;
   }
-
 
   /**
    * This is a useful class for running a trace. It allows us to use a trace in a try with which
@@ -106,17 +150,20 @@ public class Tracer {
       this.clz = clz;
       this.sw = new StopWatch();
       startTrace();
+      createInternalRequestId();
     }
 
     @Override
     public void close() {
       stopTrace();
       try {
+        log.debug("Updating trace repository");
         rpsy.addTraceInfo();
       } catch (Exception err) {
         log.warn("Could not save trace info. Discarding trace info.", err);
       }
       clearTrace();
+      MDC.clear();
     }
 
     /**
@@ -150,8 +197,8 @@ public class Tracer {
 
       sw.start();
 
-      Map<MultiKey<String>, Object> map = traceInfo.get();
-      map.put(keyOf(Tracer.class, TRACE_START_TIME_UTC), Instant.now().toString());
+      addTraceInfo(Tracer.class, TRACE_START_TIME_UTC, Instant.now().toString());
+      log.debug("Trace started. traceInfo: {}", traceInfo.get());
     }
 
     /**
@@ -159,12 +206,10 @@ public class Tracer {
      * stopped but nothing else will be timed.
      */
     private void stopTrace() {
-      Map<MultiKey<String>, Object> map = traceInfo.get();
-
       sw.stop();
 
-      map.put(keyOf(Tracer.class, TRACE_END_TIME_UTC), Instant.now().toString());
-      map.put(keyOf(Tracer.class, TRACE_SW_SUMMARY), sw.getTotalTimeMillis());
+      addTraceInfo(Tracer.class, TRACE_END_TIME_UTC, Instant.now().toString());
+      addTraceInfo(Tracer.class, TRACE_SW_SUMMARY, sw.getTotalTimeMillis());
     }
 
     /**
@@ -172,6 +217,29 @@ public class Tracer {
      */
     private void clearTrace() {
       traceInfo.get().clear();
+    }
+
+    /**
+     * Creates an internal id associated with this request.
+     *
+     * Also adds the internal id to the Tracer data captured, and to MDC so it will appear in the
+     * logs.
+     */
+    private void createInternalRequestId() {
+      // generate the internal request Id
+      // we want positive numbers only, so use nextInt(upperBound)
+      String internallyGeneratedId =
+          Integer.toString(QUERY_ID_GENERATOR.nextInt(Integer.MAX_VALUE));
+
+      // Add request id to Trace
+      addTraceInfo(Tracer.class, INTERNAL_REQUEST_ID, internallyGeneratedId);
+      log.debug("Created internal request id: {}", internallyGeneratedId);
+      log.debug("traceInfo: {}", traceInfo.get());
+
+      // And add to MDC so it will show up in the logs
+      // The key used here must align with the key defined in the logging
+      // config's log-pattern
+      MDC.put(INTERNAL_REQUEST_ID, internallyGeneratedId + " - ");
     }
   }
 }

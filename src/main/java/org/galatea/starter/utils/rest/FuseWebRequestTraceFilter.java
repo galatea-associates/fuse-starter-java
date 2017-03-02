@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.galatea.starter.utils.FuseTraceRepository;
+import org.galatea.starter.utils.Tracer;
 import org.galatea.starter.utils.Tracer.AutoClosedTrace;
 import org.springframework.boot.actuate.trace.TraceProperties;
 import org.springframework.boot.actuate.trace.WebRequestTraceFilter;
@@ -21,6 +22,8 @@ import org.springframework.web.util.WebUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -29,7 +32,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-
 
 /**
  * Builds upon spring actuator's web request tracer to capture interesting audit information. We
@@ -42,6 +44,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
+// TODO what is this class meant to do? Why's it exist? How's it work its mojo?
 public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
 
   @NonNull
@@ -56,7 +59,6 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
   public static final String REQUEST_PAYLOAD = "request-payload";
   public static final String RESPONSE_PAYLOAD = "response-payload";
   public static final String SPRING_TRACE_INFO = "spring-trace";
-
 
   /**
    * Sadly we have to write our own constructor since lombok can't call super with args.
@@ -79,7 +81,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
   @Override
   protected void doFilterInternal(final HttpServletRequest request,
       final HttpServletResponse response, final FilterChain filterChain)
-          throws ServletException, IOException {
+      throws ServletException, IOException {
 
     // Skip paths that are not interesting to trace
     if (pathsToSkip.test(request.getRequestURI())) {
@@ -105,6 +107,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
   }
 
   @SneakyThrows
+  // what's this method responsible for?
   protected void doFilterInternalHelper(final HttpServletRequest request,
       final HttpServletResponse response, final FilterChain filterChain) {
 
@@ -124,12 +127,49 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
       } finally {
         enhanceTrace(springTraceInfo, request, status.intValue() == response.getStatus() ? response
             : new CustomStatusResponseWrapper(response, status.intValue()));
+        addAuditHeaders(response);
         updateResponse(response);
       }
 
     }
   }
 
+  /**
+   * Adds audit information about the request/response to the response headers.
+   * 
+   * @param response
+   */
+  private void addAuditHeaders(final HttpServletResponse response) {
+    log.info("Attempting to add audit headers");
+    String requestReceivedTime = (String) Tracer.get(Tracer.class, Tracer.TRACE_START_TIME_UTC);
+    String requestElapsedTimeMillis =
+        String.valueOf(Instant.parse(requestReceivedTime).until(Instant.now(), ChronoUnit.MILLIS));
+
+    logAndAddAuditHeader(response, "internalQueryId",
+        (String) Tracer.get(Tracer.class, Tracer.INTERNAL_REQUEST_ID));
+    logAndAddAuditHeader(response, "externalQueryId",
+        (String) Tracer.get(Tracer.class, Tracer.EXTERNAL_REQUEST_ID));
+    logAndAddAuditHeader(response, "requestReceivedTime", requestReceivedTime);
+    logAndAddAuditHeader(response, "requestElapsedTimeMillis", requestElapsedTimeMillis);
+  }
+
+  /**
+   * Logs header name/value and adds them to the response.
+   * 
+   * @param headerName
+   * @param headerValue
+   */
+  private void logAndAddAuditHeader(HttpServletResponse response, String headerName,
+      String headerValue) {
+    log.debug("Adding audit header {}={}", headerName, headerValue);
+    if (headerValue == null) {
+      log.debug("Not adding header {} with null value", headerName);
+    } else {
+      response.addHeader(headerName, headerValue);
+    }
+  }
+
+  // TODO: What's this update about the response?
   private void updateResponse(final HttpServletResponse response) throws IOException {
     ContentCachingResponseWrapper responseWrapper =
         WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
@@ -148,6 +188,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     // Get the request and response payload and add to our trace. Note that the request payload is
     // only extracted AFTER the REST method handler has completed. This is intentional and
     // necessary.
+    // TODO: why is it necessary?
     ContentCachingRequestWrapper requestWapper =
         WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
     ContentCachingResponseWrapper responseWrapper =
