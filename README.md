@@ -57,7 +57,7 @@ FUSE currently shows how to read from a queue (not a topic).
 - For inclusion of internal/external request ids in log statements see: log4j2.yml's log-pattern definition
 
 ## Request Audit
-For creation of standard audit/payload response for REST requests see: SettlementRestController.java and RestResponse.java
+For inclusion of audit details in the response headers see: FuseWebRequestTraceFilter.addAuditHeaders()
 
 ## Testing
 This section will cover some high level principles that we want to follow.  Specifics about testing a feature (e.g. JMS) will be covered in the section relevant to that topic.
@@ -75,5 +75,6 @@ For testing rest requests/responses see:
 - For running a request: MockMvc.perform
 - For assertions based on the response: MockMvc.andExpect along with MockMvcResultMatchers static methods
 - For easy indexing of json responses: MockMvcResultMatchers.jsonPath and https://github.com/jayway/JsonPath
+- For assertions on response headers: SettlementRestControllerTest.verifyAuditHeaders()
 - For convenient tests/matchers: org.hamcrest.Matchers and https://code.google.com/archive/p/hamcrest/wikis/Tutorial.wiki
 

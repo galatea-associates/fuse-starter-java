@@ -102,7 +102,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .andExpect(status().isAccepted())
         .andExpect(jsonPath("$", containsInAnyOrder(expectedResponseJsonList.toArray())));
 
-    verifyAuditFields(resultActions);
+    verifyAuditHeaders(resultActions);
   }
 
   @Test
@@ -131,7 +131,7 @@ public class SettlementRestControllerTest extends ASpringTest {
             .andExpect(jsonPath("$.direction", is(direction)))
             .andExpect(jsonPath("$.qty", is(qty)));
 
-    verifyAuditFields(resultActions);
+    verifyAuditHeaders(resultActions);
   }
 
   @Test
@@ -144,7 +144,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .perform(get("/settlementEngine/mission/" + msnId + "?requestId=1234")
             .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound()).andExpect(content().string(""));
-    verifyAuditFields(resultActions);
+    verifyAuditHeaders(resultActions);
   }
 
   /**
@@ -153,7 +153,7 @@ public class SettlementRestControllerTest extends ASpringTest {
    * @param resultActions The resultActions object wrapping the response
    * @throws Exception On any validation exception
    */
-  private void verifyAuditFields(ResultActions resultActions) throws Exception {
+  private void verifyAuditHeaders(ResultActions resultActions) throws Exception {
     resultActions.andExpect(header().string("requestReceivedTime", not(isEmptyOrNullString())));
     resultActions
         .andExpect(header().string("requestElapsedTimeMillis", not(isEmptyOrNullString())));
