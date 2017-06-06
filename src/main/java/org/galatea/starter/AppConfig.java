@@ -6,6 +6,7 @@ import net.sf.aspect4log.aspect.LogAspect;
 
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.service.IAgreementTransformer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @Slf4j
 @Configuration
 @EnableAspectJAutoProxy
+@EnableCaching // pom imports net.sf.ehcache:ehcache, src/main/resources/ehcache.xml configures.
 public class AppConfig {
 
   @Bean
