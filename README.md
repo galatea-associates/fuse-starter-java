@@ -18,6 +18,14 @@ This readme will contain an index to features and their location in code.
 
 Postman
  - You can import our Postman collection (src/postman/Fuse-Starter-Java.postman_collection.json) for sample REST calls that can be made to the application once it has been started.
+ 
+## Branching model
+We use this branching model in fuse-starter-java:  http://nvie.com/posts/a-successful-git-branching-model/
+
+- Feature branches should be created under feature/
+- Release candidate branches should be created under release/
+- Develop is the main development branch
+- Master should mirror what is running in "production"
 
 ## SonarQube integration
 - Sonar: https://sonarqube.com/dashboard?id=org.galatea%3Afuse-starter-java
