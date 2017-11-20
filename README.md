@@ -28,7 +28,7 @@ We use this branching model in fuse-starter-java:  http://nvie.com/posts/a-succe
 - Master should mirror what is running in "production"
 
 ## SonarQube integration
-- Sonar: https://sonarqube.com/dashboard?id=org.galatea%3Afuse-starter-java
+- Sonar: https://sonarcloud.io/dashboard?id=org.galatea%3Afuse-starter-java (can login using GitHub account)
 - To integrate into eclipse
  - Install SonarLint
  - r-click on fuse-starter-java -> SonarLint -> Change binding...
