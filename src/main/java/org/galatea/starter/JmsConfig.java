@@ -1,7 +1,6 @@
 
 package org.galatea.starter;
 
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.utils.FuseTraceRepository;
