@@ -9,6 +9,8 @@ pipeline {
 			steps {
 				echo 'Environment info'
 				sh 'mvn -version'
+				echo 'Branch name:'
+				echo BRANCH_NAME
 			}
 		}
 		stage('Build') {
@@ -40,18 +42,21 @@ pipeline {
             // }
 		}
 		stage('SonarQube analysis') {
-			// withSonarQubeEnv('My SonarQube Server') {	// this will come from the Manage Jenkins -> Configure System -> SQ Servers section, which doesn't current exist...
-				// requires SonarQube Scanner for Maven 3.2+
-				// sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
-			// }
-		}
-		stage('Quality Gate'){
-			//timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
-			//	def qg = waitForQualityGate()
-			//	if (qg.status != 'OK') {
-			//		error "Pipeline aborted due to quality gate failure: ${qg.status}"	// note that "" are needed for string interpolation
-			//	}
-			//}
+			steps {
+				withSonarQubeEnv('SonarCloud FUSE') {	// this will come from the Manage Jenkins -> Configure System -> SQ Servers section, which doesn't current exist...
+					// requires SonarQube Scanner for Maven 3.2+
+					sh 'mvn sonar:sonar'
+				}
+				
+				timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
+					script {
+						def qg = waitForQualityGate()
+						if (qg.status != 'OK') {
+							error "Pipeline aborted due to quality gate failure: ${qg.status}"	// note that "" are needed for string interpolation
+						}
+					}
+				}
+			}
 		}
 		stage('Deliver') {
 			steps {
