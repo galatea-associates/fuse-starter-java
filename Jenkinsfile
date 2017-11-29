@@ -48,7 +48,7 @@ pipeline {
 					sh 'mvn sonar:sonar'
 				}
 				
-				timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
+				timeout(time: 5, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
 					script {
 						def qg = waitForQualityGate()
 						if (qg.status != 'OK') {
@@ -56,6 +56,11 @@ pipeline {
 						}
 					}
 				}
+			}
+		}
+		stage('Checktyle') {
+			steps {
+				sh 'mvn checkstyle:checkstyle'
 			}
 		}
 		stage('Deliver') {
