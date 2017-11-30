@@ -43,11 +43,15 @@ pipeline {
 		}
 		stage('SonarQube analysis') {
 			steps {
-				withSonarQubeEnv('SonarCloud FUSE') {	// this will come from the Manage Jenkins -> Configure System -> SQ Servers section, which doesn't current exist...
+				withSonarQubeEnv('SonarQube FUSE') {	// this will come from the Manage Jenkins -> Configure System -> SQ Servers section, which doesn't current exist...
 					// requires SonarQube Scanner for Maven 3.2+
 					sh 'mvn sonar:sonar'
 				}
-				
+			}
+		}
+		stage('Quality gate') {
+			steps {
+                // this will currently always timeout. believe it's because SQ never posts back to Jenkins that it's done (even though it has)
 				timeout(time: 5, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
 					script {
 						def qg = waitForQualityGate()
@@ -58,9 +62,9 @@ pipeline {
 				}
 			}
 		}
-		stage('Checktyle') {
+		stage('Checkstyle') {
 			steps {
-				sh 'mvn checkstyle:checkstyle'
+				sh 'mvn checkstyle:check'
 			}
 		}
 		stage('Deliver') {

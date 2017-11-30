@@ -33,7 +33,6 @@ public class SettlementService {
   @NonNull
   IAgreementTransformer agreementTransformer;
 
-
   /**
    * Create missions based on the agreements provided.
    *
@@ -59,5 +58,4 @@ public class SettlementService {
   public Optional<SettlementMission> findMission(final Long id) {
     return Optional.ofNullable(missionrpsy.findOne(id));
   }
-
 }

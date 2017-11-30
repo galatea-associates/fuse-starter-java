@@ -185,6 +185,22 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.17</version>
+                <!--<configuration>-->
+                    <!--<configLocation>google_checks.xml</configLocation>-->
+                <!--</configuration>-->
+                <executions>
+                    <execution>
+                        <id>checkstyle</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <failOnViolation>true</failOnViolation>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
