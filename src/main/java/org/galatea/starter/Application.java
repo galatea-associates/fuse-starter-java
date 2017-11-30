@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @RequiredArgsConstructor
 @Slf4j
 @SpringBootApplication
+@EnableFeignClients
 public class Application {
 
   /**

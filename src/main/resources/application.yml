@@ -12,6 +12,11 @@ mvc:
 jms:
    listener-concurrency: 1-5
    agreement-queue: sandbox.agreement      
+
+logging:
+   level:
+      # Feign logging only responds to the DEBUG level
+      org.galatea.starter.entrypoint.IUpstreamService: DEBUG
 ---
 # Test properties go here
 spring:
@@ -33,4 +38,4 @@ spring:
    datasource:
       username: sa
       password:
-         
+

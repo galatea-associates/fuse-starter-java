@@ -61,6 +61,9 @@ public class SettlementRestControllerTest extends ASpringTest {
   @MockBean
   private SettlementService mockSettlementService;
 
+  @MockBean
+  private IUpstreamService mockUpstreamService;
+
   private JacksonTester<List<TradeAgreement>> agreementJsonTester;
 
   private JacksonTester<List<Long>> missionIdJsonTester;
