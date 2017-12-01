@@ -1,5 +1,7 @@
 # Global properties go here
 spring:
+   profiles:
+      active: test
    datasource:
       url: jdbc:h2:~/test
       driver-class-name: org.h2.Driver
@@ -11,7 +13,7 @@ mvc:
    max-size-trace-payload: 50000
 jms:
    listener-concurrency: 1-5
-   agreement-queue: sandbox.agreement      
+   agreement-queue: sandbox.agreement
 ---
 # Test properties go here
 spring:
@@ -33,4 +35,3 @@ spring:
    datasource:
       username: sa
       password:
-         

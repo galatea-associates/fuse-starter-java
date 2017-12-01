@@ -5,18 +5,40 @@ This project serves two functions:
 
 This readme will contain an index to features and their location in code.
 
-## How to "run" the project
-- Eclipse
- - fuse-starter-java-app.launch will run that main method that starts the spring application context.  This will start a jms listener and REST services.  
- - fuse-starter-java-tests-unit.launch will run unit tests
- - fuse-starter-java-tests-all.launch will run unit + integration tests
-- Maven
- - mvn test will run the unit tests
- - mvn verify will run the unit and integration tests
-- Capsule
+## Getting Started
+### Eclipse
+- Import as a maven project however you like. https://www.youtube.com/watch?v=BlkgrXb3L0c is one place to start if you're at a complete loss on this step.
+- Install lombok: https://projectlombok.org/setup/eclipse.  Note if you're doing this step last because you raced ahead and nothing compiles you'll have to do some cleans and re-compiles to get lombok involved in generating all the class files.
+- Run stuff:
+  - src/main/java/org/galatea/starter/Application.java -> r-click -> run as Java Application.  This will start a jms listener and REST services.  Note, there is an eclipse .launch file provided which configures some VM and Program args.  
+    - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
+  - src/test/java/org/galatea/starter/UnitTestRunner.java -> r-click -> run as Junit test to run just the unit tests.
+  - src/test/java/org/galatea/starter/AllTestRunner.java -> r-click -> run as Junit test to run the unit and integration tests.
+
+### IntelliJ
+- Import as a maven project.  A simple way to do this is to Open File and select the pom.xml.
+- Install lombok: https://projectlombok.org/setup/intellij.
+- Run stuff:
+  - src/main/java/org/galatea/starter/Application.java -> r-click -> Run Application.main().  This will start a jms listener and REST services.  Note, there is a supplied Run Configurations for this class in .idea/runConfigurations which sets up some VM and Program args for this class.  If IntelliJ didn't automatically find them you may have to manually set them.
+    - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
+  - src/test/java/org/galatea/starter/UnitTestRunner.java -> r-click -> run UnitTestRunner to run just the unit tests.
+  - src/test/java/org/galatea/starter/AllTestRunner.java -> r-click -> run AllTestRunner to run the unit and integration tests.
+
+### A note on spring profiles
+- The project comes with support for 3 spring profiles:
+  - test: this profile is intended for running unit and integration tests.  This is the default active profile in application.yml
+  - dev: this profile is for running the Application main via the IDE or cmd line.
+  - uat: this profile is intended for a deployed environment.
+- Your ultimate use of profiles will be dictated by the physical environment availables to your project.
+
+### Maven
+- mvn test will run the unit tests
+- mvn verify will run the unit and integration tests
+
+### Capsule
   - Once you've run mvn install, you should have a runnable jar in your target directory.  Run this command to start the jvm:  `java -Dcapsule.log=verbose -Dcapsule.mode=[mode] -jar target/fuse-starter-java-[version]-capsule.jar`  (e.g. `java -Dcapsule.log=verbose -Dcapsule.mode=test -jar target/fuse-starter-java-0.0.1-SNAPSHOT-capsule.jar`)
 
-Postman
+### Postman
  - You can import our Postman collection (src/postman/Fuse-Starter-Java.postman_collection.json) for sample REST calls that can be made to the application once it has been started.
  
 ## Branching model
