@@ -13,7 +13,6 @@ import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.Tracer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +37,7 @@ import java.util.stream.Collectors;
 public class SettlementRestController {
 
   @NonNull
-  SettlementService settlementService;
-  @NonNull
-  IUpstreamService upstreamService;
+  SettlementService settlementService;;
 
   public static final String SETTLE_MISSION_PATH = "/settlementEngine";
   public static final String GET_MISSION_PATH = SETTLE_MISSION_PATH + "/mission/";
@@ -71,10 +68,6 @@ public class SettlementRestController {
 
     // if an external request id was provided, grab it
     processRequestId(requestId);
-
-    // Get contributors to fuse and print them
-    List<Contributor> contributors = upstreamService.contributors("GalateaRaj", "fuse-starter-java");
-    contributors.forEach(contributor -> System.out.println(contributor));
 
     Optional<SettlementMission> msn = settlementService.findMission(id);
 

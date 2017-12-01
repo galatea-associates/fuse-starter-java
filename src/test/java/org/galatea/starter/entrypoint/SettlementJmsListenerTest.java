@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.service.IAgreementTransformer;
 import org.galatea.starter.service.SettlementService;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,9 @@ public class SettlementJmsListenerTest extends ASpringTest {
 
   @MockBean
   private SettlementService mockSettlementService;
+
+  @MockBean
+  private IAgreementTransformer agreementTransformer;
 
   @Value("${jms.agreement-queue}")
   protected String queueName;
