@@ -75,6 +75,7 @@ pipeline {
 			}
 		}
 //        stage('Integration tests') {
+//          only for PR build
 //            steps {
 //                sh 'mvn verify'
 //            }
@@ -84,5 +85,13 @@ pipeline {
 //            //    }
 //            // }
 //        }
+        stage('Performance tests') {
+            when {
+                expression { BRANCH_NAME.contains('develop') }
+            }
+            steps {
+                echo 'Running performance tests...'
+            }
+        }
 	}
 }
