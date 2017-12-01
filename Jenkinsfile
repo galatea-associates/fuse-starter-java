@@ -43,7 +43,10 @@ pipeline {
 		}
 		stage('SonarQube analysis') {
 			steps {
-				withSonarQubeEnv('SonarQube FUSE') {	// this will come from the Manage Jenkins -> Configure System -> SQ Servers section, which doesn't current exist...
+                // have created 2 SQ instances on Jenkins. One is SonarCloud and one is SonarQube
+                // using SonarCloud results in an error related to parsing html
+                // using SonarQube results in the analysis being done, but always timing out as the web ook reply comes from SonarCloud
+				withSonarQubeEnv('SonarQube FUSE') {
 					// requires SonarQube Scanner for Maven 3.2+
 					sh 'mvn sonar:sonar'
 				}
