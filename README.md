@@ -7,14 +7,27 @@ This readme will contain an index to features and their location in code.
 
 ## Getting Started
 ### Eclipse
-- import as a maven project however you like. https://www.youtube.com/watch?v=BlkgrXb3L0c is one place to start if you're at a complete loss on this step.
-- you're going to need to install lombok for the lombok stuff to work.  Lombok is used extensively in this project.  https://projectlombok.org/ is a good place to get started on that.  Particularly this page which takes you through the pretty simple steps to install lombok in eclipse.  Note if you're doing this step last because you raced ahead and nothing compiles you'll have to do some cleans and re-compiles to get lombok involved in generating all the class files.
-- fuse-starter-java-app.launch will run that main method that starts the spring application context.  This will start a jms listener and REST services.  You can interact with those REST services using Postman. 
-- fuse-starter-java-tests-unit.launch will run unit tests
-- fuse-starter-java-tests-all.launch will run unit + integration tests
+- Import as a maven project however you like. https://www.youtube.com/watch?v=BlkgrXb3L0c is one place to start if you're at a complete loss on this step.
+- Install lombok: https://projectlombok.org/setup/eclipse.  Note if you're doing this step last because you raced ahead and nothing compiles you'll have to do some cleans and re-compiles to get lombok involved in generating all the class files.
+- fuse-starter-java-app.launch will run the main method that starts the spring application context.  This will start a jms listener and REST services.  We provide an eclipse launch script because some log4j2 configuration is done as VM args, and the active spring profile should be provided as a Program arg.
+  - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
+- right-click -> run as Junit test on src/test/java/org/galatea/starter/UnitTestRunner.java to run just the unit tests.
+- right-click -> run as Junit test on src/test/java/org/galatea/starter/AllTestRunner.java to run the unit and integration tests.
 
 ### IntelliJ
-- 
+- Import as a maven project.  A simple way to do this is to Open File and select the pom.xml.
+- Install lombok: https://projectlombok.org/setup/intellij.
+- right-click -> Run Application.main() on src/main/java/org/galatea/starter/Application.java.  You should have pulled down the VM args and Program args as a run configuration from /.idea/runConfigurations for this class.
+  - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
+- right-click -> run UnitTestRunner on src/test/java/org/galatea/starter/UnitTestRunner.java to run just the unit tests.
+- right-click -> run AllTestRunner on src/test/java/org/galatea/starter/AllTestRunner.java to run the unit and integration tests.
+
+### A note on spring profiles
+- The project comes with support for 3 spring profiles:
+  - test: this profile is intended for running unit and integration tests.  This is the default active profile in application.yml
+  - dev: this profile is for running the Application main via the IDE or cmd line.
+  - uat: this profile is intended for a deployed environment.
+- Your ultimate use of profiles will be dictated by the physical environment availables to your project.
 
 ### Maven
 - mvn test will run the unit tests
