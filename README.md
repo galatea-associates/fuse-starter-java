@@ -9,18 +9,20 @@ This readme will contain an index to features and their location in code.
 ### Eclipse
 - Import as a maven project however you like. https://www.youtube.com/watch?v=BlkgrXb3L0c is one place to start if you're at a complete loss on this step.
 - Install lombok: https://projectlombok.org/setup/eclipse.  Note if you're doing this step last because you raced ahead and nothing compiles you'll have to do some cleans and re-compiles to get lombok involved in generating all the class files.
-- fuse-starter-java-app.launch will run the main method that starts the spring application context.  This will start a jms listener and REST services.  We provide an eclipse launch script because some log4j2 configuration is done as VM args, and the active spring profile should be provided as a Program arg.
-  - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
-- right-click -> run as Junit test on src/test/java/org/galatea/starter/UnitTestRunner.java to run just the unit tests.
-- right-click -> run as Junit test on src/test/java/org/galatea/starter/AllTestRunner.java to run the unit and integration tests.
+- Run stuff:
+  - src/main/java/org/galatea/starter/Application.java -> r-click -> run as Java Application.  This will start a jms listener and REST services.  Note, there is an eclipse .launch file provided which configures some VM and Program args.  
+    - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
+  - src/test/java/org/galatea/starter/UnitTestRunner.java -> r-click -> run as Junit test to run just the unit tests.
+  - src/test/java/org/galatea/starter/AllTestRunner.java -> r-click -> run as Junit test to run the unit and integration tests.
 
 ### IntelliJ
 - Import as a maven project.  A simple way to do this is to Open File and select the pom.xml.
 - Install lombok: https://projectlombok.org/setup/intellij.
-- right-click -> Run Application.main() on src/main/java/org/galatea/starter/Application.java.  You should have pulled down the VM args and Program args as a run configuration from /.idea/runConfigurations for this class.
-  - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
-- right-click -> run UnitTestRunner on src/test/java/org/galatea/starter/UnitTestRunner.java to run just the unit tests.
-- right-click -> run AllTestRunner on src/test/java/org/galatea/starter/AllTestRunner.java to run the unit and integration tests.
+- Run stuff:
+  - src/main/java/org/galatea/starter/Application.java -> r-click -> Run Application.main().  This will start a jms listener and REST services.  Note, there is a supplied Run Configurations for this class in .idea/runConfigurations which sets up some VM and Program args for this class.  If IntelliJ didn't automatically find them you may have to manually set them.
+    - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
+  - src/test/java/org/galatea/starter/UnitTestRunner.java -> r-click -> run UnitTestRunner to run just the unit tests.
+  - src/test/java/org/galatea/starter/AllTestRunner.java -> r-click -> run AllTestRunner to run the unit and integration tests.
 
 ### A note on spring profiles
 - The project comes with support for 3 spring profiles:
