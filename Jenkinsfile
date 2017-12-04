@@ -74,20 +74,23 @@ pipeline {
 				// sh './jenkins/scripts/deliver.sh'
 			}
 		}
-//        stage('Integration tests') {
-//          only for PR build
-//            steps {
-//                sh 'mvn verify'
-//            }
-//            // post {
-//            //    always {
-//            //      junit 'target/surefire-reports/*.xml'
-//            //    }
-//            // }
-//        }
+        stage('Integration tests') {
+			// according to https://gist.github.com/jonico/e205b16cf07451b2f475543cf1541e70 we can check for a PR build using the following
+			when {
+				expression { BRANCH_NAME ==~ /^PR-\d+$/ }
+			}
+            steps {
+                sh 'mvn verify'
+            }
+            // post {
+            //    always {
+            //      junit 'target/surefire-reports/*.xml'
+            //    }
+            // }
+        }
         stage('Performance tests') {
             when {
-                expression { BRANCH_NAME.contains('develop') }
+                branch 'develop'
             }
             steps {
                 echo 'Running performance tests...'
