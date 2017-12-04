@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
 
+import org.galatea.starter.domain.FXRateException;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
@@ -52,11 +53,14 @@ public class SettlementRestController {
     // if an external request id was provided, grab it
     processRequestId(requestId);
 
-    Set<Long> missionIds = settlementService.spawnMissions(agreements);
-    Set<String> missionIdUris =
-        missionIds.stream().map(id -> GET_MISSION_PATH + id).collect(Collectors.toSet());
-
-    return ResponseEntity.accepted().body(missionIdUris);
+    try {
+        Set<Long> missionIds = settlementService.spawnMissions(agreements);
+        Set<String> missionIdUris = missionIds.stream().map(id -> GET_MISSION_PATH + id).collect(Collectors.toSet());
+        return ResponseEntity.accepted().body(missionIdUris);
+    } catch (FXRateException e) {
+        log.error("Failed to create FXRateResponse.", e);
+        return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+    }
   }
 
   // @GetMapping to link http GET requests to this method

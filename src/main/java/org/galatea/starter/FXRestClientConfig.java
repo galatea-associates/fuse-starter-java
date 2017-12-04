@@ -30,9 +30,8 @@ public class FXRestClientConfig {
 
     public ObjectMapper customObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(FXRateResponse.class, new FXRateResponseDeserializer(FXRateResponse.class));
-        objectMapper.registerModule(module);
+        objectMapper.registerModule(new SimpleModule().addDeserializer(FXRateResponse.class,
+            new FXRateResponseDeserializer(FXRateResponse.class)));
         return objectMapper;
     }
 
