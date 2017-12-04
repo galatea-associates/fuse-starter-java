@@ -66,12 +66,24 @@ pipeline {
             //    }
             // }
         }
-		stage('Deliver') {
+		stage('Deploy') {
+			when {
+				not {
+					// sure there's a nicer way of doing this with a regex...
+					expression { BRANCH_NAME.startsWith('feature/') }
+					expression { BRANCH_NAME.startsWith('hotfix/') }
+					expression { BRANCH_NAME.startsWith('bugfix/') }
+				}
+			}
 			steps {
-				echo 'Delivering....'
-				// The Jenkins Maven tutorial (https://jenkins.io/doc/tutorials/building-a-java-app-with-maven/)
-				// runs the script inside https://github.com/gilesgas/simple-java-maven-app/blob/master/jenkins/scripts/deliver.sh
-				// sh './jenkins/scripts/deliver.sh'
+				echo 'Deploying....'
+//				pushToCloudFoundry(
+//					target: 'api.local.pcfdev.io',
+//					organization: 'pcfdev-org',
+//					cloudSpace: 'pcfdev-space',
+//					credentialsId: 'pcfdev_user',
+//					manifestChoice: [manifestFile: 'path/to/manifest.yml']
+//				)
 			}
 		}
         stage('Integration tests') {
