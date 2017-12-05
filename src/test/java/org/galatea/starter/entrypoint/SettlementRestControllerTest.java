@@ -26,6 +26,7 @@ import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
+import org.joda.money.BigMoney;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -112,9 +113,19 @@ public class SettlementRestControllerTest extends ASpringTest {
     String instrument = "IBM";
     String direction = "REC";
     double qty = 100;
+    BigMoney proceeds = BigMoney.parse("GBP 100");
+    BigMoney usdProceeds = BigMoney.parse("USD 135");
 
-    SettlementMission testMission = SettlementMission.builder().id(MISSION_ID_1).depot(depot)
-        .externalParty(externapParty).instrument(instrument).direction(direction).qty(qty).build();
+    SettlementMission testMission = SettlementMission.builder()
+        .id(MISSION_ID_1)
+        .depot(depot)
+        .externalParty(externapParty)
+        .instrument(instrument)
+        .direction(direction)
+        .qty(qty)
+        .proceeds(proceeds)
+        .usdProceeds(usdProceeds)
+        .build();
     log.info("Test mission: {}", testMission);
 
 

@@ -18,13 +18,17 @@ public class AgreementTransformer implements IAgreementTransformer {
 
     @Override
     public SettlementMission transform(TradeAgreement agreement) {
+        SettlementMission mission = SettlementMission.builder()
+            .instrument(agreement.getInstrument())
+            .externalParty(agreement.getExternalParty())
+            .depot("DTC")
+            .qty(agreement.getQty())
+            .direction("B".equals(agreement.getBuySell()) ? "REC" : "DEL")
+            .proceeds(agreement.getProceeds())
+            .usdProceeds(proceedsCalc.getUSDProceeds(agreement.getProceeds()))
+            .build();
 
-        BigMoney base = BigMoney.parse("GBP 100");
-        BigMoney usdProceeds = proceedsCalc.getUSDProceeds(base);
-        log.info(usdProceeds.toString());
-
-        return SettlementMission.builder().instrument(agreement.getInstrument())
-            .externalParty(agreement.getExternalParty()).depot("DTC").qty(agreement.getQty())
-            .direction("B".equals(agreement.getBuySell()) ? "REC" : "DEL").build();
+        log.info(mission.toString());
+        return mission;
     }
 }

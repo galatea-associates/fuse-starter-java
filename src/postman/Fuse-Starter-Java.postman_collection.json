@@ -26,7 +26,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n\t{\n\t\t\"instrument\": \"IBM\",\n\t\t\"internalParty\": \"INT-1\",\n\t\t\"externalParty\": \"EXT-1\",\n\t\t\"buySell\": \"B\",\n\t\t\"qty\": 100\n\t}\n]"
+					"raw": "[\n\t{\n\t\t\"instrument\": \"IBM\",\n\t\t\"internalParty\": \"INT-1\",\n\t\t\"externalParty\": \"EXT-1\",\n\t\t\"buySell\": \"B\",\n\t\t\"qty\": 100, \n\t\t\"proceeds\": \"GBP 100\"\n\t}\n]"
 				},
 				"description": ""
 			},

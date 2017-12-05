@@ -1,5 +1,6 @@
 package org.galatea.starter.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.galatea.starter.utils.TradeAgreementDeserializer;
+import org.joda.money.BigMoney;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,6 +28,7 @@ import javax.persistence.Id;
 @EqualsAndHashCode
 @Slf4j
 @Entity
+@JsonDeserialize(using = TradeAgreementDeserializer.class)
 public class TradeAgreement {
 
   @Id
@@ -45,4 +49,7 @@ public class TradeAgreement {
 
   @NonNull
   protected Double qty;
+
+  @NonNull
+  protected BigMoney proceeds;
 }

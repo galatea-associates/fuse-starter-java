@@ -62,8 +62,7 @@ public class SettlementJmsListenerTest extends ASpringTest {
   public void testSettleOneAgreement() throws Exception {
     // Read the json file but get rid of the array bookends since the jms entry point doesn't
     // support that
-    String agreementJson =
-        readData("Test_IBM_Agreement.json").replace("\n", "").replace("[", "").replace("]", "");
+    String agreementJson = readData("Test_IBM_Agreement.json").replace("\n", "").replace("[", "").replace("]", "");
 
     log.info("Agreement json to put on queue {}", agreementJson);
 

@@ -3,6 +3,7 @@ package org.galatea.starter.service;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.galatea.starter.domain.FXRateResponse;
 import org.galatea.starter.service.client.IFXRestClient;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-@Slf4j
 @RequiredArgsConstructor
 @Component
 public class ProceedsCalculator implements IProceedsCalculator {
@@ -27,6 +27,6 @@ public class ProceedsCalculator implements IProceedsCalculator {
     // https://github.com/GalateaRaj/fuse-starter-java/issues/24
     // https://github.com/GalateaRaj/fuse-starter-java/issues/38
     private BigDecimal getFXRate(String base){
-        return upstreamService.getRate("GBP").getExchangeRate();
+        return upstreamService.getRate(base).getExchangeRate();
     }
 }
