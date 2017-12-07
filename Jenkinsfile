@@ -69,18 +69,20 @@ pipeline {
 		stage('Deploy') {
 			when {
 				not {
-					// sure there's a nicer way of doing this with a regex...
-					expression { BRANCH_NAME.startsWith('feature/') }
-					expression { BRANCH_NAME.startsWith('hotfix/') }
-					expression { BRANCH_NAME.startsWith('bugfix/') }
+					anyOf {
+						// sure there's a nicer way of doing this with a regex...
+						expression { BRANCH_NAME.startsWith('feature/') }
+						expression { BRANCH_NAME.startsWith('hotfix/') }
+						expression { BRANCH_NAME.startsWith('bugfix/') }
+					}
 				}
 			}
 			steps {
 				echo 'Deploying....'
 //				pushToCloudFoundry(
-//					target: 'api.local.pcfdev.io',
-//					organization: 'pcfdev-org',
-//					cloudSpace: 'pcfdev-space',
+//					target: 'fuse-rest-dev.cfapps.io',
+//					organization: 'FUSE',
+//					cloudSpace: 'development',
 //					credentialsId: 'pcfdev_user',
 //					manifestChoice: [manifestFile: 'path/to/manifest.yml']
 //				)
