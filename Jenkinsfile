@@ -2,7 +2,6 @@ pipeline {
 	agent any
 	tools {
 		maven '3.5.2'	// 3.5.2 relates to the label applied to a given version of Maven
-		//jdk 'jdk8'	// doesn't currently work - Tool type "jdk" does not have an install of "jdk8" configured - did you mean "null"? @ line 5, column 7. Same with oraclejdk8
 	}
 	stages {
 		stage('Initialization') {
@@ -78,13 +77,13 @@ pipeline {
 				}
 			}
 			steps {
-				echo 'Deploying....'
+				echo 'Deploying to Cloud Foundary....'
 //				pushToCloudFoundry(
-//					target: 'fuse-rest-dev.cfapps.io',
+//					target: 'https://api.run.pivotal.io/',
 //					organization: 'FUSE',
 //					cloudSpace: 'development',
 //					credentialsId: 'pcfdev_user',
-//					manifestChoice: [manifestFile: 'path/to/manifest.yml']
+//					manifestChoice: [manifestFile: 'manifest-dev.yml']
 //				)
 			}
 		}
