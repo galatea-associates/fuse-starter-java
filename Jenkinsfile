@@ -42,9 +42,7 @@ pipeline {
 		}
 		stage('Checkstyle') {
 			steps {
-                // for some reason, when configure the checkstyle plugin to use google_checks.xml this step never fails even though there are violations
-                // removing the use of google_checks.xml causes violations to be reported
-				sh 'mvn checkstyle:check'
+                sh 'mvn checkstyle:check'
 			}
             post {
                 success {
