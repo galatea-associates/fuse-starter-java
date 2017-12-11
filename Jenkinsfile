@@ -19,11 +19,21 @@ pipeline {
 				sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true compile'
 			}
 		}
+		stage('Unit tests') {
+            steps {
+                sh 'mvn test'
+            }
+            // post {
+            //    always {
+            //      junit 'target/surefire-reports/*.xml'
+            //    }
+            // }
+        }
 		stage('SonarQube analysis') {
 			steps {
 				withSonarQubeEnv('SonarCloud FUSE') {
 					// requires SonarQube Scanner for Maven 3.2+
-					sh 'mvn sonar:sonar'
+					sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar'
 				}
 			}
 		}
@@ -53,16 +63,6 @@ pipeline {
                 }
             }
 		}
-        stage('Unit tests') {
-            steps {
-                sh 'mvn test'
-            }
-            // post {
-            //    always {
-            //      junit 'target/surefire-reports/*.xml'
-            //    }
-            // }
-        }
 		stage('Deploy') {
 			when {
 				not {
