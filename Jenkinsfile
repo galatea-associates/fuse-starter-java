@@ -64,25 +64,25 @@ pipeline {
             }
 		}
 		stage('Deploy') {
-			when {
-				not {
-					anyOf {
-						// sure there's a nicer way of doing this with a regex...
-						expression { BRANCH_NAME.startsWith('feature/') }
-						expression { BRANCH_NAME.startsWith('hotfix/') }
-						expression { BRANCH_NAME.startsWith('bugfix/') }
-					}
-				}
-			}
+//			when {
+//				not {
+//					anyOf {
+//						// sure there's a nicer way of doing this with a regex...
+//						expression { BRANCH_NAME.startsWith('feature/') }
+//						expression { BRANCH_NAME.startsWith('hotfix/') }
+//						expression { BRANCH_NAME.startsWith('bugfix/') }
+//					}
+//				}
+//			}
 			steps {
-				echo 'Deploying to Cloud Foundary....'
-//				pushToCloudFoundry(
-//					target: 'https://api.run.pivotal.io/',
-//					organization: 'FUSE',
-//					cloudSpace: 'development',
-//					credentialsId: 'pcfdev_user',
-//					manifestChoice: [manifestFile: 'manifest-dev.yml']
-//				)
+				echo 'Deploying to Cloud Foundry....'
+				pushToCloudFoundry(
+					target: 'https://api.run.pivotal.io/',
+					organization: 'FUSE',
+					cloudSpace: 'development',
+					credentialsId: '050715dd-21ed-4cfd-a65f-b160693d8a7b',
+					manifestChoice: [manifestFile: 'manifest-dev.yml']
+				)
 			}
 		}
         stage('Integration tests') {
