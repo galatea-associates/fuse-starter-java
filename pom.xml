@@ -21,7 +21,7 @@
 			-Dapplication.log-archive-root-dir=target/logs/archive
 			-Dlog4j.configurationFile=log4j2.yml,log4j2.debug.yml
 		</argLine>
-		<sonar.coverage.exclusions>**/FuseTraceRepository.java</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java</sonar.coverage.exclusions>
 	</properties>
 
 	<parent>
