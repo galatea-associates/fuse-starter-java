@@ -28,7 +28,7 @@ public class CachingConfig extends CachingConfigurerSupport {
   }
 
   /**
-   * Configure bean for EhCacheManager
+   * Configures bean for EhCacheManager.
    */
   @Bean
   public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
