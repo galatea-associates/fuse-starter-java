@@ -81,6 +81,9 @@ public class Runner {
     };
   }
 
+  /**
+   * Attaches the provided suffix to the current thread name and then invokes call.call().
+   */
   public static <T> T setThreadAndCall(final Callable<T> call, final String suffix)
       throws Exception {
     if (suffix.isEmpty()) {
@@ -96,6 +99,10 @@ public class Runner {
     }
   }
 
+  /**
+   * Generates a suffix by looking for TradeAgreement objects in the arguments list and pulling out
+   * the instrument id from the trade.
+   */
   public static String getSuffixFor(final Object... args) {
 
     String suffix = "";

@@ -56,7 +56,8 @@ public class Tracer {
 
   /**
    * Helper method to create a key given a Class and key.
-   *
+   * 
+   * <p>
    * The Class acts as a namespace to reduce the chance of key collision.
    *
    * @param clz The class to use as the key namespace
@@ -68,7 +69,7 @@ public class Tracer {
   }
 
   /**
-   * Convenience method to store a Value object given a Class and Key to use as the key
+   * Convenience method to store a Value object given a Class and Key to use as the key.
    *
    * @param clz The class owning the 'key'
    * @param key The key identifier
@@ -109,6 +110,7 @@ public class Tracer {
    * Flatten the trace info into a map of maps. This is useful when you add the trace info to a
    * trace repository.
    *
+   * <p>
    * Only pulls out entries with a namespace (i.e. skips any elements with a null/"" namespace)
    */
   public static Map<String, Map<String, Object>> getFlattenedCopyOfTraceInfo() {
@@ -222,6 +224,7 @@ public class Tracer {
     /**
      * Creates an internal id associated with this request.
      *
+     * <p>
      * Also adds the internal id to the Tracer data captured, and to MDC so it will appear in the
      * logs.
      */
