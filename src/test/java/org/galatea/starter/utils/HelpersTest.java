@@ -51,5 +51,10 @@ public class HelpersTest {
         diffResult.toString());
   }
 
-
+  @Test(expected = IllegalArgumentException.class)
+  public void testExceptionDiff() {
+    String lhs = "hi";
+    SimpleObject rhs = new SimpleObject();
+    Helpers.diff(lhs, rhs);
+  }
 }
