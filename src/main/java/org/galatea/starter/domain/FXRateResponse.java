@@ -1,6 +1,9 @@
 package org.galatea.starter.domain;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.joda.money.CurrencyUnit;
 
 import java.math.BigDecimal;
