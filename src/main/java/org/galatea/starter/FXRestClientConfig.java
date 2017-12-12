@@ -10,12 +10,14 @@ import org.galatea.starter.domain.FXRateResponse;
 import org.galatea.starter.utils.FXRateResponseDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseEntity;
 
 @Configuration
 public class FXRestClientConfig {
 
     // To see the log levels available:
     // https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#_feign_logging
+    // Should probably set this up to be full in test, then limited in prod
     @Bean
     public Logger.Level feignLoggerLevel(){
         return Logger.Level.FULL;

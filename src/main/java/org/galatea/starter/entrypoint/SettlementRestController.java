@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
 
-import org.galatea.starter.domain.FXRateException;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
@@ -17,12 +16,7 @@ import org.galatea.starter.utils.Tracer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +37,9 @@ public class SettlementRestController {
   public static final String SETTLE_MISSION_PATH = "/settlementEngine";
   public static final String GET_MISSION_PATH = SETTLE_MISSION_PATH + "/mission/";
 
+
+
+
   // @PostMapping to link http POST requests to this method
   // @RequestBody to have the post request body deserialized into a list of TradeAgreement objects
   @PostMapping(value = SETTLE_MISSION_PATH, consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -50,17 +47,12 @@ public class SettlementRestController {
       @RequestBody final List<TradeAgreement> agreements,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
-    // if an external request id was provided, grab it
-    processRequestId(requestId);
+      // if an external request id was provided, grab it
+      processRequestId(requestId);
 
-    try {
-        Set<Long> missionIds = settlementService.spawnMissions(agreements);
-        Set<String> missionIdUris = missionIds.stream().map(id -> GET_MISSION_PATH + id).collect(Collectors.toSet());
-        return ResponseEntity.accepted().body(missionIdUris);
-    } catch (FXRateException e) {
-        log.error("Failed to create FXRateResponse.", e);
-        return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
-    }
+      Set<Long> missionIds = settlementService.spawnMissions(agreements);
+      Set<String> missionIdUris = missionIds.stream().map(id -> GET_MISSION_PATH + id).collect(Collectors.toSet());
+      return ResponseEntity.accepted().body(missionIdUris);
   }
 
   // @GetMapping to link http GET requests to this method

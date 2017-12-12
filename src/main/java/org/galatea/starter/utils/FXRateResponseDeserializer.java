@@ -52,14 +52,15 @@ public class FXRateResponseDeserializer extends StdDeserializer {
                             break;
                     }
                 } catch (IOException | ParseException e) {
-                    log.error("Failed to create FXRateResponse.", e);
+                    log.error(e.toString());
                     throw new FXRateException("Failed to deserialize response from pricing API.");
                 }
             }
         }
 
         if (baseCurrency == null || validOn == null || exchangeRate == null) {
-            throw new FXRateException("Failed to deserialize response from pricing API.");
+            log.error("Failed to deserialize response from pricing API. Parsed variables were: baseCurrency:{} validOn:{} exchangeRate:{}", baseCurrency, validOn, exchangeRate);
+            throw new FXRateException("Failed to deserialize response from FX pricing API.");
         }
         return new FXRateResponse(baseCurrency, validOn, exchangeRate);
     }
