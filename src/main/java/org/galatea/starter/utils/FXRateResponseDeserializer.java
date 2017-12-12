@@ -16,8 +16,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-;
-
 @Slf4j
 public class FXRateResponseDeserializer extends StdDeserializer {
 
