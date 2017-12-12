@@ -120,14 +120,13 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
             <version>1.4.0.RELEASE</version>
         </dependency>
-
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-jackson</artifactId>
             <version>9.5.1</version>
         </dependency>
 
-        <!-- Library of classes to store amounts of money -->
+        <!-- joda-money for storing amounts of money -->
         <dependency>
             <groupId>org.joda</groupId>
             <artifactId>joda-money</artifactId>
@@ -171,7 +170,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- Useful for waiting for an async task to complete -->
 		<dependency>
 			<groupId>org.awaitility</groupId>
@@ -179,7 +177,6 @@
 			<version>2.0.0</version>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- Allows us to parameterize tests -->
 		<dependency>
 			<groupId>pl.pragmatists</groupId>
@@ -187,23 +184,19 @@
 			<version>1.0.5</version>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- Allows us to run test suites that include/exclude junit categories -->
 		<dependency>
 			<groupId>com.googlecode.junit-toolbox</groupId>
 			<artifactId>junit-toolbox</artifactId>
 			<version>2.2</version>
 		</dependency>
-
-		<!-- Deployment dependencies -->
-		<dependency>
-			<groupId>co.paralleluniverse</groupId>
-			<artifactId>capsule</artifactId>
-			<version>1.0.3</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -226,94 +219,6 @@
 							<goal>integration-test</goal>
 							<goal>verify</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>com.github.chrischristo</groupId>
-				<artifactId>capsule-maven-plugin</artifactId>
-				<version>1.2.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>build</goal>
-						</goals>
-						<configuration>
-							<appClass>org.galatea.starter.Application</appClass>
-							<manifest>
-								<entry>
-									<key>JVM-Args</key>
-									<value>-Xms512m -Xmx1024m</value>
-								</entry>
-								<entry>
-									<key>Min-Java-Version</key>
-									<value>1.8.0</value>
-								</entry>
-								<entry>
-									<key>Java-Version</key>
-									<value>1.8</value>
-								</entry>
-							</manifest>
-							<properties>
-								<property>
-									<key>application.name</key>
-									<value>${project.artifactId}</value>
-								</property>
-								<!-- Need some properties specified to configure logging -->
-								<!-- Will want to replace these with project specific values -->
-								<property>
-									<key>application.log-dir</key>
-									<value>logs/${capsule.mode}</value>
-								</property>
-								<property>
-									<key>application.log-archive-root-dir</key>
-									<value>logs/${capsule.mode}/archive</value>
-								</property>
-								<property>
-									<key>log4j.configurationFile</key>
-									<value>log4j2.yml</value>
-								</property>
-							</properties>
-							<modes>
-								<mode>
-									<name>test</name>
-									<properties>
-										<property>
-											<key>spring.profiles.active</key>
-											<value>test</value>
-										</property>
-									</properties>
-								</mode>
-								<mode>
-									<name>dev</name>
-									<properties>
-										<property>
-											<key>spring.profiles.active</key>
-											<value>dev</value>
-										</property>
-									</properties>
-								</mode>
-								<mode>
-									<name>uat</name>
-									<properties>
-										<property>
-											<key>spring.profiles.active</key>
-											<value>uat</value>
-										</property>
-									</properties>
-								</mode>
-								<mode>
-									<name>prod</name>
-									<properties>
-										<property>
-											<key>spring.profiles.active</key>
-											<value>prod</value>
-										</property>
-									</properties>
-								</mode>
-							</modes>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>

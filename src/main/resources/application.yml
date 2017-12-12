@@ -1,5 +1,7 @@
 # Global properties go here
 spring:
+   profiles:
+      active: test
    datasource:
       url: jdbc:h2:~/test
       driver-class-name: org.h2.Driver
@@ -11,12 +13,7 @@ mvc:
    max-size-trace-payload: 50000
 jms:
    listener-concurrency: 1-5
-   agreement-queue: sandbox.agreement      
-
-logging:
-   level:
-      # Feign logging only responds to the DEBUG level
-      org.galatea.starter.service.client.IFXRestClient: DEBUG
+   agreement-queue: sandbox.agreement
 ---
 # Test properties go here
 spring:
@@ -24,6 +21,9 @@ spring:
    datasource:
       username: sa
       password:
+logging:
+   level:
+      org.galatea.starter.service.client.IFXRestClient: DEBUG
 ---
 # Dev properties go here
 spring:
@@ -38,4 +38,3 @@ spring:
    datasource:
       username: sa
       password:
-

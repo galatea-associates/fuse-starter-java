@@ -1,0 +1,10 @@
+---
+applications:
+- name: fuse-rest-dev
+  memory: 768M
+  instances: 1
+  path: target\fuse-starter-java-0.0.1-SNAPSHOT.jar
+  env:
+    SPRING_PROFILES_ACTIVE: dev
+    JAVA_OPTS: '-Dapplication.name=my-fuse-app'
+
