@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.domain.TradeAgreementException;
@@ -11,6 +12,7 @@ import org.joda.money.BigMoney;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // http://www.baeldung.com/jackson-deserialization
 @Slf4j
@@ -51,19 +53,44 @@ public class TradeAgreementDeserializer extends StdDeserializer<TradeAgreement> 
     // Change to lambda expression
     private JsonNode checkJsonNode(JsonNode node) throws TradeAgreementException {
         ArrayList<String> missingFields = new ArrayList<>();
-        String[] expectedFields = {"instrument", "internalParty", "externalParty", "buySell", "qty", "proceeds"};
+        ArrayList<String> incorrectFields = new ArrayList<>();
+        HashMap<String, JsonNodeType> fieldInfo = getFieldInfo();
 
-        for (String key: expectedFields){
-            if (!node.has(key)){
+        for (String key: fieldInfo.keySet()){
+            if (node.has(key)){
+                if (!node.get(key).getNodeType().equals(fieldInfo.get(key))) {
+                    incorrectFields.add(key);
+                }
+            } else {
                 missingFields.add(key);
             }
         }
 
-        if(!missingFields.isEmpty()) {
-            throw new TradeAgreementException(String.format("Posted agreement did not contain: %s", missingFields.toString()));
+        // More eloquent way of doing this?
+        if (!missingFields.isEmpty() && !incorrectFields.isEmpty()) {
+            throw new TradeAgreementException(
+                String.format("Posted agreement did not contain: %s", missingFields.toString())
+                    + String.format("Posted agreement had the following invalid field types: %s ", incorrectFields.toString()));
+        } else if (!missingFields.isEmpty()) {
+            throw new TradeAgreementException(
+                String.format("Posted agreement did not contain: %s", missingFields.toString()));
+        } else if (!incorrectFields.isEmpty()) {
+            throw new TradeAgreementException(
+                String.format("Posted agreement had the following invalid field types: %s ", incorrectFields.toString()));
         }
 
         return node;
+    }
+
+    private HashMap<String, JsonNodeType> getFieldInfo() {
+        HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
+        fieldInfo.put("instrument", JsonNodeType.STRING);
+        fieldInfo.put("internalParty", JsonNodeType.STRING);
+        fieldInfo.put("externalParty", JsonNodeType.STRING);
+        fieldInfo.put("buySell", JsonNodeType.STRING);
+        fieldInfo.put("qty", JsonNodeType.NUMBER);
+        fieldInfo.put("proceeds", JsonNodeType.STRING);
+        return fieldInfo;
     }
 
     private BigMoney getProceeds(JsonNode node) throws TradeAgreementException {
