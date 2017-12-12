@@ -1,6 +1,5 @@
 package org.galatea.starter.service;
 
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -14,7 +13,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -67,13 +66,12 @@ public class SettlementServiceTest extends ASpringTest {
         .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).build();
 
     given(this.mockSettlementMissionRpsy.save(Mockito.anyList()))
-        .willReturn(Arrays.asList(testSettlementMission));
+        .willReturn(Collections.singletonList(testSettlementMission));
 
     SettlementService service =
         new SettlementService(this.mockSettlementMissionRpsy, this.mockAgreementTransformer);
 
-    Set<Long> missionIds = service.spawnMissions(Arrays.asList(testTradeAgreement));
-    assertEquals(missionIds.size(), 1);
-
+    Set<Long> missionIds = service.spawnMissions(Collections.singletonList(testTradeAgreement));
+    assertEquals(1, missionIds.size());
   }
 }

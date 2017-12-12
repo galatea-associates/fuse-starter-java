@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.DiffResult;
 import org.junit.Test;
 
-
 @RequiredArgsConstructor
 @Slf4j
 @ToString
@@ -20,7 +19,7 @@ public class HelpersTest {
   public static class SimpleObject {
     private String x = "X";
 
-    public void setX(String x) {
+    void setX(String x) {
       this.x = x;
     }
 

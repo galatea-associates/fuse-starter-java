@@ -8,14 +8,11 @@ pipeline {
 			steps {
 				echo 'Environment info'
 				sh 'mvn -version'
-				echo 'Branch name:'
-				echo BRANCH_NAME
+				echo "Branch name: ${BRANCH_NAME}"
 			}
 		}
 		stage('Build') {
 			steps {
-				echo 'Building...'
-				// we'll want to separate the jacoco step once get around to handling PR builds
 				sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true compile'
 			}
 		}
@@ -23,11 +20,11 @@ pipeline {
             steps {
                 sh 'mvn test'
             }
-            // post {
-            //    always {
-            //      junit 'target/surefire-reports/*.xml'
-            //    }
-            // }
+			post {
+				always {
+					junit 'target/surefire-reports/*.xml'
+				}
+			}
         }
 		stage('SonarQube analysis') {
 			steps {
@@ -39,12 +36,12 @@ pipeline {
 		}
 		stage('Quality gate') {
 			steps {
-                // this currently always timeout. believe it's because SQ never posts back to Jenkins that it's done (even though it has)
-				timeout(time: 1, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
+				// Just in case something goes wrong, pipeline will be killed after a timeout
+                timeout(time: 1, unit: 'MINUTES') {
 					script {
 						def qg = waitForQualityGate()
 						if (qg.status != 'OK') {
-							error "Pipeline aborted due to quality gate failure: ${qg.status}"	// note that "" are needed for string interpolation
+							error "Pipeline aborted due to quality gate failure: ${qg.status}"
 						}
 					}
 				}
@@ -54,33 +51,43 @@ pipeline {
 			steps {
                 sh 'mvn checkstyle:check'
 			}
+            // using the following results in an error in the pipeline - ERROR: None of the test reports contained any result
+            //post {
+            //    always {
+            //        junit 'target/checkstyle-result.xml'
+            //    }
+            //}
+            // this will simply show a blank report if the checkstyle check is successful
             post {
-                success {
-                    echo 'Checkstyle success'
-                }
                 failure {
-                    echo 'Checkstyle failure'
+                    publishHTML (target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'target',
+                        reportFiles: 'checkstyle-result.xml',
+                        reportName: 'Checkstyle report'
+                    ])
                 }
             }
 		}
 		stage('Deploy') {
-//			when {
-//				not {
-//					anyOf {
-//						// sure there's a nicer way of doing this with a regex...
-//						expression { BRANCH_NAME.startsWith('feature/') }
-//						expression { BRANCH_NAME.startsWith('hotfix/') }
-//						expression { BRANCH_NAME.startsWith('bugfix/') }
-//					}
-//				}
-//			}
+			when {
+				not {
+					anyOf {
+						// sure there's a nicer way of doing this with a regex...
+						expression { BRANCH_NAME.startsWith('feature/') }
+						expression { BRANCH_NAME.startsWith('hotfix/') }
+						expression { BRANCH_NAME.startsWith('bugfix/') }
+					}
+				}
+			}
 			steps {
-				echo 'Deploying to Cloud Foundry....'
 				pushToCloudFoundry(
 					target: 'https://api.run.pivotal.io/',
 					organization: 'FUSE',
 					cloudSpace: 'development',
-					credentialsId: '050715dd-21ed-4cfd-a65f-b160693d8a7b',
+					credentialsId: 'danny-cloud-foundry',
 					manifestChoice: [manifestFile: 'manifest-dev.yml']
 				)
 			}
@@ -93,11 +100,11 @@ pipeline {
             steps {
                 sh 'mvn verify'
             }
-            // post {
-            //    always {
-            //      junit 'target/surefire-reports/*.xml'
-            //    }
-            // }
+            post {
+               always {
+                 junit 'target/failsafe-reports/*.xml'
+               }
+            }
         }
         stage('Performance tests') {
             when {
