@@ -3,12 +3,9 @@ package org.galatea.starter.service.client;
 import org.galatea.starter.FXRestClientConfig;
 import org.galatea.starter.domain.FXRateResponse;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.Optional;
 
 @FeignClient(name="fxrates",
     url = "http://api.fixer.io",

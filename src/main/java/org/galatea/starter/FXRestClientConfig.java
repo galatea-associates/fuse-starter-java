@@ -1,6 +1,5 @@
 package org.galatea.starter;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import feign.Logger;
@@ -10,7 +9,6 @@ import org.galatea.starter.domain.FXRateResponse;
 import org.galatea.starter.utils.FXRateResponseDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 
 @Configuration
 public class FXRestClientConfig {

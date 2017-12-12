@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
-import org.joda.money.BigMoney;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
