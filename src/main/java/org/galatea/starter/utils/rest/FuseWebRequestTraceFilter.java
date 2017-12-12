@@ -136,28 +136,24 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
 
   /**
    * Adds audit information about the request/response to the response headers.
-   * 
-   * @param response
    */
   private void addAuditHeaders(final HttpServletResponse response) {
     log.info("Attempting to add audit headers");
-    String requestReceivedTime = (String) Tracer.get(Tracer.class, Tracer.TRACE_START_TIME_UTC);
-    String requestElapsedTimeMillis =
-        String.valueOf(Instant.parse(requestReceivedTime).until(Instant.now(), ChronoUnit.MILLIS));
-
     logAndAddAuditHeader(response, "internalQueryId",
         (String) Tracer.get(Tracer.class, Tracer.INTERNAL_REQUEST_ID));
     logAndAddAuditHeader(response, "externalQueryId",
         (String) Tracer.get(Tracer.class, Tracer.EXTERNAL_REQUEST_ID));
+
+    String requestReceivedTime = (String) Tracer.get(Tracer.class, Tracer.TRACE_START_TIME_UTC);
     logAndAddAuditHeader(response, "requestReceivedTime", requestReceivedTime);
+
+    String requestElapsedTimeMillis =
+        String.valueOf(Instant.parse(requestReceivedTime).until(Instant.now(), ChronoUnit.MILLIS));
     logAndAddAuditHeader(response, "requestElapsedTimeMillis", requestElapsedTimeMillis);
   }
 
   /**
    * Logs header name/value and adds them to the response.
-   * 
-   * @param headerName
-   * @param headerValue
    */
   private void logAndAddAuditHeader(HttpServletResponse response, String headerName,
       String headerValue) {

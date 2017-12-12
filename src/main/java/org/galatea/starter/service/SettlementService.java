@@ -33,7 +33,6 @@ public class SettlementService {
   @NonNull
   IAgreementTransformer agreementTransformer;
 
-
   /**
    * Create missions based on the agreements provided.
    *
@@ -50,7 +49,7 @@ public class SettlementService {
     // We have to do all of this StreamSupport crap since the repository returns an iterable instead
     // of a normal collection
     Set<Long> idSet = StreamSupport.stream(savedMissions.spliterator(), false)
-        .map(msn -> msn.getId()).collect(Collectors.toSet());
+        .map(SettlementMission::getId).collect(Collectors.toSet());
     log.info("Returning {} mission id(s)", idSet.size());
 
     return idSet;
@@ -59,5 +58,4 @@ public class SettlementService {
   public Optional<SettlementMission> findMission(final Long id) {
     return Optional.ofNullable(missionrpsy.findOne(id));
   }
-
 }

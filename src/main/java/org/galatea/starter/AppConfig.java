@@ -20,6 +20,11 @@ public class AppConfig {
     return new LogAspect();
   }
 
+  /**
+   * Returns an anonymous class implementing the IAgreementTransformer interface. Demonstrates the
+   * use of a lambda function which can stand in as an anonymous class with a single method:
+   * https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html
+   */
   @Bean
   public IAgreementTransformer agreementTransformer() {
     return agreement -> SettlementMission.builder().instrument(agreement.getInstrument())

@@ -25,9 +25,11 @@ public class CachingConfig extends CachingConfigurerSupport {
     EhCacheCacheManager ehCacheCacheManager = new EhCacheCacheManager();
     ehCacheCacheManager.setCacheManager(ehCacheManagerFactoryBean().getObject());
     return ehCacheCacheManager;
-
   }
 
+  /**
+   * Configures bean for EhCacheManager.
+   */
   @Bean
   public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
     EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();
