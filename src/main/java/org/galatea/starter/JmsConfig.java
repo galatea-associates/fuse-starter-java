@@ -1,7 +1,6 @@
 
 package org.galatea.starter;
 
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.utils.FuseTraceRepository;
@@ -30,11 +29,12 @@ import javax.jms.Message;
 public class JmsConfig implements JmsListenerConfigurer {
 
   /**
-   * @return an implementation of failed message consumer that simply logs the message. 
+   * @return an implementation of failed message consumer that simply logs the message.
    */
   @Bean
   public BiConsumer<Message, Exception> failedMessageConsumer() {
-    return (msg,err)->log.error("Message {} failed to process after retries.  Removing message from queue",msg,err);
+    return (msg, err) -> log.error(
+        "Message {} failed to process after retries.  Removing message from queue", msg, err);
   }
 
   @Bean
@@ -63,7 +63,9 @@ public class JmsConfig implements JmsListenerConfigurer {
 
     // This provides all boot's default to this factory, including the message converter
     // Note that we don't use a caching connection factory due to this:
-    // http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jms/listener/DefaultMessageListenerContainer.html
+    //
+    // http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/
+    // jms/listener/DefaultMessageListenerContainer.html
     configurer.configure(listenerFactory, queueConnectionFactory);
 
     // TODO: override any defaults in the listener factory before we return the object

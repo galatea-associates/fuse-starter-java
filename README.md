@@ -108,3 +108,7 @@ For testing rest requests/responses see:
 - For assertions on response headers: SettlementRestControllerTest.verifyAuditHeaders()
 - For convenient tests/matchers: org.hamcrest.Matchers and https://code.google.com/archive/p/hamcrest/wikis/Tutorial.wiki
 
+## Builds
+We have a Jenkins server hosted on AWS that handles the FUSE continuous integration process - https://jenkins.fuse.galatea-associates.com
+
+The build process is handled via a [Jenkins pipeline build](https://jenkins.io/doc/book/pipeline/), with the pipeline managed via the *Jenkins* file in the root of the project.

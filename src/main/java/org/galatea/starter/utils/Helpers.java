@@ -18,12 +18,20 @@ import java.lang.reflect.Modifier;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Helpers {
 
+  /**
+   * Compares the values of all methods between the left-hand-side and right-hand-side. Checks for
+   * methods that begin with 'get' and 'is'.
+   */
   public static DiffResult diff(final Object lhs, final Object rhs) {
     return diff(lhs, rhs,
         method -> (method.getName().startsWith("get") || method.getName().startsWith("is"))
             && Modifier.isPublic(method.getModifiers()));
   }
 
+  /**
+   * Compares the values of all methods between the left-hand-side and right-hand-side. Uses the
+   * provided MethodFilter to determine which methods to check.
+   */
   public static DiffResult diff(final Object lhs, final Object rhs, final MethodFilter filter) {
     final DiffBuilder builder = new DiffBuilder(lhs, rhs, ToStringStyle.SHORT_PREFIX_STYLE);
 

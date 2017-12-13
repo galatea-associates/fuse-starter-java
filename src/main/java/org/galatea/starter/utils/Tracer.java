@@ -55,9 +55,8 @@ public class Tracer {
   private Tracer() {}
 
   /**
-   * Helper method to create a key given a Class and key.
-   *
-   * The Class acts as a namespace to reduce the chance of key collision.
+   * Helper method to create a key given a Class and key. The Class acts as a namespace to reduce
+   * the chance of key collision.
    *
    * @param clz The class to use as the key namespace
    * @param key The key portion of the MultiKey
@@ -68,7 +67,7 @@ public class Tracer {
   }
 
   /**
-   * Convenience method to store a Value object given a Class and Key to use as the key
+   * Convenience method to store a Value object given a Class and Key to use as the key.
    *
    * @param clz The class owning the 'key'
    * @param key The key identifier
@@ -107,9 +106,8 @@ public class Tracer {
 
   /**
    * Flatten the trace info into a map of maps. This is useful when you add the trace info to a
-   * trace repository.
-   *
-   * Only pulls out entries with a namespace (i.e. skips any elements with a null/"" namespace)
+   * trace repository. Only pulls out entries with a namespace (i.e. skips any elements with a
+   * null/"" namespace)
    */
   public static Map<String, Map<String, Object>> getFlattenedCopyOfTraceInfo() {
     Map<String, Map<String, Object>> flatMap = new HashMap<>(traceInfo.get().size());
@@ -220,10 +218,8 @@ public class Tracer {
     }
 
     /**
-     * Creates an internal id associated with this request.
-     *
-     * Also adds the internal id to the Tracer data captured, and to MDC so it will appear in the
-     * logs.
+     * Creates an internal id associated with this request. Also adds the internal id to the Tracer
+     * data captured, and to MDC so it will appear in the logs.
      */
     private void createInternalRequestId() {
       // generate the internal request Id
