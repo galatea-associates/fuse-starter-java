@@ -83,6 +83,8 @@ pipeline {
                 }
             }
             steps {
+                // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
+                sh 'mvn package'
                 pushToCloudFoundry(
                     target: 'https://api.run.pivotal.io/',
                     organization: 'FUSE',
