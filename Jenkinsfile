@@ -93,7 +93,6 @@ pipeline {
             }
         }
         stage('Integration tests') {
-            // according to https://gist.github.com/jonico/e205b16cf07451b2f475543cf1541e70 we can check for a PR build using the following
             when {
                 expression { BRANCH_NAME ==~ /^PR-\d+$/ }
             }
@@ -112,6 +111,22 @@ pipeline {
             }
             steps {
                 echo 'Running performance tests...'
+            }
+        }
+        stage('Shutdown') {
+            when {
+                not {
+                    anyOf {
+                        expression { BRANCH_NAME.startsWith('feature/') }
+                        expression { BRANCH_NAME.startsWith('hotfix/') }
+                        expression { BRANCH_NAME.startsWith('bugfix/') }
+                    }
+                }
+            }
+            steps {
+                echo 'Shutting down app'
+                // need to install CF on Jenkins server as plugin doesn't provide a way to stop an app
+                // sh 'cf stop fuse-rest-dev'
             }
         }
     }
