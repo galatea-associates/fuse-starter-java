@@ -30,7 +30,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarCloud FUSE') {
                     // requires SonarQube Scanner for Maven 3.2+
-                    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar'
+                    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar'
                 }
             }
         }
