@@ -43,6 +43,7 @@ public class TradeAgreementDeserializer extends StdDeserializer<TradeAgreement> 
 
     private JsonNode getJsonNode(JsonParser jsonParser) throws TradeAgreementException {
         try {
+            log.info("Codec of JsonParser: " + jsonParser.getCodec().toString());
             return checkJsonNode(jsonParser.getCodec().readTree(jsonParser));
         } catch (IOException e) {
             log.error(e.toString());

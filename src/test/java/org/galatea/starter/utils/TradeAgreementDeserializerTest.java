@@ -3,7 +3,6 @@ package org.galatea.starter.utils;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.runtime.Source;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.TradeAgreement;
 import org.joda.money.BigMoney;
@@ -11,10 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.galatea.starter.ASpringTest.readData;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @Slf4j
 public class TradeAgreementDeserializerTest {
+
+//    Codec of JsonParser: com.fasterxml.jackson.databind.ObjectMapper@60aee4ca
 
     private ObjectMapper mapper;
     private TradeAgreementDeserializer deserializer;
@@ -29,7 +30,9 @@ public class TradeAgreementDeserializerTest {
 
     @Test
     public void testDeserialize() throws Exception {
-        JsonParser jsonParser = mapper.getFactory().createParser("{}");
+        String agreementJson = readData("Test_IBM_Agreement.json");
+        JsonParser jsonParser = mapper.getFactory().createParser(agreementJson);
+        System.out.println(jsonParser.readValueAsTree().toString());
         TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
 
         assertEquals(agreement.getInstrument(),"IBM");
