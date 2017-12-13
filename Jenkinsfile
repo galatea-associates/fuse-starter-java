@@ -85,12 +85,14 @@ pipeline {
             steps {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
                 sh 'mvn package'
+
                 pushToCloudFoundry(
                     target: 'https://api.run.pivotal.io/',
                     organization: 'FUSE',
                     cloudSpace: 'development',
                     credentialsId: 'danny-cloud-foundry',
                     manifestChoice: [manifestFile: 'manifest-dev.yml']
+                    // pluginTimeout: 240 // default value is 120
                 )
             }
         }
@@ -128,7 +130,9 @@ pipeline {
             steps {
                 echo 'Shutting down app'
                 // need to install CF on Jenkins server as plugin doesn't provide a way to stop an app
-                // sh 'cf stop fuse-rest-dev'
+                // timeout(time: 2, unit: 'MINUTES') {
+                //     sh 'cf stop fuse-rest-dev'
+                // }
             }
         }
     }
