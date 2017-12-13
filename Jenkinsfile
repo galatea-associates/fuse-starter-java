@@ -30,7 +30,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarCloud FUSE') {
                     // requires SonarQube Scanner for Maven 3.2+
-                    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar'
+                    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar'
                 }
             }
         }
@@ -83,6 +83,8 @@ pipeline {
                 }
             }
             steps {
+                // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
+                sh 'mvn package'
                 pushToCloudFoundry(
                     target: 'https://api.run.pivotal.io/',
                     organization: 'FUSE',
