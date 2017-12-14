@@ -74,6 +74,8 @@ pipeline {
         stage('Deploy') {
             when {
                 not {
+                    // for some reason this does not work. a branch name of feature/issue-84-pipeline-updates does not match
+                    // expression { BRANCH_NAME ==~ /^feature\/|hotfix\/|bugfix\// }
                     anyOf {
                         // sure there's a nicer way of doing this with a regex...
                         expression { BRANCH_NAME.startsWith('feature/') }
@@ -129,10 +131,9 @@ pipeline {
             }
             steps {
                 echo 'Shutting down app'
-                // need to install CF on Jenkins server as plugin doesn't provide a way to stop an app
-                // timeout(time: 2, unit: 'MINUTES') {
-                //     sh 'cf stop fuse-rest-dev'
-                // }
+                timeout(time: 2, unit: 'MINUTES') {
+                    sh 'cf stop fuse-rest-dev'
+                }
             }
         }
     }
