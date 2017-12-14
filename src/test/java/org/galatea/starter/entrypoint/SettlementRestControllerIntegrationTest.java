@@ -24,7 +24,6 @@ import feign.RequestLine;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 
-
 @RequiredArgsConstructor
 @Slf4j
 @ToString
