@@ -1,0 +1,71 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
+    }
+}
+
+
+plugins {
+  id 'net.ltgt.apt' version '0.13'
+	id 'java'
+	id 'maven'
+}
+
+apply plugin: 'org.springframework.boot'
+
+group = 'org.galatea'
+version = '0.0.1-SNAPSHOT'
+
+description = """starter-java"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+repositories {
+		mavenCentral()
+}
+
+// need a 'global' exclude to prevent pulling in the logback dependency that comes
+// with spring boot by default.  We've chosen to go with log4j2.
+configurations.compile.exclude module : 'spring-boot-starter-logging'
+
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+		compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+		compile group: 'org.springframework.boot', name: 'spring-boot-starter-activemq'
+
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version:'2.8.10'
+    compile group: 'org.springframework', name: 'spring-aop', version:'4.3.13.RELEASE'
+    compile group: 'org.aspectj', name: 'aspectjweaver', version:'1.8.13'
+
+    compile group: 'org.apache.activemq', name: 'activemq-broker', version:'5.14.5'
+
+    compile group: 'com.h2database', name: 'h2', version:'1.4.196'
+    compile group: 'net.sf.aspect4log', name: 'aspect4log', version:'1.0.7'
+    compile group: 'com.google.collections', name: 'google-collections', version:'1.0'
+    compile group: 'org.apache.commons', name: 'commons-collections4', version:'4.1'
+    compile group: 'net.sf.ehcache', name: 'ehcache', version:'2.10.4'
+    compile group: 'org.springframework', name: 'spring-context-support', version:'4.3.13.RELEASE'
+    compile group: 'com.googlecode.junit-toolbox', name: 'junit-toolbox', version:'2.2'
+
+  	testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test') {
+			exclude(module: 'commons-logging')
+    }
+    testCompile group: 'org.awaitility', name: 'awaitility', version:'2.0.0'
+    testCompile group: 'pl.pragmatists', name: 'JUnitParams', version:'1.0.5'
+
+		// lombok is only involved during the compilation phase and not needed during runtime
+		compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.16.18'
+		testCompileOnly group: 'org.projectlombok', name: 'lombok', version:'1.16.18'
+
+		apt 'org.projectlombok:lombok:1.16.18' // supports annotation processing, particularly for lombok
+		testApt 'org.projectlombok:lombok:1.16.18'  // our test classes use lombock too
+}
