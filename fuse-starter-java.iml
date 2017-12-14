@@ -89,7 +89,6 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.8" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" name="Maven: io.github.openfeign:feign-core:9.5.0" level="project" />
-    <orderEntry type="library" name="Maven: org.jvnet:animal-sniffer-annotation:1.0" level="project" />
     <orderEntry type="library" name="Maven: io.github.openfeign:feign-slf4j:9.5.0" level="project" />
     <orderEntry type="library" name="Maven: io.github.openfeign:feign-hystrix:9.5.0" level="project" />
     <orderEntry type="library" name="Maven: com.netflix.archaius:archaius-core:0.6.6" level="project" />
@@ -140,6 +139,9 @@
     <orderEntry type="library" name="Maven: net.sf.ehcache:ehcache:2.10.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:4.3.13.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:4.3.13.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: com.netflix.feign:feign-core:8.18.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jvnet:animal-sniffer-annotation:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.netflix.feign:feign-gson:8.18.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test-autoconfigure:1.5.9.RELEASE" level="project" />
