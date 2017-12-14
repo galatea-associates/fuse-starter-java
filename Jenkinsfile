@@ -132,7 +132,10 @@ pipeline {
             steps {
                 echo 'Shutting down app'
                 timeout(time: 2, unit: 'MINUTES') {
+                    // to avoid storing passwords in clear text use Jenkins to store environment variables
+                    sh "cf login -u ${env.CF_USERNAME} -p '${env.CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
                     sh 'cf stop fuse-rest-dev'
+                    sh 'cf logout'
                 }
             }
         }
