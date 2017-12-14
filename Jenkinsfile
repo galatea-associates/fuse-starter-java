@@ -77,7 +77,6 @@ pipeline {
                     // for some reason this does not work. a branch name of feature/issue-84-pipeline-updates does not match
                     // expression { BRANCH_NAME ==~ /^feature\/|hotfix\/|bugfix\// }
                     anyOf {
-                        // sure there's a nicer way of doing this with a regex...
                         expression { BRANCH_NAME.startsWith('feature/') }
                         expression { BRANCH_NAME.startsWith('hotfix/') }
                         expression { BRANCH_NAME.startsWith('bugfix/') }
@@ -92,7 +91,7 @@ pipeline {
                     target: 'https://api.run.pivotal.io/',
                     organization: 'FUSE',
                     cloudSpace: 'development',
-                    credentialsId: 'danny-cloud-foundry',
+                    credentialsId: 'cf-credentials',
                     manifestChoice: [manifestFile: 'manifest-dev.yml']
                     // pluginTimeout: 240 // default value is 120
                 )
@@ -132,10 +131,12 @@ pipeline {
             steps {
                 echo 'Shutting down app'
                 timeout(time: 2, unit: 'MINUTES') {
-                    // to avoid storing passwords in clear text use Jenkins to store environment variables
-                    sh "cf login -u ${env.CF_USERNAME} -p '${env.CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
-                    sh 'cf stop fuse-rest-dev'
-                    sh 'cf logout'
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                        // make sure the password does not contain single quotes otherwise the escaping fails
+                        sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
+                        sh 'cf stop fuse-rest-dev'
+                        sh 'cf logout'
+                    }
                 }
             }
         }
