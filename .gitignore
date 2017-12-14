@@ -3,3 +3,5 @@
 !.idea/runConfigurations
 /.gradle/*
 /build/*
+/.gradle/
+/build/

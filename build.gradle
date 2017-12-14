@@ -7,11 +7,11 @@ buildscript {
     }
 }
 
-
 plugins {
   id 'net.ltgt.apt' version '0.13'
-	id 'java'
-	id 'maven'
+  id 'net.ltgt.apt-eclipse' version '0.13'
+  id 'java'
+  id 'maven'
 }
 
 apply plugin: 'org.springframework.boot'
@@ -37,16 +37,19 @@ configurations.compile.exclude module : 'spring-boot-starter-logging'
 
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-		compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-		compile group: 'org.springframework.boot', name: 'spring-boot-starter-activemq'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-activemq'
 
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version:'2.8.10'
     compile group: 'org.springframework', name: 'spring-aop', version:'4.3.13.RELEASE'
     compile group: 'org.aspectj', name: 'aspectjweaver', version:'1.8.13'
 
     compile group: 'org.apache.activemq', name: 'activemq-broker', version:'5.14.5'
+
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version:'1.4.0.RELEASE'
+    compile group: 'io.github.openfeign', name: 'feign-gson', version:'9.5.1'
 
     compile group: 'com.h2database', name: 'h2', version:'1.4.196'
     compile group: 'net.sf.aspect4log', name: 'aspect4log', version:'1.0.7'
@@ -62,10 +65,25 @@ dependencies {
     testCompile group: 'org.awaitility', name: 'awaitility', version:'2.0.0'
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version:'1.0.5'
 
-		// lombok is only involved during the compilation phase and not needed during runtime
-		compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.16.18'
-		testCompileOnly group: 'org.projectlombok', name: 'lombok', version:'1.16.18'
+    // lombok is only involved during the compilation phase and not needed during runtime
+    compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.16.18'
+    testCompileOnly group: 'org.projectlombok', name: 'lombok', version:'1.16.18'
 
-		apt 'org.projectlombok:lombok:1.16.18' // supports annotation processing, particularly for lombok
-		testApt 'org.projectlombok:lombok:1.16.18'  // our test classes use lombock too
+    apt 'org.projectlombok:lombok:1.16.18' // supports annotation processing, particularly for lombok
+    testApt 'org.projectlombok:lombok:1.16.18'  // our test classes use lombock too
+}
+
+test {
+    
+    useJUnit {
+        // exclude integration tests for the normal test task
+        // we'll have a separate task for integration tests that gets run by jenkins,
+        // but for people just doing a 'gradle build' let's avoid calling out to Cloud Foundry 
+        excludeCategories 'org.galatea.starter.IntegrationTestCategory'
+    }
+    
+    // in order to avoid picking up the UnitTestRunner which was only intended for use in the IDE
+    // we'll override the default behavior and specify which test classes to look for
+    // https://docs.gradle.org/2.14/userguide/java_plugin.html#N15AAD
+    include '**/*Test.class'
 }
