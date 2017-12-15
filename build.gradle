@@ -13,11 +13,11 @@ plugins {
   id 'java'
   id 'maven'
   id 'org.sonarqube' version '2.6'
-  id 'org.springframework.boot'
   id 'checkstyle'
 }
 
-// apply plugin: 'org.springframework.boot'
+// I don't know why I can't add this one in the previous plugins {} section, but it doesn't seem to work there.
+apply plugin: 'org.springframework.boot'
 
 group = 'org.galatea'
 version = '0.0.1-SNAPSHOT'
