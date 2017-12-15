@@ -74,7 +74,12 @@ dependencies {
     testApt 'org.projectlombok:lombok:1.16.18'  // our test classes use lombock too
 }
 
-sonar.coverage.exclusions = '**/FuseWebRequestTraceFilter.java,**/SettlementMission.java'
+sonarqube {
+  properties {
+    property 'sonar.coverage.exclusions', '**/FuseWebRequestTraceFilter.java,**/SettlementMission.java'
+  }
+}
+
 
 test {
 
