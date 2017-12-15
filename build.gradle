@@ -12,6 +12,7 @@ plugins {
   id 'net.ltgt.apt-eclipse' version '0.13'
   id 'java'
   id 'maven'
+  id 'org.sonarqube' version '2.6'
 }
 
 apply plugin: 'org.springframework.boot'
@@ -74,14 +75,14 @@ dependencies {
 }
 
 test {
-    
+
     useJUnit {
         // exclude integration tests for the normal test task
         // we'll have a separate task for integration tests that gets run by jenkins,
-        // but for people just doing a 'gradle build' let's avoid calling out to Cloud Foundry 
+        // but for people just doing a 'gradle build' let's avoid calling out to Cloud Foundry
         excludeCategories 'org.galatea.starter.IntegrationTestCategory'
     }
-    
+
     // in order to avoid picking up the UnitTestRunner which was only intended for use in the IDE
     // we'll override the default behavior and specify which test classes to look for
     // https://docs.gradle.org/2.14/userguide/java_plugin.html#N15AAD
