@@ -30,5 +30,22 @@ pipeline {
         }
       }
     }
+    stage('Checkstyle') {
+      steps {
+        sh './gradlew check'
+      }
+      post {
+        failure {
+          publishHTML (target: [
+            allowMissing: false,
+            alwaysLinkToLastBuild: false,
+            keepAll: true,
+            reportDir: 'target',
+            reportFiles: 'checkstyle-result.xml',
+            reportName: 'Checkstyle report'
+          ])
+        }
+      }
+    }
   }
 }
