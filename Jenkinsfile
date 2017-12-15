@@ -4,13 +4,6 @@ pipeline {
         maven '3.5.2'    // 3.5.2 relates to the label applied to a given version of Maven
     }
     stages {
-        stage('Initialization') {
-            steps {
-                echo 'Environment info'
-                sh 'mvn -version'
-                echo "Branch name: ${BRANCH_NAME}"
-            }
-        }
         stage('Build') {
             steps {
                 sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true compile'
@@ -29,7 +22,6 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarCloud FUSE') {
-                    // requires SonarQube Scanner for Maven 3.2+
                     sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar'
                 }
             }
