@@ -76,9 +76,9 @@ dependencies {
     testApt 'org.projectlombok:lombok:1.16.18'  // our test classes use lombock too
 }
 
-// checkstyle {
-  // configFile = rootProject.file('google_checks.xml')
-// }
+checkstyle {
+  configFile = rootProject.file('google_checks.xml')
+}
 
 sonarqube {
   properties {
