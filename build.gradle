@@ -77,7 +77,7 @@ dependencies {
 }
 
 checkstyle {
-  config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'google_checks.xml')
+  configFile = rootProject.file('google_checks.xml')
 }
 
 sonarqube {
