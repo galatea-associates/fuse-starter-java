@@ -64,6 +64,7 @@ pipeline {
         // assumes the first Build stage produced the jar in the location referenced by manifest-dev.yml
         pushToCloudFoundry(
           target: 'https://api.run.pivotal.io/',
+          pluginTimeout: 180,
           organization: 'FUSE',
           cloudSpace: 'development',
           credentialsId: 'cf-credentials',
