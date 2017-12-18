@@ -87,7 +87,7 @@ checkstyle {
 
 sonarqube {
   properties {
-    property 'sonar.coverage.exclusions', '**/FuseWebRequestTraceFilter.java,**/SettlementMission.java'
+    property 'sonar.coverage.exclusions', '**/FuseWebRequestTraceFilter.java,**/SettlementMission.java,**/JmsConfig.java,**/SettlementService.java'
   }
 }
 
