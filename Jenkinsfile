@@ -47,5 +47,27 @@ pipeline {
         }
       }
     }
+    stage('Deploy') {
+      when {
+        not {
+          anyOf {
+            // sure there's a nicer way of doing this with a regex...
+            expression { BRANCH_NAME.startsWith('feature/') }
+            expression { BRANCH_NAME.startsWith('hotfix/') }
+            expression { BRANCH_NAME.startsWith('bugfix/') }
+          }
+        }
+      }
+      steps {
+        // assumes the first Build stage produced the jar in the location referenced by manifest-dev.yml
+        pushToCloudFoundry(
+          target: 'https://api.run.pivotal.io/',
+          organization: 'FUSE',
+          cloudSpace: 'development',
+          credentialsId: 'danny-cloud-foundry',
+          manifestChoice: [manifestFile: 'manifest-dev.yml']
+        )
+      }
+    }
   }
 }
