@@ -77,12 +77,12 @@ dependencies {
 }
 
 checkstyle {
-  toolVersion '7.6.1'
+  toolVersion '8.5'
   // note that you need to synchronize the version of the checkstyle tool with the google_checks.xml.
   // the google_checks.xml currently checked into the root of this project is from:
-  // https://raw.githubusercontent.com/checkstyle/checkstyle/checkstyle-7.6/src/main/resources/google_checks.xml
-  // note the "checkstyle-7.6" portion of the URL.
-  configFile = rootProject.file('google_checks.xml')
+  // https://raw.githubusercontent.com/checkstyle/checkstyle/checkstyle-8.5/src/main/resources/google_checks.xml
+  // note the "checkstyle-8.5" portion of the URL.
+  configFile = rootProject.file('google_checks_8.5.xml')
 }
 
 sonarqube {
