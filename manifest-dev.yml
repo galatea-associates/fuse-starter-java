@@ -1,6 +1,7 @@
 ---
 applications:
 - name: fuse-rest-dev
+  health-check-timeout: 180
   memory: 768M
   instances: 1
   # this needs to be parameterized to the version somehow
