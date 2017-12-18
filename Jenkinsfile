@@ -52,7 +52,9 @@ pipeline {
         not {
           anyOf {
             // sure there's a nicer way of doing this with a regex...
-            expression { BRANCH_NAME.startsWith('feature/') }
+
+            // commenting out this check briefly while I test the gradle build.
+            // expression { BRANCH_NAME.startsWith('feature/') }
             expression { BRANCH_NAME.startsWith('hotfix/') }
             expression { BRANCH_NAME.startsWith('bugfix/') }
           }
