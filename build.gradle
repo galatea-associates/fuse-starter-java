@@ -83,6 +83,8 @@ checkstyle {
   // https://raw.githubusercontent.com/checkstyle/checkstyle/checkstyle-8.5/src/main/resources/google_checks.xml
   // note the "checkstyle-8.5" portion of the URL.
   configFile = rootProject.file('google_checks_8.5.xml')
+  // ignoreFailures = false
+  maxWarnings = 0
 }
 
 sonarqube {

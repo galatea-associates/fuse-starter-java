@@ -32,7 +32,7 @@ pipeline {
     }
     stage('Checkstyle') {
       steps {
-        sh './gradlew check -i'
+        sh './gradlew check -x test -i'
       }
       post {
         failure {
@@ -40,7 +40,7 @@ pipeline {
             allowMissing: false,
             alwaysLinkToLastBuild: false,
             keepAll: true,
-            reportDir: 'target',
+            reportDir: 'build',
             reportFiles: 'checkstyle-result.xml',
             reportName: 'Checkstyle report'
           ])
