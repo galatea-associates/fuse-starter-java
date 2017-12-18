@@ -27,8 +27,15 @@ public class TradeAgreementDeserializer extends StdDeserializer<TradeAgreement> 
     }
 
     @Override
-    public TradeAgreement deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws TradeAgreementException, IOException {
-        JsonNode node = getJsonNode(jsonParser);
+    public TradeAgreement deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws TradeAgreementException {
+        JsonNode node;
+        try {
+            node = JsonChecker.getNode(jsonParser, getFieldInfo());
+        } catch (IOException e) {
+            log.error(e.toString());
+            throw new TradeAgreementException(e.getMessage());
+        }
+
         BigMoney proceeds = getProceeds(node);
 
         return TradeAgreement.builder()
@@ -39,48 +46,6 @@ public class TradeAgreementDeserializer extends StdDeserializer<TradeAgreement> 
             .qty(node.get("qty").asDouble())
             .proceeds(proceeds)
             .build();
-    }
-
-    private JsonNode getJsonNode(JsonParser jsonParser) throws TradeAgreementException {
-        try {
-            log.info("Codec of JsonParser: " + jsonParser.getCodec().toString());
-            return checkJsonNode(jsonParser.getCodec().readTree(jsonParser));
-        } catch (IOException e) {
-            log.error(e.toString());
-            throw new TradeAgreementException("Posted JSON could not be deserialized.");
-        }
-    }
-
-    // Change to lambda expression
-    private JsonNode checkJsonNode(JsonNode node) throws TradeAgreementException {
-        ArrayList<String> missingFields = new ArrayList<>();
-        ArrayList<String> incorrectFields = new ArrayList<>();
-        HashMap<String, JsonNodeType> fieldInfo = getFieldInfo();
-
-        for (String key: fieldInfo.keySet()){
-            if (node.has(key)){
-                if (!node.get(key).getNodeType().equals(fieldInfo.get(key))) {
-                    incorrectFields.add(key);
-                }
-            } else {
-                missingFields.add(key);
-            }
-        }
-
-        // More eloquent way of doing this?
-        if (!missingFields.isEmpty() && !incorrectFields.isEmpty()) {
-            throw new TradeAgreementException(
-                String.format("Posted agreement did not contain: %s", missingFields.toString())
-                    + String.format("Posted agreement had the following invalid field types: %s ", incorrectFields.toString()));
-        } else if (!missingFields.isEmpty()) {
-            throw new TradeAgreementException(
-                String.format("Posted agreement did not contain: %s", missingFields.toString()));
-        } else if (!incorrectFields.isEmpty()) {
-            throw new TradeAgreementException(
-                String.format("Posted agreement had the following invalid field types: %s ", incorrectFields.toString()));
-        }
-
-        return node;
     }
 
     private HashMap<String, JsonNodeType> getFieldInfo() {
@@ -99,7 +64,7 @@ public class TradeAgreementDeserializer extends StdDeserializer<TradeAgreement> 
             return BigMoney.parse(node.get("proceeds").asText());
         } catch (IllegalArgumentException e) {
             log.error(e.toString());
-            throw new TradeAgreementException("Posted agreement contained invalid proceeds.");
+            throw new TradeAgreementException("Could not parse proceeds from request.");
         }
     }
 }

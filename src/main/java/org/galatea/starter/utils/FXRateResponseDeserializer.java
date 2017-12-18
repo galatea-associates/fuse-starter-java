@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.FXRateException;
 import org.galatea.starter.domain.FXRateResponse;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 @Slf4j
 public class FXRateResponseDeserializer extends StdDeserializer {
@@ -23,45 +26,40 @@ public class FXRateResponseDeserializer extends StdDeserializer {
         super(vc);
     }
 
-    // http://tutorials.jenkov.com/java-json/jackson-objectmapper.html
     @Override
-    public FXRateResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        CurrencyUnit baseCurrency = null;
-        Date validOn = null;
-        BigDecimal exchangeRate = null;
-
-        while(!jsonParser.isClosed()){
-            JsonToken jsonToken = jsonParser.nextToken();
-
-            if(JsonToken.FIELD_NAME.equals(jsonToken)){
-                String fieldName = jsonParser.getCurrentName();
-
-                jsonToken = jsonParser.nextToken();
-
-                try {
-                    switch (fieldName) {
-                        case "base":
-                            baseCurrency = CurrencyUnit.of(jsonParser.getValueAsString());
-                            break;
-                        case "date":
-                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                            validOn = formatter.parse(jsonParser.getValueAsString());
-                            break;
-                        case "USD":
-                            exchangeRate = BigDecimal.valueOf(jsonParser.getValueAsDouble());
-                            break;
-                    }
-                } catch (IOException | ParseException e) {
-                    log.error(e.toString());
-                    throw new FXRateException("Failed to deserialize response from pricing API.");
-                }
-            }
+    public FXRateResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws FXRateException {
+        JsonNode node;
+        try {
+            node = JsonChecker.getNode(jsonParser, getFieldInfo());
+        } catch (IOException e) {
+            log.error(e.toString());
+            throw new FXRateException(e.getMessage());
         }
 
-        if (baseCurrency == null || validOn == null || exchangeRate == null) {
-            log.error("Failed to deserialize response from pricing API. Parsed variables were: baseCurrency:{} validOn:{} exchangeRate:{}", baseCurrency, validOn, exchangeRate);
-            throw new FXRateException("Failed to deserialize response from FX pricing API.");
+        Date date = getDate(node);
+
+        return FXRateResponse.builder()
+                .baseCurrency(CurrencyUnit.of(node.get("base").asText()))
+                .validOn(date)
+                .exchangeRate(BigDecimal.valueOf(node.get("USD").asDouble()))
+                .build();
+    }
+
+    private HashMap<String, JsonNodeType> getFieldInfo() {
+        HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
+        fieldInfo.put("date", JsonNodeType.STRING);
+        fieldInfo.put("base", JsonNodeType.STRING);
+        fieldInfo.put("USD", JsonNodeType.NUMBER);
+        return fieldInfo;
+    }
+
+    private Date getDate(JsonNode node) throws FXRateException {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            return formatter.parse(node.get("date").asText());
+        } catch (ParseException e) {
+            log.error(e.toString());
+            throw new FXRateException("Could not parse date from FXRate API.");
         }
-        return new FXRateResponse(baseCurrency, validOn, exchangeRate);
     }
 }
