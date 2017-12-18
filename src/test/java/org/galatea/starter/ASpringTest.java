@@ -1,8 +1,12 @@
 
 package org.galatea.starter;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import junitparams.mappers.IdentityMapper;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.ClassRule;
@@ -14,13 +18,6 @@ import org.springframework.jms.config.JmsListenerEndpointRegistry;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
-import junitparams.mappers.IdentityMapper;
 
 @Slf4j
 @ActiveProfiles("dev")
@@ -46,8 +43,9 @@ public abstract class ASpringTest {
     @Override
     public Object[] map(Reader reader) {
       Object[] lines = super.map(reader);
-      return Arrays.stream(lines).map(objLine -> (String) objLine).filter(line -> !line.trim().isEmpty())
-          .map(line -> line.split(DELIM)).collect(Collectors.toList()).toArray();
+      return Arrays.stream(lines).map(objLine -> (String) objLine)
+          .filter(line -> !line.trim().isEmpty()).map(line -> line.split(DELIM))
+          .collect(Collectors.toList()).toArray();
     }
 
   }

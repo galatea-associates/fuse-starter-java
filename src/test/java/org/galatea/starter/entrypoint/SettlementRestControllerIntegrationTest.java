@@ -4,25 +4,22 @@ package org.galatea.starter.entrypoint;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
-
-import org.galatea.starter.domain.SettlementMission;
-import org.galatea.starter.domain.SettlementMission.SettlementMissionBuilder;
-import org.galatea.starter.domain.TradeAgreement;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-
-import java.util.List;
-
 import feign.Feign;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
+import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.galatea.starter.domain.SettlementMission;
+import org.galatea.starter.domain.SettlementMission.SettlementMissionBuilder;
+import org.galatea.starter.domain.TradeAgreement;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 
 @RequiredArgsConstructor

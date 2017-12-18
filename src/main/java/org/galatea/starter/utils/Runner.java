@@ -3,6 +3,8 @@ package org.galatea.starter.utils;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.locks.Lock;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -11,12 +13,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.domain.TradeAgreement;
 import org.springframework.util.StopWatch;
-
-import java.util.concurrent.Callable;
-import java.util.concurrent.locks.Lock;
 
 /**
  * A utility class that allows us to wrap code with common behavior (e.g. locking, timing). We use

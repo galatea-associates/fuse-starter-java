@@ -12,15 +12,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.google.common.collect.Sets;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.google.common.collect.Sets;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import junitparams.FileParameters;
+import junitparams.JUnitParamsRunner;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
@@ -35,13 +37,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import junitparams.FileParameters;
-import junitparams.JUnitParamsRunner;
 
 @RequiredArgsConstructor
 @Slf4j
