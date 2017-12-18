@@ -142,7 +142,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   }
 
   /**
-   * Verifies required audit fields are present
+   * Verifies required audit fields are present.
    *
    * @param resultActions The resultActions object wrapping the response
    * @throws Exception On any validation exception
