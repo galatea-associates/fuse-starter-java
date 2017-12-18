@@ -32,7 +32,7 @@ pipeline {
     }
     stage('Checkstyle') {
       steps {
-        sh './gradlew check'
+        sh './gradlew check -i'
       }
       post {
         failure {
