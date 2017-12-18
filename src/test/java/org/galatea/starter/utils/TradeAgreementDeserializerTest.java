@@ -30,11 +30,12 @@ public class TradeAgreementDeserializerTest {
 
     @Test
     public void testDeserialize() throws Exception {
-        String agreementJson = readData("Test_IBM_Agreement.json");
+        String agreementJson = readData("Test_IBM_Agreement.json").replace("\n", "").replace("[", "").replace("]", "");
         JsonParser jsonParser = mapper.getFactory().createParser(agreementJson);
-        System.out.println(jsonParser.readValueAsTree().toString());
+        //System.out.println(jsonParser.readValueAsTree().toString());
         TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
-
+        
+        
         assertEquals(agreement.getInstrument(),"IBM");
         assertEquals(agreement.getInternalParty(), "INT-1");
         assertEquals(agreement.getExternalParty(), "EXT-1");
