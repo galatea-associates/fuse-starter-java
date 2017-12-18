@@ -20,6 +20,9 @@ import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 
+/**
+ * Configures beans used to connect to a JMS Queue.
+ */
 @Slf4j
 @Configuration
 @EnableJms
@@ -72,7 +75,7 @@ public class JmsConfig implements JmsListenerConfigurer {
 
 
   /**
-   * @return a new handler factory that uses a different message converter than the default one.
+   * Create a new handler factory that uses a different message converter than the default one.
    */
   @Bean
   public MessageHandlerMethodFactory jmsHandlerMethodFactory() {
