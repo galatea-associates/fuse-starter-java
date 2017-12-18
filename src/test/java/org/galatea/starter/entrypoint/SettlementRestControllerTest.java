@@ -1,6 +1,5 @@
 package org.galatea.starter.entrypoint;
 
-
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
@@ -121,15 +120,15 @@ public class SettlementRestControllerTest extends ASpringTest {
     given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(testMission));
 
-    ResultActions resultActions =
-        this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-            .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk())
+    ResultActions resultActions = this.mvc
+        .perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+            .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
 
-            .andExpect(jsonPath("$.id", is(MISSION_ID_1.intValue())))
-            .andExpect(jsonPath("$.externalParty", is(externapParty)))
-            .andExpect(jsonPath("$.instrument", is(instrument)))
-            .andExpect(jsonPath("$.direction", is(direction)))
-            .andExpect(jsonPath("$.qty", is(qty)));
+        .andExpect(jsonPath("$.id", is(MISSION_ID_1.intValue())))
+        .andExpect(jsonPath("$.externalParty", is(externapParty)))
+        .andExpect(jsonPath("$.instrument", is(instrument)))
+        .andExpect(jsonPath("$.direction", is(direction))).andExpect(jsonPath("$.qty", is(qty)));
 
     verifyAuditHeaders(resultActions);
   }

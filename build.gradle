@@ -76,27 +76,13 @@ dependencies {
     testApt 'org.projectlombok:lombok:1.16.18'  // our test classes use lombock too
 }
 
-
-// attempting to do what this guy did: https://github.com/ben-manes/caffeine/blob/6ccd359fe45efc1e69f049f0465e0c146864b475/gradle/codeQuality.gradle
-// configurations {
-//   checkstyleConfig
-// }
-//
-// dependencies {
-//   checkstyleConfig gradlePlugins.checkstyle
-// }
-//
-// checkstyle {
-//   showViolations = true
-//   toolVersion = pluginVersions.checkstyle
-//   config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'google_checks.xml')
-// }
-
-
 checkstyle {
   toolVersion '7.6.1'
+  // note that you need to synchronize the version of the checkstyle tool with the google_checks.xml.
+  // the google_checks.xml currently checked into the root of this project is from:
+  // https://raw.githubusercontent.com/checkstyle/checkstyle/checkstyle-7.6/src/main/resources/google_checks.xml
+  // note the "checkstyle-7.6" portion of the URL.
   configFile = rootProject.file('google_checks.xml')
-  // configFile = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'google_checks.xml')
 }
 
 sonarqube {

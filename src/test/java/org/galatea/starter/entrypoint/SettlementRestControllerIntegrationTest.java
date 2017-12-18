@@ -1,13 +1,13 @@
 
 package org.galatea.starter.entrypoint;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.SettlementMission.SettlementMissionBuilder;
