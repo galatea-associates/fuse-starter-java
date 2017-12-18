@@ -29,7 +29,7 @@ import org.springframework.messaging.handler.annotation.support.MessageHandlerMe
 public class JmsConfig implements JmsListenerConfigurer {
 
   /**
-   * @return an implementation of failed message consumer that simply logs the message.
+   * Return an implementation of failed message consumer that simply logs the message.
    */
   @Bean
   public BiConsumer<Message, Exception> failedMessageConsumer() {
