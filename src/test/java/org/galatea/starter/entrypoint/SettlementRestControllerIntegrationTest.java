@@ -11,10 +11,13 @@ import static org.junit.Assert.assertEquals;
 
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.SettlementMission.SettlementMissionBuilder;
+import org.joda.money.BigMoney;
+import org.joda.money.CurrencyUnit;
 import org.galatea.starter.domain.TradeAgreement;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import feign.Feign;
@@ -50,23 +53,29 @@ public class SettlementRestControllerIntegrationTest {
     List<String> missionPaths = fuseServer.sendTradeAgreement(new TradeAgreement[] {
 
         TradeAgreement.builder().id(4000L).instrument("IBM").internalParty("icp-1")
-            .externalParty("ecp-1").buySell("B").qty(4500.0).build(),
+            .externalParty("ecp-1").buySell("B").qty(4500.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+            .build(),
 
         TradeAgreement.builder().id(4001L).instrument("IBM").internalParty("icp-2")
-            .externalParty("ecp-2").buySell("B").qty(4600.0).build()});
+            .externalParty("ecp-2").buySell("B").qty(4600.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)).build()
+            });
 
     log.info("created missions: {}", missionPaths);
 
     SettlementMissionBuilder b1 = SettlementMission.builder().depot("DTC").instrument("IBM")
-        .externalParty("ecp-1").direction("REC").qty(4500.0);
+        .externalParty("ecp-1").direction("REC").qty(4500.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
     SettlementMissionBuilder b2 = SettlementMission.builder().depot("DTC").instrument("IBM")
-        .externalParty("ecp-2").direction("REC").qty(4600.0);
+        .externalParty("ecp-2").direction("REC").qty(4600.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
 
     assertEquals(2, missionPaths.size());
 
     for (String missionPath : missionPaths) {
       Long missionId = Long.parseLong(missionPath.split("/")[3]); // brittle assumption...
       SettlementMission settlementMission = fuseServer.getSettlementMission(missionId);
+      settlementMission.setProceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d));
+      settlementMission.setUsdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
       log.info("fetched mission: {}", settlementMission);
 
       assertTrue(b1.id(missionId).build().equals(settlementMission)
