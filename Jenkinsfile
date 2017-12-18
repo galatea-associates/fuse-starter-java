@@ -66,7 +66,7 @@ pipeline {
           target: 'https://api.run.pivotal.io/',
           organization: 'FUSE',
           cloudSpace: 'development',
-          credentialsId: 'danny-cloud-foundry',
+          credentialsId: 'cf-credentials',
           manifestChoice: [manifestFile: 'manifest-dev.yml']
         )
       }
