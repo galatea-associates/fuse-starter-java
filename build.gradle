@@ -79,7 +79,7 @@ dependencies {
 checkstyle {
   toolVersion '7.6.1'
   // configFile = rootProject.file('google_checks_2.xml')
-  configFile = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'google_checks.xml')
+  // configFile = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'google_checks.xml')
 }
 
 sonarqube {
