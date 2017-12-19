@@ -18,19 +18,18 @@ import java.util.HashMap;
 @Slf4j
 public class TradeAgreementDeserializer extends StdDeserializer<TradeAgreement> {
 
-    public TradeAgreementDeserializer() {
-        this(null);
-    }
+    private static HashMap<String, JsonNodeType> jsonInfo;
 
     public TradeAgreementDeserializer(Class<?> vc) {
         super(vc);
+        jsonInfo = getFieldInfo();
     }
 
     @Override
     public TradeAgreement deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws TradeAgreementException {
         JsonNode node;
         try {
-            node = JsonChecker.getNode(jsonParser, getFieldInfo());
+            node = JsonChecker.getNode(jsonParser, jsonInfo);
         } catch (IOException e) {
             log.error(e.toString());
             throw new TradeAgreementException(e.getMessage());
