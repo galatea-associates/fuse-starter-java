@@ -16,13 +16,11 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true compile'
-                slackSend (color: '#FFFF00', message: "BUILDING: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
             }
         }
         stage('Unit tests') {
             steps {
                 sh 'mvn test'
-                slackSend (color: '#FFFF00', message: "RUNNING UNIT TESTS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
             }
             post {
                 always {
@@ -32,7 +30,6 @@ pipeline {
         }
         stage('SonarQube analysis') {
             steps {
-                slackSend (color: '#FFFF00', message: "SONARQUBE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                 withSonarQubeEnv('SonarCloud FUSE') {
                     // requires SonarQube Scanner for Maven 3.2+
                     sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar'
@@ -41,7 +38,6 @@ pipeline {
         }
         stage('Quality gate') {
             steps {
-                slackSend (color: '#FFFF00', message: "QUALITY GATE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                 // Just in case something goes wrong, pipeline will be killed after a timeout
                 timeout(time: 1, unit: 'MINUTES') {
                     script {
@@ -55,7 +51,6 @@ pipeline {
         }
         stage('Checkstyle') {
             steps {
-                slackSend (color: '#FFFF00', message: "CHECKSTYLE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                 sh 'mvn checkstyle:check'
             }
             // using the following results in an error in the pipeline - ERROR: None of the test reports contained any result
@@ -108,7 +103,6 @@ pipeline {
                 expression { BRANCH_NAME ==~ /^PR-\d+$/ }
             }
             steps {
-                slackSend (color: '#FFFF00', message: "INTEGRATION TESTS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                 sh 'mvn verify'
             }
             post {
@@ -122,9 +116,15 @@ pipeline {
                 branch 'develop'
             }
             steps {
-                slackSend (color: '#FFFF00', message: "PERFORMANCE TESTS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                 echo 'Running performance tests...'
             }
         }
     }
+    post {
+        success {
+            slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+        failure {
+            slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }   
 }
