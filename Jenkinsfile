@@ -123,7 +123,7 @@ pipeline {
             steps {
                 echo 'Shutting down app'
                 timeout(time: 2, unit: 'MINUTES') {
-                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
                         // make sure the password does not contain single quotes otherwise the escaping fails
                         sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
                         sh 'cf stop fuse-rest-dev'
