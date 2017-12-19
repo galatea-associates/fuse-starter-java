@@ -17,6 +17,8 @@ jms:
 logging:
    level:
       org.galatea.starter.service.client.IFXRestClient: DEBUG
+client:
+    fx-rate: http://api.fixer.io
 ---
 # Test properties go here
 spring:
