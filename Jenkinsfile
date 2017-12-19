@@ -4,13 +4,6 @@ pipeline {
         maven '3.5.2'    // 3.5.2 relates to the label applied to a given version of Maven
     }
     stages {
-        stage('Initialization') {
-            steps {
-                echo 'Environment info'
-                sh 'mvn -version'
-                echo "Branch name: ${BRANCH_NAME}"
-            }
-        }
         stage('Build') {
             steps {
                 sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true compile'
@@ -29,7 +22,6 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarCloud FUSE') {
-                    // requires SonarQube Scanner for Maven 3.2+
                     sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar'
                 }
             }
@@ -74,8 +66,9 @@ pipeline {
         stage('Deploy') {
             when {
                 not {
+                    // for some reason this does not work. a branch name of feature/issue-84-pipeline-updates does not match
+                    // expression { BRANCH_NAME ==~ /^feature\/|hotfix\/|bugfix\// }
                     anyOf {
-                        // sure there's a nicer way of doing this with a regex...
                         expression { BRANCH_NAME.startsWith('feature/') }
                         expression { BRANCH_NAME.startsWith('hotfix/') }
                         expression { BRANCH_NAME.startsWith('bugfix/') }
@@ -85,17 +78,18 @@ pipeline {
             steps {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
                 sh 'mvn package'
+
                 pushToCloudFoundry(
                     target: 'https://api.run.pivotal.io/',
                     organization: 'FUSE',
                     cloudSpace: 'development',
-                    credentialsId: 'danny-cloud-foundry',
+                    credentialsId: 'cf-credentials',
                     manifestChoice: [manifestFile: 'manifest-dev.yml']
+                    // pluginTimeout: 240 // default value is 120
                 )
             }
         }
         stage('Integration tests') {
-            // according to https://gist.github.com/jonico/e205b16cf07451b2f475543cf1541e70 we can check for a PR build using the following
             when {
                 expression { BRANCH_NAME ==~ /^PR-\d+$/ }
             }
@@ -114,6 +108,28 @@ pipeline {
             }
             steps {
                 echo 'Running performance tests...'
+            }
+        }
+        stage('Shutdown') {
+            when {
+                not {
+                    anyOf {
+                        expression { BRANCH_NAME.startsWith('feature/') }
+                        expression { BRANCH_NAME.startsWith('hotfix/') }
+                        expression { BRANCH_NAME.startsWith('bugfix/') }
+                    }
+                }
+            }
+            steps {
+                echo 'Shutting down app'
+                timeout(time: 2, unit: 'MINUTES') {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
+                        // make sure the password does not contain single quotes otherwise the escaping fails
+                        sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
+                        sh 'cf stop fuse-rest-dev'
+                        sh 'cf logout'
+                    }
+                }
             }
         }
     }

@@ -18,6 +18,12 @@ This readme will contain an index to features and their location in code.
 ### IntelliJ
 - Import as a maven project.  A simple way to do this is to Open File and select the pom.xml.
 - Install lombok: https://projectlombok.org/setup/intellij.
+- Download the [IntelliJ Google Java Style](https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml) file
+  - In IntelliJ Navigate to File -> Settings -> Editor -> Code Style -> Java
+  - Next to Scheme click the settings icon
+  - Import Scheme
+  - IntelliJ Idea Code Style as XML
+  - Choose the downloaded file and click OK
 - Run stuff:
   - src/main/java/org/galatea/starter/Application.java -> r-click -> Run Application.main().  This will start a jms listener and REST services.  Note, there is a supplied Run Configurations for this class in .idea/runConfigurations which sets up some VM and Program args for this class.  If IntelliJ didn't automatically find them you may have to manually set them.
     - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
