@@ -3,6 +3,7 @@ package org.galatea.starter.utils.deserializers;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.FXRateException;
@@ -10,7 +11,6 @@ import org.galatea.starter.domain.FXRateResponse;
 import org.galatea.starter.utils.JsonChecker;
 import org.joda.money.CurrencyUnit;
 
-import javax.swing.text.DateFormatter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -19,20 +19,20 @@ import java.util.Date;
 import java.util.HashMap;
 
 @Slf4j
-public class FXRateResponseDeserializer extends FuseJsonDeserializer {
+public class FXRateResponseDeserializer extends StdDeserializer {
 
-    private static SimpleDateFormat formatter;
+    public static final HashMap<String, JsonNodeType> fieldMap = getFieldMap();
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public FXRateResponseDeserializer() {
         super(FXRateResponse.class);
-        formatter = new SimpleDateFormat("yyyy-MM-dd");
     }
 
     @Override
     public FXRateResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws FXRateException {
         JsonNode node;
         try {
-            node = JsonChecker.getNode(jsonParser, jsonInfo);
+            node = JsonChecker.getNode(jsonParser, fieldMap);
         } catch (IOException e) {
             log.error(e.toString());
             throw new FXRateException(e.getMessage());
@@ -47,8 +47,7 @@ public class FXRateResponseDeserializer extends FuseJsonDeserializer {
                 .build();
     }
 
-    @Override
-    public HashMap<String, JsonNodeType> getFieldInfo() {
+    public static HashMap<String, JsonNodeType> getFieldMap() {
         HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
         fieldInfo.put("date", JsonNodeType.STRING);
         fieldInfo.put("base", JsonNodeType.STRING);

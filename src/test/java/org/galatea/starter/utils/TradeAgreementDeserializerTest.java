@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.galatea.starter.ASpringTest.readData;
+import static org.galatea.starter.Utilities.getTradeAgreementJsonFromFile;
 import static org.junit.Assert.assertEquals;
 
 @Slf4j
@@ -31,12 +32,11 @@ public class TradeAgreementDeserializerTest {
 
     @Test
     public void testDeserialize() throws Exception {
-        String agreementJson = readData("Test_IBM_Agreement.json").replace("\n", "").replace("[", "").replace("]", "");
+        String agreementJson = getTradeAgreementJsonFromFile("Correct_IBM_Agreement.json");
+
         JsonParser jsonParser = mapper.getFactory().createParser(agreementJson);
-        //System.out.println(jsonParser.readValueAsTree().toString());
         TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
-        
-        
+
         assertEquals(agreement.getInstrument(),"IBM");
         assertEquals(agreement.getInternalParty(), "INT-1");
         assertEquals(agreement.getExternalParty(), "EXT-1");

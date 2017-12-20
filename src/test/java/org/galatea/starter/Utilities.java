@@ -15,10 +15,8 @@ import static org.galatea.starter.ASpringTest.readData;
 @Slf4j
 public class Utilities {
 
-    public static TradeAgreement getTradeAgreement() throws IOException {
-        String agreementJson = readData("Test_IBM_Agreement.json").replace("\n", "").replace("[", "").replace("]", "");
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree(agreementJson);
+    public static TradeAgreement getTradeAgreement() throws Exception {
+        JsonNode node = getTradeAgreementNodeFromFile("Correct_IBM_Agreement.json");
 
         return TradeAgreement.builder()
                 .instrument(node.get("instrument").asText())
@@ -29,4 +27,15 @@ public class Utilities {
                 .proceeds(BigMoney.parse(node.get("proceeds").asText()))
                 .build();
     }
+
+    public static JsonNode getTradeAgreementNodeFromFile(String fileName) throws Exception {
+        String agreementJson = getTradeAgreementJsonFromFile(fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readTree(agreementJson);
+    }
+
+    public static String getTradeAgreementJsonFromFile(String fileName) throws Exception {
+        return readData(fileName).replace("\n", "").replace("[", "").replace("]", "");
+    }
+
 }
