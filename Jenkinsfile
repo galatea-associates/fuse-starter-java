@@ -182,17 +182,17 @@ pipeline {
     sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
 }
 def author = ""
-def getGitAuthor = {
+def getGitAuthor() = {
     def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
     author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
 }
 
 def message = ""
-def getLastCommitMessage = {
+def getLastCommitMessage() = {
     message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 }
 
-def populateGlobalVariables = {
+def populateGlobalVariables() = {
     getLastCommitMessage()
     getGitAuthor()
 }
