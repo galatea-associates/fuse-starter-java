@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                populateGlobalVariables();
+                populateGlobalVariables() sljdlskjdlfkjalkdj()
                 notifySlack("", 'fuse-java-builds', [
                     [
                         title: "Starting ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
