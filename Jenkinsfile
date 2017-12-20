@@ -9,12 +9,12 @@ pipeline {
             steps {
                 populateGlobalVariables()
                 //slackSend (color: '#FFFF00', message: "STARTED: '${env.BRANCH_NAME} #${env.BUILD_NUMBER}' (${env.BUILD_URL})")
-                notifySlack("Starting", 'fuse-java-builds', [
+                notifySlack("", 'fuse-java-builds', [
                     [
-                        title: "${env.JOB_NAME}, build #${env.BUILD_NUMBER}",
+                        title: "Starting ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
                         title_link: "${env.BUILD_URL}",
-                        color: "warning",
-                        text: "${author}",
+                        color: "#2fc2e0",
+                        text: "Triggered by ${author}",
                         "mrkdwn_in": ["fields"],
                         fields: [
                             [
@@ -25,7 +25,7 @@ pipeline {
                             [
                                 title: "Last Commit",
                                 value: "${message}",
-                                short: false
+                                short: true
                             ]
                         ]
                     ]
@@ -160,10 +160,52 @@ pipeline {
     }
     post {
         success {
-            slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            notifySlack("", 'fuse-java-builds', [
+                    [
+                        title: "Successful! ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
+                        title_link: "${env.BUILD_URL}",
+                        color: "good",
+                        text: "Triggered by ${author}",
+                        "mrkdwn_in": ["fields"],
+                        fields: [
+                            [
+                                title: "Branch",
+                                value: "${env.GIT_BRANCH}",
+                                short: true
+                            ],
+                            [
+                                title: "Last Commit",
+                                value: "${message}",
+                                short: true
+                            ]
+                        ]
+                    ]
+                ])
+            //slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
         failure {
-            slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            notifySlack("", 'fuse-java-builds', [
+                    [
+                        title: "FAILED ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
+                        title_link: "${env.BUILD_URL}",
+                        color: "danger",
+                        text: "Triggered by ${author}",
+                        "mrkdwn_in": ["fields"],
+                        fields: [
+                            [
+                                title: "Branch",
+                                value: "${env.GIT_BRANCH}",
+                                short: true
+                            ],
+                            [
+                                title: "Last Commit",
+                                value: "${message}",
+                                short: true
+                            ]
+                        ]
+                    ]
+                ])
+            //slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }   
     }
 }
