@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.utils.deserializers.TradeAgreementDeserializer;
 import org.joda.money.BigMoney;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class TradeAgreementDeserializerTest {
     @Before
     public void setup() {
         mapper = new ObjectMapper();
-        deserializer = new TradeAgreementDeserializer(TradeAgreement.class);
+        deserializer = new TradeAgreementDeserializer();
         context = mapper.getDeserializationContext();
     }
 
