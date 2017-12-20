@@ -115,13 +115,7 @@ pipeline {
         }
         stage('Shutdown') {
             when {
-                not {
-                    anyOf {
-                        expression { BRANCH_NAME.startsWith('feature/') }
-                        expression { BRANCH_NAME.startsWith('hotfix/') }
-                        expression { BRANCH_NAME.startsWith('bugfix/') }
-                    }
-                }
+                goodBranch()
             }
             steps {
                 echo 'Shutting down app'
@@ -152,7 +146,17 @@ pipeline {
     }
 }
 
- def notifySlack(titlePrefix, channel, color) {
+def goodBranch() {
+    not {
+        anyOf {
+            expression { BRANCH_NAME.startsWith('feature/') }
+            expression { BRANCH_NAME.startsWith('hotfix/') }
+            expression { BRANCH_NAME.startsWith('bugfix/') }
+        }
+    }
+}
+
+def notifySlack(titlePrefix, channel, color) {
     def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 
     def payload = JsonOutput.toJson([text: "",
