@@ -28,8 +28,6 @@ import javax.persistence.Id;
 @Entity
 public class SettlementMission {
   
-  random thing to break the build!
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
