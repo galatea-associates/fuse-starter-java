@@ -1,28 +1,25 @@
-package org.galatea.starter.utils;
+package org.galatea.starter.utils.deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.domain.TradeAgreementException;
+import org.galatea.starter.utils.JsonChecker;
 import org.joda.money.BigMoney;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 // http://www.baeldung.com/jackson-deserialization
 @Slf4j
-public class TradeAgreementDeserializer extends StdDeserializer<TradeAgreement> {
+public class TradeAgreementDeserializer extends FuseJsonDeserializer {
 
-    private static HashMap<String, JsonNodeType> jsonInfo;
-
-    public TradeAgreementDeserializer(Class<?> vc) {
-        super(vc);
-        jsonInfo = getFieldInfo();
+    public TradeAgreementDeserializer() {
+        super(TradeAgreement.class);
     }
 
     @Override
@@ -47,7 +44,8 @@ public class TradeAgreementDeserializer extends StdDeserializer<TradeAgreement> 
             .build();
     }
 
-    private HashMap<String, JsonNodeType> getFieldInfo() {
+    @Override
+    public HashMap<String, JsonNodeType> getFieldInfo() {
         HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
         fieldInfo.put("instrument", JsonNodeType.STRING);
         fieldInfo.put("internalParty", JsonNodeType.STRING);

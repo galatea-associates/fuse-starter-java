@@ -20,6 +20,9 @@ public class ProceedsCalculator implements IProceedsCalculator {
 
     @Override
     public BigMoney getUSDProceeds(BigMoney base) {
+        if (base.getCurrencyUnit() == CurrencyUnit.USD) {
+            return base;
+        }
         return base.convertedTo(CurrencyUnit.USD, getFXRate(base.getCurrencyUnit().getCode()));
     }
 

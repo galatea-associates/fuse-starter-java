@@ -1,10 +1,15 @@
 
 package org.galatea.starter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.io.IOUtils;
+import org.galatea.starter.domain.FXRateResponse;
+import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.utils.deserializers.FXRateResponseDeserializer;
 import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -59,7 +64,6 @@ public abstract class ASpringTest {
     }
 
   }
-
 
   public static String readData(final String fileName) throws IOException {
     return IOUtils.toString(ASpringTest.class.getClassLoader().getResourceAsStream(fileName))
