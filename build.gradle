@@ -120,3 +120,11 @@ test {
     // https://docs.gradle.org/2.14/userguide/java_plugin.html#N15AAD
     include '**/*Test.class'
 }
+
+task integration(type: Test) {
+    useJUnit {
+        includeCategories 'org.galatea.starter.IntegrationTestCategory'
+    }
+
+    include '**/*Test.class'
+}

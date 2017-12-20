@@ -13,7 +13,6 @@ This readme will contain an index to features and their location in code.
   - src/main/java/org/galatea/starter/Application.java -> r-click -> run as Java Application.  This will start a jms listener and REST services.  Note, there is an eclipse .launch file provided which configures some VM and Program args.  
     - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
   - src/test/java/org/galatea/starter/UnitTestRunner.java -> r-click -> run as Junit test to run just the unit tests.
-  - src/test/java/org/galatea/starter/AllTestRunner.java -> r-click -> run as Junit test to run the unit and integration tests.
 
 ### IntelliJ
 - Import as a maven project.  A simple way to do this is to Open File and select the pom.xml.
@@ -22,7 +21,7 @@ This readme will contain an index to features and their location in code.
   - src/main/java/org/galatea/starter/Application.java -> r-click -> Run Application.main().  This will start a jms listener and REST services.  Note, there is a supplied Run Configurations for this class in .idea/runConfigurations which sets up some VM and Program args for this class.  If IntelliJ didn't automatically find them you may have to manually set them.
     - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
   - src/test/java/org/galatea/starter/UnitTestRunner.java -> r-click -> run UnitTestRunner to run just the unit tests.
-  - src/test/java/org/galatea/starter/AllTestRunner.java -> r-click -> run AllTestRunner to run the unit and integration tests.
+  - The integration tests require an instance of FUSE to be running on CloudFoundry. Once the application is up, run gradle integration to pick up the tests  that have the @Category(IntegrationTestCategory.class) annotation.
 
 ### A note on spring profiles
 - The project comes with support for 3 spring profiles:
@@ -75,7 +74,7 @@ FUSE currently shows how to read from a queue (not a topic).
 `org.galatea.starter.utils.jms.FuseJmsListenerContainerFactory` - provides a custom "listener container" factory (which is a spring jms concept).  We use our own factory, so we can create our own "listener container".
 `org.galatea.starter.utils.jms.FuseMessageListenerContainer` - is a custom listener container.  This is the code that will actually call the JMS listener that you have registered.  You'll notice that we populate our trace repository here.  This allows us to capture every message we process and the resulting outcome.  
 `org.galatea.starter.JmsConfig` - is the spring java config related to jms
-`org.galatea.starter.entrypoint.SettlementJmsListenerTest` - shows you how to test a jms listener.  SpringBoot fires up an embedded ActiveMQ broker for the test.  It's important to look at the mentiod annotated with @After in ASpringTest.  You'll see that we tear down the jms connection after each test to ensure isolation between tests.  This is important.
+`org.galatea.starter.entrypoint.SettlementJmsListenerTest` - shows you how to test a jms listener.  SpringBoot fires up an embedded ActiveMQ broker for the test.  It's important to look at the method annotated with @After in ASpringTest.  You'll see that we tear down the jms connection after each test to ensure isolation between tests.  This is important.
 
 ## Logging
 - For the main configuration see: src/main/resources/log4j2.yml 

@@ -47,5 +47,49 @@ pipeline {
         }
       }
     }
+    stage('Deploy') {
+        when {
+            not {
+                anyOf {
+                    // sure there's a nicer way of doing this with a regex...
+                    // expression { BRANCH_NAME.startsWith('feature/') }  Comment this out so we can test the pipeline
+                    expression { BRANCH_NAME.startsWith('hotfix/') }
+                    expression { BRANCH_NAME.startsWith('bugfix/') }
+                }
+            }
+        }
+        steps {
+            // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
+            pushToCloudFoundry(
+                target: 'https://api.run.pivotal.io/',
+                organization: 'FUSE',
+                cloudSpace: 'development',
+                credentialsId: 'danny-cloud-foundry',
+                manifestChoice: [manifestFile: 'manifest-dev.yml']
+            )
+        }
+    }
+    stage('Integration tests') {
+         // according to https://gist.github.com/jonico/e205b16cf07451b2f475543cf1541e70 we can check for a PR build using the following
+         when {
+            expression { BRANCH_NAME ==~ /^PR-\d+$/ }
+         }
+         steps {
+            sh './gradlew integration -i'
+         }
+         post {
+            always {
+                junit 'target/failsafe-reports/*.xml'
+            }
+         }
+    }
+    stage('Performance tests') {
+        when {
+            branch 'develop'
+        }
+        steps {
+            echo 'Running performance tests...'
+        }
+    }
   }
 }
