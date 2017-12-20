@@ -6,6 +6,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                // send build started notifications
+                slackSend (color: '#FFFF00', message: "STARTED by ${env.CHANGE_AUTHOR}: '${env.BRANCH_NAME} #${env.BUILD_NUMBER}' /n(${env.BUILD_URL})")
                 sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true compile'
             }
         }
