@@ -27,7 +27,7 @@ import javax.persistence.Id;
 @Slf4j
 @Entity
 public class SettlementMission {
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
