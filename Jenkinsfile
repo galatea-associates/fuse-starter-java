@@ -146,20 +146,18 @@ pipeline {
             slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }   
     }
-    
-    method {
-        def notifySlack(text, channel, attachments) {
-            def slackURL = 'https://hooks.slack.com/services/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'
-            def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
-            
-            def payload = JsonOutput.toJson([text: text,
-                channel: channel,
-                username: "Jenkins",
-                icon_url: jenkinsIcon,
-                attachments: attachments
-            ])
+}
 
-            sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
-        }
-    }
+ def notifySlack(text, channel, attachments) {
+    def slackURL = 'https://hooks.slack.com/services/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'
+    def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
+
+    def payload = JsonOutput.toJson([text: text,
+        channel: channel,
+        username: "Jenkins",
+        icon_url: jenkinsIcon,
+        attachments: attachments
+    ])
+
+    sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
 }
