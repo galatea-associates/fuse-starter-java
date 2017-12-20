@@ -153,7 +153,6 @@ pipeline {
 }
 
  def notifySlack(titlePrefix, channel, color) {
-    def slackURL = 'https://hooks.slack.com/services/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'
     def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 
     def payload = JsonOutput.toJson([text: "",
@@ -183,7 +182,10 @@ pipeline {
         ]
     ])
 
-    sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+    withCredentials([string(credentialsId: 'gala-slack-url', variable: 'slackURL')]) {
+        sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+    }
+    
 }
 def author = ""
 def getGitAuthor() {
