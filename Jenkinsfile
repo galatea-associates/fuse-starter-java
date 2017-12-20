@@ -8,27 +8,7 @@ pipeline {
         stage('Build') {
             steps {
                 populateGlobalVariables()
-                notifySlack("", 'fuse-java-builds', [
-                    [
-                        title: "Starting ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
-                        title_link: "${env.BUILD_URL}",
-                        color: "#2fc2e0",
-                        text: "Triggered by ${author}",
-                        "mrkdwn_in": ["fields"],
-                        fields: [
-                            [
-                                title: "Branch",
-                                value: "${env.GIT_BRANCH}",
-                                short: true
-                            ],
-                            [
-                                title: "Last Commit",
-                                value: "${message}",
-                                short: true
-                            ]
-                        ]
-                    ]
-                ])
+                notifySlack("Starting", 'fuse-java-builds', "#2fc2e0")
                 sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true compile'
             }
         }
@@ -158,101 +138,21 @@ pipeline {
     }
     post {
         success {
-            notifySlack("", 'fuse-java-builds', [
-                [
-                    title: "Successful! ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
-                    title_link: "${env.BUILD_URL}",
-                    color: "good",
-                    text: "Triggered by ${author}",
-                    "mrkdwn_in": ["fields"],
-                    fields: [
-                        [
-                            title: "Branch",
-                            value: "${env.GIT_BRANCH}",
-                            short: true
-                        ],
-                        [
-                            title: "Last Commit",
-                            value: "${message}",
-                            short: true
-                        ]
-                     ]
-                ]
-            ])
+            notifySlack("Successful!", 'fuse-java-builds', "good")
         }
         failure {
-            notifySlack("", 'fuse-java-builds', [
-                [
-                    title: "FAILED ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
-                    title_link: "${env.BUILD_URL}",
-                    color: "danger",
-                    text: "Triggered by ${author}",
-                    "mrkdwn_in": ["fields"],
-                    fields: [
-                        [
-                            title: "Branch",
-                            value: "${env.GIT_BRANCH}",
-                            short: true
-                        ],
-                        [
-                            title: "Last Commit",
-                            value: "${message}",
-                            short: true
-                        ]
-                    ]
-                ]
-            ])
+            notifySlack("Failed", 'fuse-java-builds', "danger")
         }
         unstable {
-            notifySlack("", 'fuse-java-builds', [
-                [
-                    title: "UNSTABLE ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
-                    title_link: "${env.BUILD_URL}",
-                    color: "warning",
-                    text: "Triggered by ${author}",
-                    "mrkdwn_in": ["fields"],
-                    fields: [
-                        [
-                            title: "Branch",
-                            value: "${env.GIT_BRANCH}",
-                            short: true
-                        ],
-                        [
-                            title: "Last Commit",
-                            value: "${message}",
-                            short: true
-                        ]
-                    ]
-                ]
-            ])
+            notifySlack("Unstable", 'fuse-java-builds', "warning")
         }
         aborted {
-            notifySlack("", 'fuse-java-builds', [
-                [
-                    title: "ABORTED ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
-                    title_link: "${env.BUILD_URL}",
-                    color: "#d3d3d3",
-                    text: "Triggered by ${author}",
-                    "mrkdwn_in": ["fields"],
-                    fields: [
-                        [
-                            title: "Branch",
-                            value: "${env.GIT_BRANCH}",
-                            short: true
-                        ],
-                        [
-                            title: "Last Commit",
-                            value: "${message}",
-                            short: true
-                        ]
-                    ]
-                ]
-            ])
+            notifySlack("Aborted", 'fuse-java-builds', "#d3d3d3")
         }
     }
 }
 
- def notifySlack(text, channel, attachments) {
+ def notifySlack(titlePrefix, channel, color) {
     def slackURL = 'https://hooks.slack.com/services/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'
     def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 
@@ -260,7 +160,25 @@ pipeline {
         channel: channel,
         username: "Jenkins",
         icon_url: jenkinsIcon,
-        attachments: attachments
+        attachments: [
+                        title: "titlePrefix ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
+                        title_link: "${env.BUILD_URL}",
+                        color: color,
+                        text: "Triggered by ${author}",
+                        "mrkdwn_in": ["fields"],
+                        fields: [
+                            [
+                                title: "Branch",
+                                value: "${env.GIT_BRANCH}",
+                                short: true
+                            ],
+                            [
+                                title: "Last Commit",
+                                value: "${message}",
+                                short: true
+                            ]
+                        ]
+                    ]
     ])
 
     sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
