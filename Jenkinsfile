@@ -156,7 +156,7 @@ pipeline {
     def slackURL = 'https://hooks.slack.com/services/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'
     def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 
-    def payload = JsonOutput.toJson([text: text,
+    def payload = JsonOutput.toJson([text: "",
         channel: channel,
         username: "Jenkins",
         icon_url: jenkinsIcon,
