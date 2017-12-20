@@ -27,6 +27,8 @@ import javax.persistence.Id;
 @Slf4j
 @Entity
 public class SettlementMission {
+  
+  random thing to break the build!
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
