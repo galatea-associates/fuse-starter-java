@@ -161,21 +161,23 @@ pipeline {
         username: "Jenkins",
         icon_url: jenkinsIcon,
         attachments: [
-            title: "${titlePrefix} ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
-            title_link: "${env.BUILD_URL}",
-            color: "${color}",
-            text: "Triggered by ${author}",
-            "mrkdwn_in": ["fields"],
-            fields: [
-                [
-                    title: "Branch",
-                    value: "${env.GIT_BRANCH}",
-                    short: true
-                ],
-                [
-                    title: "Last Commit",
-                    value: "${message}",
-                    short: true
+            [
+                title: "${titlePrefix} ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
+                title_link: "${env.BUILD_URL}",
+                color: "${color}",
+                text: "Triggered by ${author}",
+                "mrkdwn_in": ["fields"],
+                fields: [
+                    [
+                        title: "Branch",
+                        value: "${env.GIT_BRANCH}",
+                        short: true
+                    ],
+                    [
+                        title: "Last Commit",
+                        value: "${message}",
+                        short: true
+                    ]
                 ]
             ]
         ]
