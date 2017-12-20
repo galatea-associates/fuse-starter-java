@@ -203,7 +203,53 @@ pipeline {
                     ]
                 ]
             ])
-        }   
+        }
+        unstable {
+            notifySlack("", 'fuse-java-builds', [
+                [
+                    title: "UNSTABLE ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
+                    title_link: "${env.BUILD_URL}",
+                    color: "warning",
+                    text: "Triggered by ${author}",
+                    "mrkdwn_in": ["fields"],
+                    fields: [
+                        [
+                            title: "Branch",
+                            value: "${env.GIT_BRANCH}",
+                            short: true
+                        ],
+                        [
+                            title: "Last Commit",
+                            value: "${message}",
+                            short: true
+                        ]
+                    ]
+                ]
+            ])
+        }
+        aborted {
+            notifySlack("", 'fuse-java-builds', [
+                [
+                    title: "ABORTED ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
+                    title_link: "${env.BUILD_URL}",
+                    color: "#d3d3d3",
+                    text: "Triggered by ${author}",
+                    "mrkdwn_in": ["fields"],
+                    fields: [
+                        [
+                            title: "Branch",
+                            value: "${env.GIT_BRANCH}",
+                            short: true
+                        ],
+                        [
+                            title: "Last Commit",
+                            value: "${message}",
+                            short: true
+                        ]
+                    ]
+                ]
+            ])
+        }
     }
 }
 
