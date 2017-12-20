@@ -115,7 +115,7 @@ pipeline {
         }
         stage('Shutdown') {
             when {
-                goodBranch()
+                expression  { goodBranch() }
             }
             steps {
                 echo 'Shutting down app'
@@ -189,8 +189,8 @@ def notifySlack(titlePrefix, channel, color) {
     withCredentials([string(credentialsId: 'gala-slack-url', variable: 'slackURL')]) {
         sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
     }
-    
 }
+
 def author = ""
 def getGitAuthor() {
     def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
