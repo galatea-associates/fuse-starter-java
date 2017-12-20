@@ -177,8 +177,9 @@ pipeline {
                             value: "${message}",
                             short: true
                         ]
-                    ]
-                ])
+                     ]
+                ]
+            ])
         }
         failure {
             notifySlack("", 'fuse-java-builds', [
@@ -200,7 +201,8 @@ pipeline {
                             short: true
                         ]
                     ]
-                ])
+                ]
+            ])
         }   
     }
 }
