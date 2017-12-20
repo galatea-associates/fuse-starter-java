@@ -7,10 +7,29 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                // https://hooks.slack.com/services/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
-                // send build started notifications
+                populateGlobalVariables()
                 //slackSend (color: '#FFFF00', message: "STARTED: '${env.BRANCH_NAME} #${env.BUILD_NUMBER}' (${env.BUILD_URL})")
-                notifySlack("Starting", 'fuse-java-builds', [])
+                notifySlack("Starting", 'fuse-java-builds', [
+                    [
+                        title: "${env.JOB_NAME}, build #${env.BUILD_NUMBER}",
+                        title_link: "${env.BUILD_URL}",
+                        color: "warning",
+                        text: "${author},
+                        "mrkdwn_in": ["fields"],
+                        fields: [
+                            [
+                                title: "Branch",
+                                value: "${env.GIT_BRANCH}",
+                                short: true
+                            ],
+                            [
+                                title: "Last Commit",
+                                value: "${message}",
+                                short: false
+                            ]
+                        ]
+                    ]
+                ])
                 sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true compile'
             }
         }
@@ -161,4 +180,19 @@ pipeline {
     ])
 
     sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+}
+def author = ""
+def getGitAuthor = {
+    def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
+    author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
+}
+
+def message = ""
+def getLastCommitMessage = {
+    message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
+}
+
+def populateGlobalVariables = {
+    getLastCommitMessage()
+    getGitAuthor()
 }
