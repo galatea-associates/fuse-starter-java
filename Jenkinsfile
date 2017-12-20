@@ -68,7 +68,7 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                expression { goodBranch() }
+                expression { isNonDeployBranch() }
             }
             steps {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
@@ -107,7 +107,7 @@ pipeline {
         }
         stage('Shutdown') {
             when {
-                expression  { goodBranch() }
+                expression  { isNonDeployBranch() }
             }
             steps {
                 echo 'Shutting down app'
@@ -138,7 +138,7 @@ pipeline {
     }
 }
 
-def goodBranch() {
+def isNonDeployBranch() {
     not {
         anyOf {
             expression { BRANCH_NAME.startsWith('feature/') }
