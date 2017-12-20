@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(name="fxrates",
-    url = "http://api.fixer.io",
+    url = "${client.fx-rate}",
     configuration = FXRestClientConfig.class)
 public interface IFXRestClient {
 
