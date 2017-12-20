@@ -22,26 +22,26 @@ pipeline {
                 }
             }
         }
-        //stage('SonarQube analysis') {
-          //  steps {
-            //    withSonarQubeEnv('SonarCloud FUSE') {
-              //      sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar'
-               // }
-            //}
-        //}
-        //stage('Quality gate') {
-          //  steps {
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('SonarCloud FUSE') {
+                    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar'
+                }
+            }
+        }
+        stage('Quality gate') {
+            steps {
                 // Just in case something goes wrong, pipeline will be killed after a timeout
-            //    timeout(time: 1, unit: 'MINUTES') {
-              //      script {
-                //        def qg = waitForQualityGate()
-                  //      if (qg.status != 'OK') {
-                    //        error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                      //  }
-                    //}
-        //        }
-          //  }
-        //}
+                timeout(time: 1, unit: 'MINUTES') {
+                    script {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
         stage('Checkstyle') {
             steps {
                 sh 'mvn checkstyle:check'
@@ -69,15 +69,6 @@ pipeline {
         stage('Deploy') {
             when {
                 expression { goodBranch() }
-                //not {
-                    // for some reason this does not work. a branch name of feature/issue-84-pipeline-updates does not match
-                    // expression { BRANCH_NAME ==~ /^feature\/|hotfix\/|bugfix\// }
-                  //  anyOf {
-                    //    expression { BRANCH_NAME.startsWith('feature/') }
-                      //  expression { BRANCH_NAME.startsWith('hotfix/') }
-                        //expression { BRANCH_NAME.startsWith('bugfix/') }
-                //    }
-               // }
             }
             steps {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
