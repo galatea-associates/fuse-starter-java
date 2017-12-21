@@ -69,7 +69,7 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                isDeployBranch()
+                expression { isDeployBranch() }
             }
             steps {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
@@ -108,7 +108,7 @@ pipeline {
         }
         stage('Shutdown') {
             when {
-                isDeployBranch()
+                expression { isDeployBranch() }
             }
             steps {
                 echo 'Shutting down app'
