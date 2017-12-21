@@ -75,7 +75,10 @@ pipeline {
     stage('Integration tests') {
          // according to https://gist.github.com/jonico/e205b16cf07451b2f475543cf1541e70 we can check for a PR build using the following
          when {
-            expression { BRANCH_NAME ==~ /^PR-\d+$/ }
+            // expression { BRANCH_NAME ==~ /^PR-\d+$/ }
+
+            // Put a different conditional here to observe integration test passing on the feature branch without a PR
+            expression { BRANCH_NAME.startsWith('feature/') }
          }
          steps {
             sh './gradlew integration -i'
