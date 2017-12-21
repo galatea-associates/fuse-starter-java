@@ -69,7 +69,7 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                expression { isNonDeployBranch() }
+                expression { isDeployBranch() }
             }
             steps {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
@@ -108,7 +108,7 @@ pipeline {
         }
         stage('Shutdown') {
             when {
-                expression  { isNonDeployBranch() }
+                expression  { isDeployBranch() }
             }
             steps {
                 echo 'Shutting down app'
@@ -139,14 +139,12 @@ pipeline {
     }
 }
 
-def isNonDeployBranch() {
-    not {
-        anyOf {
-            expression { BRANCH_NAME.startsWith('feature/') }
-            expression { BRANCH_NAME.startsWith('hotfix/') }
-            expression { BRANCH_NAME.startsWith('bugfix/') }
-        }
-    }
+def isDeployBranch() {
+   if ( BRANCH_NAME.startsWith('feature/') || BRANCH_NAME.startsWith('hotfix/') || BRANCH_NAME.startsWith('bugfix/') ) {
+       return false
+   } else {
+       return true
+   }
 }
 
 def notifySlack(titlePrefix, channel, color) {
