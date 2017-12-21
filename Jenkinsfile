@@ -47,31 +47,31 @@ pipeline {
         }
       }
     }
-     stage('Deploy') {
-          when {
+    stage('Deploy') {
+        when {
             not {
-              anyOf {
-                // sure there's a nicer way of doing this with a regex...
+                anyOf {
+                    // sure there's a nicer way of doing this with a regex...
 
-                // commenting out this check briefly while I test the gradle build.
-                // expression { BRANCH_NAME.startsWith('feature/') }
-                expression { BRANCH_NAME.startsWith('hotfix/') }
-                expression { BRANCH_NAME.startsWith('bugfix/') }
-              }
+                    // commenting out this check briefly while I test the gradle build.
+                    // expression { BRANCH_NAME.startsWith('feature/') }
+                    expression { BRANCH_NAME.startsWith('hotfix/') }
+                    expression { BRANCH_NAME.startsWith('bugfix/') }
+                }
             }
-            steps {
-              // assumes the first Build stage produced the jar in the location referenced by manifest-dev.yml
-              pushToCloudFoundry(
+        }
+        steps {
+            // assumes the first Build stage produced the jar in the location referenced by manifest-dev.yml
+            pushToCloudFoundry(
                 target: 'https://api.run.pivotal.io/',
                 pluginTimeout: 180,
                 organization: 'FUSE',
                 cloudSpace: 'development',
                 credentialsId: 'cf-credentials',
                 manifestChoice: [manifestFile: 'manifest-dev.yml']
-              )
-            }
-          }
-     }
+            )
+        }
+    }
     stage('Integration tests') {
          // according to https://gist.github.com/jonico/e205b16cf07451b2f475543cf1541e70 we can check for a PR build using the following
          when {
