@@ -3,7 +3,7 @@ import groovy.json.JsonOutput
 pipeline {
     agent any
     tools {
-        maven '3.5.2'    // 3.5.2 relates to the label applied to a given version of Maven
+        maven '3.5.2'
     }
     stages {
         stage('Build') {
