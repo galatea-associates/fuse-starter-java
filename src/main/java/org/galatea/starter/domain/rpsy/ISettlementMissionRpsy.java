@@ -1,10 +1,9 @@
 package org.galatea.starter.domain.rpsy;
 
+import java.util.List;
 import org.galatea.starter.domain.SettlementMission;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
 
 public interface ISettlementMissionRpsy extends CrudRepository<SettlementMission, Long> {
 

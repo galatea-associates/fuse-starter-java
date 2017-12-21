@@ -1,34 +1,23 @@
 
 package org.galatea.starter;
 
-import lombok.SneakyThrows;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import junitparams.mappers.IdentityMapper;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Rule;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jms.config.JmsListenerEndpointRegistry;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import junitparams.JUnitParamsRunner;
-import junitparams.mappers.DataMapper;
-import junitparams.mappers.IdentityMapper;
 
 @Slf4j
 @ActiveProfiles("dev")
@@ -54,8 +43,9 @@ public abstract class ASpringTest {
     @Override
     public Object[] map(Reader reader) {
       Object[] lines = super.map(reader);
-      return Arrays.stream(lines).map(objLine -> (String) objLine).filter(line -> !line.trim().isEmpty())
-          .map(line -> line.split(DELIM)).collect(Collectors.toList()).toArray();
+      return Arrays.stream(lines).map(objLine -> (String) objLine)
+          .filter(line -> !line.trim().isEmpty()).map(line -> line.split(DELIM))
+          .collect(Collectors.toList()).toArray();
     }
 
   }

@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang3.builder.DiffResult;
 import org.junit.Test;
 
@@ -17,14 +16,14 @@ import org.junit.Test;
 public class HelpersTest {
 
   public static class SimpleObject {
-    private String x = "X";
+    private String sampleAttribute = "X";
 
-    void setX(String x) {
-      this.x = x;
+    void setSampleAttribute(String sampleAttribute) {
+      this.sampleAttribute = sampleAttribute;
     }
 
-    public String getX() {
-      return x;
+    public String getSampleAttribute() {
+      return sampleAttribute;
     }
   }
 
@@ -43,11 +42,11 @@ public class HelpersTest {
 
     SimpleObject lhs = new SimpleObject();
     SimpleObject rhs = new SimpleObject();
-    rhs.setX("Y");
+    rhs.setSampleAttribute("Y");
 
     DiffResult diffResult = Helpers.diff(lhs, rhs);
-    assertEquals("HelpersTest.SimpleObject[getX=X] differs from HelpersTest.SimpleObject[getX=Y]",
-        diffResult.toString());
+    assertEquals("HelpersTest.SimpleObject[getSampleAttribute=X] differs "
+        + "from HelpersTest.SimpleObject[getSampleAttribute=Y]", diffResult.toString());
   }
 
   @Test(expected = IllegalArgumentException.class)

@@ -5,12 +5,13 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import java.util.Arrays;
+import java.util.List;
+import javax.jms.TextMessage;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
@@ -22,11 +23,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jms.core.JmsTemplate;
-
-import java.util.Arrays;
-import java.util.List;
-
-import javax.jms.TextMessage;
 
 
 @RequiredArgsConstructor

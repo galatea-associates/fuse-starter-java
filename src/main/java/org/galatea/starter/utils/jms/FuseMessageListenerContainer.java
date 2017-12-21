@@ -4,23 +4,20 @@ package org.galatea.starter.utils.jms;
 import static org.galatea.starter.utils.Tracer.addTraceInfo;
 import static org.galatea.starter.utils.Tracer.setExternalRequestId;
 
+import java.util.function.BiConsumer;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.Tracer.AutoClosedTrace;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
-
-import java.util.function.BiConsumer;
-
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-import javax.jms.TextMessage;
 
 @RequiredArgsConstructor
 @Slf4j

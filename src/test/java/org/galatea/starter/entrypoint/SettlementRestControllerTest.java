@@ -1,6 +1,5 @@
 package org.galatea.starter.entrypoint;
 
-
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
@@ -13,15 +12,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.google.common.collect.Sets;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.google.common.collect.Sets;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import junitparams.FileParameters;
+import junitparams.JUnitParamsRunner;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
@@ -36,13 +37,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import junitparams.FileParameters;
-import junitparams.JUnitParamsRunner;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -121,15 +115,15 @@ public class SettlementRestControllerTest extends ASpringTest {
     given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(testMission));
 
-    ResultActions resultActions =
-        this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-            .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk())
+    ResultActions resultActions = this.mvc
+        .perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+            .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
 
-            .andExpect(jsonPath("$.id", is(MISSION_ID_1.intValue())))
-            .andExpect(jsonPath("$.externalParty", is(externapParty)))
-            .andExpect(jsonPath("$.instrument", is(instrument)))
-            .andExpect(jsonPath("$.direction", is(direction)))
-            .andExpect(jsonPath("$.qty", is(qty)));
+        .andExpect(jsonPath("$.id", is(MISSION_ID_1.intValue())))
+        .andExpect(jsonPath("$.externalParty", is(externapParty)))
+        .andExpect(jsonPath("$.instrument", is(instrument)))
+        .andExpect(jsonPath("$.direction", is(direction))).andExpect(jsonPath("$.qty", is(qty)));
 
     verifyAuditHeaders(resultActions);
   }
@@ -148,7 +142,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   }
 
   /**
-   * Verifies required audit fields are present
+   * Verifies required audit fields are present.
    *
    * @param resultActions The resultActions object wrapping the response
    * @throws Exception On any validation exception

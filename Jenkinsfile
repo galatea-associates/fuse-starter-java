@@ -8,7 +8,7 @@ pipeline {
         // I'm going to call the gradle wrapper rather than use the jenkins gradle plugin
         // https://stackoverflow.com/questions/27064631/jenkins-gradle-integration-invoke-gradle-vs-use-gradle-wrapper-options
         // bigguy (a principal engineer at Gradle, Inc) says to, so clearly we should.
-        sh './gradlew build -x test -i'
+        sh './gradlew build -x test -x check -i'
       }
     }
     stage('SonarQube analysis') {
@@ -32,7 +32,7 @@ pipeline {
     }
     stage('Checkstyle') {
       steps {
-        sh './gradlew check -i'
+        sh './gradlew check -x test -i'
       }
       post {
         failure {
@@ -40,7 +40,7 @@ pipeline {
             allowMissing: false,
             alwaysLinkToLastBuild: false,
             keepAll: true,
-            reportDir: 'target',
+            reportDir: 'build',
             reportFiles: 'checkstyle-result.xml',
             reportName: 'Checkstyle report'
           ])
@@ -62,9 +62,10 @@ pipeline {
             // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
             pushToCloudFoundry(
                 target: 'https://api.run.pivotal.io/',
+                pluginTimeout: 180,
                 organization: 'FUSE',
                 cloudSpace: 'development',
-                credentialsId: 'danny-cloud-foundry',
+                credentialsId: 'cf-credentials',
                 manifestChoice: [manifestFile: 'manifest-dev.yml']
             )
         }
@@ -90,6 +91,31 @@ pipeline {
         steps {
             echo 'Running performance tests...'
         }
+    }
+    stage('Deploy') {
+      when {
+        not {
+          anyOf {
+            // sure there's a nicer way of doing this with a regex...
+
+            // commenting out this check briefly while I test the gradle build.
+            // expression { BRANCH_NAME.startsWith('feature/') }
+            expression { BRANCH_NAME.startsWith('hotfix/') }
+            expression { BRANCH_NAME.startsWith('bugfix/') }
+          }
+        }
+      }
+      steps {
+        // assumes the first Build stage produced the jar in the location referenced by manifest-dev.yml
+        pushToCloudFoundry(
+          target: 'https://api.run.pivotal.io/',
+          pluginTimeout: 180,
+          organization: 'FUSE',
+          cloudSpace: 'development',
+          credentialsId: 'cf-credentials',
+          manifestChoice: [manifestFile: 'manifest-dev.yml']
+        )
+      }
     }
   }
 }
