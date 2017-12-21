@@ -47,6 +47,17 @@ pipeline {
         }
       }
     }
+    stage('Unit test') {
+        when {
+            // expression { BRANCH_NAME ==~ /^PR-\d+$/ }
+
+            // Put a different conditional here to observe integration test passing on the feature branch without a PR
+            expression { BRANCH_NAME.startsWith('feature/') }
+        }
+        steps {
+            sh './gradlew test -i'
+        }
+    }
     stage('Deploy') {
         when {
             not {
@@ -81,7 +92,7 @@ pipeline {
             expression { BRANCH_NAME.startsWith('feature/') }
          }
          steps {
-            sh './gradlew integration -i'
+            sh './gradlew integration'
          }
          post {
             always {
