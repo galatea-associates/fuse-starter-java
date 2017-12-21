@@ -1,11 +1,15 @@
+import groovy.json.JsonOutput
+
 pipeline {
     agent any
     tools {
-        maven '3.5.2'    // 3.5.2 relates to the label applied to a given version of Maven
+        maven '3.5.2'
     }
     stages {
         stage('Build') {
             steps {
+                populateGlobalVariables()
+                notifySlack("Starting", 'fuse-java-builds', "#2fc2e0")
                 sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true compile'
             }
         }
@@ -65,15 +69,7 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                not {
-                    // for some reason this does not work. a branch name of feature/issue-84-pipeline-updates does not match
-                    // expression { BRANCH_NAME ==~ /^feature\/|hotfix\/|bugfix\// }
-                    anyOf {
-                        expression { BRANCH_NAME.startsWith('feature/') }
-                        expression { BRANCH_NAME.startsWith('hotfix/') }
-                        expression { BRANCH_NAME.startsWith('bugfix/') }
-                    }
-                }
+                expression { isDeployBranch() }
             }
             steps {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
@@ -112,13 +108,7 @@ pipeline {
         }
         stage('Shutdown') {
             when {
-                not {
-                    anyOf {
-                        expression { BRANCH_NAME.startsWith('feature/') }
-                        expression { BRANCH_NAME.startsWith('hotfix/') }
-                        expression { BRANCH_NAME.startsWith('bugfix/') }
-                    }
-                }
+                expression { isDeployBranch() }
             }
             steps {
                 echo 'Shutting down app'
@@ -133,4 +123,77 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            notifySlack("Successful!", 'fuse-java-builds', "good")
+        }
+        failure {
+            notifySlack("Failed", 'fuse-java-builds', "danger")
+        }
+        unstable {
+            notifySlack("Unstable", 'fuse-java-builds', "warning")
+        }
+        aborted {
+            notifySlack("Aborted", 'fuse-java-builds', "#d3d3d3")
+        }
+    }
+}
+
+def isDeployBranch() {
+   if ( BRANCH_NAME.startsWith('feature/') || BRANCH_NAME.startsWith('hotfix/') || BRANCH_NAME.startsWith('bugfix/') ) {
+       return false
+   } else {
+       return true
+   }
+}
+
+def notifySlack(titlePrefix, channel, color) {
+    def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
+
+    def payload = JsonOutput.toJson([text: "",
+        channel: channel,
+        username: "Jenkins",
+        icon_url: jenkinsIcon,
+        attachments: [
+            [
+                title: "${titlePrefix} ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
+                title_link: "${env.BUILD_URL}",
+                color: "${color}",
+                text: "Triggered by ${author}",
+                "mrkdwn_in": ["fields"],
+                fields: [
+                    [
+                        title: "Branch",
+                        value: "${env.GIT_BRANCH}",
+                        short: true
+                    ],
+                    [
+                        title: "Last Commit",
+                        value: "${message}",
+                        short: true
+                    ]
+                ]
+            ]
+        ]
+    ])
+
+    withCredentials([string(credentialsId: 'gala-slack-url', variable: 'slackURL')]) {
+        sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+    }
+}
+
+def author = ""
+def getGitAuthor() {
+    def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
+    author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
+}
+
+def message = ""
+def getLastCommitMessage() {
+    message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
+}
+
+def populateGlobalVariables() {
+    getLastCommitMessage()
+    getGitAuthor()
 }
