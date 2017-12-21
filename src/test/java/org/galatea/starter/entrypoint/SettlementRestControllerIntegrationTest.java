@@ -43,7 +43,7 @@ public class SettlementRestControllerIntegrationTest {
 
     // TODO: the base URL should probably be moved to a src/test/resources properties file
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
-        .target(FuseServer.class, "http://fuse-rest-dev.cfapps.io");
+        .target(FuseServer.class, "https://fuse-rest-dev.cfapps.io");
 
     List<String> missionPaths = fuseServer.sendTradeAgreement(new TradeAgreement[] {
 
