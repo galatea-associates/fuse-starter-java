@@ -99,7 +99,7 @@ pipeline {
          }
          steps {
             sleep time: 90, unit: 'SECONDS'
-            sh './gradlew integration -i'
+            sh './gradlew integration -i --rerun-tasks'
          }
          post {
             always {
