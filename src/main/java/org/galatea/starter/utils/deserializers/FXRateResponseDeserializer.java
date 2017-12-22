@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.FXRateException;
 import org.galatea.starter.domain.FXRateResponse;
@@ -24,20 +25,21 @@ public class FXRateResponseDeserializer extends StdDeserializer {
     public static final HashMap<String, JsonNodeType> fieldMap = getFieldMap();
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
+    @NonNull
+    private JsonChecker jsonChecker;
+
     public FXRateResponseDeserializer() {
         super(FXRateResponse.class);
     }
 
+    public FXRateResponseDeserializer(JsonChecker jsonChecker) {
+        this();
+        this.jsonChecker = jsonChecker;
+    }
+
     @Override
     public FXRateResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws FXRateException {
-        JsonNode node;
-        try {
-            node = JsonChecker.getNode(jsonParser, fieldMap);
-        } catch (IOException e) {
-            log.error(e.toString());
-            throw new FXRateException(e.getMessage());
-        }
-
+        JsonNode node = getNode(jsonParser);
         Date date = getDate(node);
 
         return FXRateResponse.builder()
@@ -45,6 +47,15 @@ public class FXRateResponseDeserializer extends StdDeserializer {
                 .validOn(date)
                 .exchangeRate(BigDecimal.valueOf(node.get("USD").asDouble()))
                 .build();
+    }
+
+    private JsonNode getNode(JsonParser jsonParser) {
+        try {
+            return jsonChecker.getNode(jsonParser, fieldMap);
+        } catch (IOException e) {
+            log.error(e.toString());
+            throw new FXRateException(e.getMessage());
+        }
     }
 
     public static HashMap<String, JsonNodeType> getFieldMap() {

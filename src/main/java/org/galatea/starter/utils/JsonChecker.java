@@ -13,7 +13,7 @@ import java.util.HashMap;
 @Component
 public class JsonChecker {
 
-    public static JsonNode getNode(JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
+    public JsonNode getNode(JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
         ArrayList<String> missingFields = new ArrayList<>();
