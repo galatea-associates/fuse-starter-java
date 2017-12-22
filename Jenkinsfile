@@ -14,7 +14,7 @@ pipeline {
     stage('SonarQube analysis') {
       steps {
         withSonarQubeEnv('SonarCloud FUSE') {
-          sh './gradlew --info sonarqube'
+          sh './gradlew --info sonarqube -x test'
         }
       }
     }
@@ -55,7 +55,8 @@ pipeline {
             expression { BRANCH_NAME.startsWith('feature/') }
         }
         steps {
-            sh './gradlew test -i'
+            // Seems like sometimes gradle will inherit test results from previous builds so make sure this is rerun
+            sh './gradlew test -i --rerun-tasks'
         }
         post {
              always {
