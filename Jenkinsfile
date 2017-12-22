@@ -56,7 +56,7 @@ pipeline {
         }
         steps {
             // Seems like sometimes gradle will inherit test results from previous builds so make sure this is rerun
-            sh './gradlew test -i --rerun-tasks'
+            sh './gradlew test -i'
         }
         post {
              always {
@@ -99,7 +99,7 @@ pipeline {
          }
          steps {
             sleep time: 90, unit: 'SECONDS'
-            sh './gradlew integration -i --rerun-tasks'
+            sh './gradlew integration -i'
          }
          post {
             always {

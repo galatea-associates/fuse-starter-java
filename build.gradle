@@ -95,6 +95,10 @@ sonarqube {
 
 
 test {
+    // This property tells Gradle to run the task even if it detects the JUnit test results output is already present;
+    // in Jenkins, the workspace does not always get properly cleaned out between runs so this prevents the task from being
+    // marked up-to-date incorrectly
+    outputs.upToDateWhen { false }
 
     useJUnit {
         // exclude integration tests for the normal test task
@@ -110,6 +114,8 @@ test {
 }
 
 task integration(type: Test) {
+    outputs.upToDateWhen { false }
+
     useJUnit {
         includeCategories 'org.galatea.starter.IntegrationTestCategory'
     }
