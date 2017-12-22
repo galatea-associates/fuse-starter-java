@@ -19,8 +19,8 @@ import java.util.HashMap;
 @Slf4j
 public class FXRateResponseDeserializer extends FuseDeserializer {
 
-    public static final HashMap<String, JsonNodeType> fieldMap = getFieldMap();
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    protected static final HashMap<String, JsonNodeType> fieldMap = getFieldMap();
+    protected static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public FXRateResponseDeserializer() {
         super(FXRateResponse.class);
@@ -28,14 +28,7 @@ public class FXRateResponseDeserializer extends FuseDeserializer {
 
     @Override
     public FXRateResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws FXRateException {
-        JsonNode node;
-        try {
-            node = getNode(jsonParser, fieldMap);
-        } catch (IOException e) {
-            log.error(e.toString());
-            throw new FXRateException(e.getMessage());
-        }
-
+        JsonNode node = getNode(jsonParser);
         Date date = getDate(node);
 
         return FXRateResponse.builder()
@@ -51,6 +44,15 @@ public class FXRateResponseDeserializer extends FuseDeserializer {
         fieldInfo.put("base", JsonNodeType.STRING);
         fieldInfo.put("USD", JsonNodeType.NUMBER);
         return fieldInfo;
+    }
+
+    protected JsonNode getNode(JsonParser jsonParser) throws FXRateException {
+        try {
+            return checkNode(jsonParser, fieldMap);
+        } catch (IOException e) {
+            log.error(e.toString());
+            throw new FXRateException(e.getMessage());
+        }
     }
 
     protected Date getDate(JsonNode node) throws FXRateException {

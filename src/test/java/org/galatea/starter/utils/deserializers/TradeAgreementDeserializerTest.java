@@ -1,4 +1,4 @@
-package org.galatea.starter.utils;
+package org.galatea.starter.utils.deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

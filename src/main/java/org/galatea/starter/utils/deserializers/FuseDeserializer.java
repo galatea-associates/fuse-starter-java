@@ -15,7 +15,7 @@ public abstract class FuseDeserializer extends StdDeserializer{
         super(vc);
     }
 
-    protected JsonNode getNode(JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
+    protected JsonNode checkNode(JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
         ArrayList<String> missingFields = new ArrayList<>();

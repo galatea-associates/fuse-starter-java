@@ -16,20 +16,13 @@ import java.util.HashMap;
 @Slf4j
 public class TradeAgreementDeserializer extends FuseDeserializer {
 
-    public static final HashMap<String, JsonNodeType> fieldMap = getFieldMap();
+    protected static final HashMap<String, JsonNodeType> fieldMap = getFieldMap();
 
     public TradeAgreementDeserializer() { super(TradeAgreement.class); }
 
     @Override
     public TradeAgreement deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws TradeAgreementException {
-        JsonNode node;
-        try {
-            node = getNode(jsonParser, fieldMap);
-        } catch (IOException e) {
-            log.error(e.toString());
-            throw new TradeAgreementException(e.getMessage());
-        }
-
+        JsonNode node = getNode(jsonParser);
         BigMoney proceeds = getProceeds(node);
 
         return TradeAgreement.builder()
@@ -51,6 +44,15 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
         fieldInfo.put("qty", JsonNodeType.NUMBER);
         fieldInfo.put("proceeds", JsonNodeType.STRING);
         return fieldInfo;
+    }
+
+    protected JsonNode getNode(JsonParser jsonParser) throws TradeAgreementException{
+        try {
+            return checkNode(jsonParser, fieldMap);
+        } catch (IOException e) {
+            log.error(e.toString());
+            throw new TradeAgreementException(e.getMessage());
+        }
     }
 
     protected BigMoney getProceeds(JsonNode node) throws TradeAgreementException {
