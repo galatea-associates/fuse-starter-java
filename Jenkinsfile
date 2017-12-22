@@ -92,7 +92,7 @@ pipeline {
             expression { BRANCH_NAME.startsWith('feature/') }
          }
          steps {
-            sleep time: 30, unit: 'SECONDS'
+            sleep time: 90, unit: 'SECONDS'
             sh './gradlew integration -i'
          }
          post {
