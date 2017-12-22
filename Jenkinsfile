@@ -57,6 +57,11 @@ pipeline {
         steps {
             sh './gradlew test -i'
         }
+        post {
+             always {
+                junit 'build/test-results/*.xml'
+             }
+        }
     }
     stage('Deploy') {
         when {
@@ -97,7 +102,7 @@ pipeline {
          }
          post {
             always {
-                junit 'target/failsafe-reports/*.xml'
+                junit 'build/test-results/*.xml'
             }
          }
     }
