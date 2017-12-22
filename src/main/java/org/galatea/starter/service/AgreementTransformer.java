@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
-@Component
+@Service
 @Slf4j
 public class AgreementTransformer implements IAgreementTransformer {
 

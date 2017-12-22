@@ -3,13 +3,10 @@ package org.galatea.starter.utils.deserializers;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.FXRateException;
 import org.galatea.starter.domain.FXRateResponse;
-import org.galatea.starter.utils.JsonChecker;
 import org.joda.money.CurrencyUnit;
 
 import java.io.IOException;
@@ -20,26 +17,25 @@ import java.util.Date;
 import java.util.HashMap;
 
 @Slf4j
-public class FXRateResponseDeserializer extends StdDeserializer {
+public class FXRateResponseDeserializer extends FuseDeserializer {
 
     public static final HashMap<String, JsonNodeType> fieldMap = getFieldMap();
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-    @NonNull
-    private JsonChecker jsonChecker;
 
     public FXRateResponseDeserializer() {
         super(FXRateResponse.class);
     }
 
-    public FXRateResponseDeserializer(JsonChecker jsonChecker) {
-        this();
-        this.jsonChecker = jsonChecker;
-    }
-
     @Override
     public FXRateResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws FXRateException {
-        JsonNode node = getNode(jsonParser);
+        JsonNode node;
+        try {
+            node = getNode(jsonParser, fieldMap);
+        } catch (IOException e) {
+            log.error(e.toString());
+            throw new FXRateException(e.getMessage());
+        }
+
         Date date = getDate(node);
 
         return FXRateResponse.builder()
@@ -49,16 +45,7 @@ public class FXRateResponseDeserializer extends StdDeserializer {
                 .build();
     }
 
-    private JsonNode getNode(JsonParser jsonParser) {
-        try {
-            return jsonChecker.getNode(jsonParser, fieldMap);
-        } catch (IOException e) {
-            log.error(e.toString());
-            throw new FXRateException(e.getMessage());
-        }
-    }
-
-    public static HashMap<String, JsonNodeType> getFieldMap() {
+    protected static HashMap<String, JsonNodeType> getFieldMap() {
         HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
         fieldInfo.put("date", JsonNodeType.STRING);
         fieldInfo.put("base", JsonNodeType.STRING);
@@ -66,7 +53,7 @@ public class FXRateResponseDeserializer extends StdDeserializer {
         return fieldInfo;
     }
 
-    private Date getDate(JsonNode node) throws FXRateException {
+    protected Date getDate(JsonNode node) throws FXRateException {
         try {
             return formatter.parse(node.get("date").asText());
         } catch (ParseException e) {

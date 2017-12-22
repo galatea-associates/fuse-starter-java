@@ -1,15 +1,12 @@
 package org.galatea.starter.utils.deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.domain.TradeAgreementException;
-import org.galatea.starter.utils.JsonChecker;
 import org.joda.money.BigMoney;
 
 import java.io.IOException;
@@ -17,19 +14,17 @@ import java.util.HashMap;
 
 // http://www.baeldung.com/jackson-deserialization
 @Slf4j
-public class TradeAgreementDeserializer extends StdDeserializer {
+public class TradeAgreementDeserializer extends FuseDeserializer {
 
     public static final HashMap<String, JsonNodeType> fieldMap = getFieldMap();
 
-    public TradeAgreementDeserializer() {
-        super(TradeAgreement.class);
-    }
+    public TradeAgreementDeserializer() { super(TradeAgreement.class); }
 
     @Override
     public TradeAgreement deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws TradeAgreementException {
         JsonNode node;
         try {
-            node = JsonChecker.getNode(jsonParser, fieldMap);
+            node = getNode(jsonParser, fieldMap);
         } catch (IOException e) {
             log.error(e.toString());
             throw new TradeAgreementException(e.getMessage());
@@ -47,7 +42,7 @@ public class TradeAgreementDeserializer extends StdDeserializer {
             .build();
     }
 
-    public static HashMap<String, JsonNodeType> getFieldMap() {
+    protected static HashMap<String, JsonNodeType> getFieldMap() {
         HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
         fieldInfo.put("instrument", JsonNodeType.STRING);
         fieldInfo.put("internalParty", JsonNodeType.STRING);
@@ -58,7 +53,7 @@ public class TradeAgreementDeserializer extends StdDeserializer {
         return fieldInfo;
     }
 
-    private BigMoney getProceeds(JsonNode node) throws TradeAgreementException {
+    protected BigMoney getProceeds(JsonNode node) throws TradeAgreementException {
         try {
             return BigMoney.parse(node.get("proceeds").asText());
         } catch (IllegalArgumentException e) {

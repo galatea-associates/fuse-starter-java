@@ -2,13 +2,10 @@ package org.galatea.starter.entrypoint;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
-
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
@@ -27,7 +24,6 @@ import java.util.stream.Collectors;
  * REST Controller that generates and listens to http endpoints which allow the caller to create
  * Missions from TradeAgreements and query them back out.
  */
-@RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Slf4j
@@ -40,6 +36,11 @@ public class SettlementRestController {
 
   public static final String SETTLE_MISSION_PATH = "/settlementEngine";
   public static final String GET_MISSION_PATH = SETTLE_MISSION_PATH + "/mission/";
+
+  @java.beans.ConstructorProperties({"settlementService"})
+  public SettlementRestController(SettlementService settlementService) {
+    this.settlementService = settlementService;
+  }
 
   /**
    * Generate Missions from a provided TradeAgreement.

@@ -1,19 +1,21 @@
-package org.galatea.starter.utils;
+package org.galatea.starter.utils.deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import org.galatea.starter.domain.TradeAgreementException;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@Component
-public class JsonChecker {
+public abstract class FuseDeserializer extends StdDeserializer{
 
-    public JsonNode getNode(JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
+    protected FuseDeserializer(Class vc) {
+        super(vc);
+    }
+
+    protected JsonNode getNode(JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
         ArrayList<String> missingFields = new ArrayList<>();
@@ -43,6 +45,6 @@ public class JsonChecker {
         }
 
         return node;
-
     }
+
 }

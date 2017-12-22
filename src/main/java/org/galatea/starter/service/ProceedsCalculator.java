@@ -6,12 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.service.client.IFXRestClient;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @RequiredArgsConstructor
-@Component
+@Service
 @Slf4j
 public class ProceedsCalculator implements IProceedsCalculator {
 

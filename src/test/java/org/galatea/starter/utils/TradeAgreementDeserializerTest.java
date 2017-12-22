@@ -10,7 +10,6 @@ import org.joda.money.BigMoney;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.galatea.starter.ASpringTest.readData;
 import static org.galatea.starter.Utilities.getTradeAgreementJsonFromFile;
 import static org.junit.Assert.assertEquals;
 
