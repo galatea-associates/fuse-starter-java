@@ -59,7 +59,7 @@ pipeline {
         }
         post {
              always {
-                junit 'build/test-results/*.xml'
+                junit 'build/test-results/test/*.xml'
              }
         }
     }
@@ -102,7 +102,7 @@ pipeline {
          }
          post {
             always {
-                junit 'build/test-results/*.xml'
+                junit 'build/test-results/integration/*.xml'
             }
          }
     }
