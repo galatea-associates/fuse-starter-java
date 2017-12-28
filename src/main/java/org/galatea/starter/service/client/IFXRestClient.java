@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface IFXRestClient {
 
     // base = "GBP" would query https://api.fixer.io/latest?base=GBP&symbols=USD
-    // which returns something like {"base":"GBP","date":"2017-11-30","rates":{"USD":1.3467}}
     @RequestMapping(method = RequestMethod.GET,
         value="/latest?base={base}&symbols=USD")
     FXRateResponse getRate(@PathVariable("base") String base);

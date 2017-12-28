@@ -1,14 +1,10 @@
 package org.galatea.starter;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.TradeAgreement;
 import org.joda.money.BigMoney;
-
-import java.io.IOException;
 
 import static org.galatea.starter.ASpringTest.readData;
 
@@ -16,7 +12,7 @@ import static org.galatea.starter.ASpringTest.readData;
 public class Utilities {
 
     public static TradeAgreement getTradeAgreement() throws Exception {
-        JsonNode node = getTradeAgreementNodeFromFile("Correct_IBM_Agreement.json");
+        JsonNode node = getJsonNodeFromFile("TradeAgreement/Correct_IBM_Agreement.json");
 
         return TradeAgreement.builder()
                 .instrument(node.get("instrument").asText())
@@ -28,13 +24,13 @@ public class Utilities {
                 .build();
     }
 
-    public static JsonNode getTradeAgreementNodeFromFile(String fileName) throws Exception {
-        String agreementJson = getTradeAgreementJsonFromFile(fileName);
+    public static JsonNode getJsonNodeFromFile(String fileName) throws Exception {
+        String agreementJson = getJsonFromFile(fileName);
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readTree(agreementJson);
     }
 
-    public static String getTradeAgreementJsonFromFile(String fileName) throws Exception {
+    public static String getJsonFromFile(String fileName) throws Exception {
         return readData(fileName).replace("\n", "").replace("[", "").replace("]", "");
     }
 

@@ -8,15 +8,14 @@ import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.domain.TradeAgreementException;
-import org.galatea.starter.utils.deserializers.TradeAgreementDeserializer;
 import org.joda.money.BigMoney;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.galatea.starter.Utilities.getTradeAgreementJsonFromFile;
-import static org.galatea.starter.Utilities.getTradeAgreementNodeFromFile;
+import static org.galatea.starter.Utilities.getJsonFromFile;
+import static org.galatea.starter.Utilities.getJsonNodeFromFile;
 import static org.junit.Assert.assertEquals;
 
 @Slf4j
@@ -32,7 +31,7 @@ public class TradeAgreementDeserializerTest {
         deserializer = new TradeAgreementDeserializer();
         mapper = new ObjectMapper();
         context = mapper.getDeserializationContext();
-        agreementJson = getTradeAgreementJsonFromFile("Correct_IBM_Agreement.json");
+        agreementJson = getJsonFromFile("TradeAgreement/Correct_IBM_Agreement.json");
     }
 
     @Test
@@ -67,7 +66,7 @@ public class TradeAgreementDeserializerTest {
         JsonParser jsonParser = mapper.getFactory().createParser(agreementJson);
         JsonNode node = deserializer.getCheckedNode(jsonParser);
 
-        assertEquals(node, getTradeAgreementNodeFromFile("Correct_IBM_Agreement.json"));
+        assertEquals(node, getJsonNodeFromFile("TradeAgreement/Correct_IBM_Agreement.json"));
     }
 
     @Test
@@ -80,7 +79,7 @@ public class TradeAgreementDeserializerTest {
 
     @Test(expected = TradeAgreementException.class)
     public void testGetProceedsTradeAgreementException() throws Exception {
-        String incorrectAgreementJson = getTradeAgreementJsonFromFile("Incorrect_Fields_IBM_Agreement.json");
+        String incorrectAgreementJson = getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json");
         JsonNode node = mapper.readTree(incorrectAgreementJson);
         BigMoney proceeds = deserializer.getProceeds(node);
     }
