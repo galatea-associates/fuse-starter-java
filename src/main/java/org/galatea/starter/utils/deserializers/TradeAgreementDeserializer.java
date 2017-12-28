@@ -22,7 +22,7 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
 
     @Override
     public TradeAgreement deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws TradeAgreementException {
-        JsonNode node = getNode(jsonParser);
+        JsonNode node = getCheckedNode(jsonParser);
         BigMoney proceeds = getProceeds(node);
 
         return TradeAgreement.builder()
@@ -46,7 +46,7 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
         return fieldInfo;
     }
 
-    protected JsonNode getNode(JsonParser jsonParser) throws TradeAgreementException{
+    protected JsonNode getCheckedNode(JsonParser jsonParser) throws TradeAgreementException{
         try {
             return checkNode(jsonParser, fieldMap);
         } catch (IOException e) {

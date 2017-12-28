@@ -28,7 +28,7 @@ public class FXRateResponseDeserializer extends FuseDeserializer {
 
     @Override
     public FXRateResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws FXRateException {
-        JsonNode node = getNode(jsonParser);
+        JsonNode node = getCheckedNode(jsonParser);
         Date date = getDate(node);
 
         return FXRateResponse.builder()
@@ -46,7 +46,7 @@ public class FXRateResponseDeserializer extends FuseDeserializer {
         return fieldInfo;
     }
 
-    protected JsonNode getNode(JsonParser jsonParser) throws FXRateException {
+    protected JsonNode getCheckedNode(JsonParser jsonParser) throws FXRateException {
         try {
             return checkNode(jsonParser, fieldMap);
         } catch (IOException e) {
