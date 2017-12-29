@@ -7,15 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.TradeAgreement;
-import org.galatea.starter.domain.TradeAgreementException;
 import org.joda.money.BigMoney;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import static org.galatea.starter.Utilities.getJsonFromFile;
-import static org.galatea.starter.Utilities.getJsonNodeFromFile;
 import static org.junit.Assert.assertEquals;
 
 @Slf4j
@@ -62,14 +61,6 @@ public class TradeAgreementDeserializerTest {
     }
 
     @Test
-    public void testGetCheckedNode() throws Exception {
-        JsonParser jsonParser = mapper.getFactory().createParser(agreementJson);
-        JsonNode node = deserializer.getCheckedNode(jsonParser);
-
-        assertEquals(node, getJsonNodeFromFile("TradeAgreement/Correct_IBM_Agreement.json"));
-    }
-
-    @Test
     public void testGetProceeds() throws Exception {
         JsonNode node = mapper.readTree(agreementJson);
         BigMoney proceeds = deserializer.getProceeds(node);
@@ -77,8 +68,8 @@ public class TradeAgreementDeserializerTest {
         assertEquals(proceeds, BigMoney.parse("GBP 100"));
     }
 
-    @Test(expected = TradeAgreementException.class)
-    public void testGetProceedsTradeAgreementException() throws Exception {
+    @Test(expected = IOException.class)
+    public void testGetProceedsIOException() throws Exception {
         String incorrectAgreementJson = getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json");
         JsonNode node = mapper.readTree(incorrectAgreementJson);
         BigMoney proceeds = deserializer.getProceeds(node);

@@ -4,11 +4,4 @@ import static org.junit.Assert.*;
 
 public class FuseDeserializerTest {
 
-
-
-
-    public void testGetNode() {
-
-    }
-
 }

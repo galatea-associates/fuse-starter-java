@@ -15,9 +15,11 @@ public abstract class FuseDeserializer extends StdDeserializer{
         super(vc);
     }
 
-    protected JsonNode checkNode(JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
-        JsonNode node = jsonParser.readValueAsTree();
+    protected JsonNode getAndCheckRootNode(JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
+        return checkNode(jsonParser.readValueAsTree(), fieldInfo);
+    }
 
+    protected JsonNode checkNode(JsonNode node, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
         ArrayList<String> missingFields = new ArrayList<>();
         ArrayList<String> incorrectFields = new ArrayList<>();
 

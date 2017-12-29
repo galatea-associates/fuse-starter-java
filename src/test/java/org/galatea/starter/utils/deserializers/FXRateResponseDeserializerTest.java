@@ -5,20 +5,19 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import org.galatea.starter.domain.FXRateException;
 import org.galatea.starter.domain.FXRateResponse;
 import org.joda.money.CurrencyUnit;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
 import static org.galatea.starter.Utilities.getJsonFromFile;
-import static org.galatea.starter.Utilities.getJsonNodeFromFile;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class FXRateResponseDeserializerTest {
 
@@ -48,21 +47,23 @@ public class FXRateResponseDeserializerTest {
     }
 
     @Test
-    public void testGetFieldMap() {
-        HashMap<String, JsonNodeType> fieldMap = deserializer.getFieldMap();
+    public void testGetRootFieldMap() {
+        HashMap<String, JsonNodeType> fieldMap = deserializer.getRootFieldMap();
         HashMap<String, JsonNodeType> expected = new HashMap<>();
         expected.put("date", JsonNodeType.STRING);
         expected.put("base", JsonNodeType.STRING);
-        expected.put("USD", JsonNodeType.NUMBER);
+        expected.put("rates", JsonNodeType.OBJECT);
 
         assertEquals(fieldMap, expected);
     }
 
     @Test
-    public void testGetCheckedNode() throws Exception {
-        JsonParser jsonParser = mapper.getFactory().createParser(responseJson);
-        JsonNode node = deserializer.getCheckedNode(jsonParser);
-        assertEquals(node, getJsonNodeFromFile("FXRateResponse/Correct_FX_Response.json"));
+    public void testGetRatesFieldMap() {
+        HashMap<String, JsonNodeType> fieldMap = deserializer.getRatesFieldMap();
+        HashMap<String, JsonNodeType> expected = new HashMap<>();
+        expected.put("USD", JsonNodeType.NUMBER);
+
+        assertEquals(fieldMap, expected);
     }
 
     @Test
@@ -73,8 +74,8 @@ public class FXRateResponseDeserializerTest {
         assertEquals(validOn, formatter.parse("2017-11-30"));
     }
 
-    @Test(expected = FXRateException.class)
-    public void testGetDateFXRateException() throws Exception {
+    @Test(expected = IOException.class)
+    public void testGetDateIOException() throws Exception {
         String incorrectResponseJson = getJsonFromFile("FXRateResponse/Incorrect_Fields_FX_Response.json");
         JsonNode node = mapper.readTree(incorrectResponseJson);
         Date validOn = deserializer.getDate(node);

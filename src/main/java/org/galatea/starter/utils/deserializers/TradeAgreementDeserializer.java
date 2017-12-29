@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.TradeAgreement;
-import org.galatea.starter.domain.TradeAgreementException;
 import org.joda.money.BigMoney;
 
 import java.io.IOException;
@@ -21,9 +20,8 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
     public TradeAgreementDeserializer() { super(TradeAgreement.class); }
 
     @Override
-    public TradeAgreement deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws TradeAgreementException {
-        JsonNode node = getCheckedNode(jsonParser);
-        BigMoney proceeds = getProceeds(node);
+    public TradeAgreement deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+        JsonNode node = getAndCheckRootNode(jsonParser, fieldMap);
 
         return TradeAgreement.builder()
             .instrument(node.get("instrument").asText())
@@ -31,7 +29,7 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
             .externalParty(node.get("externalParty").asText())
             .buySell(node.get("buySell").asText())
             .qty(node.get("qty").asDouble())
-            .proceeds(proceeds)
+            .proceeds(getProceeds(node))
             .build();
     }
 
@@ -46,21 +44,12 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
         return fieldInfo;
     }
 
-    protected JsonNode getCheckedNode(JsonParser jsonParser) throws TradeAgreementException{
-        try {
-            return checkNode(jsonParser, fieldMap);
-        } catch (IOException e) {
-            log.error(e.toString());
-            throw new TradeAgreementException(e.getMessage());
-        }
-    }
-
-    protected BigMoney getProceeds(JsonNode node) throws TradeAgreementException {
+    protected BigMoney getProceeds(JsonNode node) throws IOException {
         try {
             return BigMoney.parse(node.get("proceeds").asText());
         } catch (IllegalArgumentException e) {
             log.error(e.toString());
-            throw new TradeAgreementException("Could not parse proceeds from request.");
+            throw new IOException("Could not parse proceeds from request.");
         }
     }
 }

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
-import org.galatea.starter.domain.FXRateException;
 import org.galatea.starter.domain.FXRateResponse;
 import org.joda.money.CurrencyUnit;
 
@@ -19,7 +18,8 @@ import java.util.HashMap;
 @Slf4j
 public class FXRateResponseDeserializer extends FuseDeserializer {
 
-    protected static final HashMap<String, JsonNodeType> fieldMap = getFieldMap();
+    protected static final HashMap<String, JsonNodeType> rootFieldMap = getRootFieldMap();
+    protected static final HashMap<String, JsonNodeType> ratesFieldMap = getRatesFieldMap();
     protected static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public FXRateResponseDeserializer() {
@@ -27,40 +27,37 @@ public class FXRateResponseDeserializer extends FuseDeserializer {
     }
 
     @Override
-    public FXRateResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws FXRateException {
-        JsonNode node = getCheckedNode(jsonParser);
-        Date date = getDate(node);
+    public FXRateResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+        JsonNode rootNode = getAndCheckRootNode(jsonParser, rootFieldMap);
+        JsonNode ratesNode = checkNode(rootNode.path("rates"), ratesFieldMap);
 
         return FXRateResponse.builder()
-                .baseCurrency(CurrencyUnit.of(node.get("base").asText()))
-                .validOn(date)
-                .exchangeRate(BigDecimal.valueOf(node.get("USD").asDouble()))
+                .baseCurrency(CurrencyUnit.of(rootNode.get("base").asText()))
+                .validOn(getDate(rootNode))
+                .exchangeRate(BigDecimal.valueOf(ratesNode.get("USD").asDouble()))
                 .build();
     }
 
-    protected static HashMap<String, JsonNodeType> getFieldMap() {
+    protected static HashMap<String, JsonNodeType> getRootFieldMap() {
         HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
         fieldInfo.put("date", JsonNodeType.STRING);
         fieldInfo.put("base", JsonNodeType.STRING);
+        fieldInfo.put("rates", JsonNodeType.OBJECT);
+        return fieldInfo;
+    }
+
+    protected static HashMap<String, JsonNodeType> getRatesFieldMap() {
+        HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
         fieldInfo.put("USD", JsonNodeType.NUMBER);
         return fieldInfo;
     }
 
-    protected JsonNode getCheckedNode(JsonParser jsonParser) throws FXRateException {
-        try {
-            return checkNode(jsonParser, fieldMap);
-        } catch (IOException e) {
-            log.error(e.toString());
-            throw new FXRateException(e.getMessage());
-        }
-    }
-
-    protected Date getDate(JsonNode node) throws FXRateException {
+    protected Date getDate(JsonNode node) throws IOException {
         try {
             return formatter.parse(node.get("date").asText());
         } catch (ParseException e) {
             log.error(e.toString());
-            throw new FXRateException("Could not parse date from FXRate API.");
+            throw new IOException("Could not parse date from FXRate API.");
         }
     }
 }
