@@ -48,7 +48,7 @@ public class FXRateResponseDeserializerTest {
 
         assertEquals(response.getExchangeRate(), BigDecimal.valueOf(1.3467));
         assertEquals(response.getBaseCurrency(), CurrencyUnit.GBP);
-        assertEquals(response.getValidOn(), formatter.parse("2017-11-30"));
+        assertEquals(response.getValidOn(), LocalDate.parse("2017-11-30"));
     }
 
     @Test
