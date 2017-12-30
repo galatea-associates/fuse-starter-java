@@ -4,7 +4,7 @@ import lombok.*;
 import org.joda.money.CurrencyUnit;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @ToString
@@ -16,7 +16,7 @@ public class FXRateResponse {
     CurrencyUnit baseCurrency;
 
     @NonNull
-    Date validOn;
+    LocalDate validOn;
 
     @NonNull
     BigDecimal exchangeRate;

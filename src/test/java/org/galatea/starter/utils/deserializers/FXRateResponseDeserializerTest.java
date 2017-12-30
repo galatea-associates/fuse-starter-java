@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import net.sf.cglib.core.Local;
 import org.galatea.starter.domain.FXRateResponse;
 import org.joda.money.CurrencyUnit;
 import org.junit.Before;
@@ -15,6 +16,7 @@ import org.junit.rules.ExpectedException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -27,7 +29,6 @@ public class FXRateResponseDeserializerTest {
     private ObjectMapper mapper;
     private DeserializationContext context;
     private String responseJson;
-    private SimpleDateFormat formatter;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -38,7 +39,6 @@ public class FXRateResponseDeserializerTest {
         mapper = new ObjectMapper();
         context = mapper.getDeserializationContext();
         responseJson = getJsonFromFile("FXRateResponse/Correct_FX_Response.json");
-        formatter = new SimpleDateFormat("yyyy-MM-dd");
     }
 
     @Test
@@ -101,9 +101,9 @@ public class FXRateResponseDeserializerTest {
     @Test
     public void testGetDate() throws Exception {
         JsonNode node = mapper.readTree(responseJson);
-        Date validOn = deserializer.getDate(node);
+        LocalDate validOn = deserializer.getDate(node);
 
-        assertEquals(validOn, formatter.parse("2017-11-30"));
+        assertEquals(validOn, LocalDate.parse("2017-11-30"));
     }
 
     @Test
@@ -113,7 +113,6 @@ public class FXRateResponseDeserializerTest {
 
         String incorrectResponseJson = getJsonFromFile("FXRateResponse/Incorrect_Fields_FX_Response.json");
         JsonNode node = mapper.readTree(incorrectResponseJson);
-        Date validOn = deserializer.getDate(node);
+        LocalDate validOn = deserializer.getDate(node);
     }
-
 }

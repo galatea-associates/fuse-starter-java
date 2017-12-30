@@ -10,9 +10,8 @@ import org.joda.money.CurrencyUnit;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 
 @Slf4j
@@ -20,11 +19,8 @@ public class FXRateResponseDeserializer extends FuseDeserializer {
 
     protected static final HashMap<String, JsonNodeType> rootFieldMap = getRootFieldMap();
     protected static final HashMap<String, JsonNodeType> ratesFieldMap = getRatesFieldMap();
-    protected static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    public FXRateResponseDeserializer() {
-        super(FXRateResponse.class);
-    }
+    public FXRateResponseDeserializer() { super(FXRateResponse.class); }
 
     @Override
     public FXRateResponse deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
@@ -53,10 +49,10 @@ public class FXRateResponseDeserializer extends FuseDeserializer {
     }
 
     // See Effective Java 2nd Ed. Item 61
-    protected Date getDate(JsonNode node) throws IOException {
+    protected LocalDate getDate(JsonNode node) throws IOException {
         try {
-            return formatter.parse(node.get("date").asText());
-        } catch (ParseException e) {
+            return LocalDate.parse(node.get("date").asText());
+        } catch (DateTimeParseException e) {
             log.error("Unable to parse date from FX Rate API.", e);
             throw new IOException("Unable to parse date from FX Rate API.", e);
         }
