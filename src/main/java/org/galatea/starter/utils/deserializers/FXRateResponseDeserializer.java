@@ -58,7 +58,7 @@ public class FXRateResponseDeserializer extends FuseDeserializer {
             return formatter.parse(node.get("date").asText());
         } catch (ParseException e) {
             log.error("Unable to parse date from FX Rate API.", e);
-            throw new IOException(e);
+            throw new IOException("Unable to parse date from FX Rate API.", e);
         }
     }
 }

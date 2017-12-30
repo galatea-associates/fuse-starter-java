@@ -49,7 +49,7 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
             return BigMoney.parse(node.get("proceeds").asText());
         } catch (IllegalArgumentException e) {
             log.error("Could not parse proceeds from request.", e);
-            throw new IOException(e);
+            throw new IOException("Could not parse proceeds from request.", e);
         }
     }
 }

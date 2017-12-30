@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.node.JsonNodeType;
 import org.galatea.starter.domain.FXRateResponse;
 import org.joda.money.CurrencyUnit;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -27,6 +29,9 @@ public class FXRateResponseDeserializerTest {
     private String responseJson;
     private SimpleDateFormat formatter;
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Before
     public void setUp() throws Exception {
         deserializer = new FXRateResponseDeserializer();
@@ -44,6 +49,33 @@ public class FXRateResponseDeserializerTest {
         assertEquals(response.getExchangeRate(), BigDecimal.valueOf(1.3467));
         assertEquals(response.getBaseCurrency(), CurrencyUnit.GBP);
         assertEquals(response.getValidOn(), formatter.parse("2017-11-30"));
+    }
+
+    @Test
+    public void testDeserializeIncorrectFields() throws Exception {
+        expectedException.expect(IOException.class);
+        expectedException.expectMessage("Received JSON had the following invalid field types: [USD]");
+
+        JsonParser jsonParser = mapper.getFactory().createParser(getJsonFromFile("FXRateResponse/Incorrect_Fields_FX_Response.json"));
+        FXRateResponse response = deserializer.deserialize(jsonParser, context);
+    }
+
+    @Test
+    public void testDeserializeMissingFields() throws Exception {
+        expectedException.expect(IOException.class);
+        expectedException.expectMessage("Received JSON did not contain: [date]");
+
+        JsonParser jsonParser = mapper.getFactory().createParser(getJsonFromFile("FXRateResponse/Missing_Field_FX_Response.json"));
+        FXRateResponse response = deserializer.deserialize(jsonParser, context);
+    }
+
+    @Test
+    public void testDeserializeMissingIncorrectFields() throws Exception {
+        expectedException.expect(IOException.class);
+        expectedException.expectMessage("Received JSON did not contain: [base] & had the following invalid field types: [date]");
+
+        JsonParser jsonParser = mapper.getFactory().createParser(getJsonFromFile("FXRateResponse/Missing_Incorrect_Fields_FX_Response.json"));
+        FXRateResponse response = deserializer.deserialize(jsonParser, context);
     }
 
     @Test
@@ -74,8 +106,11 @@ public class FXRateResponseDeserializerTest {
         assertEquals(validOn, formatter.parse("2017-11-30"));
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void testGetDateIOException() throws Exception {
+        expectedException.expect(IOException.class);
+        expectedException.expectMessage("Unable to parse date from FX Rate API.");
+
         String incorrectResponseJson = getJsonFromFile("FXRateResponse/Incorrect_Fields_FX_Response.json");
         JsonNode node = mapper.readTree(incorrectResponseJson);
         Date validOn = deserializer.getDate(node);

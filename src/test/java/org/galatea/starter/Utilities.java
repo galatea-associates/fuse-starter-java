@@ -33,5 +33,4 @@ public class Utilities {
     public static String getJsonFromFile(String fileName) throws Exception {
         return readData(fileName).replace("\n", "").replace("[", "").replace("]", "");
     }
-
 }
