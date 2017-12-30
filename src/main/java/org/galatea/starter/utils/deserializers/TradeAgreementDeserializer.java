@@ -11,7 +11,6 @@ import org.joda.money.BigMoney;
 import java.io.IOException;
 import java.util.HashMap;
 
-// http://www.baeldung.com/jackson-deserialization
 @Slf4j
 public class TradeAgreementDeserializer extends FuseDeserializer {
 
@@ -44,12 +43,13 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
         return fieldInfo;
     }
 
+    // See Effective Java 2nd Ed. Item 61
     protected BigMoney getProceeds(JsonNode node) throws IOException {
         try {
             return BigMoney.parse(node.get("proceeds").asText());
         } catch (IllegalArgumentException e) {
-            log.error(e.toString());
-            throw new IOException("Could not parse proceeds from request.");
+            log.error("Could not parse proceeds from request.", e);
+            throw new IOException(e);
         }
     }
 }

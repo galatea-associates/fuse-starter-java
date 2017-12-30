@@ -52,12 +52,13 @@ public class FXRateResponseDeserializer extends FuseDeserializer {
         return fieldInfo;
     }
 
+    // See Effective Java 2nd Ed. Item 61
     protected Date getDate(JsonNode node) throws IOException {
         try {
             return formatter.parse(node.get("date").asText());
         } catch (ParseException e) {
-            log.error(e.toString());
-            throw new IOException("Could not parse date from FXRate API.");
+            log.error("Unable to parse date from FX Rate API.", e);
+            throw new IOException(e);
         }
     }
 }
