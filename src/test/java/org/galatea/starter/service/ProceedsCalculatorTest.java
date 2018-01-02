@@ -1,10 +1,5 @@
 package org.galatea.starter.service;
 
-import static org.junit.Assert.*;
-
-import java.math.BigDecimal;
-import java.util.Date;
-
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.FXRateResponse;
 import org.galatea.starter.service.client.IFXRestClient;
@@ -13,6 +8,12 @@ import org.joda.money.CurrencyUnit;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 public class ProceedsCalculatorTest extends ASpringTest {
@@ -37,7 +38,7 @@ public class ProceedsCalculatorTest extends ASpringTest {
 
 		given(restClient.getRate(proceeds.getCurrencyUnit().getCode()))
 				.willReturn(FXRateResponse.builder().baseCurrency(CurrencyUnit.of("GBP"))
-						.exchangeRate(BigDecimal.valueOf(1.33d)).validOn(new Date()).build());
+						.exchangeRate(BigDecimal.valueOf(1.33d)).validOn(LocalDate.now()).build());
 
 		USDProceeds = proceedsCalc.getUSDProceeds(proceeds);
 
