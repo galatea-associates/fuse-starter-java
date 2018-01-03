@@ -15,8 +15,8 @@ public abstract class FuseDeserializer extends StdDeserializer {
     super(vc);
   }
 
-  protected JsonNode getAndCheckRootNode(JsonParser jsonParser,
-      HashMap<String, JsonNodeType> fieldInfo) throws IOException {
+  protected JsonNode getAndCheckRootNode(
+      JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
     return checkNode(jsonParser.readValueAsTree(), fieldInfo);
   }
 
@@ -39,14 +39,15 @@ public abstract class FuseDeserializer extends StdDeserializer {
     if (!missingFields.isEmpty() && !incorrectFields.isEmpty()) {
       throw new IOException(
           String.format("Received JSON did not contain: %s", missingFields.toString())
-              + String
-              .format(" & had the following invalid field types: %s", incorrectFields.toString()));
+              + String.format(
+                  " & had the following invalid field types: %s", incorrectFields.toString()));
     } else if (!missingFields.isEmpty()) {
       throw new IOException(
           String.format("Received JSON did not contain: %s", missingFields.toString()));
     } else if (!incorrectFields.isEmpty()) {
       throw new IOException(
-          String.format("Received JSON had the following invalid field types: %s",
+          String.format(
+              "Received JSON had the following invalid field types: %s",
               incorrectFields.toString()));
     }
 

@@ -1,8 +1,4 @@
-
 package org.galatea.starter.utils.jms;
-
-import static org.galatea.starter.utils.Tracer.addTraceInfo;
-import static org.galatea.starter.utils.Tracer.setExternalRequestId;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -10,17 +6,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.Tracer.AutoClosedTrace;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
-
-import java.util.function.BiConsumer;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import java.util.function.BiConsumer;
+
+import static org.galatea.starter.utils.Tracer.addTraceInfo;
+import static org.galatea.starter.utils.Tracer.setExternalRequestId;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,14 +25,9 @@ import javax.jms.TextMessage;
 @EqualsAndHashCode(callSuper = true)
 public class FuseMessageListenerContainer extends DefaultMessageListenerContainer {
 
-  @NonNull
-  protected FuseTraceRepository repository;
-
-  @NonNull
-  protected BiConsumer<Message, Exception> failedMessageConsumer;
-
   public static final String UNK = "UNKNOWN";
-
+  @NonNull protected FuseTraceRepository repository;
+  @NonNull protected BiConsumer<Message, Exception> failedMessageConsumer;
 
   @Override
   @SneakyThrows
@@ -52,17 +44,17 @@ public class FuseMessageListenerContainer extends DefaultMessageListenerContaine
       // RuntimeException, which would result in the message being placed back on the queue. While
       // this is not encouraged, there may be certain circumstances where that is necessary.
       try {
-        t.runAndTraceSuccess("message", () -> {
-          super.invokeListener(session, message);
-          return Void.TYPE;
-        });
+        t.runAndTraceSuccess(
+            "message",
+            () -> {
+              super.invokeListener(session, message);
+              return Void.TYPE;
+            });
       } catch (Exception e) {
         failedMessageConsumer.accept(message, e);
       }
     }
-
   }
-
 
   protected void addMessageInfoToTracer(final Message msg) {
     String dest = UNK;
@@ -87,6 +79,5 @@ public class FuseMessageListenerContainer extends DefaultMessageListenerContaine
     addTraceInfo(this.getClass(), "jms-payload", text);
 
     setExternalRequestId(msgId);
-
   }
 }

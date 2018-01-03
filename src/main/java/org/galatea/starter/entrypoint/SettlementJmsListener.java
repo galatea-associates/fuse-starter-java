@@ -1,4 +1,3 @@
-
 package org.galatea.starter.entrypoint;
 
 import lombok.EqualsAndHashCode;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Set;
 
-
 @RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
@@ -22,17 +20,13 @@ import java.util.Set;
 @Component
 public class SettlementJmsListener {
 
-  @NonNull
-  protected SettlementService settlementService;
+  @NonNull protected SettlementService settlementService;
 
-  /**
-   * Spawns Missions for any TradeAgreements pulled off the jms queue.
-   */
+  /** Spawns Missions for any TradeAgreements pulled off the jms queue. */
   @JmsListener(destination = "${jms.agreement-queue}", concurrency = "${jms.listener-concurrency}")
   public void settleAgreement(final TradeAgreement agreements) {
     log.info("Handling agreements {}", agreements);
     Set<Long> missionIds = settlementService.spawnMissions(Arrays.asList(agreements));
     log.info("Created missions {}", missionIds);
   }
-
 }

@@ -1,10 +1,5 @@
 package org.galatea.starter.service;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
-
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
@@ -20,23 +15,32 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.BDDMockito.given;
+
 public class SettlementServiceTest extends ASpringTest {
 
-  @MockBean
-  private ISettlementMissionRpsy mockSettlementMissionRpsy;
+  @MockBean private ISettlementMissionRpsy mockSettlementMissionRpsy;
 
-  @MockBean
-  private IAgreementTransformer mockAgreementTransformer;
+  @MockBean private IAgreementTransformer mockAgreementTransformer;
 
   @Test
   public void testFindMissionFound() {
     Long id = 1L;
 
-    SettlementMission testSettlementMission = SettlementMission.builder().id(id).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d)
-        .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), new BigDecimal(100)))
-        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), new BigDecimal(100)))
-        .build();
+    SettlementMission testSettlementMission =
+        SettlementMission.builder()
+            .id(id)
+            .depot("DTC")
+            .externalParty("EXT-1")
+            .instrument("IBM")
+            .direction("REC")
+            .qty(100d)
+            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), new BigDecimal(100)))
+            .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), new BigDecimal(100)))
+            .build();
 
     given(this.mockSettlementMissionRpsy.findOne(id)).willReturn(testSettlementMission);
 
@@ -51,11 +55,17 @@ public class SettlementServiceTest extends ASpringTest {
   public void testFindMissionNotFound() {
     Long id = 1L;
 
-    SettlementMission testSettlementMission = SettlementMission.builder().id(id).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d)
-        .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d))
-        .build();
+    SettlementMission testSettlementMission =
+        SettlementMission.builder()
+            .id(id)
+            .depot("DTC")
+            .externalParty("EXT-1")
+            .instrument("IBM")
+            .direction("REC")
+            .qty(100d)
+            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+            .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d))
+            .build();
 
     given(this.mockSettlementMissionRpsy.findOne(id)).willReturn(testSettlementMission);
 
@@ -69,16 +79,28 @@ public class SettlementServiceTest extends ASpringTest {
   @Test
   public void testSpawnMissions() {
 
-    SettlementMission testSettlementMission = SettlementMission.builder().id(35L).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d)
-        .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d))
-        .build();
+    SettlementMission testSettlementMission =
+        SettlementMission.builder()
+            .id(35L)
+            .depot("DTC")
+            .externalParty("EXT-1")
+            .instrument("IBM")
+            .direction("REC")
+            .qty(100d)
+            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+            .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d))
+            .build();
 
-    TradeAgreement testTradeAgreement = TradeAgreement.builder().id(45L).instrument("instr-1")
-        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0)
-        .proceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d))
-        .build();
+    TradeAgreement testTradeAgreement =
+        TradeAgreement.builder()
+            .id(45L)
+            .instrument("instr-1")
+            .internalParty("icp-1")
+            .externalParty("ecp-1")
+            .buySell("B")
+            .qty(4500.0)
+            .proceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d))
+            .build();
 
     given(this.mockSettlementMissionRpsy.save(Mockito.anyList()))
         .willReturn(Collections.singletonList(testSettlementMission));

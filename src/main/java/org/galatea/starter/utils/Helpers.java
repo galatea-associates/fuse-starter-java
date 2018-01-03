@@ -1,12 +1,7 @@
-
 package org.galatea.starter.utils;
-
-import static org.springframework.util.ReflectionUtils.doWithMethods;
-import static org.springframework.util.ReflectionUtils.invokeMethod;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-
 import org.apache.commons.lang3.builder.DiffBuilder;
 import org.apache.commons.lang3.builder.DiffResult;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -14,6 +9,8 @@ import org.springframework.util.ReflectionUtils.MethodFilter;
 
 import java.lang.reflect.Modifier;
 
+import static org.springframework.util.ReflectionUtils.doWithMethods;
+import static org.springframework.util.ReflectionUtils.invokeMethod;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Helpers {
@@ -23,9 +20,12 @@ public class Helpers {
    * methods that begin with 'get' and 'is'.
    */
   public static DiffResult diff(final Object lhs, final Object rhs) {
-    return diff(lhs, rhs,
-        method -> (method.getName().startsWith("get") || method.getName().startsWith("is"))
-            && Modifier.isPublic(method.getModifiers()));
+    return diff(
+        lhs,
+        rhs,
+        method ->
+            (method.getName().startsWith("get") || method.getName().startsWith("is"))
+                && Modifier.isPublic(method.getModifiers()));
   }
 
   /**
@@ -39,8 +39,11 @@ public class Helpers {
       throw new IllegalArgumentException("lhs is not assignable from rhs");
     }
 
-    doWithMethods(lhs.getClass(), method -> builder.append(method.getName(),
-        invokeMethod(method, lhs), invokeMethod(method, rhs)), filter);
+    doWithMethods(
+        lhs.getClass(),
+        method ->
+            builder.append(method.getName(), invokeMethod(method, lhs), invokeMethod(method, rhs)),
+        filter);
 
     return builder.build();
   }

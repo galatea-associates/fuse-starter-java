@@ -22,13 +22,11 @@ import static org.junit.Assert.assertEquals;
 @Slf4j
 public class TradeAgreementDeserializerTest {
 
+  @Rule public ExpectedException expectedException = ExpectedException.none();
   private TradeAgreementDeserializer deserializer;
   private ObjectMapper mapper;
   private DeserializationContext context;
   private String agreementJson;
-
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
 
   @Before
   public void setUp() throws Exception {
@@ -56,19 +54,23 @@ public class TradeAgreementDeserializerTest {
     expectedException.expect(IOException.class);
     expectedException.expectMessage("Received JSON did not contain: [externalParty, buySell]");
 
-    JsonParser jsonParser = mapper.getFactory()
-        .createParser(getJsonFromFile("TradeAgreement/Missing_Fields_IBM_Agreement.json"));
+    JsonParser jsonParser =
+        mapper
+            .getFactory()
+            .createParser(getJsonFromFile("TradeAgreement/Missing_Fields_IBM_Agreement.json"));
     TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
   }
 
   @Test
   public void testDeserializeIncorrectFields() throws Exception {
     expectedException.expect(IOException.class);
-    expectedException
-        .expectMessage("Received JSON had the following invalid field types: [proceeds, qty]");
+    expectedException.expectMessage(
+        "Received JSON had the following invalid field types: [proceeds, qty]");
 
-    JsonParser jsonParser = mapper.getFactory()
-        .createParser(getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json"));
+    JsonParser jsonParser =
+        mapper
+            .getFactory()
+            .createParser(getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json"));
     TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
   }
 
@@ -78,8 +80,11 @@ public class TradeAgreementDeserializerTest {
     expectedException.expectMessage(
         "Received JSON did not contain: [buySell] & had the following invalid field types: [proceeds]");
 
-    JsonParser jsonParser = mapper.getFactory().createParser(
-        getJsonFromFile("TradeAgreement/Missing_Incorrect_Fields_IBM_Agreement.json"));
+    JsonParser jsonParser =
+        mapper
+            .getFactory()
+            .createParser(
+                getJsonFromFile("TradeAgreement/Missing_Incorrect_Fields_IBM_Agreement.json"));
     TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
   }
 
@@ -110,8 +115,8 @@ public class TradeAgreementDeserializerTest {
     expectedException.expect(IOException.class);
     expectedException.expectMessage("Could not parse proceeds from request.");
 
-    String incorrectAgreementJson = getJsonFromFile(
-        "TradeAgreement/Incorrect_Fields_IBM_Agreement.json");
+    String incorrectAgreementJson =
+        getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json");
     JsonNode node = mapper.readTree(incorrectAgreementJson);
     BigMoney proceeds = deserializer.getProceeds(node);
   }

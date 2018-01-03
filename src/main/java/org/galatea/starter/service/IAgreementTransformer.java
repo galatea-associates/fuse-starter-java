@@ -1,4 +1,3 @@
-
 package org.galatea.starter.service;
 
 import org.galatea.starter.domain.SettlementMission;

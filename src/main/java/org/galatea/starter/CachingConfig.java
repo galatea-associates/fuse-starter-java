@@ -1,4 +1,3 @@
-
 package org.galatea.starter;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +25,7 @@ public class CachingConfig extends CachingConfigurerSupport {
     return ehCacheCacheManager;
   }
 
-  /**
-   * Configures bean for EhCacheManager.
-   */
+  /** Configures bean for EhCacheManager. */
   @Bean
   public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
     EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();

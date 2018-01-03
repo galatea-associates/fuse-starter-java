@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import net.sf.cglib.core.Local;
-import org.galatea.starter.domain.FXRateResponse;
+import org.galatea.starter.domain.FxRateResponse;
 import org.joda.money.CurrencyUnit;
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,27 +14,23 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 
 import static org.galatea.starter.Utilities.getJsonFromFile;
 import static org.junit.Assert.assertEquals;
 
-public class FXRateResponseDeserializerTest {
+public class FxRateResponseDeserializerTest {
 
-  private FXRateResponseDeserializer deserializer;
+  @Rule public ExpectedException expectedException = ExpectedException.none();
+  private FxRateResponseDeserializer deserializer;
   private ObjectMapper mapper;
   private DeserializationContext context;
   private String responseJson;
 
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
   @Before
   public void setUp() throws Exception {
-    deserializer = new FXRateResponseDeserializer();
+    deserializer = new FxRateResponseDeserializer();
     mapper = new ObjectMapper();
     context = mapper.getDeserializationContext();
     responseJson = getJsonFromFile("FXRateResponse/Correct_FX_Response.json");
@@ -44,7 +39,7 @@ public class FXRateResponseDeserializerTest {
   @Test
   public void testDeserialize() throws Exception {
     JsonParser jsonParser = mapper.getFactory().createParser(responseJson);
-    FXRateResponse response = deserializer.deserialize(jsonParser, context);
+    FxRateResponse response = deserializer.deserialize(jsonParser, context);
 
     assertEquals(response.getExchangeRate(), BigDecimal.valueOf(1.3467));
     assertEquals(response.getBaseCurrency(), CurrencyUnit.GBP);
@@ -56,9 +51,11 @@ public class FXRateResponseDeserializerTest {
     expectedException.expect(IOException.class);
     expectedException.expectMessage("Received JSON had the following invalid field types: [USD]");
 
-    JsonParser jsonParser = mapper.getFactory()
-        .createParser(getJsonFromFile("FXRateResponse/Incorrect_Fields_FX_Response.json"));
-    FXRateResponse response = deserializer.deserialize(jsonParser, context);
+    JsonParser jsonParser =
+        mapper
+            .getFactory()
+            .createParser(getJsonFromFile("FXRateResponse/Incorrect_Fields_FX_Response.json"));
+    FxRateResponse response = deserializer.deserialize(jsonParser, context);
   }
 
   @Test
@@ -66,9 +63,11 @@ public class FXRateResponseDeserializerTest {
     expectedException.expect(IOException.class);
     expectedException.expectMessage("Received JSON did not contain: [date]");
 
-    JsonParser jsonParser = mapper.getFactory()
-        .createParser(getJsonFromFile("FXRateResponse/Missing_Field_FX_Response.json"));
-    FXRateResponse response = deserializer.deserialize(jsonParser, context);
+    JsonParser jsonParser =
+        mapper
+            .getFactory()
+            .createParser(getJsonFromFile("FXRateResponse/Missing_Field_FX_Response.json"));
+    FxRateResponse response = deserializer.deserialize(jsonParser, context);
   }
 
   @Test
@@ -77,9 +76,12 @@ public class FXRateResponseDeserializerTest {
     expectedException.expectMessage(
         "Received JSON did not contain: [base] & had the following invalid field types: [date]");
 
-    JsonParser jsonParser = mapper.getFactory()
-        .createParser(getJsonFromFile("FXRateResponse/Missing_Incorrect_Fields_FX_Response.json"));
-    FXRateResponse response = deserializer.deserialize(jsonParser, context);
+    JsonParser jsonParser =
+        mapper
+            .getFactory()
+            .createParser(
+                getJsonFromFile("FXRateResponse/Missing_Incorrect_Fields_FX_Response.json"));
+    FxRateResponse response = deserializer.deserialize(jsonParser, context);
   }
 
   @Test
@@ -115,8 +117,8 @@ public class FXRateResponseDeserializerTest {
     expectedException.expect(IOException.class);
     expectedException.expectMessage("Unable to parse date from FX Rate API.");
 
-    String incorrectResponseJson = getJsonFromFile(
-        "FXRateResponse/Incorrect_Fields_FX_Response.json");
+    String incorrectResponseJson =
+        getJsonFromFile("FXRateResponse/Incorrect_Fields_FX_Response.json");
     JsonNode node = mapper.readTree(incorrectResponseJson);
     LocalDate validOn = deserializer.getDate(node);
   }

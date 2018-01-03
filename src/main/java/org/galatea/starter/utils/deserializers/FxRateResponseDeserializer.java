@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
-import org.galatea.starter.domain.FXRateResponse;
+import org.galatea.starter.domain.FxRateResponse;
 import org.joda.money.CurrencyUnit;
 
 import java.io.IOException;
@@ -15,26 +15,13 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 
 @Slf4j
-public class FXRateResponseDeserializer extends FuseDeserializer {
+public class FxRateResponseDeserializer extends FuseDeserializer {
 
   protected static final HashMap<String, JsonNodeType> rootFieldMap = getRootFieldMap();
   protected static final HashMap<String, JsonNodeType> ratesFieldMap = getRatesFieldMap();
 
-  public FXRateResponseDeserializer() {
-    super(FXRateResponse.class);
-  }
-
-  @Override
-  public FXRateResponse deserialize(JsonParser jsonParser,
-      DeserializationContext deserializationContext) throws IOException {
-    JsonNode rootNode = getAndCheckRootNode(jsonParser, rootFieldMap);
-    JsonNode ratesNode = checkNode(rootNode.path("rates"), ratesFieldMap);
-
-    return FXRateResponse.builder()
-        .baseCurrency(CurrencyUnit.of(rootNode.get("base").asText()))
-        .validOn(getDate(rootNode))
-        .exchangeRate(BigDecimal.valueOf(ratesNode.get("USD").asDouble()))
-        .build();
+  public FxRateResponseDeserializer() {
+    super(FxRateResponse.class);
   }
 
   protected static HashMap<String, JsonNodeType> getRootFieldMap() {
@@ -49,6 +36,19 @@ public class FXRateResponseDeserializer extends FuseDeserializer {
     HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
     fieldInfo.put("USD", JsonNodeType.NUMBER);
     return fieldInfo;
+  }
+
+  @Override
+  public FxRateResponse deserialize(
+      JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+    JsonNode rootNode = getAndCheckRootNode(jsonParser, rootFieldMap);
+    JsonNode ratesNode = checkNode(rootNode.path("rates"), ratesFieldMap);
+
+    return FxRateResponse.builder()
+        .baseCurrency(CurrencyUnit.of(rootNode.get("base").asText()))
+        .validOn(getDate(rootNode))
+        .exchangeRate(BigDecimal.valueOf(ratesNode.get("USD").asDouble()))
+        .build();
   }
 
   // See Effective Java 2nd Ed. Item 61

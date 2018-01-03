@@ -20,9 +20,20 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
     super(TradeAgreement.class);
   }
 
+  protected static HashMap<String, JsonNodeType> getFieldMap() {
+    HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
+    fieldInfo.put("instrument", JsonNodeType.STRING);
+    fieldInfo.put("internalParty", JsonNodeType.STRING);
+    fieldInfo.put("externalParty", JsonNodeType.STRING);
+    fieldInfo.put("buySell", JsonNodeType.STRING);
+    fieldInfo.put("qty", JsonNodeType.NUMBER);
+    fieldInfo.put("proceeds", JsonNodeType.STRING);
+    return fieldInfo;
+  }
+
   @Override
-  public TradeAgreement deserialize(JsonParser jsonParser,
-      DeserializationContext deserializationContext) throws IOException {
+  public TradeAgreement deserialize(
+      JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
     JsonNode node = getAndCheckRootNode(jsonParser, fieldMap);
 
     return TradeAgreement.builder()
@@ -33,17 +44,6 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
         .qty(node.get("qty").asDouble())
         .proceeds(getProceeds(node))
         .build();
-  }
-
-  protected static HashMap<String, JsonNodeType> getFieldMap() {
-    HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
-    fieldInfo.put("instrument", JsonNodeType.STRING);
-    fieldInfo.put("internalParty", JsonNodeType.STRING);
-    fieldInfo.put("externalParty", JsonNodeType.STRING);
-    fieldInfo.put("buySell", JsonNodeType.STRING);
-    fieldInfo.put("qty", JsonNodeType.NUMBER);
-    fieldInfo.put("proceeds", JsonNodeType.STRING);
-    return fieldInfo;
   }
 
   // See Effective Java 2nd Ed. Item 61

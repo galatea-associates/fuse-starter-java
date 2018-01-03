@@ -1,8 +1,8 @@
 package org.galatea.starter.service;
 
 import org.galatea.starter.ASpringTest;
-import org.galatea.starter.domain.FXRateResponse;
-import org.galatea.starter.service.client.IFXRestClient;
+import org.galatea.starter.domain.FxRateResponse;
+import org.galatea.starter.service.client.IFxRestClient;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
 import org.junit.Before;
@@ -18,8 +18,7 @@ import static org.mockito.BDDMockito.given;
 
 public class ProceedsCalculatorTest extends ASpringTest {
 
-  @MockBean
-  private IFXRestClient restClient;
+  @MockBean private IFxRestClient restClient;
 
   private IProceedsCalculator proceedsCalc;
 
@@ -37,8 +36,12 @@ public class ProceedsCalculatorTest extends ASpringTest {
   public void testGetUSDProceedsSuccess() {
 
     given(restClient.getRate(proceeds.getCurrencyUnit().getCode()))
-        .willReturn(FXRateResponse.builder().baseCurrency(CurrencyUnit.of("GBP"))
-            .exchangeRate(BigDecimal.valueOf(1.33d)).validOn(LocalDate.now()).build());
+        .willReturn(
+            FxRateResponse.builder()
+                .baseCurrency(CurrencyUnit.of("GBP"))
+                .exchangeRate(BigDecimal.valueOf(1.33d))
+                .validOn(LocalDate.now())
+                .build());
 
     USDProceeds = proceedsCalc.getUSDProceeds(proceeds);
 
@@ -59,5 +62,4 @@ public class ProceedsCalculatorTest extends ASpringTest {
 
     assertEquals(proceeds, USDProceeds);
   }
-
 }
