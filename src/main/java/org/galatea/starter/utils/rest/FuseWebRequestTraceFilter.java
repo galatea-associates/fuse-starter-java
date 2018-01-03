@@ -1,10 +1,13 @@
 package org.galatea.starter.utils.rest;
 
+import static org.galatea.starter.utils.Tracer.addTraceInfo;
+
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.Tracer;
@@ -16,11 +19,6 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.Instant;
@@ -28,7 +26,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static org.galatea.starter.utils.Tracer.addTraceInfo;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
  * Builds upon spring actuator's web request tracer to capture interesting audit information. We
