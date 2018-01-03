@@ -1,3 +1,4 @@
+
 package org.galatea.starter.utils;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
@@ -23,6 +24,7 @@ import java.util.concurrent.locks.Lock;
  * in-line the code in the existing method.
  *
  * @author rbasu
+ *
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Accessors(fluent = true, chain = true)
@@ -31,47 +33,20 @@ import java.util.concurrent.locks.Lock;
 @Slf4j
 public class Runner {
 
-  @Setter protected Lock lock;
+  @Setter
+  protected Lock lock;
 
-  @NonNull protected Runnable op;
+  @NonNull
+  protected Runnable op;
 
-  @Setter protected StopWatch timer;
+  @Setter
+  protected StopWatch timer;
 
-  @Setter protected String taskName = "";
+  @Setter
+  protected String taskName = "";
 
   public static Runner of(final Runnable op) {
     return new Runner(op);
-  }
-
-  /** Attaches the provided suffix to the current thread name and then invokes call.call(). */
-  public static <T> T setThreadAndCall(final Callable<T> call, final String suffix)
-      throws Exception {
-    if (suffix.isEmpty()) {
-      return call.call();
-    }
-
-    String oldName = Thread.currentThread().getName();
-    Thread.currentThread().setName(oldName + "-" + suffix);
-    try {
-      return call.call();
-    } finally {
-      Thread.currentThread().setName(oldName);
-    }
-  }
-
-  /**
-   * Generates a suffix by looking for TradeAgreement objects in the arguments list and pulling out
-   * the instrument id from the trade.
-   */
-  public static String getSuffixFor(final Object... args) {
-
-    String suffix = "";
-    for (int i = 0; i < args.length; i++) {
-      if (args[i] instanceof TradeAgreement) {
-        suffix = ((TradeAgreement) args[i]).getInstrument();
-      }
-    }
-    return suffix;
   }
 
   /**
@@ -104,5 +79,38 @@ public class Runner {
         lock.unlock();
       }
     };
+  }
+
+  /**
+   * Attaches the provided suffix to the current thread name and then invokes call.call().
+   */
+  public static <T> T setThreadAndCall(final Callable<T> call, final String suffix)
+      throws Exception {
+    if (suffix.isEmpty()) {
+      return call.call();
+    }
+
+    String oldName = Thread.currentThread().getName();
+    Thread.currentThread().setName(oldName + "-" + suffix);
+    try {
+      return call.call();
+    } finally {
+      Thread.currentThread().setName(oldName);
+    }
+  }
+
+  /**
+   * Generates a suffix by looking for TradeAgreement objects in the arguments list and pulling out
+   * the instrument id from the trade.
+   */
+  public static String getSuffixFor(final Object... args) {
+
+    String suffix = "";
+    for (int i = 0; i < args.length; i++) {
+      if (args[i] instanceof TradeAgreement) {
+        suffix = ((TradeAgreement) args[i]).getInstrument();
+      }
+    }
+    return suffix;
   }
 }

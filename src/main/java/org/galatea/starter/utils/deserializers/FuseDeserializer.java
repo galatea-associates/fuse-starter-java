@@ -9,48 +9,43 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class FuseDeserializer extends StdDeserializer {
+public abstract class FuseDeserializer extends StdDeserializer{
 
-  protected FuseDeserializer(Class vc) {
-    super(vc);
-  }
+    protected FuseDeserializer(Class vc) {
+        super(vc);
+    }
 
-  protected JsonNode getAndCheckRootNode(
-      JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
-    return checkNode(jsonParser.readValueAsTree(), fieldInfo);
-  }
+    protected JsonNode getAndCheckRootNode(JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
+        return checkNode(jsonParser.readValueAsTree(), fieldInfo);
+    }
 
-  protected JsonNode checkNode(JsonNode node, HashMap<String, JsonNodeType> fieldInfo)
-      throws IOException {
-    ArrayList<String> missingFields = new ArrayList<>();
-    ArrayList<String> incorrectFields = new ArrayList<>();
+    protected JsonNode checkNode(JsonNode node, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
+        ArrayList<String> missingFields = new ArrayList<>();
+        ArrayList<String> incorrectFields = new ArrayList<>();
 
-    for (String key : fieldInfo.keySet()) {
-      if (node.has(key)) {
-        if (!node.get(key).getNodeType().equals(fieldInfo.get(key))) {
-          incorrectFields.add(key);
+        for (String key: fieldInfo.keySet()){
+            if (node.has(key)){
+                if (!node.get(key).getNodeType().equals(fieldInfo.get(key))) {
+                    incorrectFields.add(key);
+                }
+            } else {
+                missingFields.add(key);
+            }
         }
-      } else {
-        missingFields.add(key);
-      }
-    }
 
-    // More eloquent way of doing this?
-    if (!missingFields.isEmpty() && !incorrectFields.isEmpty()) {
-      throw new IOException(
-          String.format("Received JSON did not contain: %s", missingFields.toString())
-              + String.format(
-                  " & had the following invalid field types: %s", incorrectFields.toString()));
-    } else if (!missingFields.isEmpty()) {
-      throw new IOException(
-          String.format("Received JSON did not contain: %s", missingFields.toString()));
-    } else if (!incorrectFields.isEmpty()) {
-      throw new IOException(
-          String.format(
-              "Received JSON had the following invalid field types: %s",
-              incorrectFields.toString()));
-    }
+        // More eloquent way of doing this?
+        if (!missingFields.isEmpty() && !incorrectFields.isEmpty()) {
+            throw new IOException(
+                    String.format("Received JSON did not contain: %s", missingFields.toString())
+                            + String.format(" & had the following invalid field types: %s", incorrectFields.toString()));
+        } else if (!missingFields.isEmpty()) {
+            throw new IOException(
+                    String.format("Received JSON did not contain: %s", missingFields.toString()));
+        } else if (!incorrectFields.isEmpty()) {
+            throw new IOException(
+                    String.format("Received JSON had the following invalid field types: %s", incorrectFields.toString()));
+        }
 
-    return node;
-  }
+        return node;
+    }
 }

@@ -1,4 +1,24 @@
+
 package org.galatea.starter.entrypoint;
+
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+
+import org.galatea.starter.domain.SettlementMission;
+import org.galatea.starter.domain.SettlementMission.SettlementMissionBuilder;
+import org.joda.money.BigMoney;
+import org.joda.money.CurrencyUnit;
+import org.galatea.starter.domain.TradeAgreement;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 import feign.Feign;
 import feign.Headers;
@@ -6,22 +26,6 @@ import feign.Param;
 import feign.RequestLine;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
-import org.galatea.starter.domain.SettlementMission;
-import org.galatea.starter.domain.SettlementMission.SettlementMissionBuilder;
-import org.galatea.starter.domain.TradeAgreement;
-import org.joda.money.BigMoney;
-import org.joda.money.CurrencyUnit;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -30,59 +34,40 @@ import static org.junit.Assert.assertTrue;
 @Category(org.galatea.starter.IntegrationTestCategory.class)
 public class SettlementRestControllerIntegrationTest {
 
+  interface FuseServer {
+    @RequestLine("POST /settlementEngine")
+    @Headers("Content-Type: application/json")
+    List<String> sendTradeAgreement(TradeAgreement[] tradeAgreements);
+
+    @RequestLine("GET /settlementEngine/mission/{id}")
+    SettlementMission getSettlementMission(@Param("id") Long id);
+  }
+
   @Test
   public void testMissionCreation() {
 
     // TODO: the base URL should probably be moved to a src/test/resources properties file
-    FuseServer fuseServer =
-        Feign.builder()
-            .decoder(new GsonDecoder())
-            .encoder(new GsonEncoder())
-            .target(FuseServer.class, "http://fuse-rest-dev.cfapps.io");
+    FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
+        .target(FuseServer.class, "http://fuse-rest-dev.cfapps.io");
 
-    List<String> missionPaths =
-        fuseServer.sendTradeAgreement(
-            new TradeAgreement[] {
-              TradeAgreement.builder()
-                  .id(4000L)
-                  .instrument("IBM")
-                  .internalParty("icp-1")
-                  .externalParty("ecp-1")
-                  .buySell("B")
-                  .qty(4500.0)
-                  .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-                  .build(),
-              TradeAgreement.builder()
-                  .id(4001L)
-                  .instrument("IBM")
-                  .internalParty("icp-2")
-                  .externalParty("ecp-2")
-                  .buySell("B")
-                  .qty(4600.0)
-                  .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-                  .build()
+    List<String> missionPaths = fuseServer.sendTradeAgreement(new TradeAgreement[] {
+
+        TradeAgreement.builder().id(4000L).instrument("IBM").internalParty("icp-1")
+            .externalParty("ecp-1").buySell("B").qty(4500.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+            .build(),
+
+        TradeAgreement.builder().id(4001L).instrument("IBM").internalParty("icp-2")
+            .externalParty("ecp-2").buySell("B").qty(4600.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)).build()
             });
 
     log.info("created missions: {}", missionPaths);
 
-    SettlementMissionBuilder b1 =
-        SettlementMission.builder()
-            .depot("DTC")
-            .instrument("IBM")
-            .externalParty("ecp-1")
-            .direction("REC")
-            .qty(4500.0)
-            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-            .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
-    SettlementMissionBuilder b2 =
-        SettlementMission.builder()
-            .depot("DTC")
-            .instrument("IBM")
-            .externalParty("ecp-2")
-            .direction("REC")
-            .qty(4600.0)
-            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-            .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
+    SettlementMissionBuilder b1 = SettlementMission.builder().depot("DTC").instrument("IBM")
+        .externalParty("ecp-1").direction("REC").qty(4500.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
+    SettlementMissionBuilder b2 = SettlementMission.builder().depot("DTC").instrument("IBM")
+        .externalParty("ecp-2").direction("REC").qty(4600.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
 
     assertEquals(2, missionPaths.size());
 
@@ -93,19 +78,8 @@ public class SettlementRestControllerIntegrationTest {
       settlementMission.setUsdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
       log.info("fetched mission: {}", settlementMission);
 
-      assertTrue(
-          b1.id(missionId).build().equals(settlementMission)
-              || b2.id(missionId).build().equals(settlementMission));
+      assertTrue(b1.id(missionId).build().equals(settlementMission)
+          || b2.id(missionId).build().equals(settlementMission));
     }
-  }
-
-  interface FuseServer {
-
-    @RequestLine("POST /settlementEngine")
-    @Headers("Content-Type: application/json")
-    List<String> sendTradeAgreement(TradeAgreement[] tradeAgreements);
-
-    @RequestLine("GET /settlementEngine/mission/{id}")
-    SettlementMission getSettlementMission(@Param("id") Long id);
   }
 }

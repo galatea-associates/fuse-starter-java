@@ -16,7 +16,7 @@ jms:
    agreement-queue: sandbox.agreement
 logging:
    level:
-      org.galatea.starter.service.client.IFxRestClient: DEBUG
+      org.galatea.starter.service.client.IFXRestClient: DEBUG
 client:
     fx-rate: http://api.fixer.io
 ---

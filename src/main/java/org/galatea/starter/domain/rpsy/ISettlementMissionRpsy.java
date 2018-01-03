@@ -13,4 +13,5 @@ public interface ISettlementMissionRpsy extends CrudRepository<SettlementMission
   @Override
   @Cacheable(cacheNames = "missions", sync = true)
   SettlementMission findOne(Long id);
+
 }

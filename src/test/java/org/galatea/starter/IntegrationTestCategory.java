@@ -1,3 +1,6 @@
+
 package org.galatea.starter;
 
-public interface IntegrationTestCategory {}
+public interface IntegrationTestCategory {
+
+}

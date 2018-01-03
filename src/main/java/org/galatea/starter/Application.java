@@ -6,7 +6,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
-/** This is the entry point for the application. */
+
+/**
+ * This is the entry point for the application.
+ *
+ */
 @RequiredArgsConstructor
 @Slf4j
 @SpringBootApplication
@@ -22,5 +26,6 @@ public class Application {
   public static void main(final String[] args) {
     log.info("Starting spring application {}", System.getProperty("application.name"));
     SpringApplication.run(Application.class, args);
+
   }
 }

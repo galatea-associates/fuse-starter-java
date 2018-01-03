@@ -1,3 +1,4 @@
+
 package org.galatea.starter.utils.rest;
 
 import static org.galatea.starter.utils.Tracer.addTraceInfo;
@@ -38,6 +39,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * from spring's default implementation).
  *
  * @author rbasu
+ *
  */
 @ToString
 @EqualsAndHashCode(callSuper = true)
@@ -45,12 +47,18 @@ import javax.servlet.http.HttpServletResponseWrapper;
 // TODO what is this class meant to do? Why's it exist? How's it work its mojo?
 public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
 
+  @NonNull
+  protected final Integer maxPayloadLength;
+
+  @NonNull
+  protected final FuseTraceRepository repository;
+
+  @NonNull
+  protected final Predicate<String> pathsToSkip;
+
   public static final String REQUEST_PAYLOAD = "request-payload";
   public static final String RESPONSE_PAYLOAD = "response-payload";
   public static final String SPRING_TRACE_INFO = "spring-trace";
-  @NonNull protected final Integer maxPayloadLength;
-  @NonNull protected final FuseTraceRepository repository;
-  @NonNull protected final Predicate<String> pathsToSkip;
 
   /**
    * Sadly we have to write our own constructor since lombok can't call super with args.
@@ -59,12 +67,10 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
    * @param properties any trace properties
    * @param pathsToSkip a predicate that will return try if we want to a skip a certain url path
    * @param maxPayloadLength the max number of bytes of payload information that we want to capture
-   *     in the trace
+   *        in the trace
    */
-  public FuseWebRequestTraceFilter(
-      final FuseTraceRepository repository,
-      final TraceProperties properties,
-      final Predicate<String> pathsToSkip,
+  public FuseWebRequestTraceFilter(final FuseTraceRepository repository,
+      final TraceProperties properties, final Predicate<String> pathsToSkip,
       final Integer maxPayloadLength) {
     super(repository, properties);
     this.repository = repository;
@@ -73,10 +79,8 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
   }
 
   @Override
-  protected void doFilterInternal(
-      final HttpServletRequest request,
-      final HttpServletResponse response,
-      final FilterChain filterChain)
+  protected void doFilterInternal(final HttpServletRequest request,
+      final HttpServletResponse response, final FilterChain filterChain)
       throws ServletException, IOException {
 
     // Skip paths that are not interesting to trace
@@ -99,14 +103,13 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     }
 
     this.doFilterInternalHelper(requestToUse, responseToUse, filterChain);
+
   }
 
   @SneakyThrows
   // what's this method responsible for?
-  protected void doFilterInternalHelper(
-      final HttpServletRequest request,
-      final HttpServletResponse response,
-      final FilterChain filterChain) {
+  protected void doFilterInternalHelper(final HttpServletRequest request,
+      final HttpServletResponse response, final FilterChain filterChain) {
 
     // Start our trace
     try (AutoClosedTrace t = new AutoClosedTrace(repository, this.getClass())) {
@@ -116,33 +119,30 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
 
       MutableInt status = new MutableInt(HttpStatus.INTERNAL_SERVER_ERROR.value());
       try {
-        t.runAndTraceSuccess(
-            "request",
-            () -> {
-              filterChain.doFilter(request, response);
-              status.setValue(response.getStatus());
-              return Void.TYPE;
-            });
+        t.runAndTraceSuccess("request", () -> {
+          filterChain.doFilter(request, response);
+          status.setValue(response.getStatus());
+          return Void.TYPE;
+        });
       } finally {
-        enhanceTrace(
-            springTraceInfo,
-            request,
-            status.intValue() == response.getStatus()
-                ? response
-                : new CustomStatusResponseWrapper(response, status.intValue()));
+        enhanceTrace(springTraceInfo, request, status.intValue() == response.getStatus() ? response
+            : new CustomStatusResponseWrapper(response, status.intValue()));
         addAuditHeaders(response);
         updateResponse(response);
       }
+
     }
   }
 
-  /** Adds audit information about the request/response to the response headers. */
+  /**
+   * Adds audit information about the request/response to the response headers.
+   */
   private void addAuditHeaders(final HttpServletResponse response) {
     log.info("Attempting to add audit headers");
-    logAndAddAuditHeader(
-        response, "internalQueryId", (String) Tracer.get(Tracer.class, Tracer.INTERNAL_REQUEST_ID));
-    logAndAddAuditHeader(
-        response, "externalQueryId", (String) Tracer.get(Tracer.class, Tracer.EXTERNAL_REQUEST_ID));
+    logAndAddAuditHeader(response, "internalQueryId",
+        (String) Tracer.get(Tracer.class, Tracer.INTERNAL_REQUEST_ID));
+    logAndAddAuditHeader(response, "externalQueryId",
+        (String) Tracer.get(Tracer.class, Tracer.EXTERNAL_REQUEST_ID));
 
     String requestReceivedTime = (String) Tracer.get(Tracer.class, Tracer.TRACE_START_TIME_UTC);
     logAndAddAuditHeader(response, "requestReceivedTime", requestReceivedTime);
@@ -152,9 +152,11 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     logAndAddAuditHeader(response, "requestElapsedTimeMillis", requestElapsedTimeMillis);
   }
 
-  /** Logs header name/value and adds them to the response. */
-  private void logAndAddAuditHeader(
-      HttpServletResponse response, String headerName, String headerValue) {
+  /**
+   * Logs header name/value and adds them to the response.
+   */
+  private void logAndAddAuditHeader(HttpServletResponse response, String headerName,
+      String headerValue) {
     log.debug("Adding audit header {}={}", headerName, headerValue);
     if (headerValue == null) {
       log.debug("Not adding header {} with null value", headerName);
@@ -170,10 +172,8 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     responseWrapper.copyBodyToResponse();
   }
 
-  protected void enhanceTrace(
-      final Map<String, Object> springTraceInfo,
-      final HttpServletRequest request,
-      final HttpServletResponse response) {
+  protected void enhanceTrace(final Map<String, Object> springTraceInfo,
+      final HttpServletRequest request, final HttpServletResponse response) {
 
     // Add additional spring info to the trace
     super.enhanceTrace(springTraceInfo, response);
@@ -194,14 +194,12 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
   }
 
   protected String getPayload(final ContentCachingRequestWrapper wrapper) {
-    return wrapper == null
-        ? "null"
+    return wrapper == null ? "null"
         : getPayload(wrapper.getContentAsByteArray(), wrapper.getCharacterEncoding());
   }
 
   protected String getPayload(final ContentCachingResponseWrapper wrapper) {
-    return wrapper == null
-        ? "null"
+    return wrapper == null ? "null"
         : getPayload(wrapper.getContentAsByteArray(), wrapper.getCharacterEncoding());
   }
 
@@ -230,6 +228,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
    * was private.
    *
    * @author rbasu
+   *
    */
   private static final class CustomStatusResponseWrapper extends HttpServletResponseWrapper {
 
@@ -244,5 +243,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     public int getStatus() {
       return this.status;
     }
+
   }
+
 }

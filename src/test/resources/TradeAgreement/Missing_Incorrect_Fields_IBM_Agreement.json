@@ -1,9 +1,9 @@
 [
-  {
-    "instrument": "IBM",
-    "internalParty": "INT-1",
-    "externalParty": "EXT-1",
-    "qty": 100,
-    "proceeds": 100
-  }
+	{
+		"instrument": "IBM",
+		"internalParty": "INT-1",
+		"externalParty": "EXT-1",
+		"qty": 100,
+		"proceeds": 100
+	}
 ]

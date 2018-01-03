@@ -22,102 +22,91 @@ import static org.junit.Assert.assertEquals;
 @Slf4j
 public class TradeAgreementDeserializerTest {
 
-  @Rule public ExpectedException expectedException = ExpectedException.none();
-  private TradeAgreementDeserializer deserializer;
-  private ObjectMapper mapper;
-  private DeserializationContext context;
-  private String agreementJson;
+    private TradeAgreementDeserializer deserializer;
+    private ObjectMapper mapper;
+    private DeserializationContext context;
+    private String agreementJson;
 
-  @Before
-  public void setUp() throws Exception {
-    deserializer = new TradeAgreementDeserializer();
-    mapper = new ObjectMapper();
-    context = mapper.getDeserializationContext();
-    agreementJson = getJsonFromFile("TradeAgreement/Correct_IBM_Agreement.json");
-  }
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
-  @Test
-  public void testDeserialize() throws Exception {
-    JsonParser jsonParser = mapper.getFactory().createParser(agreementJson);
-    TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
+    @Before
+    public void setUp() throws Exception {
+        deserializer = new TradeAgreementDeserializer();
+        mapper = new ObjectMapper();
+        context = mapper.getDeserializationContext();
+        agreementJson = getJsonFromFile("TradeAgreement/Correct_IBM_Agreement.json");
+    }
 
-    assertEquals(agreement.getInstrument(), "IBM");
-    assertEquals(agreement.getInternalParty(), "INT-1");
-    assertEquals(agreement.getExternalParty(), "EXT-1");
-    assertEquals(agreement.getBuySell(), "B");
-    assertEquals(agreement.getQty(), new Double(100.0));
-    assertEquals(agreement.getProceeds(), BigMoney.parse("GBP 100"));
-  }
+    @Test
+    public void testDeserialize() throws Exception {
+        JsonParser jsonParser = mapper.getFactory().createParser(agreementJson);
+        TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
 
-  @Test
-  public void testDeserializeMissingFields() throws Exception {
-    expectedException.expect(IOException.class);
-    expectedException.expectMessage("Received JSON did not contain: [externalParty, buySell]");
+        assertEquals(agreement.getInstrument(),"IBM");
+        assertEquals(agreement.getInternalParty(), "INT-1");
+        assertEquals(agreement.getExternalParty(), "EXT-1");
+        assertEquals(agreement.getBuySell(), "B");
+        assertEquals(agreement.getQty(), new Double(100.0));
+        assertEquals(agreement.getProceeds(), BigMoney.parse("GBP 100"));
+    }
 
-    JsonParser jsonParser =
-        mapper
-            .getFactory()
-            .createParser(getJsonFromFile("TradeAgreement/Missing_Fields_IBM_Agreement.json"));
-    TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
-  }
+    @Test
+    public void testDeserializeMissingFields() throws Exception {
+        expectedException.expect(IOException.class);
+        expectedException.expectMessage("Received JSON did not contain: [externalParty, buySell]");
 
-  @Test
-  public void testDeserializeIncorrectFields() throws Exception {
-    expectedException.expect(IOException.class);
-    expectedException.expectMessage(
-        "Received JSON had the following invalid field types: [ProceedsCalculator, qty]");
+        JsonParser jsonParser = mapper.getFactory().createParser(getJsonFromFile("TradeAgreement/Missing_Fields_IBM_Agreement.json"));
+        TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
+    }
 
-    JsonParser jsonParser =
-        mapper
-            .getFactory()
-            .createParser(getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json"));
-    TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
-  }
+    @Test
+    public void testDeserializeIncorrectFields() throws Exception {
+        expectedException.expect(IOException.class);
+        expectedException.expectMessage("Received JSON had the following invalid field types: [proceeds, qty]");
 
-  @Test
-  public void testDeserializeMissingIncorrectFields() throws Exception {
-    expectedException.expect(IOException.class);
-    expectedException.expectMessage(
-        "Received JSON did not contain: [buySell] & had the following invalid field types: [ProceedsCalculator]");
+        JsonParser jsonParser = mapper.getFactory().createParser(getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json"));
+        TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
+    }
 
-    JsonParser jsonParser =
-        mapper
-            .getFactory()
-            .createParser(
-                getJsonFromFile("TradeAgreement/Missing_Incorrect_Fields_IBM_Agreement.json"));
-    TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
-  }
+    @Test
+    public void testDeserializeMissingIncorrectFields() throws Exception {
+        expectedException.expect(IOException.class);
+        expectedException.expectMessage("Received JSON did not contain: [buySell] & had the following invalid field types: [proceeds]");
 
-  @Test
-  public void testGetFieldMap() {
-    HashMap<String, JsonNodeType> fieldMap = deserializer.getFieldMap();
-    HashMap<String, JsonNodeType> expectedMap = new HashMap<>();
-    expectedMap.put("instrument", JsonNodeType.STRING);
-    expectedMap.put("internalParty", JsonNodeType.STRING);
-    expectedMap.put("externalParty", JsonNodeType.STRING);
-    expectedMap.put("buySell", JsonNodeType.STRING);
-    expectedMap.put("qty", JsonNodeType.NUMBER);
-    expectedMap.put("ProceedsCalculator", JsonNodeType.STRING);
+        JsonParser jsonParser = mapper.getFactory().createParser(getJsonFromFile("TradeAgreement/Missing_Incorrect_Fields_IBM_Agreement.json"));
+        TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
+    }
 
-    assertEquals(fieldMap, expectedMap);
-  }
+    @Test
+    public void testGetFieldMap() {
+        HashMap<String, JsonNodeType> fieldMap = deserializer.getFieldMap();
+        HashMap<String, JsonNodeType> expectedMap = new HashMap<>();
+        expectedMap.put("instrument", JsonNodeType.STRING);
+        expectedMap.put("internalParty", JsonNodeType.STRING);
+        expectedMap.put("externalParty", JsonNodeType.STRING);
+        expectedMap.put("buySell", JsonNodeType.STRING);
+        expectedMap.put("qty", JsonNodeType.NUMBER);
+        expectedMap.put("proceeds", JsonNodeType.STRING);
 
-  @Test
-  public void testGetProceeds() throws Exception {
-    JsonNode node = mapper.readTree(agreementJson);
-    BigMoney proceeds = deserializer.getProceeds(node);
+        assertEquals(fieldMap, expectedMap);
+    }
 
-    assertEquals(proceeds, BigMoney.parse("GBP 100"));
-  }
+    @Test
+    public void testGetProceeds() throws Exception {
+        JsonNode node = mapper.readTree(agreementJson);
+        BigMoney proceeds = deserializer.getProceeds(node);
 
-  @Test
-  public void testGetProceedsIOException() throws Exception {
-    expectedException.expect(IOException.class);
-    expectedException.expectMessage("Could not parse ProceedsCalculator from request.");
+        assertEquals(proceeds, BigMoney.parse("GBP 100"));
+    }
 
-    String incorrectAgreementJson =
-        getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json");
-    JsonNode node = mapper.readTree(incorrectAgreementJson);
-    BigMoney proceeds = deserializer.getProceeds(node);
-  }
+    @Test
+    public void testGetProceedsIOException() throws Exception {
+        expectedException.expect(IOException.class);
+        expectedException.expectMessage("Could not parse proceeds from request.");
+
+        String incorrectAgreementJson = getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json");
+        JsonNode node = mapper.readTree(incorrectAgreementJson);
+        BigMoney proceeds = deserializer.getProceeds(node);
+    }
 }

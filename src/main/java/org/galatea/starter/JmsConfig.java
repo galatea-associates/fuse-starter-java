@@ -1,6 +1,8 @@
+
 package org.galatea.starter;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.jms.FuseJmsListenerContainerFactory;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -17,6 +19,7 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
 import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 
 import java.util.function.BiConsumer;
+
 import javax.jms.ConnectionFactory;
 import javax.jms.Message;
 
@@ -27,12 +30,11 @@ public class JmsConfig implements JmsListenerConfigurer {
 
   /**
    * @return an implementation of failed message consumer that simply logs the message.
-   * */
+   */
   @Bean
   public BiConsumer<Message, Exception> failedMessageConsumer() {
-    return (msg, err) ->
-        log.error(
-            "Message {} failed to process after retries.  Removing message from queue", msg, err);
+    return (msg, err) -> log.error(
+        "Message {} failed to process after retries.  Removing message from queue", msg, err);
   }
 
   @Bean
@@ -71,9 +73,10 @@ public class JmsConfig implements JmsListenerConfigurer {
     return listenerFactory;
   }
 
+
   /**
    * @return a new handler factory that uses a different message converter than the default one.
-   * */
+   */
   @Bean
   public MessageHandlerMethodFactory jmsHandlerMethodFactory() {
     DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
@@ -89,3 +92,5 @@ public class JmsConfig implements JmsListenerConfigurer {
     registrar.setMessageHandlerMethodFactory(jmsHandlerMethodFactory());
   }
 }
+
+
