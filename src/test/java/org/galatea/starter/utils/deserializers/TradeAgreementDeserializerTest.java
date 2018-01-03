@@ -65,7 +65,7 @@ public class TradeAgreementDeserializerTest {
   public void testDeserializeIncorrectFields() throws Exception {
     expectedException.expect(IOException.class);
     expectedException.expectMessage(
-        "Received JSON had the following invalid field types: [proceeds, qty]");
+        "Received JSON had the following invalid field types: [ProceedsCalculator, qty]");
 
     JsonParser jsonParser =
         mapper
@@ -78,7 +78,7 @@ public class TradeAgreementDeserializerTest {
   public void testDeserializeMissingIncorrectFields() throws Exception {
     expectedException.expect(IOException.class);
     expectedException.expectMessage(
-        "Received JSON did not contain: [buySell] & had the following invalid field types: [proceeds]");
+        "Received JSON did not contain: [buySell] & had the following invalid field types: [ProceedsCalculator]");
 
     JsonParser jsonParser =
         mapper
@@ -97,7 +97,7 @@ public class TradeAgreementDeserializerTest {
     expectedMap.put("externalParty", JsonNodeType.STRING);
     expectedMap.put("buySell", JsonNodeType.STRING);
     expectedMap.put("qty", JsonNodeType.NUMBER);
-    expectedMap.put("proceeds", JsonNodeType.STRING);
+    expectedMap.put("ProceedsCalculator", JsonNodeType.STRING);
 
     assertEquals(fieldMap, expectedMap);
   }
@@ -113,7 +113,7 @@ public class TradeAgreementDeserializerTest {
   @Test
   public void testGetProceedsIOException() throws Exception {
     expectedException.expect(IOException.class);
-    expectedException.expectMessage("Could not parse proceeds from request.");
+    expectedException.expectMessage("Could not parse ProceedsCalculator from request.");
 
     String incorrectAgreementJson =
         getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json");

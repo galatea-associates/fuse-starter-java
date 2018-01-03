@@ -20,7 +20,7 @@ public class Utilities {
         .externalParty(node.get("externalParty").asText())
         .buySell(node.get("buySell").asText())
         .qty(node.get("qty").asDouble())
-        .proceeds(BigMoney.parse(node.get("proceeds").asText()))
+        .proceeds(BigMoney.parse(node.get("ProceedsCalculator").asText()))
         .build();
   }
 

@@ -15,21 +15,20 @@ import java.math.BigDecimal;
 @Slf4j
 public class ProceedsCalculator implements IProceedsCalculator {
 
-  @NonNull
-  IFxRestClient upstreamService;
+  @NonNull IFxRestClient upstreamService;
 
   @Override
-  public BigMoney getUSDProceeds(BigMoney base) {
+  public BigMoney getUsdProceeds(BigMoney base) {
     if (base.getCurrencyUnit() == CurrencyUnit.USD) {
       return base;
     }
-    return base.convertedTo(CurrencyUnit.USD, getFXRate(base.getCurrencyUnit().getCode()));
+    return base.convertedTo(CurrencyUnit.USD, getFxRate(base.getCurrencyUnit().getCode()));
   }
 
   // Potentially a spot to solve these issues:
   // https://github.com/GalateaRaj/fuse-starter-java/issues/24
   // https://github.com/GalateaRaj/fuse-starter-java/issues/38
-  private BigDecimal getFXRate(String base) {
+  private BigDecimal getFxRate(String base) {
     return upstreamService.getRate(base).getExchangeRate();
   }
 }

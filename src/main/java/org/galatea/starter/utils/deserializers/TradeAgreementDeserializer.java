@@ -27,7 +27,7 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
     fieldInfo.put("externalParty", JsonNodeType.STRING);
     fieldInfo.put("buySell", JsonNodeType.STRING);
     fieldInfo.put("qty", JsonNodeType.NUMBER);
-    fieldInfo.put("proceeds", JsonNodeType.STRING);
+    fieldInfo.put("ProceedsCalculator", JsonNodeType.STRING);
     return fieldInfo;
   }
 
@@ -49,10 +49,10 @@ public class TradeAgreementDeserializer extends FuseDeserializer {
   // See Effective Java 2nd Ed. Item 61
   protected BigMoney getProceeds(JsonNode node) throws IOException {
     try {
-      return BigMoney.parse(node.get("proceeds").asText());
+      return BigMoney.parse(node.get("ProceedsCalculator").asText());
     } catch (IllegalArgumentException e) {
-      log.error("Could not parse proceeds from request.", e);
-      throw new IOException("Could not parse proceeds from request.", e);
+      log.error("Could not parse ProceedsCalculator from request.", e);
+      throw new IOException("Could not parse ProceedsCalculator from request.", e);
     }
   }
 }
