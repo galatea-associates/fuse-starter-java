@@ -13,25 +13,26 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FXRestClientConfig {
 
-    ObjectMapper objectMapper;
+  ObjectMapper objectMapper;
 
-    public FXRestClientConfig() {
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new SimpleModule().addDeserializer(FXRateResponse.class, new FXRateResponseDeserializer()));
-    }
+  public FXRestClientConfig() {
+    objectMapper = new ObjectMapper();
+    objectMapper.registerModule(
+        new SimpleModule().addDeserializer(FXRateResponse.class, new FXRateResponseDeserializer()));
+  }
 
-    // To see the log levels available:
-    // https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#_feign_logging
-    // Should probably set this up to be full in test, then limited in prod
-    @Bean
-    public Logger.Level feignLoggerLevel(){
-        return Logger.Level.FULL;
-    }
+  // To see the log levels available:
+  // https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#_feign_logging
+  // Should probably set this up to be full in test, then limited in prod
+  @Bean
+  public Logger.Level feignLoggerLevel() {
+    return Logger.Level.FULL;
+  }
 
-    // https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#spring-cloud-feign-overriding-defaults
-    // https://stackoverflow.com/questions/35853908/how-to-set-custom-jackson-objectmapper-with-spring-cloud-netflix-feign
-    @Bean
-    public Decoder feignDecoder() {
-        return new JacksonDecoder(objectMapper);
-    }
+  // https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#spring-cloud-feign-overriding-defaults
+  // https://stackoverflow.com/questions/35853908/how-to-set-custom-jackson-objectmapper-with-spring-cloud-netflix-feign
+  @Bean
+  public Decoder feignDecoder() {
+    return new JacksonDecoder(objectMapper);
+  }
 }

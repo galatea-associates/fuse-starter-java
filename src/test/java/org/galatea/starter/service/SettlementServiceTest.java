@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class SettlementServiceTest extends ASpringTest {
+
   @MockBean
   private ISettlementMissionRpsy mockSettlementMissionRpsy;
 

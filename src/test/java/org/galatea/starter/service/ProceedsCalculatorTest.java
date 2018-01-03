@@ -18,46 +18,46 @@ import static org.mockito.BDDMockito.given;
 
 public class ProceedsCalculatorTest extends ASpringTest {
 
-	@MockBean
-	private IFXRestClient restClient;
+  @MockBean
+  private IFXRestClient restClient;
 
-	private IProceedsCalculator proceedsCalc;
+  private IProceedsCalculator proceedsCalc;
 
-	private BigMoney proceeds;
+  private BigMoney proceeds;
 
-	private BigMoney USDProceeds;
+  private BigMoney USDProceeds;
 
-	@Before
-	public void setUp() {
-		proceedsCalc = new ProceedsCalculator(restClient);
-		proceeds = BigMoney.of(CurrencyUnit.of("GBP"), BigDecimal.valueOf(100));
-	}
+  @Before
+  public void setUp() {
+    proceedsCalc = new ProceedsCalculator(restClient);
+    proceeds = BigMoney.of(CurrencyUnit.of("GBP"), BigDecimal.valueOf(100));
+  }
 
-	@Test
-	public void testGetUSDProceedsSuccess() {
+  @Test
+  public void testGetUSDProceedsSuccess() {
 
-		given(restClient.getRate(proceeds.getCurrencyUnit().getCode()))
-				.willReturn(FXRateResponse.builder().baseCurrency(CurrencyUnit.of("GBP"))
-						.exchangeRate(BigDecimal.valueOf(1.33d)).validOn(LocalDate.now()).build());
+    given(restClient.getRate(proceeds.getCurrencyUnit().getCode()))
+        .willReturn(FXRateResponse.builder().baseCurrency(CurrencyUnit.of("GBP"))
+            .exchangeRate(BigDecimal.valueOf(1.33d)).validOn(LocalDate.now()).build());
 
-		USDProceeds = proceedsCalc.getUSDProceeds(proceeds);
+    USDProceeds = proceedsCalc.getUSDProceeds(proceeds);
 
-		// this works but doesn't feel correct 
-		assertTrue(BigMoney.of(CurrencyUnit.of("USD"), 133d).compareTo(USDProceeds) == 0);
+    // this works but doesn't feel correct
+    assertTrue(BigMoney.of(CurrencyUnit.of("USD"), 133d).compareTo(USDProceeds) == 0);
 
-		// this does not work -> expected <USD 133> but was <USD 133.00>
-		// assertEquals(BigMoney.of(CurrencyUnit.of("USD"), 133d), USDProceeds);
+    // this does not work -> expected <USD 133> but was <USD 133.00>
+    // assertEquals(BigMoney.of(CurrencyUnit.of("USD"), 133d), USDProceeds);
 
-	}
+  }
 
-	@Test
-	public void testGetUSDProceedsFromUSD() {
-		// case when the initial currency is USD already, so we expect the same result
-		// back.
-		proceeds = BigMoney.of(CurrencyUnit.of("USD"), BigDecimal.valueOf(100));
-		USDProceeds = proceedsCalc.getUSDProceeds(proceeds);
+  @Test
+  public void testGetUSDProceedsFromUSD() {
+    // case when the initial currency is USD already, so we expect the same result
+    // back.
+    proceeds = BigMoney.of(CurrencyUnit.of("USD"), BigDecimal.valueOf(100));
+    USDProceeds = proceedsCalc.getUSDProceeds(proceeds);
 
-		assertEquals(proceeds, USDProceeds);
-	}
+    assertEquals(proceeds, USDProceeds);
+  }
 
 }

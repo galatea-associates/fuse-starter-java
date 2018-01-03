@@ -52,7 +52,8 @@ public class Tracer {
         }
       };
 
-  private Tracer() {}
+  private Tracer() {
+  }
 
   /**
    * Helper method to create a key given a Class and key. The Class acts as a namespace to reduce
@@ -128,7 +129,6 @@ public class Tracer {
    * makes starting/stopping the trace easy.
    *
    * @author rbasu
-   *
    */
   public static class AutoClosedTrace implements AutoCloseable {
 

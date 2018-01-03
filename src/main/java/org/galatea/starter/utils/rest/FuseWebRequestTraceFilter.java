@@ -39,7 +39,6 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * from spring's default implementation).
  *
  * @author rbasu
- *
  */
 @ToString
 @EqualsAndHashCode(callSuper = true)
@@ -67,7 +66,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
    * @param properties any trace properties
    * @param pathsToSkip a predicate that will return try if we want to a skip a certain url path
    * @param maxPayloadLength the max number of bytes of payload information that we want to capture
-   *        in the trace
+   * in the trace
    */
   public FuseWebRequestTraceFilter(final FuseTraceRepository repository,
       final TraceProperties properties, final Predicate<String> pathsToSkip,
@@ -228,7 +227,6 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
    * was private.
    *
    * @author rbasu
-   *
    */
   private static final class CustomStatusResponseWrapper extends HttpServletResponseWrapper {
 

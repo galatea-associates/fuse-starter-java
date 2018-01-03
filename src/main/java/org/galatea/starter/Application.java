@@ -9,7 +9,6 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
 /**
  * This is the entry point for the application.
- *
  */
 @RequiredArgsConstructor
 @Slf4j

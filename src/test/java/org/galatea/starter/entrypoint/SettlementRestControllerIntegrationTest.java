@@ -35,6 +35,7 @@ import feign.gson.GsonEncoder;
 public class SettlementRestControllerIntegrationTest {
 
   interface FuseServer {
+
     @RequestLine("POST /settlementEngine")
     @Headers("Content-Type: application/json")
     List<String> sendTradeAgreement(TradeAgreement[] tradeAgreements);
@@ -50,23 +51,27 @@ public class SettlementRestControllerIntegrationTest {
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
         .target(FuseServer.class, "http://fuse-rest-dev.cfapps.io");
 
-    List<String> missionPaths = fuseServer.sendTradeAgreement(new TradeAgreement[] {
+    List<String> missionPaths = fuseServer.sendTradeAgreement(new TradeAgreement[]{
 
         TradeAgreement.builder().id(4000L).instrument("IBM").internalParty("icp-1")
-            .externalParty("ecp-1").buySell("B").qty(4500.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+            .externalParty("ecp-1").buySell("B").qty(4500.0)
+            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
             .build(),
 
         TradeAgreement.builder().id(4001L).instrument("IBM").internalParty("icp-2")
-            .externalParty("ecp-2").buySell("B").qty(4600.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)).build()
-            });
+            .externalParty("ecp-2").buySell("B").qty(4600.0)
+            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)).build()
+    });
 
     log.info("created missions: {}", missionPaths);
 
     SettlementMissionBuilder b1 = SettlementMission.builder().depot("DTC").instrument("IBM")
-        .externalParty("ecp-1").direction("REC").qty(4500.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+        .externalParty("ecp-1").direction("REC").qty(4500.0)
+        .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
         .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
     SettlementMissionBuilder b2 = SettlementMission.builder().depot("DTC").instrument("IBM")
-        .externalParty("ecp-2").direction("REC").qty(4600.0).proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+        .externalParty("ecp-2").direction("REC").qty(4600.0)
+        .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
         .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
 
     assertEquals(2, missionPaths.size());

@@ -128,7 +128,6 @@ public class SettlementRestControllerTest extends ASpringTest {
         .build();
     log.info("Test mission: {}", testMission);
 
-
     given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(testMission));
 

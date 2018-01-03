@@ -12,13 +12,13 @@ import java.time.LocalDate;
 @Builder
 public class FXRateResponse {
 
-    @NonNull
-    CurrencyUnit baseCurrency;
+  @NonNull
+  CurrencyUnit baseCurrency;
 
-    @NonNull
-    LocalDate validOn;
+  @NonNull
+  LocalDate validOn;
 
-    @NonNull
-    BigDecimal exchangeRate;
+  @NonNull
+  BigDecimal exchangeRate;
 
 }

@@ -32,7 +32,8 @@ import java.util.stream.Collectors;
 public class SettlementRestController {
 
   @NonNull
-  SettlementService settlementService;;
+  SettlementService settlementService;
+  ;
 
   public static final String SETTLE_MISSION_PATH = "/settlementEngine";
   public static final String GET_MISSION_PATH = SETTLE_MISSION_PATH + "/mission/";
@@ -52,8 +53,8 @@ public class SettlementRestController {
       @RequestBody final List<TradeAgreement> agreements,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
-      // if an external request id was provided, grab it
-      processRequestId(requestId);
+    // if an external request id was provided, grab it
+    processRequestId(requestId);
 
     Set<Long> missionIds = settlementService.spawnMissions(agreements);
     Set<String> missionIdUris =

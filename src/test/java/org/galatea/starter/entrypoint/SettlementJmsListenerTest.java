@@ -51,29 +51,29 @@ public class SettlementJmsListenerTest extends ASpringTest {
   @Value("${jms.agreement-queue}")
   protected String queueName;
 
-    @Before
-    public void setup() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        JacksonTester.initFields(this, objectMapper);
-    }
+  @Before
+  public void setup() {
+    ObjectMapper objectMapper = new ObjectMapper();
+    JacksonTester.initFields(this, objectMapper);
+  }
 
   @Test
   public void testSettleOneAgreement() throws Exception {
 
-      // Read the json file but get rid of the array bookends since the jms entry point doesn't support that
-      String agreementJson = getJsonFromFile("TradeAgreement/Correct_IBM_Agreement.json");
-      log.info("Agreement json to put on queue {}", agreementJson);
+    // Read the json file but get rid of the array bookends since the jms entry point doesn't support that
+    String agreementJson = getJsonFromFile("TradeAgreement/Correct_IBM_Agreement.json");
+    log.info("Agreement json to put on queue {}", agreementJson);
 
     List<TradeAgreement> agreements = Arrays.asList(getTradeAgreement());
     log.info("Agreement objects that the service will expect {}", agreements);
 
     jmsTemplate.send(queueName, s -> {
-        TextMessage msg = s.createTextMessage(agreementJson);
-        return msg;
+      TextMessage msg = s.createTextMessage(agreementJson);
+      return msg;
     });
 
-      verify(mockSettlementService, timeout(10000)).spawnMissions(agreements);
+    verify(mockSettlementService, timeout(10000)).spawnMissions(agreements);
 
-    }
+  }
 
 }

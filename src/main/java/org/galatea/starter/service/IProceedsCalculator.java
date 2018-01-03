@@ -4,6 +4,6 @@ import org.joda.money.BigMoney;
 
 public interface IProceedsCalculator {
 
-    public BigMoney getUSDProceeds(BigMoney base);
+  public BigMoney getUSDProceeds(BigMoney base);
 
 }
