@@ -27,7 +27,7 @@ public class AgreementTransformerTest extends ASpringTest {
 
 		BigMoney usdProceeds = BigMoney.of(CurrencyUnit.of("USD"), new BigDecimal(100));
 
-		given(mockProceedsCalc.getUSDProceeds(proceeds)).willReturn(usdProceeds);
+		given(mockProceedsCalc.getUsdProceeds(proceeds)).willReturn(usdProceeds);
 
 		AgreementTransformer agreementTransformer = new AgreementTransformer(mockProceedsCalc);
 

@@ -4,8 +4,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
+
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
@@ -13,7 +15,12 @@ import org.galatea.starter.utils.Tracer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +38,7 @@ import java.util.stream.Collectors;
 @RestController
 public class SettlementRestController {
 
-  @NonNull
-  SettlementService settlementService;;
+  @NonNull SettlementService settlementService;
 
   public static final String SETTLE_MISSION_PATH = "/settlementEngine";
   public static final String GET_MISSION_PATH = SETTLE_MISSION_PATH + "/mission/";
@@ -42,18 +48,18 @@ public class SettlementRestController {
     this.settlementService = settlementService;
   }
 
-  /**
-   * Generate Missions from a provided TradeAgreement.
-   */
+  /** Generate Missions from a provided TradeAgreement. */
   // @PostMapping to link http POST requests to this method
   // @RequestBody to have the post request body deserialized into a list of TradeAgreement objects
-  @PostMapping(value = SETTLE_MISSION_PATH, consumes = {MediaType.APPLICATION_JSON_VALUE})
+  @PostMapping(
+      value = SETTLE_MISSION_PATH,
+      consumes = {MediaType.APPLICATION_JSON_VALUE})
   public ResponseEntity<Set<String>> settleAgreement(
       @RequestBody final List<TradeAgreement> agreements,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
-      // if an external request id was provided, grab it
-      processRequestId(requestId);
+    // if an external request id was provided, grab it
+    processRequestId(requestId);
 
     Set<Long> missionIds = settlementService.spawnMissions(agreements);
     Set<String> missionIdUris =
@@ -62,14 +68,15 @@ public class SettlementRestController {
     return ResponseEntity.accepted().body(missionIdUris);
   }
 
-  /**
-   * Retrieve a previously generated Mission.
-   */
+  /** Retrieve a previously generated Mission. */
   // @GetMapping to link http GET requests to this method
   // @PathVariable to take the id from the path and make it available as a method argument
   // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
-  @GetMapping(value = GET_MISSION_PATH + "{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<SettlementMission> getMission(@PathVariable final Long id,
+  @GetMapping(
+      value = GET_MISSION_PATH + "{id}",
+      produces = {MediaType.APPLICATION_JSON_VALUE})
+  public ResponseEntity<SettlementMission> getMission(
+      @PathVariable final Long id,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
     // if an external request id was provided, grab it
@@ -84,14 +91,11 @@ public class SettlementRestController {
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
-  /**
-   * Adds the specified requestId to the context for this request (if not null).
-   */
+  /** Adds the specified requestId to the context for this request (if not null). */
   private void processRequestId(String requestId) {
     if (requestId != null) {
       log.info("Request received with id: {}", requestId);
       Tracer.setExternalRequestId(requestId);
     }
   }
-
 }

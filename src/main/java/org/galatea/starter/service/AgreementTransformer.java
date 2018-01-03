@@ -12,22 +12,22 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AgreementTransformer implements IAgreementTransformer {
 
-    @NonNull
-    IProceedsCalculator proceedsCalc;
+  @NonNull IProceedsCalculator proceedsCalc;
 
-    @Override
-    public SettlementMission transform(TradeAgreement agreement) {
-        SettlementMission mission = SettlementMission.builder()
+  @Override
+  public SettlementMission transform(TradeAgreement agreement) {
+    SettlementMission mission =
+        SettlementMission.builder()
             .instrument(agreement.getInstrument())
             .externalParty(agreement.getExternalParty())
             .depot("DTC")
             .qty(agreement.getQty())
             .direction("B".equals(agreement.getBuySell()) ? "REC" : "DEL")
             .proceeds(agreement.getProceeds())
-            .usdProceeds(proceedsCalc.getUSDProceeds(agreement.getProceeds()))
+            .usdProceeds(proceedsCalc.getUsdProceeds(agreement.getProceeds()))
             .build();
 
-        log.info(mission.toString());
-        return mission;
-    }
+    log.info(mission.toString());
+    return mission;
+  }
 }

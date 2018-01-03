@@ -1,8 +1,8 @@
 package org.galatea.starter.service;
 
 import org.galatea.starter.ASpringTest;
-import org.galatea.starter.domain.FXRateResponse;
-import org.galatea.starter.service.client.IFXRestClient;
+import org.galatea.starter.domain.FxRateResponse;
+import org.galatea.starter.service.client.IFxRestClient;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
 import org.junit.Before;
@@ -19,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 public class ProceedsCalculatorTest extends ASpringTest {
 
 	@MockBean
-	private IFXRestClient restClient;
+	private IFxRestClient restClient;
 
 	private IProceedsCalculator proceedsCalc;
 
@@ -37,10 +37,10 @@ public class ProceedsCalculatorTest extends ASpringTest {
 	public void testGetUSDProceedsSuccess() {
 
 		given(restClient.getRate(proceeds.getCurrencyUnit().getCode()))
-				.willReturn(FXRateResponse.builder().baseCurrency(CurrencyUnit.of("GBP"))
+				.willReturn(FxRateResponse.builder().baseCurrency(CurrencyUnit.of("GBP"))
 						.exchangeRate(BigDecimal.valueOf(1.33d)).validOn(LocalDate.now()).build());
 
-		USDProceeds = proceedsCalc.getUSDProceeds(proceeds);
+		USDProceeds = proceedsCalc.getUsdProceeds(proceeds);
 
 		// this works but doesn't feel correct 
 		assertTrue(BigMoney.of(CurrencyUnit.of("USD"), 133d).compareTo(USDProceeds) == 0);
@@ -55,7 +55,7 @@ public class ProceedsCalculatorTest extends ASpringTest {
 		// case when the initial currency is USD already, so we expect the same result
 		// back.
 		proceeds = BigMoney.of(CurrencyUnit.of("USD"), BigDecimal.valueOf(100));
-		USDProceeds = proceedsCalc.getUSDProceeds(proceeds);
+		USDProceeds = proceedsCalc.getUsdProceeds(proceeds);
 
 		assertEquals(proceeds, USDProceeds);
 	}
