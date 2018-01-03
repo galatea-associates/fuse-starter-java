@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(name = "fxrates", url = "${client.fx-rate}", configuration = FxRestClientConfig.class)
 public interface IFxRestClient {
 
-  // base = "GBP" would query https://api.fixer.io/latest?base=GBP&symbols=USD
+  // base = "GBP" would query http://api.fixer.io/latest?base=GBP&symbols=USD
   @RequestMapping(method = RequestMethod.GET, value = "/latest?base={base}&symbols=USD")
   FxRateResponse getRate(@PathVariable("base") String base);
 }

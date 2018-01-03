@@ -35,7 +35,7 @@ public class FxRateResponseDeserializerTest {
     deserializer = new FxRateResponseDeserializer();
     mapper = new ObjectMapper();
     context = mapper.getDeserializationContext();
-    responseJson = getJsonFromFile("FXRateResponse/Correct_FX_Response.json");
+    responseJson = getJsonFromFile("FxRateResponse/Correct_FX_Response.json");
   }
 
   @Test
@@ -56,7 +56,7 @@ public class FxRateResponseDeserializerTest {
     JsonParser jsonParser =
         mapper
             .getFactory()
-            .createParser(getJsonFromFile("FXRateResponse/Incorrect_Fields_FX_Response.json"));
+            .createParser(getJsonFromFile("FxRateResponse/Incorrect_Fields_FX_Response.json"));
     FxRateResponse response = deserializer.deserialize(jsonParser, context);
   }
 
@@ -68,7 +68,7 @@ public class FxRateResponseDeserializerTest {
     JsonParser jsonParser =
         mapper
             .getFactory()
-            .createParser(getJsonFromFile("FXRateResponse/Missing_Field_FX_Response.json"));
+            .createParser(getJsonFromFile("FxRateResponse/Missing_Field_FX_Response.json"));
     FxRateResponse response = deserializer.deserialize(jsonParser, context);
   }
 
@@ -82,7 +82,7 @@ public class FxRateResponseDeserializerTest {
         mapper
             .getFactory()
             .createParser(
-                getJsonFromFile("FXRateResponse/Missing_Incorrect_Fields_FX_Response.json"));
+                getJsonFromFile("FxRateResponse/Missing_Incorrect_Fields_FX_Response.json"));
     FxRateResponse response = deserializer.deserialize(jsonParser, context);
   }
 
@@ -120,7 +120,7 @@ public class FxRateResponseDeserializerTest {
     expectedException.expectMessage("Unable to parse date from FX Rate API.");
 
     String incorrectResponseJson =
-        getJsonFromFile("FXRateResponse/Incorrect_Fields_FX_Response.json");
+        getJsonFromFile("FxRateResponse/Incorrect_Fields_FX_Response.json");
     JsonNode node = mapper.readTree(incorrectResponseJson);
     LocalDate validOn = deserializer.getDate(node);
   }
