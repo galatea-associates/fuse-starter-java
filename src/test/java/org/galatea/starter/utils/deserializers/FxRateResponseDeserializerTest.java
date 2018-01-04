@@ -43,9 +43,9 @@ public class FxRateResponseDeserializerTest {
     JsonParser jsonParser = mapper.getFactory().createParser(responseJson);
     FxRateResponse response = deserializer.deserialize(jsonParser, context);
 
-    assertEquals(response.getExchangeRate(), BigDecimal.valueOf(1.3467));
-    assertEquals(response.getBaseCurrency(), CurrencyUnit.GBP);
-    assertEquals(response.getValidOn(), LocalDate.parse("2017-11-30"));
+    assertEquals( BigDecimal.valueOf(1.3467), response.getExchangeRate());
+    assertEquals(CurrencyUnit.GBP, response.getBaseCurrency());
+    assertEquals(LocalDate.parse("2017-11-30"), response.getValidOn());
   }
 
   @Test
@@ -94,7 +94,7 @@ public class FxRateResponseDeserializerTest {
     expected.put("base", JsonNodeType.STRING);
     expected.put("rates", JsonNodeType.OBJECT);
 
-    assertEquals(fieldMap, expected);
+    assertEquals(expected, fieldMap);
   }
 
   @Test
@@ -103,7 +103,7 @@ public class FxRateResponseDeserializerTest {
     HashMap<String, JsonNodeType> expected = new HashMap<>();
     expected.put("USD", JsonNodeType.NUMBER);
 
-    assertEquals(fieldMap, expected);
+    assertEquals(expected, fieldMap);
   }
 
   @Test
@@ -111,7 +111,7 @@ public class FxRateResponseDeserializerTest {
     JsonNode node = mapper.readTree(responseJson);
     LocalDate validOn = deserializer.getDate(node);
 
-    assertEquals(validOn, LocalDate.parse("2017-11-30"));
+    assertEquals(LocalDate.parse("2017-11-30"), validOn);
   }
 
   @Test

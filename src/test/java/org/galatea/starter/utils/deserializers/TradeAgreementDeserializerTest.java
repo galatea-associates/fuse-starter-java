@@ -42,12 +42,12 @@ public class TradeAgreementDeserializerTest {
     JsonParser jsonParser = mapper.getFactory().createParser(agreementJson);
     TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
 
-    assertEquals(agreement.getInstrument(), "IBM");
-    assertEquals(agreement.getInternalParty(), "INT-1");
-    assertEquals(agreement.getExternalParty(), "EXT-1");
-    assertEquals(agreement.getBuySell(), "B");
-    assertEquals(agreement.getQty(), new Double(100.0));
-    assertEquals(agreement.getProceeds(), BigMoney.parse("GBP 100"));
+    assertEquals("IBM", agreement.getInstrument());
+    assertEquals("INT-1", agreement.getInternalParty());
+    assertEquals("EXT-1", agreement.getExternalParty());
+    assertEquals("B", agreement.getBuySell());
+    assertEquals(new Double(100.0), agreement.getQty());
+    assertEquals(BigMoney.parse("GBP 100"), agreement.getProceeds());
   }
 
   @Test
@@ -100,7 +100,7 @@ public class TradeAgreementDeserializerTest {
     expectedMap.put("qty", JsonNodeType.NUMBER);
     expectedMap.put("proceeds", JsonNodeType.STRING);
 
-    assertEquals(fieldMap, expectedMap);
+    assertEquals(expectedMap, fieldMap);
   }
 
   @Test
@@ -108,7 +108,7 @@ public class TradeAgreementDeserializerTest {
     JsonNode node = mapper.readTree(agreementJson);
     BigMoney proceeds = deserializer.getProceeds(node);
 
-    assertEquals(proceeds, BigMoney.parse("GBP 100"));
+    assertEquals(BigMoney.parse("GBP 100"), proceeds);
   }
 
   @Test

@@ -54,9 +54,9 @@ public class IFxRestClientTest {
 
         FxRateResponse response = restClient.getRate("GBP");
 
-        assertEquals(response.getExchangeRate(), BigDecimal.valueOf(1.3467));
-        assertEquals(response.getBaseCurrency(), CurrencyUnit.GBP);
-        assertEquals(response.getValidOn(), LocalDate.parse("2017-11-30"));
+        assertEquals(BigDecimal.valueOf(1.3467), response.getExchangeRate());
+        assertEquals(CurrencyUnit.GBP, response.getBaseCurrency());
+        assertEquals(LocalDate.parse("2017-11-30"), response.getValidOn());
     }
 
     public static class RandomPortInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
