@@ -20,9 +20,11 @@ import javax.jms.Message;
 @Slf4j
 public class FuseJmsListenerContainerFactory extends DefaultJmsListenerContainerFactory {
 
-  @NonNull protected FuseTraceRepository repository;
+  @NonNull
+  protected FuseTraceRepository repository;
 
-  @NonNull protected BiConsumer<Message, Exception> failedMessageConsumer;
+  @NonNull
+  protected BiConsumer<Message, Exception> failedMessageConsumer;
 
   @Override
   protected DefaultMessageListenerContainer createContainerInstance() {

@@ -16,7 +16,8 @@ import java.math.BigDecimal;
 @Slf4j
 public class ProceedsCalculator implements IProceedsCalculator {
 
-  @NonNull IFxRestClient upstreamService;
+  @NonNull
+  IFxRestClient upstreamService;
 
   @Override
   public BigMoney getUsdProceeds(BigMoney base) {

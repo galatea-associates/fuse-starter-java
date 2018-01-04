@@ -34,17 +34,24 @@ public class SettlementMission {
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
 
-  @NonNull protected String instrument;
+  @NonNull
+  protected String instrument;
 
-  @NonNull protected String externalParty;
+  @NonNull
+  protected String externalParty;
 
-  @NonNull protected String depot;
+  @NonNull
+  protected String depot;
 
-  @NonNull protected String direction;
+  @NonNull
+  protected String direction;
 
-  @NonNull protected Double qty;
+  @NonNull
+  protected Double qty;
 
-  @NonNull protected BigMoney proceeds;
+  @NonNull
+  protected BigMoney proceeds;
 
-  @NonNull protected BigMoney usdProceeds;
+  @NonNull
+  protected BigMoney usdProceeds;
 }

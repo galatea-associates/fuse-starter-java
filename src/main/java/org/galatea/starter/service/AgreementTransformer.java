@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AgreementTransformer implements IAgreementTransformer {
 
-  @NonNull IProceedsCalculator proceedsCalc;
+  @NonNull
+  IProceedsCalculator proceedsCalc;
 
   @Override
   public SettlementMission transform(TradeAgreement agreement) {

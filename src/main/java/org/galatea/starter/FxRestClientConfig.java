@@ -17,7 +17,9 @@ public class FxRestClientConfig {
 
   ObjectMapper objectMapper;
 
-  /** * Create custom ObjectMapper for JacksonDecoder. */
+  /**
+   * Create custom ObjectMapper for JacksonDecoder.
+   */
   public FxRestClientConfig() {
     objectMapper = new ObjectMapper();
     objectMapper.registerModule(

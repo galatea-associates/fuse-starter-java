@@ -15,7 +15,9 @@ import java.util.Map;
 @Slf4j
 public class FuseTraceRepository extends InMemoryTraceRepository {
 
-  /** Adds the information in the current trace to our repository. */
+  /**
+   * Adds the information in the current trace to our repository.
+   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void addTraceInfo() {
     Map<String, Map<String, Object>> traceInfo = Tracer.getFlattenedCopyOfTraceInfo();

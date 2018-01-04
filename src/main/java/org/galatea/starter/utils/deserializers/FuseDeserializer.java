@@ -40,7 +40,7 @@ public abstract class FuseDeserializer extends StdDeserializer {
       throw new IOException(
           String.format("Received JSON did not contain: %s", missingFields.toString())
               + String.format(
-                  " & had the following invalid field types: %s", incorrectFields.toString()));
+              " & had the following invalid field types: %s", incorrectFields.toString()));
     } else if (!missingFields.isEmpty()) {
       throw new IOException(
           String.format("Received JSON did not contain: %s", missingFields.toString()));

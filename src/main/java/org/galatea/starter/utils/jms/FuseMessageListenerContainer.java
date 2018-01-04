@@ -27,9 +27,11 @@ import javax.jms.TextMessage;
 @EqualsAndHashCode(callSuper = true)
 public class FuseMessageListenerContainer extends DefaultMessageListenerContainer {
 
-  @NonNull protected FuseTraceRepository repository;
+  @NonNull
+  protected FuseTraceRepository repository;
 
-  @NonNull protected BiConsumer<Message, Exception> failedMessageConsumer;
+  @NonNull
+  protected BiConsumer<Message, Exception> failedMessageConsumer;
 
   public static final String UNK = "UNKNOWN";
 

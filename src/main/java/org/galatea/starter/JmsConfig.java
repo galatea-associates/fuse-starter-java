@@ -29,7 +29,7 @@ public class JmsConfig implements JmsListenerConfigurer {
 
   /**
    * @return an implementation of failed message consumer that simply logs the message.
-   * */
+   */
   @Bean
   public BiConsumer<Message, Exception> failedMessageConsumer() {
     return (msg, err) ->
@@ -75,7 +75,7 @@ public class JmsConfig implements JmsListenerConfigurer {
 
   /**
    * @return a new handler factory that uses a different message converter than the default one.
-   * */
+   */
   @Bean
   public MessageHandlerMethodFactory jmsHandlerMethodFactory() {
     DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();

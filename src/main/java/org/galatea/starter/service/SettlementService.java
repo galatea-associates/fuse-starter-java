@@ -27,9 +27,11 @@ import java.util.stream.StreamSupport;
 @Service
 public class SettlementService {
 
-  @NonNull ISettlementMissionRpsy missionrpsy;
+  @NonNull
+  ISettlementMissionRpsy missionrpsy;
 
-  @NonNull IAgreementTransformer agreementTransformer;
+  @NonNull
+  IAgreementTransformer agreementTransformer;
 
   /**
    * Create missions based on the agreements provided.

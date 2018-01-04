@@ -7,7 +7,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
-/** This is the entry point for the application. */
+/**
+ * This is the entry point for the application.
+ */
 @RequiredArgsConstructor
 @Slf4j
 @SpringBootApplication

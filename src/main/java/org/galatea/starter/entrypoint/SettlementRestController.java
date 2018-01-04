@@ -38,7 +38,8 @@ import java.util.stream.Collectors;
 @RestController
 public class SettlementRestController {
 
-  @NonNull SettlementService settlementService;
+  @NonNull
+  SettlementService settlementService;
 
   public static final String SETTLE_MISSION_PATH = "/settlementEngine";
   public static final String GET_MISSION_PATH = SETTLE_MISSION_PATH + "/mission/";
@@ -48,7 +49,9 @@ public class SettlementRestController {
     this.settlementService = settlementService;
   }
 
-  /** Generate Missions from a provided TradeAgreement. */
+  /**
+   * Generate Missions from a provided TradeAgreement.
+   */
   // @PostMapping to link http POST requests to this method
   // @RequestBody to have the post request body deserialized into a list of TradeAgreement objects
   @PostMapping(
@@ -68,7 +71,9 @@ public class SettlementRestController {
     return ResponseEntity.accepted().body(missionIdUris);
   }
 
-  /** Retrieve a previously generated Mission. */
+  /**
+   * Retrieve a previously generated Mission.
+   */
   // @GetMapping to link http GET requests to this method
   // @PathVariable to take the id from the path and make it available as a method argument
   // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
@@ -91,7 +96,9 @@ public class SettlementRestController {
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
-  /** Adds the specified requestId to the context for this request (if not null). */
+  /**
+   * Adds the specified requestId to the context for this request (if not null).
+   */
   private void processRequestId(String requestId) {
     if (requestId != null) {
       log.info("Request received with id: {}", requestId);

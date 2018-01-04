@@ -45,11 +45,14 @@ import javax.servlet.http.HttpServletResponseWrapper;
 // TODO what is this class meant to do? Why's it exist? How's it work its mojo?
 public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
 
-  @NonNull protected final Integer maxPayloadLength;
+  @NonNull
+  protected final Integer maxPayloadLength;
 
-  @NonNull protected final FuseTraceRepository repository;
+  @NonNull
+  protected final FuseTraceRepository repository;
 
-  @NonNull protected final Predicate<String> pathsToSkip;
+  @NonNull
+  protected final Predicate<String> pathsToSkip;
 
   public static final String REQUEST_PAYLOAD = "request-payload";
   public static final String RESPONSE_PAYLOAD = "response-payload";
@@ -139,7 +142,9 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     }
   }
 
-  /** Adds audit information about the request/response to the response headers. */
+  /**
+   * Adds audit information about the request/response to the response headers.
+   */
   private void addAuditHeaders(final HttpServletResponse response) {
     log.info("Attempting to add audit headers");
     logAndAddAuditHeader(
@@ -155,7 +160,9 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     logAndAddAuditHeader(response, "requestElapsedTimeMillis", requestElapsedTimeMillis);
   }
 
-  /** Logs header name/value and adds them to the response. */
+  /**
+   * Logs header name/value and adds them to the response.
+   */
   private void logAndAddAuditHeader(
       HttpServletResponse response, String headerName, String headerValue) {
     log.debug("Adding audit header {}={}", headerName, headerValue);

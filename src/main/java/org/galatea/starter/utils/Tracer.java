@@ -51,7 +51,8 @@ public class Tracer {
         }
       };
 
-  private Tracer() {}
+  private Tracer() {
+  }
 
   /**
    * Helper method to create a key given a Class and key. The Class acts as a namespace to reduce
@@ -213,7 +214,9 @@ public class Tracer {
       addTraceInfo(Tracer.class, TRACE_SW_SUMMARY, sw.getTotalTimeMillis());
     }
 
-    /** Deletes all of the data in the current trace. */
+    /**
+     * Deletes all of the data in the current trace.
+     */
     private void clearTrace() {
       traceInfo.get().clear();
     }
