@@ -1,4 +1,3 @@
-
 package org.galatea.starter.utils;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
@@ -24,7 +23,6 @@ import java.util.concurrent.locks.Lock;
  * in-line the code in the existing method.
  *
  * @author rbasu
- *
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Accessors(fluent = true, chain = true)
@@ -33,17 +31,13 @@ import java.util.concurrent.locks.Lock;
 @Slf4j
 public class Runner {
 
-  @Setter
-  protected Lock lock;
+  @Setter protected Lock lock;
 
-  @NonNull
-  protected Runnable op;
+  @NonNull protected Runnable op;
 
-  @Setter
-  protected StopWatch timer;
+  @Setter protected StopWatch timer;
 
-  @Setter
-  protected String taskName = "";
+  @Setter protected String taskName = "";
 
   public static Runner of(final Runnable op) {
     return new Runner(op);
@@ -81,9 +75,7 @@ public class Runner {
     };
   }
 
-  /**
-   * Attaches the provided suffix to the current thread name and then invokes call.call().
-   */
+  /** Attaches the provided suffix to the current thread name and then invokes call.call(). */
   public static <T> T setThreadAndCall(final Callable<T> call, final String suffix)
       throws Exception {
     if (suffix.isEmpty()) {

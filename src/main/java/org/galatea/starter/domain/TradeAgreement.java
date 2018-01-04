@@ -37,21 +37,15 @@ public class TradeAgreement {
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
 
-  @NonNull
-  protected String instrument;
+  @NonNull protected String instrument;
 
-  @NonNull
-  protected String internalParty;
+  @NonNull protected String internalParty;
 
-  @NonNull
-  protected String externalParty;
+  @NonNull protected String externalParty;
 
-  @NonNull
-  protected String buySell;
+  @NonNull protected String buySell;
 
-  @NonNull
-  protected Double qty;
+  @NonNull protected Double qty;
 
-  @NonNull
-  protected BigMoney proceeds;
+  @NonNull protected BigMoney proceeds;
 }

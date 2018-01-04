@@ -2,9 +2,11 @@ package org.galatea.starter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+
 import feign.Logger;
 import feign.codec.Decoder;
 import feign.jackson.JacksonDecoder;
+
 import org.galatea.starter.domain.FxRateResponse;
 import org.galatea.starter.utils.deserializers.FxRateResponseDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +17,7 @@ public class FxRestClientConfig {
 
   ObjectMapper objectMapper;
 
-  /*** Create custom ObjectMapper for JacksonDecoder. */
+  /** * Create custom ObjectMapper for JacksonDecoder. */
   public FxRestClientConfig() {
     objectMapper = new ObjectMapper();
     objectMapper.registerModule(

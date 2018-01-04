@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.galatea.starter.domain.TradeAgreement;
 import org.joda.money.BigMoney;
 

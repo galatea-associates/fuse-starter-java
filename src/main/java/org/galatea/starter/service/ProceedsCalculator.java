@@ -3,6 +3,7 @@ package org.galatea.starter.service;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.galatea.starter.service.client.IFxRestClient;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
@@ -15,8 +16,7 @@ import java.math.BigDecimal;
 @Slf4j
 public class ProceedsCalculator implements IProceedsCalculator {
 
-  @NonNull
-  IFxRestClient upstreamService;
+  @NonNull IFxRestClient upstreamService;
 
   @Override
   public BigMoney getUsdProceeds(BigMoney base) {

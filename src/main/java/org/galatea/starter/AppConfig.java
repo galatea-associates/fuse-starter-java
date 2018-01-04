@@ -17,5 +17,4 @@ public class AppConfig {
   public LogAspect createLogAspect() {
     return new LogAspect();
   }
-
 }

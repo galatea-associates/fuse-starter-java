@@ -10,12 +10,13 @@ import static org.junit.Assert.assertEquals;
 
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 
+import feign.FeignException;
+
 import org.galatea.starter.domain.FxRateResponse;
 import org.joda.money.CurrencyUnit;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +31,11 @@ import org.springframework.test.context.support.TestPropertySourceUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import feign.FeignException;
-
 /** This test is based upon https://stackoverflow.com/a/45643183 */
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "client.fx-rate=http://api.fixer.io")
 @ContextConfiguration(initializers = IFxRestClientTest.RandomPortInitializer.class)
 @EnableFeignClients(clients = IFxRestClient.class)
-@Category(org.galatea.starter.IntegrationTestCategory.class)
 public class IFxRestClientTest {
 
   @ClassRule

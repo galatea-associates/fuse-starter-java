@@ -1,4 +1,3 @@
-
 package org.galatea.starter.utils.jms;
 
 import lombok.EqualsAndHashCode;
@@ -15,22 +14,18 @@ import java.util.function.BiConsumer;
 
 import javax.jms.Message;
 
-
 @RequiredArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
 public class FuseJmsListenerContainerFactory extends DefaultJmsListenerContainerFactory {
 
-  @NonNull
-  protected FuseTraceRepository repository;
+  @NonNull protected FuseTraceRepository repository;
 
-  @NonNull
-  protected BiConsumer<Message, Exception> failedMessageConsumer;
+  @NonNull protected BiConsumer<Message, Exception> failedMessageConsumer;
 
   @Override
   protected DefaultMessageListenerContainer createContainerInstance() {
     return new FuseMessageListenerContainer(repository, failedMessageConsumer);
   }
-
 }

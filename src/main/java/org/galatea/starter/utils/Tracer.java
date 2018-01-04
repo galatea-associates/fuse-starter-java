@@ -1,4 +1,3 @@
-
 package org.galatea.starter.utils;
 
 import com.google.common.collect.Maps;
@@ -73,8 +72,8 @@ public class Tracer {
    * @param key The key identifier
    * @param val The value
    */
-  public static void addTraceInfo(@NonNull final Class<?> clz, @NonNull final String key,
-      @NonNull final Object val) {
+  public static void addTraceInfo(
+      @NonNull final Class<?> clz, @NonNull final String key, @NonNull final Object val) {
     traceInfo.get().put(keyOf(clz, key), val);
   }
 
@@ -112,13 +111,18 @@ public class Tracer {
   public static Map<String, Map<String, Object>> getFlattenedCopyOfTraceInfo() {
     Map<String, Map<String, Object>> flatMap = new HashMap<>(traceInfo.get().size());
 
-    traceInfo.get().forEach((mk, obj) -> {
-      String clzName = mk.getKey(0);
-      String traceKey = mk.getKey(1);
-      if (!clzName.isEmpty()) {
-        flatMap.computeIfAbsent(clzName, name -> new HashMap<String, Object>()).put(traceKey, obj);
-      }
-    });
+    traceInfo
+        .get()
+        .forEach(
+            (mk, obj) -> {
+              String clzName = mk.getKey(0);
+              String traceKey = mk.getKey(1);
+              if (!clzName.isEmpty()) {
+                flatMap
+                    .computeIfAbsent(clzName, name -> new HashMap<String, Object>())
+                    .put(traceKey, obj);
+              }
+            });
 
     return flatMap;
   }
@@ -128,7 +132,6 @@ public class Tracer {
    * makes starting/stopping the trace easy.
    *
    * @author rbasu
-   *
    */
   public static class AutoClosedTrace implements AutoCloseable {
 
@@ -210,9 +213,7 @@ public class Tracer {
       addTraceInfo(Tracer.class, TRACE_SW_SUMMARY, sw.getTotalTimeMillis());
     }
 
-    /**
-     * Deletes all of the data in the current trace.
-     */
+    /** Deletes all of the data in the current trace. */
     private void clearTrace() {
       traceInfo.get().clear();
     }
