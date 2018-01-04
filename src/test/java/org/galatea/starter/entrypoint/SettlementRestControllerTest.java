@@ -13,14 +13,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.google.common.collect.Sets;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+
+import junitparams.FileParameters;
+import junitparams.JUnitParamsRunner;
 
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.SettlementMission;
@@ -41,9 +43,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import junitparams.FileParameters;
-import junitparams.JUnitParamsRunner;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -127,7 +126,6 @@ public class SettlementRestControllerTest extends ASpringTest {
         .usdProceeds(usdProceeds)
         .build();
     log.info("Test mission: {}", testMission);
-
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(testMission));

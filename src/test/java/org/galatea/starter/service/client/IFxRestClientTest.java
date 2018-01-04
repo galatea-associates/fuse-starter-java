@@ -32,7 +32,9 @@ import org.springframework.test.context.support.TestPropertySourceUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-/** This test is based upon https://stackoverflow.com/a/45643183 */
+/**
+ * This test is based upon https://stackoverflow.com/a/45643183
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "client.fx-rate=http://api.fixer.io")
 @ContextConfiguration(initializers = IFxRestClientTest.RandomPortInitializer.class)
@@ -44,9 +46,11 @@ public class IFxRestClientTest {
   public static WireMockClassRule wireMockRule =
       new WireMockClassRule(wireMockConfig().dynamicPort());
 
-  @Rule public ExpectedException expectedException = ExpectedException.none();
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
 
-  @Autowired public IFxRestClient restClient;
+  @Autowired
+  public IFxRestClient restClient;
 
   @Test
   public void testGetRate() throws Exception {

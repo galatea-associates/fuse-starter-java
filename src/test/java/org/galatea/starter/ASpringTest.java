@@ -1,7 +1,8 @@
-
 package org.galatea.starter;
 
 import lombok.extern.slf4j.Slf4j;
+
+import junitparams.mappers.IdentityMapper;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -20,8 +21,6 @@ import java.io.Reader;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import junitparams.mappers.IdentityMapper;
-
 @Slf4j
 @ActiveProfiles("dev")
 public abstract class ASpringTest {
@@ -37,7 +36,6 @@ public abstract class ASpringTest {
 
   /**
    * Pipe delimited mapper used for parameterized unit tests run by JUnitParamsRunner.class
-   *
    */
   public static class JsonTestFileMapper extends IdentityMapper {
 
@@ -46,7 +44,8 @@ public abstract class ASpringTest {
     @Override
     public Object[] map(Reader reader) {
       Object[] lines = super.map(reader);
-      return Arrays.stream(lines).map(objLine -> (String) objLine).filter(line -> !line.trim().isEmpty())
+      return Arrays.stream(lines).map(objLine -> (String) objLine)
+          .filter(line -> !line.trim().isEmpty())
           .map(line -> line.split(DELIM)).collect(Collectors.toList()).toArray();
     }
 
@@ -61,7 +60,6 @@ public abstract class ASpringTest {
    * The ActiveMQ broker isn't automatically shutdown after each test, so this step ensures we are
    * shutting it down. Otherwise, you may have old mocks injected into the listeners when you run
    * future tests. Subclasses that override this method should make sure to do a super call
-   *
    */
   @After
   public void cleanup() {

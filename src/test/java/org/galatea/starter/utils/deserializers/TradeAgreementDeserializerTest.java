@@ -1,11 +1,16 @@
 package org.galatea.starter.utils.deserializers;
 
+import static org.galatea.starter.Utilities.getJsonFromFile;
+import static org.junit.Assert.assertEquals;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.galatea.starter.domain.TradeAgreement;
 import org.joda.money.BigMoney;
 import org.junit.Before;
@@ -16,9 +21,6 @@ import org.junit.rules.ExpectedException;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.galatea.starter.Utilities.getJsonFromFile;
-import static org.junit.Assert.assertEquals;
-
 @Slf4j
 public class TradeAgreementDeserializerTest {
 
@@ -27,7 +29,8 @@ public class TradeAgreementDeserializerTest {
   private DeserializationContext context;
   private String agreementJson;
 
-  @Rule public ExpectedException expectedException = ExpectedException.none();
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
 
   @Before
   public void setUp() throws Exception {

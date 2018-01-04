@@ -1,8 +1,8 @@
 package org.galatea.starter.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 import org.galatea.starter.ASpringTest;
@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class SettlementServiceTest extends ASpringTest {
+
   @MockBean
   private ISettlementMissionRpsy mockSettlementMissionRpsy;
 

@@ -1,5 +1,8 @@
 package org.galatea.starter.utils.deserializers;
 
+import static org.galatea.starter.Utilities.getJsonFromFile;
+import static org.junit.Assert.assertEquals;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,9 +21,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-import static org.galatea.starter.Utilities.getJsonFromFile;
-import static org.junit.Assert.assertEquals;
-
 public class FxRateResponseDeserializerTest {
 
   private FxRateResponseDeserializer deserializer;
@@ -28,7 +28,8 @@ public class FxRateResponseDeserializerTest {
   private DeserializationContext context;
   private String responseJson;
 
-  @Rule public ExpectedException expectedException = ExpectedException.none();
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
 
   @Before
   public void setUp() throws Exception {
@@ -43,7 +44,7 @@ public class FxRateResponseDeserializerTest {
     JsonParser jsonParser = mapper.getFactory().createParser(responseJson);
     FxRateResponse response = deserializer.deserialize(jsonParser, context);
 
-    assertEquals( BigDecimal.valueOf(1.3467), response.getExchangeRate());
+    assertEquals(BigDecimal.valueOf(1.3467), response.getExchangeRate());
     assertEquals(CurrencyUnit.GBP, response.getBaseCurrency());
     assertEquals(LocalDate.parse("2017-11-30"), response.getValidOn());
   }
