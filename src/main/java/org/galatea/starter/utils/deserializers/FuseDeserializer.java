@@ -6,8 +6,9 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class FuseDeserializer extends StdDeserializer {
 
@@ -22,33 +23,26 @@ public abstract class FuseDeserializer extends StdDeserializer {
 
   protected JsonNode checkNode(JsonNode node, HashMap<String, JsonNodeType> fieldInfo)
       throws IOException {
-    ArrayList<String> missingFields = new ArrayList<>();
-    ArrayList<String> incorrectFields = new ArrayList<>();
 
-    for (String key : fieldInfo.keySet()) {
-      if (node.has(key)) {
-        if (!node.get(key).getNodeType().equals(fieldInfo.get(key))) {
-          incorrectFields.add(key);
-        }
-      } else {
-        missingFields.add(key);
-      }
-    }
+    List<String> missingFields = fieldInfo.keySet()
+        .stream()
+        .filter(k -> !node.has(k))
+        .collect(Collectors.toList());
 
-    // More eloquent way of doing this?
+    List<String> incorrectFields = fieldInfo.keySet()
+        .stream()
+        .filter(k -> node.has(k) && !node.get(k).getNodeType().equals(fieldInfo.get(k)))
+        .collect(Collectors.toList());
+
     if (!missingFields.isEmpty() && !incorrectFields.isEmpty()) {
-      throw new IOException(
-          String.format("Received JSON did not contain: %s", missingFields.toString())
-              + String.format(
-              " & had the following invalid field types: %s", incorrectFields.toString()));
+      throw new IOException(String
+          .format("Received JSON did not contain: %s & had the following invalid field types: %s",
+              missingFields, incorrectFields));
     } else if (!missingFields.isEmpty()) {
-      throw new IOException(
-          String.format("Received JSON did not contain: %s", missingFields.toString()));
+      throw new IOException(String.format("Received JSON did not contain: %s", missingFields));
     } else if (!incorrectFields.isEmpty()) {
-      throw new IOException(
-          String.format(
-              "Received JSON had the following invalid field types: %s",
-              incorrectFields.toString()));
+      throw new IOException(String
+          .format("Received JSON had the following invalid field types: %s", incorrectFields));
     }
 
     return node;
