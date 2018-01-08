@@ -5,7 +5,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static org.galatea.starter.Utilities.getJsonFromFile;
+import static org.galatea.starter.TestUtilities.getJsonFromFile;
 import static org.junit.Assert.assertEquals;
 
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
@@ -33,7 +33,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * This test is based upon https://stackoverflow.com/a/45643183
+ * This test is based upon https://stackoverflow.com/a/45643183 It's not really an integration test but
+ * can't be run with unit tests due to required set up.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "client.fx-rate=http://api.fixer.io")

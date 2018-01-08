@@ -18,7 +18,8 @@ public class FxRestClientConfig {
   ObjectMapper objectMapper;
 
   /**
-   * Create custom ObjectMapper for JacksonDecoder.
+   * Need a custom deserializer as FxRateResponse has non-primitive types.
+   * Have to attach FxRateResponseDeserializer to JacksonDecoder via an ObjectMapper.
    */
   public FxRestClientConfig() {
     objectMapper = new ObjectMapper();
@@ -26,16 +27,11 @@ public class FxRestClientConfig {
         new SimpleModule().addDeserializer(FxRateResponse.class, new FxRateResponseDeserializer()));
   }
 
-  // To see the log levels available:
-  // https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#_feign_logging
-  // Should probably set this up to be full in test, then limited in prod
   @Bean
   public Logger.Level feignLoggerLevel() {
     return Logger.Level.FULL;
   }
 
-  // https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#spring-cloud-feign-overriding-defaults
-  // https://stackoverflow.com/questions/35853908/how-to-set-custom-jackson-objectmapper-with-spring-cloud-netflix-feign
   @Bean
   public Decoder feignDecoder() {
     return new JacksonDecoder(objectMapper);

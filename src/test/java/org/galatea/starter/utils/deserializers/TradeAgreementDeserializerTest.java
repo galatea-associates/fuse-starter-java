@@ -1,6 +1,6 @@
 package org.galatea.starter.utils.deserializers;
 
-import static org.galatea.starter.Utilities.getJsonFromFile;
+import static org.galatea.starter.TestUtilities.getJsonFromFile;
 import static org.junit.Assert.assertEquals;
 
 import com.fasterxml.jackson.core.JsonParser;

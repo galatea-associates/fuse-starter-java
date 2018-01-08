@@ -1,7 +1,7 @@
 package org.galatea.starter.entrypoint;
 
-import static org.galatea.starter.Utilities.getJsonFromFile;
-import static org.galatea.starter.Utilities.getTradeAgreement;
+import static org.galatea.starter.TestUtilities.getJsonFromFile;
+import static org.galatea.starter.TestUtilities.getTradeAgreement;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 

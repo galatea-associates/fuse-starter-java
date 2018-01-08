@@ -11,7 +11,7 @@ import org.galatea.starter.domain.TradeAgreement;
 import org.joda.money.BigMoney;
 
 @Slf4j
-public class Utilities {
+public class TestUtilities {
 
   public static TradeAgreement getTradeAgreement() throws Exception {
     JsonNode node = getJsonNodeFromFile("TradeAgreement/Correct_IBM_Agreement.json");
