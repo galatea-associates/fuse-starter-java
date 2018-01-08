@@ -15,25 +15,20 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FxRestClientConfig {
 
-  ObjectMapper objectMapper;
-
-  /**
-   * Need a custom deserializer as FxRateResponse has non-primitive types.
-   * Have to attach FxRateResponseDeserializer to JacksonDecoder via an ObjectMapper.
-   */
-  public FxRestClientConfig() {
-    objectMapper = new ObjectMapper();
-    objectMapper.registerModule(
-        new SimpleModule().addDeserializer(FxRateResponse.class, new FxRateResponseDeserializer()));
-  }
-
   @Bean
   public Logger.Level feignLoggerLevel() {
     return Logger.Level.FULL;
   }
 
+  /**
+   * Need a custom deserializer as FxRateResponse has non-primitive types. Have to attach
+   * FxRateResponseDeserializer to JacksonDecoder via an ObjectMapper.
+   */
   @Bean
   public Decoder feignDecoder() {
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(
+        new SimpleModule().addDeserializer(FxRateResponse.class, new FxRateResponseDeserializer()));
     return new JacksonDecoder(objectMapper);
   }
 }
