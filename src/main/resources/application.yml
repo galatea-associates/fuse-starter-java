@@ -14,9 +14,6 @@ mvc:
 jms:
    listener-concurrency: 1-5
    agreement-queue: sandbox.agreement
-logging:
-   level:
-      org.galatea.starter.service.client.IFxRestClient: DEBUG
 client:
     fx-rate: http://api.fixer.io
 ---
@@ -33,6 +30,9 @@ spring:
    datasource:
       username: sa
       password:
+logging:
+    level:
+      org.galatea.starter.service.client.IFxRestClient: DEBUG
 ---
 # UAT properties go here
 spring:
