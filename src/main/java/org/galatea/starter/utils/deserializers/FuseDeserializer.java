@@ -38,9 +38,13 @@ public abstract class FuseDeserializer extends StdDeserializer {
       throw new IOException(String
           .format("Received JSON did not contain: %s & had the following invalid field types: %s",
               missingFields, incorrectFields));
-    } else if (!missingFields.isEmpty()) {
+    }
+
+    if (!missingFields.isEmpty()) {
       throw new IOException(String.format("Received JSON did not contain: %s", missingFields));
-    } else if (!incorrectFields.isEmpty()) {
+    }
+
+    if (!incorrectFields.isEmpty()) {
       throw new IOException(String
           .format("Received JSON had the following invalid field types: %s", incorrectFields));
     }
@@ -48,3 +52,6 @@ public abstract class FuseDeserializer extends StdDeserializer {
     return node;
   }
 }
+
+
+
