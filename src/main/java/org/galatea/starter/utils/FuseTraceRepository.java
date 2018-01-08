@@ -1,4 +1,3 @@
-
 package org.galatea.starter.utils;
 
 import lombok.EqualsAndHashCode;

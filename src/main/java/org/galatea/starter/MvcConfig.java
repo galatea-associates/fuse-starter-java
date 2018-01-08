@@ -1,4 +1,3 @@
-
 package org.galatea.starter;
 
 import com.google.common.collect.Sets;
@@ -30,15 +29,20 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
    * @return the trace filter
    */
   @Bean
-  public WebRequestTraceFilter webRequestLoggingFilter(final TraceProperties traceProperties,
+  public WebRequestTraceFilter webRequestLoggingFilter(
+      final TraceProperties traceProperties,
       final ObjectProvider<ErrorAttributes> errorAttributesProvider,
       @Value("${mvc.max-size-trace-payload}") final int maxTracePayloadSize) {
 
     // Trace everything!
     traceProperties.setInclude(Sets.newHashSet(TraceProperties.Include.values()));
 
-    WebRequestTraceFilter filter = new FuseWebRequestTraceFilter(traceRepository(), traceProperties,
-        path -> path.startsWith("/trace"), maxTracePayloadSize);
+    WebRequestTraceFilter filter =
+        new FuseWebRequestTraceFilter(
+            traceRepository(),
+            traceProperties,
+            path -> path.startsWith("/trace"),
+            maxTracePayloadSize);
 
     ErrorAttributes errorAttributes = errorAttributesProvider.getIfAvailable();
     if (errorAttributes != null) {
@@ -52,5 +56,4 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
   public FuseTraceRepository traceRepository() {
     return new FuseTraceRepository();
   }
-
 }

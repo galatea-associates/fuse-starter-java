@@ -13,19 +13,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.google.common.collect.Sets;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import junitparams.FileParameters;
+import junitparams.JUnitParamsRunner;
+
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
+import org.joda.money.BigMoney;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,9 +43,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import junitparams.FileParameters;
-import junitparams.JUnitParamsRunner;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -112,11 +112,20 @@ public class SettlementRestControllerTest extends ASpringTest {
     String instrument = "IBM";
     String direction = "REC";
     double qty = 100;
+    BigMoney proceeds = BigMoney.parse("GBP 100");
+    BigMoney usdProceeds = BigMoney.parse("USD 135");
 
-    SettlementMission testMission = SettlementMission.builder().id(MISSION_ID_1).depot(depot)
-        .externalParty(externapParty).instrument(instrument).direction(direction).qty(qty).build();
+    SettlementMission testMission = SettlementMission.builder()
+        .id(MISSION_ID_1)
+        .depot(depot)
+        .externalParty(externapParty)
+        .instrument(instrument)
+        .direction(direction)
+        .qty(qty)
+        .proceeds(proceeds)
+        .usdProceeds(usdProceeds)
+        .build();
     log.info("Test mission: {}", testMission);
-
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(testMission));

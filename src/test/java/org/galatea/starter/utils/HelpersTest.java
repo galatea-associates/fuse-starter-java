@@ -17,6 +17,7 @@ import org.junit.Test;
 public class HelpersTest {
 
   public static class SimpleObject {
+
     private String x = "X";
 
     void setX(String x) {

@@ -11,6 +11,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import org.joda.money.BigMoney;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,4 +49,9 @@ public class SettlementMission {
   @NonNull
   protected Double qty;
 
+  @NonNull
+  protected BigMoney proceeds;
+
+  @NonNull
+  protected BigMoney usdProceeds;
 }

@@ -42,14 +42,20 @@ public class SettlementService {
   public Set<Long> spawnMissions(final List<TradeAgreement> agreements) {
 
     // Map each agreement to a mission, collect to a list, and then same in bulk
-    Iterable<SettlementMission> savedMissions = missionrpsy.save(agreements.stream()
-        .map(agr -> agreementTransformer.transform(agr)).collect(Collectors.toList()));
+    Iterable<SettlementMission> savedMissions =
+        missionrpsy.save(
+            agreements
+                .stream()
+                .map(agr -> agreementTransformer.transform(agr))
+                .collect(Collectors.toList()));
     log.debug("The following missions were saved: {}", savedMissions);
 
     // We have to do all of this StreamSupport crap since the repository returns an iterable instead
     // of a normal collection
-    Set<Long> idSet = StreamSupport.stream(savedMissions.spliterator(), false)
-        .map(SettlementMission::getId).collect(Collectors.toSet());
+    Set<Long> idSet =
+        StreamSupport.stream(savedMissions.spliterator(), false)
+            .map(SettlementMission::getId)
+            .collect(Collectors.toSet());
     log.info("Returning {} mission id(s)", idSet.size());
 
     return idSet;
