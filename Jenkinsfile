@@ -85,8 +85,6 @@ pipeline {
                     manifestChoice: [manifestFile: 'manifest-dev.yml']
                     // pluginTimeout: 240 // default value is 120
                 )
-                echo 'Waiting 30s before running integration test..'
-                sleep 30
             }
         }
         stage('Integration tests') {
@@ -94,6 +92,8 @@ pipeline {
                 expression { BRANCH_NAME ==~ /^PR-\d+$/ }
             }
             steps {
+                echo 'Waiting 90s before running integration test..'
+                sleep time: 90, unit: 'SECONDS'
                 sh 'mvn verify'
             }
             post {
