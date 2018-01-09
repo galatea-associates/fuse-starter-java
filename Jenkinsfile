@@ -72,6 +72,8 @@ pipeline {
                 expression { isDeployBranch() }
             }
             steps {
+                echo 'Deploying to CloudFoundry'
+
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
                 sh 'mvn package'
 
@@ -83,6 +85,8 @@ pipeline {
                     manifestChoice: [manifestFile: 'manifest-dev.yml']
                     // pluginTimeout: 240 // default value is 120
                 )
+                echo 'Waiting 30s before running integration test..'
+                sleep 30
             }
         }
         stage('Integration tests') {
