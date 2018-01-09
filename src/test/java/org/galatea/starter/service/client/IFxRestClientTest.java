@@ -40,7 +40,7 @@ import java.time.LocalDate;
 @SpringBootTest(properties = "client.fx-rate=http://api.fixer.io")
 @ContextConfiguration(initializers = IFxRestClientTest.RandomPortInitializer.class)
 @EnableFeignClients(clients = IFxRestClient.class)
-@Category(org.galatea.starter.IntegrationTestCategory.class)
+//@Category(org.galatea.starter.IntegrationTestCategory.class)
 public class IFxRestClientTest {
 
   @ClassRule
