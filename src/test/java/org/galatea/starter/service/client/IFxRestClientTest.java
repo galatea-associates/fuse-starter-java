@@ -44,8 +44,7 @@ import java.time.LocalDate;
 public class IFxRestClientTest {
 
   @ClassRule
-  public static WireMockClassRule wireMockRule =
-      new WireMockClassRule(wireMockConfig().dynamicPort());
+  public static WireMockClassRule wireMockRule = new WireMockClassRule(8081);
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
