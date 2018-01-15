@@ -8,12 +8,14 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 import static org.galatea.starter.TestUtilities.getJsonFromFile;
 import static org.junit.Assert.assertEquals;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 
 import feign.FeignException;
 
 import org.galatea.starter.domain.FxRateResponse;
 import org.joda.money.CurrencyUnit;
+import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,11 +42,12 @@ import java.time.LocalDate;
 @SpringBootTest(properties = "client.fx-rate=http://api.fixer.io")
 @ContextConfiguration(initializers = IFxRestClientTest.RandomPortInitializer.class)
 @EnableFeignClients(clients = IFxRestClient.class)
-//@Category(org.galatea.starter.IntegrationTestCategory.class)
+@Category(org.galatea.starter.IntegrationTestCategory.class)
 public class IFxRestClientTest {
 
   @ClassRule
-  public static WireMockClassRule wireMockRule = new WireMockClassRule(8081);
+  public static WireMockClassRule wireMockRule =
+      new WireMockClassRule(wireMockConfig().dynamicPort());
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
@@ -89,5 +92,10 @@ public class IFxRestClientTest {
       TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
           applicationContext, "client.fx-rate=" + "http://localhost:" + wireMockRule.port());
     }
+  }
+
+  @After
+  public void tearDown() {
+    WireMock.reset();
   }
 }
