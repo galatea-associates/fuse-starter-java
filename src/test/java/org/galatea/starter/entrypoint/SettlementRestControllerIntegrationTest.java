@@ -1,5 +1,7 @@
 package org.galatea.starter.entrypoint;
 
+import static org.junit.Assert.assertEquals;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -124,12 +126,12 @@ public class SettlementRestControllerIntegrationTest {
     FxRateResponse fxRateResponse = fxServer.getRate("GBP");
 
     SettlementMission expectedMission = SettlementMission.builder()
-        .id(4000L)
+        .id(1073L)
         .instrument("IBM")
-        .externalParty("ecp-1")
+        .externalParty("EXT-1")
         .depot("DTC")
         .direction("REC")
-        .qty(4500.0)
+        .qty(100.0)
         .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
         .usdProceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)
             .convertedTo(CurrencyUnit.USD, fxRateResponse.getExchangeRate()))
@@ -146,6 +148,6 @@ public class SettlementRestControllerIntegrationTest {
 
     SettlementMission actualMission = fuseGetServer.getSettlementMission(1073L);
 
-    System.out.println(actualMission.toString());
+    assertEquals(expectedMission, actualMission);
   }
 }
