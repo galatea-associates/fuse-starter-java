@@ -1,7 +1,12 @@
 package org.galatea.starter.entrypoint;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -11,18 +16,24 @@ import lombok.extern.slf4j.Slf4j;
 import feign.Feign;
 import feign.Headers;
 import feign.Param;
+import feign.RequestInterceptor;
 import feign.RequestLine;
+import feign.RequestTemplate;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
+import feign.jackson.JacksonDecoder;
 
+import org.galatea.starter.TestUtilities;
+import org.galatea.starter.domain.FxRateResponse;
 import org.galatea.starter.domain.SettlementMission;
-import org.galatea.starter.domain.SettlementMission.SettlementMissionBuilder;
 import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.utils.deserializers.FxRateResponseDeserializer;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -36,53 +47,105 @@ public class SettlementRestControllerIntegrationTest {
 
     @RequestLine("POST /settlementEngine")
     @Headers("Content-Type: application/json")
-    List<String> sendTradeAgreement(TradeAgreement[] tradeAgreements);
+    List<String> sendTradeAgreement(TradeAgreement[] jsonAgreements);
 
     @RequestLine("GET /settlementEngine/mission/{id}")
     SettlementMission getSettlementMission(@Param("id") Long id);
   }
 
+  interface FxRateServer {
+
+    @RequestLine("GET /latest?base={base}&symbols=USD")
+    FxRateResponse getRate(@Param("base") String base);
+  }
+
+  class ModifyBigMoneyInterceptor implements RequestInterceptor {
+
+    @Override
+    public void apply(RequestTemplate template) {
+      String body = new String(template.body());
+      template.body(body.replace("{\n"
+          + "      \"currency\": {\n"
+          + "        \"code\": \"GBP\",\n"
+          + "        \"numericCode\": 826,\n"
+          + "        \"decimalPlaces\": 2\n"
+          + "      },\n"
+          + "      \"amount\": 100\n"
+          + "    }", "\"GBP 100\""));
+    }
+  }
+
+  class SettlementMissionDeserializer extends StdDeserializer {
+
+    public SettlementMissionDeserializer() {
+      super(SettlementMission.class);
+    }
+
+    @Override
+    public SettlementMission deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+        throws IOException, JsonProcessingException {
+
+      JsonNode node = jsonParser.readValueAsTree();
+
+      return SettlementMission.builder()
+          .id(node.get("id").asLong())
+          .instrument(node.get("instrument").asText())
+          .externalParty(node.get("externalParty").asText())
+          .depot(node.get("depot").asText())
+          .direction(node.get("direction").asText())
+          .qty(node.get("qty").asDouble())
+          .proceeds(BigMoney.parse(node.get("proceeds").asText()))
+          .usdProceeds(BigMoney.parse(node.get("usdProceeds").asText()))
+          .build();
+    }
+  }
+
   @Test
-  public void testMissionCreation() {
-
+  public void testMissionCreation() throws Exception {
     // TODO: the base URL should probably be moved to a src/test/resources properties file
-    FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
-        .target(FuseServer.class, "http://fuse-rest-dev.cfapps.io");
+    FuseServer fusePostServer = Feign.builder()
+        .decoder(new GsonDecoder())
+        .encoder(new GsonEncoder())
+        .requestInterceptor(new ModifyBigMoneyInterceptor())
+        .target(FuseServer.class, "http://localhost:8080");
 
-    List<String> missionPaths = fuseServer.sendTradeAgreement(new TradeAgreement[]{
-
-        TradeAgreement.builder().id(4000L).instrument("IBM").internalParty("icp-1")
-            .externalParty("ecp-1").buySell("B").qty(4500.0)
-            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-            .build(),
-
-        TradeAgreement.builder().id(4001L).instrument("IBM").internalParty("icp-2")
-            .externalParty("ecp-2").buySell("B").qty(4600.0)
-            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)).build()
+    List<String> missionPaths = fusePostServer.sendTradeAgreement(new TradeAgreement[]{
+        TestUtilities.getTradeAgreement()
     });
 
-    log.info("created missions: {}", missionPaths);
+    ObjectMapper fxMapper = new ObjectMapper();
+    fxMapper.registerModule(
+        new SimpleModule().addDeserializer(FxRateResponse.class, new FxRateResponseDeserializer()));
 
-    SettlementMissionBuilder b1 = SettlementMission.builder().depot("DTC").instrument("IBM")
-        .externalParty("ecp-1").direction("REC").qty(4500.0)
+    FxRateServer fxServer = Feign.builder()
+        .decoder(new JacksonDecoder(fxMapper))
+        .target(FxRateServer.class, "http://api.fixer.io");
+
+    FxRateResponse fxRateResponse = fxServer.getRate("GBP");
+
+    SettlementMission expectedMission = SettlementMission.builder()
+        .id(4000L)
+        .instrument("IBM")
+        .externalParty("ecp-1")
+        .depot("DTC")
+        .direction("REC")
+        .qty(4500.0)
         .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
-    SettlementMissionBuilder b2 = SettlementMission.builder().depot("DTC").instrument("IBM")
-        .externalParty("ecp-2").direction("REC").qty(4600.0)
-        .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
+        .usdProceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)
+            .convertedTo(CurrencyUnit.USD, fxRateResponse.getExchangeRate()))
+        .build();
 
-    assertEquals(2, missionPaths.size());
+    ObjectMapper fuseGetMapper = new ObjectMapper();
+    fuseGetMapper.registerModule(new SimpleModule()
+        .addDeserializer(SettlementMission.class, new SettlementMissionDeserializer()));
 
-    for (String missionPath : missionPaths) {
-      Long missionId = Long.parseLong(missionPath.split("/")[3]); // brittle assumption...
-      SettlementMission settlementMission = fuseServer.getSettlementMission(missionId);
-      settlementMission.setProceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d));
-      settlementMission.setUsdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d));
-      log.info("fetched mission: {}", settlementMission);
+    FuseServer fuseGetServer = Feign.builder()
+        .decoder(new JacksonDecoder(fuseGetMapper))
+        .encoder(new GsonEncoder())
+        .target(FuseServer.class, "http://localhost:8080");
 
-      assertTrue(b1.id(missionId).build().equals(settlementMission)
-          || b2.id(missionId).build().equals(settlementMission));
-    }
+    SettlementMission actualMission = fuseGetServer.getSettlementMission(1L);
+
+    System.out.println(actualMission.toString());
   }
 }
