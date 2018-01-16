@@ -144,7 +144,7 @@ public class SettlementRestControllerIntegrationTest {
         .encoder(new GsonEncoder())
         .target(FuseServer.class, "http://localhost:8080");
 
-    SettlementMission actualMission = fuseGetServer.getSettlementMission(1L);
+    SettlementMission actualMission = fuseGetServer.getSettlementMission(1073L);
 
     System.out.println(actualMission.toString());
   }

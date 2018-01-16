@@ -1,5 +1,7 @@
 package org.galatea.starter.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import org.galatea.starter.utils.serializers.SettlementMissionSerializer;
 import org.joda.money.BigMoney;
 
 import javax.persistence.Entity;
@@ -28,6 +31,7 @@ import javax.persistence.Id;
 @EqualsAndHashCode
 @Slf4j
 @Entity
+@JsonSerialize(using = SettlementMissionSerializer.class)
 public class SettlementMission {
 
   @Id

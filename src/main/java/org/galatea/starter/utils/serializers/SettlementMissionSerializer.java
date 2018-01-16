@@ -24,9 +24,6 @@ public class SettlementMissionSerializer extends StdSerializer<SettlementMission
   public void serialize(SettlementMission mission, JsonGenerator jsonGenerator,
       SerializerProvider serializerProvider) throws IOException {
 
-    log.info("PROCEEDS: %s", mission.getProceeds().toString());
-    log.info("USD PROCEEDS: %s", mission.getUsdProceeds().toString());
-
     jsonGenerator.writeStartObject();
     jsonGenerator.writeNumberField("id", mission.getId());
     jsonGenerator.writeStringField("instrument", mission.getInstrument());
@@ -34,8 +31,8 @@ public class SettlementMissionSerializer extends StdSerializer<SettlementMission
     jsonGenerator.writeStringField("depot", mission.getDepot());
     jsonGenerator.writeStringField("direction", mission.getDirection());
     jsonGenerator.writeNumberField("qty", mission.getQty());
-    jsonGenerator.writeStringField("proceeds", mission.getProceeds().toString());
-    jsonGenerator.writeStringField("usdProceeds", mission.getUsdProceeds().toString());
+    jsonGenerator.writeStringField("proceeds", mission.getProceeds().getCurrencyUnit().toString() + " " + mission.getProceeds().getAmount().toString());
+    jsonGenerator.writeStringField("usdProceeds", mission.getUsdProceeds().getCurrencyUnit().toString() + " " + mission.getUsdProceeds().getAmount().toString());
     jsonGenerator.writeEndObject();
   }
 }
