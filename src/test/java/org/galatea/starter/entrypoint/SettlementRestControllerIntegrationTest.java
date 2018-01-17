@@ -2,13 +2,16 @@ package org.galatea.starter.entrypoint;
 
 import static org.junit.Assert.assertEquals;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 import feign.Feign;
 import feign.Headers;
 import feign.Param;
-import feign.RequestInterceptor;
 import feign.RequestLine;
-import feign.RequestTemplate;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
 
 import org.galatea.starter.TestUtilities;
 import org.galatea.starter.domain.FxRateResponse;
@@ -36,7 +38,10 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -61,22 +66,36 @@ public class SettlementRestControllerIntegrationTest {
     FxRateResponse getRate(@Param("base") String base);
   }
 
-  class ModifyBigMoneyInterceptor implements RequestInterceptor {
+  /**
+   * Need this as we don't normally serialize TradeAgreements
+   */
+  class TradeAgreementSerializer extends StdSerializer<TradeAgreement> {
+
+    public TradeAgreementSerializer() {
+      super(TradeAgreement.class);
+    }
 
     @Override
-    public void apply(RequestTemplate template) {
-      String body = new String(template.body());
-      template.body(body.replace("{\n"
-          + "      \"currency\": {\n"
-          + "        \"code\": \"GBP\",\n"
-          + "        \"numericCode\": 826,\n"
-          + "        \"decimalPlaces\": 2\n"
-          + "      },\n"
-          + "      \"amount\": 100\n"
-          + "    }", "\"GBP 100\""));
+    public void serialize(TradeAgreement tradeAgreement, JsonGenerator jsonGenerator,
+        SerializerProvider serializerProvider) throws IOException {
+      jsonGenerator.writeStartObject();
+      jsonGenerator.writeStringField("instrument", tradeAgreement.getInstrument());
+      jsonGenerator.writeStringField("internalParty", tradeAgreement.getInternalParty());
+      jsonGenerator.writeStringField("externalParty", tradeAgreement.getExternalParty());
+      jsonGenerator.writeStringField("buySell", tradeAgreement.getBuySell());
+      jsonGenerator.writeNumberField("qty", tradeAgreement.getQty());
+      jsonGenerator.writeStringField("proceeds", writeBigMoney(tradeAgreement.getProceeds()));
+      jsonGenerator.writeEndObject();
+    }
+
+    public String writeBigMoney(BigMoney money) {
+      return money.getCurrencyUnit().toString() + " " + money.getAmount().toString();
     }
   }
 
+  /**
+   * Need this as we don't normally deserialize SettlementMissions
+   */
   class SettlementMissionDeserializer extends StdDeserializer {
 
     public SettlementMissionDeserializer() {
@@ -84,7 +103,8 @@ public class SettlementRestControllerIntegrationTest {
     }
 
     @Override
-    public SettlementMission deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+    public SettlementMission deserialize(JsonParser jsonParser,
+        DeserializationContext deserializationContext)
         throws IOException, JsonProcessingException {
 
       JsonNode node = jsonParser.readValueAsTree();
@@ -104,17 +124,40 @@ public class SettlementRestControllerIntegrationTest {
 
   @Test
   public void testMissionCreation() throws Exception {
-    // TODO: the base URL should probably be moved to a src/test/resources properties file
+    // Create some TradeAgreements and POST them to the application
+    List<Long> createdMissionIds = postTradeAgreements();
+
+    // Query the GET endpoint for the created SettlementMissions
+    List<SettlementMission> actualMissions = getActualMissions(createdMissionIds);
+
+    // Create the SettlementMissions that should be there
+    List<SettlementMission> expectedMissions = getExpectedMissions(createdMissionIds,
+        getCurrentExchangeRate());
+
+    assertEquals(expectedMissions, actualMissions);
+  }
+
+  // Change how this gets its URL
+  public List<Long> postTradeAgreements() throws Exception {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.registerModule(
+        new SimpleModule().addSerializer(TradeAgreement.class, new TradeAgreementSerializer()));
+
     FuseServer fusePostServer = Feign.builder()
         .decoder(new GsonDecoder())
-        .encoder(new GsonEncoder())
-        .requestInterceptor(new ModifyBigMoneyInterceptor())
+        .encoder(new JacksonEncoder(mapper))
         .target(FuseServer.class, "http://localhost:8080");
 
     List<String> missionPaths = fusePostServer.sendTradeAgreement(new TradeAgreement[]{
-        TestUtilities.getTradeAgreement()
+        TestUtilities.getTradeAgreement(), TestUtilities.getTradeAgreement()
     });
 
+    return missionPaths.stream()
+        .map(s -> Long.parseLong(s.split("/")[3]))
+        .collect(Collectors.toList());
+  }
+
+  public BigDecimal getCurrentExchangeRate() throws Exception {
     ObjectMapper fxMapper = new ObjectMapper();
     fxMapper.registerModule(
         new SimpleModule().addDeserializer(FxRateResponse.class, new FxRateResponseDeserializer()));
@@ -124,30 +167,49 @@ public class SettlementRestControllerIntegrationTest {
         .target(FxRateServer.class, "http://api.fixer.io");
 
     FxRateResponse fxRateResponse = fxServer.getRate("GBP");
+    return fxRateResponse.getExchangeRate();
+  }
 
-    SettlementMission expectedMission = SettlementMission.builder()
-        .id(1073L)
-        .instrument("IBM")
-        .externalParty("EXT-1")
-        .depot("DTC")
-        .direction("REC")
-        .qty(100.0)
-        .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-        .usdProceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)
-            .convertedTo(CurrencyUnit.USD, fxRateResponse.getExchangeRate()))
-        .build();
-
-    ObjectMapper fuseGetMapper = new ObjectMapper();
-    fuseGetMapper.registerModule(new SimpleModule()
+  // Change how this gets its URL
+  public List<SettlementMission> getActualMissions(List<Long> ids) throws Exception {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.registerModule(new SimpleModule()
         .addDeserializer(SettlementMission.class, new SettlementMissionDeserializer()));
 
     FuseServer fuseGetServer = Feign.builder()
-        .decoder(new JacksonDecoder(fuseGetMapper))
+        .decoder(new JacksonDecoder(mapper))
         .encoder(new GsonEncoder())
         .target(FuseServer.class, "http://localhost:8080");
 
-    SettlementMission actualMission = fuseGetServer.getSettlementMission(1073L);
+    List<SettlementMission> actualMissions = ids.stream()
+        .map(i -> fuseGetServer.getSettlementMission(i))
+        .collect(Collectors.toList());
+    return actualMissions;
+  }
 
-    assertEquals(expectedMission, actualMission);
+  public List<SettlementMission> getExpectedMissions(List<Long> ids, BigDecimal currentExchangeRate) {
+    return Arrays.asList(
+        SettlementMission.builder()
+            .id(ids.get(0))
+            .instrument("IBM")
+            .externalParty("EXT-1")
+            .depot("DTC")
+            .direction("REC")
+            .qty(100.0)
+            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+            .usdProceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)
+                .convertedTo(CurrencyUnit.USD, currentExchangeRate))
+            .build(),
+        SettlementMission.builder()
+            .id(ids.get(1))
+            .instrument("IBM")
+            .externalParty("EXT-1")
+            .depot("DTC")
+            .direction("REC")
+            .qty(100.0)
+            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+            .usdProceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)
+                .convertedTo(CurrencyUnit.USD, currentExchangeRate))
+            .build());
   }
 }

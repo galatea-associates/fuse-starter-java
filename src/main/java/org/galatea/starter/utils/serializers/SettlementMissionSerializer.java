@@ -4,19 +4,14 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-import lombok.extern.slf4j.Slf4j;
-
-import net.sf.aspect4log.Log;
-
 import org.galatea.starter.domain.SettlementMission;
+import org.joda.money.BigMoney;
 
 import java.io.IOException;
 
-@Slf4j
-@Log(enterLevel = Log.Level.INFO, exitLevel = Log.Level.INFO)
 public class SettlementMissionSerializer extends StdSerializer<SettlementMission> {
 
-  public SettlementMissionSerializer() {
+  protected SettlementMissionSerializer() {
     super(SettlementMission.class);
   }
 
@@ -31,8 +26,12 @@ public class SettlementMissionSerializer extends StdSerializer<SettlementMission
     jsonGenerator.writeStringField("depot", mission.getDepot());
     jsonGenerator.writeStringField("direction", mission.getDirection());
     jsonGenerator.writeNumberField("qty", mission.getQty());
-    jsonGenerator.writeStringField("proceeds", mission.getProceeds().getCurrencyUnit().toString() + " " + mission.getProceeds().getAmount().toString());
-    jsonGenerator.writeStringField("usdProceeds", mission.getUsdProceeds().getCurrencyUnit().toString() + " " + mission.getUsdProceeds().getAmount().toString());
+    jsonGenerator.writeStringField("proceeds", writeBigMoney(mission.getProceeds()));
+    jsonGenerator.writeStringField("usdProceeds", writeBigMoney(mission.getUsdProceeds()));
     jsonGenerator.writeEndObject();
+  }
+
+  protected String writeBigMoney(BigMoney money) {
+    return money.getCurrencyUnit().toString() + " " + money.getAmount().toString();
   }
 }

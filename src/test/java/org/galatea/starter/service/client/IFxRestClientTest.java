@@ -35,14 +35,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * This test is based upon https://stackoverflow.com/a/45643183 It's not really an integration test but
- * can't be run with unit tests due to required set up.
+ * This test is based upon https://stackoverflow.com/a/45643183
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "client.fx-rate=http://api.fixer.io")
 @ContextConfiguration(initializers = IFxRestClientTest.RandomPortInitializer.class)
 @EnableFeignClients(clients = IFxRestClient.class)
-@Category(org.galatea.starter.IntegrationTestCategory.class)
 public class IFxRestClientTest {
 
   @ClassRule
