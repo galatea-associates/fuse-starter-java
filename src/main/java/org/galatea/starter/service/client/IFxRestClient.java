@@ -13,6 +13,7 @@ import javax.validation.Valid;
 public interface IFxRestClient {
 
   // base = "GBP" would query http://api.fixer.io/latest?base=GBP&symbols=USD
+  @Valid
   @RequestMapping(method = RequestMethod.GET, value = "/latest?base={base}&symbols=USD")
   FxRateResponse getRate(@PathVariable("base") String base);
 }

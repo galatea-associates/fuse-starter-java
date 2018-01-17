@@ -27,6 +27,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 /**
  * REST Controller that generates and listens to http endpoints which allow the caller to create
  * Missions from TradeAgreements and query them back out.
@@ -58,7 +60,7 @@ public class SettlementRestController {
       value = SETTLE_MISSION_PATH,
       consumes = {MediaType.APPLICATION_JSON_VALUE})
   public ResponseEntity<Set<String>> settleAgreement(
-      @RequestBody final List<TradeAgreement> agreements,
+      @RequestBody final List<@Valid TradeAgreement> agreements,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
     // if an external request id was provided, grab it
