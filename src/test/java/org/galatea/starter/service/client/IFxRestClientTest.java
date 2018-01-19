@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.TestPropertySourceUtils;
@@ -47,6 +48,7 @@ import javax.validation.ValidatorFactory;
 @SpringBootTest(properties = "client.fx-rate=http://api.fixer.io")
 @ContextConfiguration(initializers = IFxRestClientTest.RandomPortInitializer.class)
 @EnableFeignClients(clients = IFxRestClient.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class IFxRestClientTest {
 
   @ClassRule
