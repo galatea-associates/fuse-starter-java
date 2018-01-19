@@ -23,6 +23,9 @@ spring:
    datasource:
       username: sa
       password:
+logging:
+    level:
+      org.galatea.starter.service.client.IFxRestClient: DEBUG
 ---
 # Dev properties go here
 spring:

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,21 +26,23 @@ import feign.gson.GsonEncoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 
-import org.galatea.starter.TestUtilities;
 import org.galatea.starter.domain.FxRateResponse;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.utils.deserializers.FxRateResponseDeserializer;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -123,6 +124,13 @@ public class SettlementRestControllerIntegrationTest {
     }
   }
 
+  private String address;
+
+  @Before
+  public void setUp() throws Exception {
+    address = System.getProperty("location");
+  }
+
   @Test
   public void testMissionCreation() throws Exception {
     // Create some TradeAgreements and POST them to the application
@@ -147,7 +155,7 @@ public class SettlementRestControllerIntegrationTest {
     FuseServer fusePostServer = Feign.builder()
         .decoder(new GsonDecoder())
         .encoder(new JacksonEncoder(mapper))
-        .target(FuseServer.class, "http://localhost:8080");
+        .target(FuseServer.class, address);
 
     List<String> missionPaths = fusePostServer.sendTradeAgreement(getTradeAgreements());
 
@@ -157,7 +165,7 @@ public class SettlementRestControllerIntegrationTest {
         .collect(Collectors.toList());
   }
 
-  public TradeAgreement[] getTradeAgreements() throws Exception{
+  public TradeAgreement[] getTradeAgreements() throws Exception {
     return new TradeAgreement[]{
         TradeAgreement.builder()
             .instrument("IBM")
@@ -200,14 +208,15 @@ public class SettlementRestControllerIntegrationTest {
     FuseServer fuseGetServer = Feign.builder()
         .decoder(new JacksonDecoder(mapper))
         .encoder(new GsonEncoder())
-        .target(FuseServer.class, "http://localhost:8080");
+        .target(FuseServer.class, address);
 
     return ids.stream()
-        .map(i -> fuseGetServer.getSettlementMission(i))
+        .map(fuseGetServer::getSettlementMission)
         .collect(Collectors.toList());
   }
 
-  public List<SettlementMission> getExpectedMissions(List<Long> ids, BigDecimal currentExchangeRate) {
+  public List<SettlementMission> getExpectedMissions(List<Long> ids,
+      BigDecimal currentExchangeRate) {
     return Arrays.asList(
         SettlementMission.builder()
             .id(ids.get(0))

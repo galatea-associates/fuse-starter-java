@@ -82,8 +82,7 @@ pipeline {
                     organization: 'FUSE',
                     cloudSpace: 'development',
                     credentialsId: 'cf-credentials',
-                    manifestChoice: [manifestFile: 'manifest-dev.yml']
-                    // pluginTimeout: 240 // default value is 120
+                    manifestChoice: [manifestFile: 'manifest-test.yml']
                 )
             }
         }

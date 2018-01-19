@@ -177,7 +177,7 @@
 			<version>8.18.0</version>
 		</dependency>
 
-		<!-- JSR 380 Validation-->
+
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -271,6 +271,9 @@
 					<includes>
 						<include>**/*.java</include>
 					</includes>
+					<systemPropertyVariables>
+						<location>http://fuse-rest-dev.cfapps.io</location>
+					</systemPropertyVariables>
 					<groups>org.galatea.starter.IntegrationTestCategory</groups>
 				</configuration>
 				<executions>
