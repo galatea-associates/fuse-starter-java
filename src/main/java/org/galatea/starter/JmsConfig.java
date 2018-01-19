@@ -1,4 +1,3 @@
-
 package org.galatea.starter;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +32,9 @@ public class JmsConfig implements JmsListenerConfigurer {
    */
   @Bean
   public BiConsumer<Message, Exception> failedMessageConsumer() {
-    return (msg, err) -> log.error(
-        "Message {} failed to process after retries.  Removing message from queue", msg, err);
+    return (msg, err) ->
+        log.error(
+            "Message {} failed to process after retries.  Removing message from queue", msg, err);
   }
 
   @Bean
@@ -73,7 +73,6 @@ public class JmsConfig implements JmsListenerConfigurer {
     return listenerFactory;
   }
 
-
   /**
    * @return a new handler factory that uses a different message converter than the default one.
    */
@@ -92,5 +91,3 @@ public class JmsConfig implements JmsListenerConfigurer {
     registrar.setMessageHandlerMethodFactory(jmsHandlerMethodFactory());
   }
 }
-
-

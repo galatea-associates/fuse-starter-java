@@ -1,0 +1,31 @@
+package org.galatea.starter.domain;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
+
+import org.joda.money.CurrencyUnit;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import javax.validation.constraints.NotNull;
+
+@Getter
+@ToString
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+public class FxRateResponse {
+
+  @NotNull
+  CurrencyUnit baseCurrency;
+
+  @NotNull()
+  LocalDate validOn;
+
+  @NotNull
+  BigDecimal exchangeRate;
+}

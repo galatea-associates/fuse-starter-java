@@ -1,4 +1,3 @@
-
 package org.galatea.starter.entrypoint;
 
 import lombok.EqualsAndHashCode;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Set;
-
 
 @RequiredArgsConstructor
 @ToString
@@ -35,5 +33,4 @@ public class SettlementJmsListener {
     Set<Long> missionIds = settlementService.spawnMissions(Arrays.asList(agreements));
     log.info("Created missions {}", missionIds);
   }
-
 }

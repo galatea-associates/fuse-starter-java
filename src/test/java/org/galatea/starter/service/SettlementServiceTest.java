@@ -1,23 +1,27 @@
 package org.galatea.starter.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.domain.rpsy.ISettlementMissionRpsy;
+import org.joda.money.BigMoney;
+import org.joda.money.CurrencyUnit;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
 public class SettlementServiceTest extends ASpringTest {
+
   @MockBean
   private ISettlementMissionRpsy mockSettlementMissionRpsy;
 
@@ -29,7 +33,10 @@ public class SettlementServiceTest extends ASpringTest {
     Long id = 1L;
 
     SettlementMission testSettlementMission = SettlementMission.builder().id(id).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).build();
+        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d)
+        .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), new BigDecimal(100)))
+        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), new BigDecimal(100)))
+        .build();
 
     given(this.mockSettlementMissionRpsy.findOne(id)).willReturn(testSettlementMission);
 
@@ -45,7 +52,10 @@ public class SettlementServiceTest extends ASpringTest {
     Long id = 1L;
 
     SettlementMission testSettlementMission = SettlementMission.builder().id(id).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).build();
+        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d)
+        .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d))
+        .build();
 
     given(this.mockSettlementMissionRpsy.findOne(id)).willReturn(testSettlementMission);
 
@@ -60,10 +70,15 @@ public class SettlementServiceTest extends ASpringTest {
   public void testSpawnMissions() {
 
     SettlementMission testSettlementMission = SettlementMission.builder().id(35L).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).build();
+        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d)
+        .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
+        .usdProceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d))
+        .build();
 
     TradeAgreement testTradeAgreement = TradeAgreement.builder().id(45L).instrument("instr-1")
-        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).build();
+        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0)
+        .proceeds(BigMoney.of(CurrencyUnit.of("USD"), 100d))
+        .build();
 
     given(this.mockSettlementMissionRpsy.save(Mockito.anyList()))
         .willReturn(Collections.singletonList(testSettlementMission));

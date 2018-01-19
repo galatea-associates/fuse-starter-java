@@ -115,6 +115,26 @@
 			<scope>provided</scope>
 		</dependency>
 
+        <!-- Feign used to simplify interaction with HTTP API-->
+        <!-- See: https://github.com/OpenFeign/feign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>1.4.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
+            <version>9.5.1</version>
+        </dependency>
+
+        <!-- joda-money for storing amounts of money -->
+        <dependency>
+            <groupId>org.joda</groupId>
+            <artifactId>joda-money</artifactId>
+            <version>0.12</version>
+        </dependency>
+
 		<!-- Gives us a logging aspect -->
 		<dependency>
 			<groupId>net.sf.aspect4log</groupId>
@@ -133,7 +153,6 @@
 			<artifactId>commons-collections4</artifactId>
 			<version>4.1</version>
 		</dependency>
-
 
 		<!-- Ehcache for caching -->
 		<dependency>
@@ -156,6 +175,37 @@
 			<groupId>com.netflix.feign</groupId>
 			<artifactId>feign-gson</artifactId>
 			<version>8.18.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.0.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.0.2.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator-annotation-processor</artifactId>
+			<version>6.0.2.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>2.2.6</version>
 		</dependency>
 
 		<!-- Testing dependencies -->
@@ -183,6 +233,12 @@
 			<groupId>com.googlecode.junit-toolbox</groupId>
 			<artifactId>junit-toolbox</artifactId>
 			<version>2.2</version>
+		</dependency>
+		<!-- wiremock for API testing -->
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-standalone</artifactId>
+			<version>2.13.0</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -215,6 +271,9 @@
 					<includes>
 						<include>**/*.java</include>
 					</includes>
+					<systemPropertyVariables>
+						<location>http://fuse-rest-dev.cfapps.io</location>
+					</systemPropertyVariables>
 					<groups>org.galatea.starter.IntegrationTestCategory</groups>
 				</configuration>
 				<executions>

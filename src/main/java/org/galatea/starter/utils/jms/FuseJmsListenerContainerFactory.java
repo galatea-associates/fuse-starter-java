@@ -1,4 +1,3 @@
-
 package org.galatea.starter.utils.jms;
 
 import lombok.EqualsAndHashCode;
@@ -14,7 +13,6 @@ import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import java.util.function.BiConsumer;
 
 import javax.jms.Message;
-
 
 @RequiredArgsConstructor
 @ToString(callSuper = true)
@@ -32,5 +30,4 @@ public class FuseJmsListenerContainerFactory extends DefaultJmsListenerContainer
   protected DefaultMessageListenerContainer createContainerInstance() {
     return new FuseMessageListenerContainer(repository, failedMessageConsumer);
   }
-
 }
