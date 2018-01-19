@@ -1,14 +1,10 @@
 package org.galatea.starter.utils.deserializers;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 public abstract class FuseDeserializer extends StdDeserializer {
 
@@ -16,40 +12,9 @@ public abstract class FuseDeserializer extends StdDeserializer {
     super(vc);
   }
 
-  protected JsonNode getAndCheckRootNode(
-      JsonParser jsonParser, HashMap<String, JsonNodeType> fieldInfo) throws IOException {
-    return checkNode(jsonParser.readValueAsTree(), fieldInfo);
-  }
-
-  protected JsonNode checkNode(JsonNode node, HashMap<String, JsonNodeType> fieldInfo)
-      throws IOException {
-
-    List<String> missingFields = fieldInfo.keySet()
-        .stream()
-        .filter(k -> !node.has(k))
-        .collect(Collectors.toList());
-
-    List<String> incorrectFields = fieldInfo.keySet()
-        .stream()
-        .filter(k -> node.has(k) && !node.get(k).getNodeType().equals(fieldInfo.get(k)))
-        .collect(Collectors.toList());
-
-    if (!missingFields.isEmpty() && !incorrectFields.isEmpty()) {
-      throw new IOException(String
-          .format("Received JSON did not contain: %s & had the following invalid field types: %s",
-              missingFields, incorrectFields));
-    }
-
-    if (!missingFields.isEmpty()) {
-      throw new IOException(String.format("Received JSON did not contain: %s", missingFields));
-    }
-
-    if (!incorrectFields.isEmpty()) {
-      throw new IOException(String
-          .format("Received JSON had the following invalid field types: %s", incorrectFields));
-    }
-
-    return node;
+  protected <T> T getIfValid(JsonNode node, String key, JsonNodeType type,
+      Function<JsonNode, T> function) {
+    return node.has(key) && node.get(key).getNodeType().equals(type) ? function.apply(node) : null;
   }
 }
 

@@ -20,6 +20,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE) // For builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring and jackson
@@ -37,21 +38,21 @@ public class TradeAgreement {
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
 
-  @NonNull
+  @NotNull
   protected String instrument;
 
-  @NonNull
+  @NotNull
   protected String internalParty;
 
-  @NonNull
+  @NotNull
   protected String externalParty;
 
-  @NonNull
+  @NotNull
   protected String buySell;
 
-  @NonNull
+  @NotNull
   protected Double qty;
 
-  @NonNull
+  @NotNull
   protected BigMoney proceeds;
 }

@@ -12,18 +12,20 @@ import org.joda.money.CurrencyUnit;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class FxRateResponse {
 
-  @NonNull
+  @NotNull
   CurrencyUnit baseCurrency;
 
-  @NonNull
+  @NotNull()
   LocalDate validOn;
 
-  @NonNull
+  @NotNull
   BigDecimal exchangeRate;
 }

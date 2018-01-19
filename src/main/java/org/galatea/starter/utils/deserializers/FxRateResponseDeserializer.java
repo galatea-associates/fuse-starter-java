@@ -14,13 +14,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
 
 @Slf4j
 public class FxRateResponseDeserializer extends FuseDeserializer {
-
-  protected static final HashMap<String, JsonNodeType> rootFieldMap = getRootFieldMap();
-  protected static final HashMap<String, JsonNodeType> ratesFieldMap = getRatesFieldMap();
 
   public FxRateResponseDeserializer() {
     super(FxRateResponse.class);
@@ -29,37 +25,25 @@ public class FxRateResponseDeserializer extends FuseDeserializer {
   @Override
   public FxRateResponse deserialize(
       JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-    JsonNode rootNode = getAndCheckRootNode(jsonParser, rootFieldMap);
-    JsonNode ratesNode = checkNode(rootNode.path("rates"), ratesFieldMap);
+    JsonNode rootNode = jsonParser.readValueAsTree();
+    JsonNode ratesNode = rootNode.path("rates");
 
     return FxRateResponse.builder()
-        .baseCurrency(CurrencyUnit.of(rootNode.get("base").asText()))
-        .validOn(getDate(rootNode))
-        .exchangeRate(BigDecimal.valueOf(ratesNode.get("USD").asDouble()))
+        .baseCurrency(getIfValid(rootNode, "base", JsonNodeType.STRING,
+            n -> CurrencyUnit.of(n.get("base").asText())))
+        .validOn(getIfValid(rootNode, "date", JsonNodeType.STRING,
+            this::getDate))
+        .exchangeRate(getIfValid(ratesNode, "USD", JsonNodeType.NUMBER,
+            n -> BigDecimal.valueOf(n.get("USD").asDouble())))
         .build();
   }
 
-  protected static HashMap<String, JsonNodeType> getRootFieldMap() {
-    HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
-    fieldInfo.put("date", JsonNodeType.STRING);
-    fieldInfo.put("base", JsonNodeType.STRING);
-    fieldInfo.put("rates", JsonNodeType.OBJECT);
-    return fieldInfo;
-  }
-
-  protected static HashMap<String, JsonNodeType> getRatesFieldMap() {
-    HashMap<String, JsonNodeType> fieldInfo = new HashMap<>();
-    fieldInfo.put("USD", JsonNodeType.NUMBER);
-    return fieldInfo;
-  }
-
-  // See Effective Java 2nd Ed. Item 61
-  protected LocalDate getDate(JsonNode node) throws IOException {
+  protected LocalDate getDate(JsonNode node) {
     try {
       return LocalDate.parse(node.get("date").asText());
     } catch (DateTimeParseException e) {
       log.error("Unable to parse date from FX Rate API.", e);
-      throw new IOException("Unable to parse date from FX Rate API.", e);
+      return null;
     }
   }
 }

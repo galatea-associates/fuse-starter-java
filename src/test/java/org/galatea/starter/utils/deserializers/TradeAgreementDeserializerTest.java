@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeType;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,8 +17,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 @Slf4j
 public class TradeAgreementDeserializerTest {
@@ -28,6 +35,7 @@ public class TradeAgreementDeserializerTest {
   private ObjectMapper mapper;
   private DeserializationContext context;
   private String agreementJson;
+  private Validator validator;
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
@@ -38,6 +46,10 @@ public class TradeAgreementDeserializerTest {
     mapper = new ObjectMapper();
     context = mapper.getDeserializationContext();
     agreementJson = getJsonFromFile("TradeAgreement/Correct_IBM_Agreement.json");
+    ValidatorFactory factory = Validation.byDefaultProvider()
+        .configure()
+        .buildValidatorFactory();
+    validator = factory.getValidator();
   }
 
   @Test
@@ -55,55 +67,69 @@ public class TradeAgreementDeserializerTest {
 
   @Test
   public void testDeserializeMissingFields() throws Exception {
-    expectedException.expect(IOException.class);
-    expectedException.expectMessage("Received JSON did not contain: [externalParty, buySell]");
-
     JsonParser jsonParser =
         mapper
             .getFactory()
             .createParser(getJsonFromFile("TradeAgreement/Missing_Fields_IBM_Agreement.json"));
+
     TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
+    List<ConstraintViolation<TradeAgreement>> constraintViolations = validator.validate(agreement)
+        .stream().sorted(Comparator.comparing(a -> a.getPropertyPath().toString()))
+        .collect(Collectors.toList());
+    Iterator<ConstraintViolation<TradeAgreement>> iter = constraintViolations.iterator();
+    ConstraintViolation<TradeAgreement> buySellViolation = iter.next();
+    ConstraintViolation<TradeAgreement> externalPartyViolation = iter.next();
+
+    assertEquals(2, constraintViolations.size());
+    assertEquals("must not be null", buySellViolation.getMessage());
+    assertEquals("buySell", buySellViolation.getPropertyPath().toString());
+    assertEquals("must not be null", externalPartyViolation.getMessage());
+    assertEquals("externalParty", externalPartyViolation.getPropertyPath().toString());
   }
 
   @Test
   public void testDeserializeIncorrectFields() throws Exception {
-    expectedException.expect(IOException.class);
-    expectedException.expectMessage(
-        "Received JSON had the following invalid field types: [proceeds, qty]");
-
     JsonParser jsonParser =
         mapper
             .getFactory()
             .createParser(getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json"));
+
     TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
+    List<ConstraintViolation<TradeAgreement>> constraintViolations = validator.validate(agreement)
+        .stream().sorted(Comparator.comparing(a -> a.getPropertyPath().toString()))
+        .collect(Collectors.toList());
+    Iterator<ConstraintViolation<TradeAgreement>> iter = constraintViolations.iterator();
+    ConstraintViolation<TradeAgreement> proceedsViolation = iter.next();
+    ConstraintViolation<TradeAgreement> qtyViolation = iter.next();
+
+    assertEquals(2, constraintViolations.size());
+    assertEquals("must not be null", qtyViolation.getMessage());
+    assertEquals("qty", qtyViolation.getPropertyPath().toString());
+    assertEquals("must not be null", proceedsViolation.getMessage());
+    assertEquals("proceeds", proceedsViolation.getPropertyPath().toString());
   }
 
   @Test
   public void testDeserializeMissingIncorrectFields() throws Exception {
-    expectedException.expect(IOException.class);
-    expectedException.expectMessage(
-        "Received JSON did not contain: [buySell] & had the following invalid field types: [proceeds]");
-
     JsonParser jsonParser =
         mapper
             .getFactory()
             .createParser(
                 getJsonFromFile("TradeAgreement/Missing_Incorrect_Fields_IBM_Agreement.json"));
+
     TradeAgreement agreement = deserializer.deserialize(jsonParser, context);
-  }
+    List<ConstraintViolation<TradeAgreement>> constraintViolations = validator.validate(agreement)
+        .stream().sorted(Comparator.comparing(a -> a.getPropertyPath().toString()))
+        .collect(Collectors.toList());
+    Iterator<ConstraintViolation<TradeAgreement>> iter = constraintViolations.iterator();
+    ConstraintViolation<TradeAgreement> buySellViolation = iter.next();
+    ConstraintViolation<TradeAgreement> proceedsViolation = iter.next();
 
-  @Test
-  public void testGetFieldMap() {
-    HashMap<String, JsonNodeType> fieldMap = deserializer.getFieldMap();
-    HashMap<String, JsonNodeType> expectedMap = new HashMap<>();
-    expectedMap.put("instrument", JsonNodeType.STRING);
-    expectedMap.put("internalParty", JsonNodeType.STRING);
-    expectedMap.put("externalParty", JsonNodeType.STRING);
-    expectedMap.put("buySell", JsonNodeType.STRING);
-    expectedMap.put("qty", JsonNodeType.NUMBER);
-    expectedMap.put("proceeds", JsonNodeType.STRING);
-
-    assertEquals(expectedMap, fieldMap);
+    assertEquals(2, constraintViolations.size());
+    assertEquals("must not be null", proceedsViolation.getMessage());
+    assertEquals("proceeds", proceedsViolation.getPropertyPath().toString());
+    assertEquals("must not be null", buySellViolation.getMessage());
+    assertEquals("buySell", buySellViolation.getPropertyPath().toString());
   }
 
   @Test
@@ -115,13 +141,12 @@ public class TradeAgreementDeserializerTest {
   }
 
   @Test
-  public void testGetProceedsIOException() throws Exception {
-    expectedException.expect(IOException.class);
-    expectedException.expectMessage("Could not parse proceeds from request.");
-
+  public void testInvalidProceedsReturnsNull() throws Exception {
     String incorrectAgreementJson =
         getJsonFromFile("TradeAgreement/Incorrect_Fields_IBM_Agreement.json");
     JsonNode node = mapper.readTree(incorrectAgreementJson);
+
     BigMoney proceeds = deserializer.getProceeds(node);
+    assertEquals(null, proceeds);
   }
 }

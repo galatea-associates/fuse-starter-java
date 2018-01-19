@@ -33,6 +33,12 @@ import org.springframework.test.context.support.TestPropertySourceUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  * This test is based upon https://stackoverflow.com/a/45643183
@@ -90,6 +96,29 @@ public class IFxRestClientTest {
       TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
           applicationContext, "client.fx-rate=" + "http://localhost:" + wireMockRule.port());
     }
+  }
+
+  @Test
+  public void testValidationFails() throws Exception {
+    ValidatorFactory factory = Validation.byDefaultProvider()
+        .configure()
+        .buildValidatorFactory();
+    Validator validator = factory.getValidator();
+
+    stubFor(
+        get(urlEqualTo("/latest?base=GBP&symbols=USD"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json")
+                    .withBody(getJsonFromFile("FxRateResponse/Missing_Field_FX_Response.json"))));
+
+    FxRateResponse response = restClient.getRate("GBP");
+    Set<ConstraintViolation<FxRateResponse>> constraintViolations = validator.validate(response);
+
+    assertEquals(1, constraintViolations.size());
+    assertEquals("must not be null",
+        constraintViolations.iterator().next().getMessage());
   }
 
   @After

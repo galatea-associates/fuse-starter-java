@@ -40,6 +40,7 @@ import org.junit.experimental.categories.Category;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,7 +106,7 @@ public class SettlementRestControllerIntegrationTest {
     @Override
     public SettlementMission deserialize(JsonParser jsonParser,
         DeserializationContext deserializationContext)
-        throws IOException, JsonProcessingException {
+        throws IOException {
 
       JsonNode node = jsonParser.readValueAsTree();
 
@@ -148,13 +149,33 @@ public class SettlementRestControllerIntegrationTest {
         .encoder(new JacksonEncoder(mapper))
         .target(FuseServer.class, "http://localhost:8080");
 
-    List<String> missionPaths = fusePostServer.sendTradeAgreement(new TradeAgreement[]{
-        TestUtilities.getTradeAgreement(), TestUtilities.getTradeAgreement()
-    });
+    List<String> missionPaths = fusePostServer.sendTradeAgreement(getTradeAgreements());
 
     return missionPaths.stream()
         .map(s -> Long.parseLong(s.split("/")[3]))
+        .sorted(Long::compare)
         .collect(Collectors.toList());
+  }
+
+  public TradeAgreement[] getTradeAgreements() throws Exception{
+    return new TradeAgreement[]{
+        TradeAgreement.builder()
+            .instrument("IBM")
+            .internalParty("INT-1")
+            .externalParty("EXT-1")
+            .buySell("B")
+            .qty(100.0)
+            .proceeds(BigMoney.parse("GBP 100"))
+            .build(),
+        TradeAgreement.builder()
+            .instrument("GOOGL")
+            .internalParty("INT-1")
+            .externalParty("EXT-2")
+            .buySell("B")
+            .qty(200.0)
+            .proceeds(BigMoney.parse("GBP 1000"))
+            .build(),
+    };
   }
 
   public BigDecimal getCurrentExchangeRate() throws Exception {
@@ -181,10 +202,9 @@ public class SettlementRestControllerIntegrationTest {
         .encoder(new GsonEncoder())
         .target(FuseServer.class, "http://localhost:8080");
 
-    List<SettlementMission> actualMissions = ids.stream()
+    return ids.stream()
         .map(i -> fuseGetServer.getSettlementMission(i))
         .collect(Collectors.toList());
-    return actualMissions;
   }
 
   public List<SettlementMission> getExpectedMissions(List<Long> ids, BigDecimal currentExchangeRate) {
@@ -202,13 +222,13 @@ public class SettlementRestControllerIntegrationTest {
             .build(),
         SettlementMission.builder()
             .id(ids.get(1))
-            .instrument("IBM")
-            .externalParty("EXT-1")
+            .instrument("GOOGL")
+            .externalParty("EXT-2")
             .depot("DTC")
             .direction("REC")
-            .qty(100.0)
-            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d))
-            .usdProceeds(BigMoney.of(CurrencyUnit.of("GBP"), 100d)
+            .qty(200.0)
+            .proceeds(BigMoney.of(CurrencyUnit.of("GBP"), 1000d))
+            .usdProceeds(BigMoney.of(CurrencyUnit.of("GBP"), 1000d)
                 .convertedTo(CurrencyUnit.USD, currentExchangeRate))
             .build());
   }
