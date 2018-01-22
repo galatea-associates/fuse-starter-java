@@ -135,9 +135,11 @@ public class SettlementRestControllerIntegrationTest {
   public void testMissionCreation() throws Exception {
     // Create some TradeAgreements and POST them to the application
     List<Long> createdMissionIds = postTradeAgreements();
+    log.info("Created mission IDs: %s", createdMissionIds.toString());
 
     // Query the GET endpoint for the created SettlementMissions
     List<SettlementMission> actualMissions = getActualMissions(createdMissionIds);
+    log.info("Created missions: %s", actualMissions.toString());
 
     // Create the SettlementMissions that should be there
     List<SettlementMission> expectedMissions = getExpectedMissions(createdMissionIds,
@@ -146,7 +148,6 @@ public class SettlementRestControllerIntegrationTest {
     assertEquals(expectedMissions, actualMissions);
   }
 
-  // Change how this gets its URL
   public List<Long> postTradeAgreements() throws Exception {
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(
@@ -195,11 +196,12 @@ public class SettlementRestControllerIntegrationTest {
         .decoder(new JacksonDecoder(fxMapper))
         .target(FxRateServer.class, "http://api.fixer.io");
 
+    log.info("Querying http://api.fixer.io for exchange rate...");
     FxRateResponse fxRateResponse = fxServer.getRate("GBP");
+    log.info("Received FxRateResponse: %s", fxRateResponse.toString());
     return fxRateResponse.getExchangeRate();
   }
 
-  // Change how this gets its URL
   public List<SettlementMission> getActualMissions(List<Long> ids) throws Exception {
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new SimpleModule()

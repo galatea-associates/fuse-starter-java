@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.ToString;
 
 import org.joda.money.CurrencyUnit;
@@ -14,9 +13,9 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
 
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @ToString
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class FxRateResponse {
 

@@ -1,8 +1,7 @@
 package org.galatea.starter.domain;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import org.apache.tomcat.jni.Local;
 import org.joda.money.CurrencyUnit;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,11 +32,6 @@ public class FxRateResponseTest {
         .validOn(LocalDate.of(2018, 1, 19))
         .exchangeRate(BigDecimal.valueOf(1))
         .build();
-  }
-
-  @Test
-  public void testToString() {
-    assertEquals("FxRateResponse(baseCurrency=GBP, validOn=2018-01-19, exchangeRate=1)", response.toString());
   }
 
   @Test

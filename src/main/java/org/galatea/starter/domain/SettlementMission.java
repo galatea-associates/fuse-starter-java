@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.utils.serializers.SettlementMissionSerializer;
 import org.joda.money.BigMoney;
@@ -21,17 +20,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-/* For builder since we explictly want to make the all args ctor private */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@JsonSerialize(using = SettlementMissionSerializer.class)
+@AllArgsConstructor(access = AccessLevel.PRIVATE) // For builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring and jackson
 @Builder
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
-@Slf4j
 @Entity
-@JsonSerialize(using = SettlementMissionSerializer.class)
 public class SettlementMission {
 
   @Id
