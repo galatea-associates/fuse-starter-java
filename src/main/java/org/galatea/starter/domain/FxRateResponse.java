@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@ToString
+@lombok.ToString
 @Builder
 public class FxRateResponse {
 
