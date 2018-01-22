@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import org.joda.money.CurrencyUnit;
 
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Builder
+@ToString
 public class FxRateResponse {
 
   @NotNull
@@ -25,10 +27,4 @@ public class FxRateResponse {
 
   @NotNull
   BigDecimal exchangeRate;
-
-  @lombok.Generated
-  public String toString() {
-    return "FxRateResponse(baseCurrency=" + this.getBaseCurrency() + ", validOn=" + this
-        .getValidOn() + ", exchangeRate=" + this.getExchangeRate() + ")";
-  }
 }
