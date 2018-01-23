@@ -22,7 +22,7 @@
 			-Dlog4j.configurationFile=log4j2.yml,log4j2.debug.yml
 		</argLine>
 		<!-- Currently excluding all POJOs and config files from coverage stats-->
-		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/domain/*, **/*Config.java</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/domain/*, **/*Config.java, **/Runner.java</sonar.coverage.exclusions>
 	</properties>
 
 	<parent>
