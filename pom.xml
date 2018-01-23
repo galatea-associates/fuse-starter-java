@@ -21,7 +21,8 @@
 			-Dapplication.log-archive-root-dir=target/logs/archive
 			-Dlog4j.configurationFile=log4j2.yml,log4j2.debug.yml
 		</argLine>
-		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java,**/FxRateResponse.java</sonar.coverage.exclusions>
+		<!-- Currently excluding all POJOs and config files from coverage stats-->
+		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/domain/*, **/*Config.java</sonar.coverage.exclusions>
 	</properties>
 
 	<parent>
@@ -55,7 +56,6 @@
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-yaml</artifactId>
 		</dependency>
-
 
 		<!-- Use spring-aop and aspectj for our aspects -->
 		<dependency>
@@ -115,25 +115,35 @@
 			<scope>provided</scope>
 		</dependency>
 
-        <!-- Feign used to simplify interaction with HTTP API-->
-        <!-- See: https://github.com/OpenFeign/feign -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>1.4.0.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-jackson</artifactId>
-            <version>9.5.1</version>
-        </dependency>
+		<!-- Feign used to simplify interaction with HTTP API-->
+		<!-- See: https://github.com/OpenFeign/feign -->
+		<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-openfeign</artifactId>
+				<version>1.4.0.RELEASE</version>
+		</dependency>
+		<dependency>
+				<groupId>io.github.openfeign</groupId>
+				<artifactId>feign-jackson</artifactId>
+				<version>9.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netflix.feign</groupId>
+			<artifactId>feign-core</artifactId>
+			<version>8.18.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netflix.feign</groupId>
+			<artifactId>feign-gson</artifactId>
+			<version>8.18.0</version>
+		</dependency>
 
-        <!-- joda-money for storing amounts of money -->
-        <dependency>
-            <groupId>org.joda</groupId>
-            <artifactId>joda-money</artifactId>
-            <version>0.12</version>
-        </dependency>
+		<!-- joda-money for storing amounts of money -->
+		<dependency>
+			<groupId>org.joda</groupId>
+			<artifactId>joda-money</artifactId>
+			<version>0.12</version>
+		</dependency>
 
 		<!-- Gives us a logging aspect -->
 		<dependency>
@@ -166,46 +176,26 @@
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>com.netflix.feign</groupId>
-			<artifactId>feign-core</artifactId>
-			<version>8.18.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.netflix.feign</groupId>
-			<artifactId>feign-gson</artifactId>
-			<version>8.18.0</version>
-		</dependency>
-
-
+		<!-- Dependencies for JSR 380 Validation -->
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
-			<version>2.0.0.Final</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>6.0.2.Final</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator-annotation-processor</artifactId>
-			<version>6.0.2.Final</version>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.el</groupId>
 			<artifactId>javax.el-api</artifactId>
-			<version>3.0.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.glassfish.web</groupId>
 			<artifactId>javax.el</artifactId>
-			<version>2.2.6</version>
 		</dependency>
 
 		<!-- Testing dependencies -->
@@ -214,28 +204,24 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- Useful for waiting for an async task to complete -->
-		<dependency>
+		<dependency> <!-- Useful for waiting for an async task to complete -->
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
 			<version>2.0.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Allows us to parameterize tests -->
-		<dependency>
+		<dependency> <!-- Allows us to parameterize tests -->
 			<groupId>pl.pragmatists</groupId>
 			<artifactId>JUnitParams</artifactId>
 			<version>1.0.5</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Allows us to run test suites that include/exclude junit categories -->
-		<dependency>
+		<dependency> <!-- Allows us to run test suites that include/exclude junit categories -->
 			<groupId>com.googlecode.junit-toolbox</groupId>
 			<artifactId>junit-toolbox</artifactId>
 			<version>2.2</version>
 		</dependency>
-		<!-- wiremock for API testing -->
-		<dependency>
+		<dependency> 		<!-- Useful for mocking out responses from APIs -->
 			<groupId>com.github.tomakehurst</groupId>
 			<artifactId>wiremock-standalone</artifactId>
 			<version>2.13.0</version>
