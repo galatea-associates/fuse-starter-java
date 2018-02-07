@@ -72,6 +72,8 @@ pipeline {
                 expression { isDeployBranch() }
             }
             steps {
+                echo 'Deploying to CloudFoundry'
+
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
                 sh 'mvn package'
 
@@ -80,8 +82,7 @@ pipeline {
                     organization: 'FUSE',
                     cloudSpace: 'development',
                     credentialsId: 'cf-credentials',
-                    manifestChoice: [manifestFile: 'manifest-dev.yml']
-                    // pluginTimeout: 240 // default value is 120
+                    manifestChoice: [manifestFile: 'manifest-test.yml']
                 )
             }
         }
@@ -90,6 +91,8 @@ pipeline {
                 expression { BRANCH_NAME ==~ /^PR-\d+$/ }
             }
             steps {
+                echo 'Waiting 90s before running integration test..'
+                sleep time: 90, unit: 'SECONDS'
                 sh 'mvn verify'
             }
             post {

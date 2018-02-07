@@ -18,12 +18,19 @@ This readme will contain an index to features and their location in code.
 ### IntelliJ
 - Import as a maven project.  A simple way to do this is to Open File and select the pom.xml.
 - Install lombok: https://projectlombok.org/setup/intellij.
-- Download the [IntelliJ Google Java Style](https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml) file
+- Download the [IntelliJ Google Java Style](https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml) file. 
+    Running reformat code will for the most part format the code so that it passes.
+    There are however a few edge cases (e.g. multiline annotations) which you may have to hunt down manually. 
+    This is a known issue with the IntelliJ Google Java Style file. 
   - In IntelliJ Navigate to File -> Settings -> Editor -> Code Style -> Java
   - Next to Scheme click the settings icon
   - Import Scheme
   - IntelliJ Idea Code Style as XML
   - Choose the downloaded file and click OK
+  - Click on the Imports tab and ensure that 'Use single class import' is the only option ticked. Then change 'Class count to import with '*':' and 'Names count to use static import with '*':' to 999.
+  - In the Import Layout section ensure that 'Layout static imports separately' is ticked
+  - In the Import Layout section change to: static all other imports -> blank line(bl) -> com.* -> bl -> all other imports -> bl -> net.* -> bl -> org.* -> bl -> java.* -> bl -> javax.*
+  
 - Run stuff:
   - src/main/java/org/galatea/starter/Application.java -> r-click -> Run Application.main().  This will start a jms listener and REST services.  Note, there is a supplied Run Configurations for this class in .idea/runConfigurations which sets up some VM and Program args for this class.  If IntelliJ didn't automatically find them you may have to manually set them.
     - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
@@ -115,7 +122,7 @@ For testing rest requests/responses see:
 - For convenient tests/matchers: org.hamcrest.Matchers and https://code.google.com/archive/p/hamcrest/wikis/Tutorial.wiki
 
 ## Builds
-We have a Jenkins server hosted on AWS that handles the FUSE continuous integration process - https://jenkins.fuse.galatea-associates.com
+We have a Jenkins server hosted on AWS that handles the FUSE continuous integration process - https://jenkins.fuse.galatea-associates.com 
 
 The build process is handled via a [Jenkins pipeline build](https://jenkins.io/doc/book/pipeline/), with the pipeline managed via the *Jenkins* file in the root of the project.  We recommend that all of your build steps are captured in the *Jeninks* file.  You should not define any build steps directly within the Jenkins server.
 

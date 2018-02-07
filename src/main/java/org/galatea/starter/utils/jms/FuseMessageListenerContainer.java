@@ -1,4 +1,3 @@
-
 package org.galatea.starter.utils.jms;
 
 import static org.galatea.starter.utils.Tracer.addTraceInfo;
@@ -36,7 +35,6 @@ public class FuseMessageListenerContainer extends DefaultMessageListenerContaine
 
   public static final String UNK = "UNKNOWN";
 
-
   @Override
   @SneakyThrows
   protected void invokeListener(final Session session, final Message message) throws JMSException {
@@ -52,17 +50,17 @@ public class FuseMessageListenerContainer extends DefaultMessageListenerContaine
       // RuntimeException, which would result in the message being placed back on the queue. While
       // this is not encouraged, there may be certain circumstances where that is necessary.
       try {
-        t.runAndTraceSuccess("message", () -> {
-          super.invokeListener(session, message);
-          return Void.TYPE;
-        });
+        t.runAndTraceSuccess(
+            "message",
+            () -> {
+              super.invokeListener(session, message);
+              return Void.TYPE;
+            });
       } catch (Exception e) {
         failedMessageConsumer.accept(message, e);
       }
     }
-
   }
-
 
   protected void addMessageInfoToTracer(final Message msg) {
     String dest = UNK;
@@ -87,6 +85,5 @@ public class FuseMessageListenerContainer extends DefaultMessageListenerContaine
     addTraceInfo(this.getClass(), "jms-payload", text);
 
     setExternalRequestId(msgId);
-
   }
 }

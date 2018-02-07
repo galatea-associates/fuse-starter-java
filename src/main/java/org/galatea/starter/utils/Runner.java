@@ -1,4 +1,3 @@
-
 package org.galatea.starter.utils;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
@@ -24,7 +23,6 @@ import java.util.concurrent.locks.Lock;
  * in-line the code in the existing method.
  *
  * @author rbasu
- *
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Accessors(fluent = true, chain = true)
