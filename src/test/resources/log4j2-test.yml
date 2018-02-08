@@ -6,7 +6,7 @@
 Configuration:
   name: Default  
   # "status: trace" to print out logging configuration debug messages
-  status: trace
+  # status: trace
   
   Appenders:
   
