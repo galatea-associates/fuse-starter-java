@@ -85,7 +85,7 @@ FUSE currently shows how to read from a queue (not a topic).
 
 ## Logging
 - For the main configuration see: src/main/resources/log4j2.yml 
-- For configuring logging to the console and selectively enabling debug logging for local testing see: src/main/resources/log4j2.debug.yml 
+- For configuring logging to the console and selectively enabling debug logging for local testing see: src/test/resources/log4j2-debug.yml 
 - For required dependencies see: pom.xml
 - For creation of internal request id see: Tracer.java
 - For creation of external request id for Rest requests see: SettlementRestController.java
