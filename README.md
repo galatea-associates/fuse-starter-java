@@ -85,7 +85,7 @@ FUSE currently shows how to read from a queue (not a topic).
 
 ## Logging
 - For the main configuration see: src/main/resources/log4j2.yml 
-- For configuring logging to the console and selectively enabling debug logging for local testing see: src/main/resources/log4j2.debug.yml 
+- For configuring logging to the console and selectively enabling debug logging for local testing see: src/test/resources/log4j2-debug.yml 
 - For required dependencies see: pom.xml
 - For creation of internal request id see: Tracer.java
 - For creation of external request id for Rest requests see: SettlementRestController.java
@@ -103,6 +103,11 @@ Automated testing is good.  You should do it.  You should also design your appli
 We often struggle with the terms unit vs integration test.  For the purposes of FUSE, let's define as follows:
 - A unit test should test specific functionality without requiring resources outside of your jvm (e.g. no external databases, no external queues).  It really should only test a single class with mocked out dependencies, but we can see cases where you might want to relax the "single class" restriction.  Unit tests should be executed during the mvn test goal.
 - An integration test should connect to resources outside of your jvm and test that the end-to-end flow works as expected.  These should be executed during the mvn verify goal.
+
+To run the FUSE unit tests:
+- **Eclipse**: r-click 'Run As -> JUnit Test' on src/test/java/org/galatea/starter/UnitTestRunner
+- **command line**: Run '$>mvn test'
+- **IntelliJ**: TBD 
 
 Mocking is a good way to unit test (keeping in mind that your mock needs to be used in conjuction with a integration test).  FUSE has plenty of examples of how to use @MockBean.  See `org.galatea.starter.entrypoint.SettlementJmsListenerTest` and `org.galatea.starter.entrypoint.SettlementRestControllerTest` for some examples of how to mock.  Both of those tests mock out the settlement service using `given(...)` or `verify(...)` 
 
