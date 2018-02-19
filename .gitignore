@@ -1,3 +1,4 @@
 /target/
 .idea/*
 !.idea/runConfigurations
+fuse-starter-java.iml
