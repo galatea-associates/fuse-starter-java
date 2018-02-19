@@ -15,9 +15,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-  /**
-   * Handle SettlementMissionNotFoundException thrown by all Spring web controllers
-   */
   @ExceptionHandler(SettlementMissionNotFoundException.class)
   protected ResponseEntity<Object> handleSettlementMissionNotFound(
       SettlementMissionNotFoundException ex) {
