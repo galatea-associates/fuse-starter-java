@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- *  REST handler that intercepts exceptions thrown by controller calls
- *  and returns an appropriate response that is serialized into JSON format.
+ *  REST handler that intercepts exceptions thrown by controller calls and returns an
+ *  appropriate ResponseEntity.
  */
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {

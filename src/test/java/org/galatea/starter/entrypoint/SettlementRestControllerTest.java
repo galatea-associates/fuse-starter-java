@@ -23,8 +23,10 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.ASpringTest;
+import org.galatea.starter.ApiError;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.domain.exception.SettlementMissionNotFoundException;
 import org.galatea.starter.service.SettlementService;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -138,12 +141,16 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testGetMissionNotFound() throws Exception {
     long msnId = 1091L;
 
+    SettlementMissionNotFoundException exc = new SettlementMissionNotFoundException(msnId);
+
     given(this.mockSettlementService.findMission(msnId)).willReturn(Optional.empty());
 
     ResultActions resultActions = this.mvc
         .perform(get("/settlementEngine/mission/" + msnId + "?requestId=1234")
             .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isNotFound()).andExpect(content().string(""));
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.status", is(HttpStatus.NOT_FOUND.name())))
+        .andExpect(jsonPath("$.message", is(exc.getMessage())));
     verifyAuditHeaders(resultActions);
   }
 
