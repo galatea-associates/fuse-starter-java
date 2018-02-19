@@ -8,10 +8,17 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ *  REST handler that intercepts exceptions thrown by controller calls
+ *  and returns an appropriate response that is serialized into JSON format.
+ */
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-  @ExceptionHandler
+  /**
+   * Handle SettlementMissionNotFoundException thrown by all Spring web controllers
+   */
+  @ExceptionHandler(SettlementMissionNotFoundException.class)
   protected ResponseEntity<Object> handleSettlementMissionNotFound(
       SettlementMissionNotFoundException ex) {
     ApiError error = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage());
