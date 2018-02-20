@@ -12,6 +12,7 @@ Configuration:
   Properties:
     Property:
       - name: log-file-prefix
+        # create a new log file each hour
         value: ${date:yyyyMMddHH}.${sys:application.name}
       - name: log-dir
         value: ${sys:application.log-dir}
