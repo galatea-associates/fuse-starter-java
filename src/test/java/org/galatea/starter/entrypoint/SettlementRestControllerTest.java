@@ -141,7 +141,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testGetMissionNotFound() throws Exception {
     long msnId = 1091L;
 
-    SettlementMissionNotFoundException exc = new SettlementMissionNotFoundException(msnId);
+    SettlementMissionNotFoundException exception = new SettlementMissionNotFoundException(msnId);
 
     given(this.mockSettlementService.findMission(msnId)).willReturn(Optional.empty());
 
@@ -150,7 +150,7 @@ public class SettlementRestControllerTest extends ASpringTest {
             .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.status", is(HttpStatus.NOT_FOUND.name())))
-        .andExpect(jsonPath("$.message", is(exc.getMessage())));
+        .andExpect(jsonPath("$.message", is(exception.getMessage())));
     verifyAuditHeaders(resultActions);
   }
 
