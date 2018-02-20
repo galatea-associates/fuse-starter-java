@@ -9,12 +9,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- *  REST handler that intercepts exceptions thrown by controller calls and returns an
- *  appropriate ResponseEntity.
+ *  A centralized REST handler that intercepts defined exceptions thrown by controller calls,
+ *  enabling a custom ResponseEntity to be returned.
  */
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
+  /**
+   * Handles SettlementMissionNotFoundException's thrown by calls to any web controller,
+   * setting an appropriate response body containing the HttpStatus and exception message.
+   */
   @ExceptionHandler(SettlementMissionNotFoundException.class)
   protected ResponseEntity<Object> handleSettlementMissionNotFound(
       SettlementMissionNotFoundException ex) {
