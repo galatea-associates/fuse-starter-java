@@ -93,6 +93,7 @@ pipeline {
             	}
             }
             steps {
+            	sleep time:90, unit: 'SECONDS'
                 sh 'mvn verify'
             }
             post {
