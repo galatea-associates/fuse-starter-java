@@ -57,6 +57,10 @@ public abstract class ASpringTest {
         .trim();
   }
 
+  public static byte[] readBytes(final String fileName) throws IOException {
+    return IOUtils.toByteArray(ASpringTest.class.getClassLoader().getResourceAsStream(fileName));
+  }
+
   /**
    * The ActiveMQ broker isn't automatically shutdown after each test, so this step ensures we are
    * shutting it down. Otherwise, you may have old mocks injected into the listeners when you run

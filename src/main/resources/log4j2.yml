@@ -121,7 +121,7 @@ Configuration:
   Loggers:
     # Define some defaults
     Root:
-      level: info 
+      level: debug
       AppenderRef:
         - ref: AsyncAppender
         

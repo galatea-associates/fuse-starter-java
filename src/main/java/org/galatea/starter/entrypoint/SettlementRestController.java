@@ -12,15 +12,18 @@ import net.sf.aspect4log.Log.Level;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
+import org.galatea.starter.entrypoint.messagecontracts.Messages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.Tracer;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -73,8 +76,9 @@ public class SettlementRestController {
   // @GetMapping to link http GET requests to this method
   // @PathVariable to take the id from the path and make it available as a method argument
   // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
-  @GetMapping(value = GET_MISSION_PATH + "{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public SettlementMission getMission(@PathVariable final Long id,
+  @GetMapping(value = GET_MISSION_PATH + "{id}",
+      produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,"application/x-protobuf"})
+  public @ResponseBody SettlementMission getMission(@PathVariable final Long id,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
     // if an external request id was provided, grab it
@@ -87,6 +91,12 @@ public class SettlementRestController {
     }
 
     throw new EntityNotFoundException(SettlementMission.class, id.toString());
+  }
+
+  @GetMapping(value = "/test/", produces = "application/x-protobuf")
+  public Messages.SettlementMissionMessage getMsg() {
+    return Messages.SettlementMissionMessage.newBuilder().setId(1L).setQty(20).setDepot("dt")
+        .setDirection("del").setExternalParty("ecp").setInstrument("int").build();
   }
 
   /**

@@ -1,32 +1,28 @@
 
 package org.galatea.starter;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import java.util.function.BiConsumer;
+import javax.jms.ConnectionFactory;
+import javax.jms.Message;
 import lombok.extern.slf4j.Slf4j;
-
+import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
 import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.jms.FuseJmsListenerContainerFactory;
+import org.galatea.starter.utils.translation.ITranslator;
+import org.galatea.starter.utils.translation.TranslationException;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
-import org.springframework.jms.annotation.JmsListenerConfigurer;
 import org.springframework.jms.config.JmsListenerContainerFactory;
-import org.springframework.jms.config.JmsListenerEndpointRegistrar;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.converter.MessageConverter;
-import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
-import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
-
-import java.util.function.BiConsumer;
-
-import javax.jms.ConnectionFactory;
-import javax.jms.Message;
 
 @Slf4j
 @Configuration
 @EnableJms
-public class JmsConfig implements JmsListenerConfigurer {
+public class JmsConfig {
 
   /**
    * @return an implementation of failed message consumer that simply logs the message.
@@ -37,9 +33,24 @@ public class JmsConfig implements JmsListenerConfigurer {
         "Message {} failed to process after retries.  Removing message from queue", msg, err);
   }
 
+  /**
+   * @return a translator to convert binary protobuf messages to trade agreements.
+   */
   @Bean
-  public MessageConverter jacksonJmsMessageConverter() {
-    return new MappingJackson2MessageConverter();
+  public ITranslator<byte[], TradeAgreement> tradeAgreementMessageTranslator () {
+    return msg -> {
+      TradeAgreementMessage message;
+
+      try {
+        message = TradeAgreementMessage.parseFrom(msg);
+      } catch (InvalidProtocolBufferException e) {
+        throw new TranslationException("Could not translate the message to a trade agreement.", e);
+      }
+
+      return TradeAgreement.builder().id(message.getId()).instrument(message.getInstrument())
+          .internalParty(message.getInternalParty()).externalParty(message.getExternalParty())
+          .buySell(message.getBuySell()).qty(message.getQty()).build();
+    };
   }
 
   /**
@@ -71,25 +82,6 @@ public class JmsConfig implements JmsListenerConfigurer {
     // TODO: override any defaults in the listener factory before we return the object
 
     return listenerFactory;
-  }
-
-
-  /**
-   * @return a new handler factory that uses a different message converter than the default one.
-   */
-  @Bean
-  public MessageHandlerMethodFactory jmsHandlerMethodFactory() {
-    DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
-
-    // Note that we use the spring messaging converter instead of the spring jms converter. The two
-    // behave differently.
-    factory.setMessageConverter(jacksonJmsMessageConverter());
-    return factory;
-  }
-
-  @Override
-  public void configureJmsListeners(final JmsListenerEndpointRegistrar registrar) {
-    registrar.setMessageHandlerMethodFactory(jmsHandlerMethodFactory());
   }
 }
 

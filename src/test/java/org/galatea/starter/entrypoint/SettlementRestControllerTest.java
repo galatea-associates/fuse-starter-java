@@ -177,6 +177,12 @@ public class SettlementRestControllerTest extends ASpringTest {
     }
   }
 
+  @Test
+  public void testProtobuf() throws Exception {
+    this.mvc.perform(get("/test/").accept("application/x-protobuf"))
+        .andExpect(status().isOk());
+  }
+
   /**
    * Verifies required audit fields are present
    *

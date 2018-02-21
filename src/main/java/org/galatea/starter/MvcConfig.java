@@ -15,8 +15,16 @@ import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
+import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -51,6 +59,22 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
   @Bean
   public FuseTraceRepository traceRepository() {
     return new FuseTraceRepository();
+  }
+
+  @Override
+  public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+    configurer.favorParameter(true) // give precedence to url request parameters
+        .ignoreAcceptHeader(false) // enable use of the Accept header for content negotiation
+        .useJaf(false) // let's not fallback on the Java Activation Framework
+        .defaultContentType(MediaType.APPLICATION_JSON);
+  }
+
+  @Override
+  public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    converters.add(new MappingJackson2HttpMessageConverter()); // JSON
+    converters.add(new Jaxb2RootElementHttpMessageConverter()); // XML
+    converters.add(new ProtobufHttpMessageConverter());
+    super.configureMessageConverters(converters);
   }
 
 }
