@@ -86,10 +86,11 @@ pipeline {
             }
         }
         stage('Integration tests') {
-            when {
+            when {            	
                 expression { BRANCH_NAME ==~ /^PR-\d+$/ }
             }
             steps {
+            	sleep time:90, unit: 'SECONDS'
                 sh 'mvn verify'
             }
             post {
