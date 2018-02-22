@@ -12,7 +12,8 @@ Configuration:
   Properties:
     Property:
       - name: log-file-prefix
-        value: ${date:yyyyMMddHHmmss}.${sys:application.name}
+        # log file naming prefix.  each time the date prefix changes, a new log file wil be created
+        value: ${date:yyyyMMddHH}.${sys:application.name}
       - name: log-dir
         value: ${sys:application.log-dir}
       - name: log-archive-dir
@@ -34,7 +35,7 @@ Configuration:
         # Define where to put logs when rolling
         filePattern: ${log-archive-dir}/${log-file-prefix}.${zip-suffix}
         # Define what the log output will look like 
-        PatternLayout: 
+        PatternLayout:
           Pattern: ${log-pattern}
         Policies:
           # Logs should be rolled based on time. Rolled logs should be gz (defined by zip-suffix)
@@ -90,7 +91,7 @@ Configuration:
       - name: RestRequestRollingFileAppender
         filename: ${log-dir}/${log-file-prefix}.rest.log
         filePattern: ${log-archive-dir}/${log-file-prefix}.rest.${zip-suffix}
-        PatternLayout: 
+        PatternLayout:
           Pattern: ${log-pattern}
         Policies:
           TimeBasedTriggeringPolicy:
