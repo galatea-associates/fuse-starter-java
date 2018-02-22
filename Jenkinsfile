@@ -86,8 +86,11 @@ pipeline {
             }
         }
         stage('Integration tests') {
-            when {            	
-                expression { BRANCH_NAME ==~ /^PR-\d+$/ }
+            when {
+            	anyOf {
+	                expression { BRANCH_NAME ==~ /^PR-\d+$/ }
+            	 	branch 'develop'   
+            	}
             }
             steps {
             	sleep time:90, unit: 'SECONDS'
@@ -105,6 +108,7 @@ pipeline {
             }
             steps {
                 echo 'Running performance tests...'
+                echo 'No performance tests defined yet.'
             }
         }
         stage('Shutdown') {
