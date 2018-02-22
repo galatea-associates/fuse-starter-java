@@ -19,7 +19,7 @@
 			-Dapplication.name=${project.artifactId}
 			-Dapplication.log-dir=target/logs
 			-Dapplication.log-archive-root-dir=target/logs/archive
-			-Dlog4j.configurationFile=log4j2.yml,log4j2.debug.yml
+			-Dlog4j.configurationFile=log4j2.yml,log4j2-debug.yml
 		</argLine>
 		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java</sonar.coverage.exclusions>
 		<!-- Allow us to skip Unit Tests only, if need be, with -Dskip.surefire.tests, but retain the skip all tests functionality of -DskipTests -->
@@ -137,16 +137,10 @@
 		</dependency>
 
 
-		<!-- Ehcache for caching -->
+		<!-- Ehcache for caching. Having ehcache.xml in src/main/resources tells SpringBoot to use EhCache as the caching implementation for @Cacheable -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-		</dependency>
-
-		<!-- Support for various caches -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
 		</dependency>
 
 		<dependency>
