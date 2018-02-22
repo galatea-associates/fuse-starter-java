@@ -43,30 +43,6 @@ pipeline {
                 }
             }
         }
-        stage('Checkstyle') {
-            steps {
-                sh 'mvn checkstyle:check'
-            }
-            // using the following results in an error in the pipeline - ERROR: None of the test reports contained any result
-            //post {
-            //    always {
-            //        junit 'target/checkstyle-result.xml'
-            //    }
-            //}
-            // this will simply show a blank report if the checkstyle check is successful
-            post {
-                failure {
-                    publishHTML (target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'target',
-                        reportFiles: 'checkstyle-result.xml',
-                        reportName: 'Checkstyle report'
-                    ])
-                }
-            }
-        }
         stage('Deploy') {
             when {
                 expression { isDeployBranch() }
