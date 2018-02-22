@@ -135,16 +135,10 @@
 		</dependency>
 
 
-		<!-- Ehcache for caching -->
+		<!-- Ehcache for caching. Having ehcache.xml in src/main/resources tells SpringBoot to use EhCache as the caching implementation for @Cacheable -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-		</dependency>
-
-		<!-- Support for various caches -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
 		</dependency>
 
 		<dependency>

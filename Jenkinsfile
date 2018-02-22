@@ -33,7 +33,7 @@ pipeline {
         stage('Quality gate') {
             steps {
                 // Just in case something goes wrong, pipeline will be killed after a timeout
-                timeout(time: 1, unit: 'MINUTES') {
+                timeout(time: 2, unit: 'MINUTES') {
                     script {
                         def qg = waitForQualityGate()
                         if (qg.status != 'OK') {
@@ -87,9 +87,13 @@ pipeline {
         }
         stage('Integration tests') {
             when {
-                expression { BRANCH_NAME ==~ /^PR-\d+$/ }
+            	anyOf {
+	                expression { BRANCH_NAME ==~ /^PR-\d+$/ }
+            	 	branch 'develop'   
+            	}
             }
             steps {
+            	sleep time:90, unit: 'SECONDS'
                 sh 'mvn verify'
             }
             post {
@@ -104,6 +108,7 @@ pipeline {
             }
             steps {
                 echo 'Running performance tests...'
+                echo 'No performance tests defined yet.'
             }
         }
         stage('Shutdown') {
