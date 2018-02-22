@@ -22,6 +22,8 @@
 			-Dlog4j.configurationFile=log4j2.yml,log4j2-debug.yml
 		</argLine>
 		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java</sonar.coverage.exclusions>
+		<!-- Allow us to skip Unit Tests only, if need be, with -Dskip.surefire.tests, but retain the skip all tests functionality of -DskipTests -->
+		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
 	</properties>
 
 	<parent>
@@ -200,6 +202,10 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<excludedGroups>org.galatea.starter.IntegrationTestCategory</excludedGroups>
+					<!-- skips surefire tests without skipping failsafe tests. Property 
+						value seems to magically default to false -->
+					<!-- See https://stackoverflow.com/questions/6612344/prevent-unit-tests-in-maven-but-allow-integration-tests -->
+					<skipTests>${skip.surefire.tests}</skipTests>
 				</configuration>
 			</plugin>
 			<plugin>
