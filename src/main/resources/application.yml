@@ -3,7 +3,11 @@ spring:
    profiles:
       active: test
    datasource:
-      url: jdbc:h2:~/test
+      # this maps to an in-memory database that lives within a single VM.
+      # in case you want to use H2 with a file persistence or as a service
+      # reference http://www.h2database.com/html/cheatSheet.html and
+      # http://www.h2database.com/html/tutorial.html#using_server
+      url: jdbc:h2:mem:testtest
       driver-class-name: org.h2.Driver
    jpa:
       hibernate:
