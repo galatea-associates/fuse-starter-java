@@ -80,7 +80,10 @@ pipeline {
         }
         stage('Performance tests') {
             when {
-                branch 'develop'
+            	anyOf {
+	                expression { BRANCH_NAME ==~ /^PR-\d+$/ }
+            	 	branch 'develop'   
+            	}
             }
             steps {
                 echo 'Running performance tests...'
