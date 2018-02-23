@@ -57,12 +57,12 @@ pipeline {
                     cloudSpace: 'development',
                     credentialsId: 'cf-credentials',
                     manifestChoice: [
-                        appName: fuse-rest-dev-#{BUILD_NUMBER}
-                        memory: 768M
+                        appName: 'fuse-rest-dev-#{BUILD_NUMBER}'
+                        memory: 768
                         instances: 1
-                        appPath: target/fuse-starter-java-0.0.1-SNAPSHOT.jar
+                        appPath: 'target/fuse-starter-java-0.0.1-SNAPSHOT.jar'
                         env:
-                          SPRING_PROFILES_ACTIVE: dev
+                          SPRING_PROFILES_ACTIVE: 'dev'
                           JAVA_OPTS: '-Dapplication.name=my-fuse-app-#{BUILD_NUMBER} -Dlog4j.configurationFile=log4j2-stdout.yml'
                     ]
                     // pluginTimeout: 240 // default value is 120
