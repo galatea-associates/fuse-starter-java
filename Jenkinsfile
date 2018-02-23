@@ -87,7 +87,7 @@ pipeline {
             }
             steps {
             	sleep time:90, unit: 'SECONDS'
-              sh "mvn verify -Dskip.surefire.tests"
+              sh "mvn verify -Dskip.surefire.tests -Dfuse.sandbox.url=http://fuse-rest-dev-${env.GIT_COMMIT}.cfapps.io"
             }
             post {
                always {
