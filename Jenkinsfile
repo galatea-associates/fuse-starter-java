@@ -52,6 +52,7 @@ pipeline {
                 sh 'mvn package'
 
                 pushToCloudFoundry(
+                    value: 'jenkinsConfig',
                     target: 'https://api.run.pivotal.io/',
                     organization: 'FUSE',
                     cloudSpace: 'development',
