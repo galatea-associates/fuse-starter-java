@@ -26,7 +26,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarCloud FUSE') {
-                    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar'
+                    sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar"
                 }
             }
         }
