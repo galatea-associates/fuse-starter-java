@@ -108,7 +108,6 @@ pipeline {
                         // make sure the password does not contain single quotes otherwise the escaping fails
                         sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
                         sh "cf stop fuse-rest-dev-${env.GIT_COMMIT}"
-                        sh "cf delete fuse-rest-dev-${env.GIT_COMMIT} -r -f"
                         sh 'cf logout'
                     }
                 }
