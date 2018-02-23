@@ -80,7 +80,7 @@ pipeline {
             }
             steps {
             	sleep time:90, unit: 'SECONDS'
-                sh "mvn verify -Dfuse.sandbox.name=http://fuse-rest-dev-${env.GIT_COMMIT}.cfapps.io"
+                sh "mvn verify -Dfuse.sandbox.url=http://fuse-rest-dev-${env.GIT_COMMIT}.cfapps.io"
             }
             post {
                always {
