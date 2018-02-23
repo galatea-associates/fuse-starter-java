@@ -70,6 +70,13 @@ pipeline {
                     pluginTimeout: 240 // default value is 120
                 )
             }
+            post {
+              success {
+                script {
+                  appStarted = true
+                }
+              }
+            }
         }
         stage('Integration tests') {
             when {
@@ -86,6 +93,10 @@ pipeline {
                always {
                  junit 'target/failsafe-reports/*.xml'
                }
+               failure {
+                 echo 'Shutting down app'
+                 doShutdown()
+               }
             }
         }
         stage('Performance tests') {
@@ -99,22 +110,17 @@ pipeline {
                 echo 'Running performance tests...'
                 echo 'No performance tests defined yet.'
             }
+            post {
+              failure {
+                echo 'Shutting down app'
+                doShutdown()
+              }
+            }
         }
         stage('Shutdown') {
-            when {
-                expression { isDeployBranch() }
-            }
             steps {
                 echo 'Shutting down app'
-                timeout(time: 2, unit: 'MINUTES') {
-                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
-                        // make sure the password does not contain single quotes otherwise the escaping fails
-                        sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
-                        sh "cf stop fuse-rest-dev-${env.GIT_COMMIT}"
-                        sh "cf delete fuse-rest-dev-${env.GIT_COMMIT} -r -f"
-                        sh 'cf logout'
-                    }
-                }
+                doShutdown()
             }
         }
     }
@@ -191,4 +197,21 @@ def getLastCommitMessage() {
 def populateGlobalVariables() {
     getLastCommitMessage()
     getGitAuthor()
+}
+
+def appStarted = false;
+def doShutdown() {
+  if (isDeployBranch() && appStarted) {
+    timeout(time: 2, unit: 'MINUTES') {
+      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
+          // make sure the password does not contain single quotes otherwise the escaping fails
+          sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
+          sh "cf stop fuse-rest-dev-${env.GIT_COMMIT}"
+          sh "cf delete fuse-rest-dev-${env.GIT_COMMIT} -r -f"
+          sh 'cf logout'
+      }
+    }
+
+    appStarted = false;
+  }
 }
