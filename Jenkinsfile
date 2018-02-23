@@ -58,13 +58,13 @@ pipeline {
                     credentialsId: "cf-credentials",
                     manifestChoice: [
                         value: "jenkinsConfig",
-                        appName: "fuse-rest-dev-${env.BUILD_NUMBER}",
+                        appName: "fuse-rest-dev-${env.GIT_REVISION}",
                         memory: 768,
                         instances: 1,
                         appPath: "target/fuse-starter-java-0.0.1-SNAPSHOT.jar",
                         envVars: [
                           [key: "SPRING_PROFILES_ACTIVE", value: "dev"],
-                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.BUILD_NUMBER} -Dlog4j.configurationFile=log4j2-stdout.yml"]
+                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_REVISION} -Dlog4j.configurationFile=log4j2-stdout.yml"]
                         ]
                     ]
                     // pluginTimeout: 240 // default value is 120
@@ -107,7 +107,7 @@ pipeline {
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
                         // make sure the password does not contain single quotes otherwise the escaping fails
                         sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
-                        sh 'cf stop fuse-rest-dev'
+                        sh "cf stop fuse-rest-dev-${env.GIT_REVISION}"
                         sh 'cf logout'
                     }
                 }
