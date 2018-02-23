@@ -93,7 +93,7 @@ pipeline {
                always {
                  junit 'target/failsafe-reports/*.xml'
                }
-               fail {
+               failure {
                  echo 'Shutting down app'
                  doShutdown()
                }
@@ -111,7 +111,7 @@ pipeline {
                 echo 'No performance tests defined yet.'
             }
             post {
-              fail {
+              failure {
                 echo 'Shutting down app'
                 doShutdown()
               }
