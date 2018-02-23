@@ -52,12 +52,22 @@ pipeline {
                 sh 'mvn package -DskipTests'
 
                 pushToCloudFoundry(
-                    target: 'https://api.run.pivotal.io/',
-                    organization: 'FUSE',
-                    cloudSpace: 'development',
-                    credentialsId: 'cf-credentials',
-                    manifestChoice: [manifestFile: 'manifest-dev.yml']
-                    // pluginTimeout: 240 // default value is 120
+                    target: "https://api.run.pivotal.io/",
+                    organization: "FUSE",
+                    cloudSpace: "development",
+                    credentialsId: "cf-credentials",
+                    manifestChoice: [
+                        value: "jenkinsConfig",
+                        appName: "fuse-rest-dev-${env.GIT_COMMIT}",
+                        memory: 768,
+                        instances: 1,
+                        appPath: "target/fuse-starter-java-0.0.1-SNAPSHOT.jar",
+                        envVars: [
+                          [key: "SPRING_PROFILES_ACTIVE", value: "dev"],
+                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml"]
+                        ]
+                    ],
+                    pluginTimeout: 240 // default value is 120
                 )
             }
         }
@@ -70,7 +80,7 @@ pipeline {
             }
             steps {
             	sleep time:90, unit: 'SECONDS'
-                sh 'mvn verify -Dskip.surefire.tests'
+              sh "mvn verify -Dskip.surefire.tests -Dfuse.sandbox.url=http://fuse-rest-dev-${env.GIT_COMMIT}.cfapps.io"
             }
             post {
                always {
@@ -100,7 +110,8 @@ pipeline {
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
                         // make sure the password does not contain single quotes otherwise the escaping fails
                         sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
-                        sh 'cf stop fuse-rest-dev'
+                        sh "cf stop fuse-rest-dev-${env.GIT_COMMIT}"
+                        sh "cf delete fuse-rest-dev-${env.GIT_COMMIT} -r -f"
                         sh 'cf logout'
                     }
                 }
