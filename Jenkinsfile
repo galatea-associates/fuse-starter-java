@@ -57,7 +57,6 @@ pipeline {
                     cloudSpace: 'development',
                     credentialsId: 'cf-credentials',
                     manifestChoice: [
-                        value: 'jenkinsConfig',
                         appName: 'fuse-rest-dev-#{BUILD_NUMBER}',
                         memory: 768,
                         instances: 1,
