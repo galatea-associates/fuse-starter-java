@@ -118,9 +118,6 @@ pipeline {
             }
         }
         stage('Shutdown') {
-            when {
-                expression { isDeployBranch() }
-            }
             steps {
                 echo 'Shutting down app'
                 doShutdown()
@@ -203,16 +200,8 @@ def populateGlobalVariables() {
 }
 
 def appStarted = false;
-def needsShutdown() {
-  if (isDeployBranch() && appStarted) {
-    return true;
-  }
-
-  return false;
-}
-
 def doShutdown() {
-  if (needsShutdown()) {
+  if (isDeployBranch() && appStarted) {
     timeout(time: 2, unit: 'MINUTES') {
       withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
           // make sure the password does not contain single quotes otherwise the escaping fails
