@@ -49,7 +49,7 @@ pipeline {
             }
             steps {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
-                sh 'mvn package'
+                sh 'mvn package -DskipTests'
 
                 pushToCloudFoundry(
                     target: "https://api.run.pivotal.io/",
@@ -80,7 +80,7 @@ pipeline {
             }
             steps {
             	sleep time:90, unit: 'SECONDS'
-                sh "mvn verify -Dfuse.sandbox.url=http://fuse-rest-dev-${env.GIT_COMMIT}.cfapps.io"
+              sh "mvn verify -Dskip.surefire.tests -Dfuse.sandbox.url=http://fuse-rest-dev-${env.GIT_COMMIT}.cfapps.io"
             }
             post {
                always {
