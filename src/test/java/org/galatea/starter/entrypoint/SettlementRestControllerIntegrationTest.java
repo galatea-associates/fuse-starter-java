@@ -43,10 +43,13 @@ public class SettlementRestControllerIntegrationTest {
 
   @Test
   public void testMissionCreation() {
+    String fuseHostName = System.getProperty("fuse.sandbox.name");
+    if (fuseHostName == null || fuseHostName.isEmpty()) {
+      throw new RuntimeException("The name of the fuse sandbox wasn't specified.");
+    }
 
-    // TODO: the base URL should probably be moved to a src/test/resources properties file
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
-        .target(FuseServer.class, "http://fuse-rest-dev.cfapps.io");
+        .target(FuseServer.class, fuseHostName);
 
     List<String> missionPaths = fuseServer.sendTradeAgreement(new TradeAgreement[] {
 
