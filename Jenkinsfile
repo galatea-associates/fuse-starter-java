@@ -70,6 +70,13 @@ pipeline {
                     pluginTimeout: 240 // default value is 120
                 )
             }
+            post {
+              success {
+                script {
+                  appStarted = true
+                }
+              }
+            }
         }
         stage('Integration tests') {
             when {
@@ -80,11 +87,15 @@ pipeline {
             }
             steps {
             	sleep time:90, unit: 'SECONDS'
-              sh "mvn verify -Dskip.surefire.tests -Dfuse.sandbox.url=http://fuse-rest-dev-${env.GIT_COMMIT}.cfapps.io"
+              sh "mvn verify -Dskip.surefire.tests"
             }
             post {
                always {
                  junit 'target/failsafe-reports/*.xml'
+               }
+               fail {
+                 echo 'Shutting down app'
+                 doShutdown()
                }
             }
         }
@@ -99,6 +110,12 @@ pipeline {
                 echo 'Running performance tests...'
                 echo 'No performance tests defined yet.'
             }
+            post {
+              fail {
+                echo 'Shutting down app'
+                doShutdown()
+              }
+            }
         }
         stage('Shutdown') {
             when {
@@ -106,15 +123,7 @@ pipeline {
             }
             steps {
                 echo 'Shutting down app'
-                timeout(time: 2, unit: 'MINUTES') {
-                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
-                        // make sure the password does not contain single quotes otherwise the escaping fails
-                        sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
-                        sh "cf stop fuse-rest-dev-${env.GIT_COMMIT}"
-                        sh "cf delete fuse-rest-dev-${env.GIT_COMMIT} -r -f"
-                        sh 'cf logout'
-                    }
-                }
+                doShutdown()
             }
         }
     }
@@ -191,4 +200,29 @@ def getLastCommitMessage() {
 def populateGlobalVariables() {
     getLastCommitMessage()
     getGitAuthor()
+}
+
+def appStarted = false;
+def needsShutdown() {
+  if (isDeployBranch() && appStarted) {
+    return true;
+  }
+
+  return false;
+}
+
+def doShutdown() {
+  if (needsShutdown()) {
+    timeout(time: 2, unit: 'MINUTES') {
+      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
+          // make sure the password does not contain single quotes otherwise the escaping fails
+          sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
+          sh "cf stop fuse-rest-dev-${env.GIT_COMMIT}"
+          sh "cf delete fuse-rest-dev-${env.GIT_COMMIT} -r -f"
+          sh 'cf logout'
+      }
+    }
+
+    appStarted = false;
+  }
 }
