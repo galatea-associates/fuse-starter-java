@@ -1,9 +1,9 @@
 ---
 applications:
-- name: fuse-rest-dev
+- name: fuse-rest-dev-${env.GIT_COMMIT}
   memory: 768M
   instances: 1
   path: target/fuse-starter-java-0.0.1-SNAPSHOT.jar
   env:
     SPRING_PROFILES_ACTIVE: dev
-    JAVA_OPTS: '-Dapplication.name=my-fuse-app -Dlog4j.configurationFile=log4j2-stdout.yml'
+    JAVA_OPTS: '-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml'
