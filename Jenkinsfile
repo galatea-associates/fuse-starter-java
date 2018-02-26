@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Unit tests') {
             steps {
-                sh 'mvn test org.jacoco:jacoco-maven-plugin:0.8.0:prepare-agent'
+                sh 'mvn test'
             }
             post {
                 always {
@@ -28,7 +28,7 @@ pipeline {
             	populateTargetBranch()
             	echo "Branch name: ${env.BRANCH_NAME} Target branch: ${targetBranch}"            	                 
                 withSonarQubeEnv('SonarCloud FUSE') {
-                  sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} sonar:sonar"
+                  sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} org.jacoco:jacoco-maven-plugin:0.8.0:prepare-agent sonar:sonar"
                 }
             }
         }
