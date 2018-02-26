@@ -26,6 +26,13 @@ public class SonarIssuesAboundHere {
     }
   }
 
+  public Integer addTwoNumbers(Double d, Integer i) {
+    if (i == null) {
+      int zero = 0;
+      return (int) (d / zero);
+    }
+    return (int) (d + i);
+  }
 
   // seems like sonar should complain about a main method in some rando class...
   public static void main(String[] args) {
