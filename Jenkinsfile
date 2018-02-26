@@ -10,7 +10,7 @@ pipeline {
             steps {
                 populateGlobalVariables()
                 notifySlack("Starting", 'fuse-java-builds', "#2fc2e0")
-                sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true compile'
+                sh 'mvn clean org.jacoco:jacoco-maven-plugin:0.8.0:prepare-agent -Dmaven.test.failure.ignore=true compile'
             }
         }
         stage('Unit tests') {
@@ -26,7 +26,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarCloud FUSE') {
-                    sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar'
+                    sh 'mvn clean org.jacoco:jacoco-maven-plugin:0.8.0:prepare-agent compile test-compile test sonar:sonar'
                 }
             }
         }
