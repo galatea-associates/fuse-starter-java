@@ -25,8 +25,10 @@ pipeline {
         }
         stage('SonarQube analysis') {
             steps {
+            	populateTargetBranch()
+            	echo "Branch name: ${env.BRANCH_NAME} Target branch: ${targetBranch}"            	                 
                 withSonarQubeEnv('SonarCloud FUSE') {
-                    sh 'mvn sonar:sonar'
+                  sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} sonar:sonar"
                 }
             }
         }
@@ -209,3 +211,10 @@ def doShutdown() {
     appStarted = false;
   }
 }
+
+def targetBranch=""
+def populateTargetBranch() {
+	echo "Populating target branch for branch: ${BRANCH_NAME}"
+	targetBranch=(BRANCH_NAME == "develop") ? "" : "develop"
+}
+
