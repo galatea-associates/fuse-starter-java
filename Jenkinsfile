@@ -220,7 +220,7 @@ def doShutdown() {
 
 def targetBranch=""
 def populateTargetBranch() {
-	echo "Populating target branch for branch: " & BRANCH_NAME
+	echo "Populating target branch for branch: ${BRANCH_NAME}"
 	targetBranch=(BRANCH_NAME == "develop") ? "" : "develop"
 }
 
