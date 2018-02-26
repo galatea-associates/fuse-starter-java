@@ -183,6 +183,9 @@ def notifySlack(titlePrefix, channel, color) {
     }
 }
 
+// if this branch is develop or master, leave blank. Otherwise, target 'develop'
+def targetBranch = (env.BRANCH_NAME == "develop" || env.BRANCH_NAME == "master") ? "" : "develop"
+
 def author = ""
 def getGitAuthor() {
     def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
@@ -215,6 +218,3 @@ def doShutdown() {
     appStarted = false;
   }
 }
-
-// if this branch is develop or master, leave blank. Otherwise, target 'develop'
-def targetBranch = (env.BRANCH_NAME == "develop" || env.BRANCH_NAME == "master") ? "" : "develop"
