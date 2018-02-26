@@ -26,7 +26,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarCloud FUSE') {
-                    sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar"
+                    sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} -Dsonar.branch.target=${targetBranch} clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar"
                 }
             }
         }
@@ -215,3 +215,6 @@ def doShutdown() {
     appStarted = false;
   }
 }
+
+// if this branch is develop or master, leave blank. Otherwise, target 'develop'
+def targetBranch = (env.BRANCH_NAME == "develop" || env.BRANCH_NAME == "master") ? "" : "develop"
