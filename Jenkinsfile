@@ -28,7 +28,7 @@ pipeline {
             	populateTargetBranch()
             	echo "Branch name: ${env.BRANCH_NAME} Target branch: ${targetBranch}"            	                 
                 withSonarQubeEnv('SonarCloud FUSE') {
-                  sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} sonar:sonar"
+                  sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} -Dsonar.branch.target=${targetBranch} sonar:sonar"
                 }
             }
         }
@@ -66,7 +66,7 @@ pipeline {
                         appPath: "target/fuse-starter-java-0.0.1-SNAPSHOT.jar",
                         envVars: [
                           [key: "SPRING_PROFILES_ACTIVE", value: "dev"],
-                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dsonar.branch.target=${targetBranch} -Dlog4j.configurationFile=log4j2-stdout.yml"]
+                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml"]
                         ]
                     ],
                     pluginTimeout: 240 // default value is 120
