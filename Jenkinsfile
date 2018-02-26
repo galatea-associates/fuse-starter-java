@@ -26,7 +26,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarCloud FUSE') {
-                    sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} -Dsonar.branch.target=${targetBranch} clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar"
+                    sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} -Dsonar.branch.target=${env.CHANGE_TARGET} clean org.jacoco:jacoco-maven-plugin:prepare-agent compile test-compile test sonar:sonar"
                 }
             }
         }
@@ -182,9 +182,6 @@ def notifySlack(titlePrefix, channel, color) {
         sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
     }
 }
-
-// if this branch is develop or master, leave blank. Otherwise, target 'develop'
-def targetBranch = (env.BRANCH_NAME == "develop" || env.BRANCH_NAME == "master") ? "" : "develop"
 
 def author = ""
 def getGitAuthor() {
