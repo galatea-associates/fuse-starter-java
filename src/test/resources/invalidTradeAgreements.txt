@@ -1,0 +1,6 @@
+{"internalParty": "INT-1","externalParty": "EXT-1","buySell": "B","qty": 100}|
+{"instrument": "IBM","internalParty": "INT-1","externalParty": "EXT-1","buySell": "S","qty": 100}|
+{"instrument": "IBM","internalParty": "INT-1","externalParty": "EXT-1","buySell": "S","qty": 200}|
+[{{invalidJson}|
+
+

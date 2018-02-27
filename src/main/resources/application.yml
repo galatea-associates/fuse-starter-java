@@ -39,3 +39,9 @@ spring:
    datasource:
       username: sa
       password:
+---
+entrypoint:
+   file:
+      directory: testDir
+      filePatternRegex: ^.*\.txt$
+      delimiter:  \\|
