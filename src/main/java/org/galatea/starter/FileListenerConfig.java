@@ -14,6 +14,7 @@ import java.io.File;
 @Configuration
 public class FileListenerConfig {
 
+  // inject the value from application properties (see application.yml)
   @Value("${entrypoint.file.directory}")
   private String listenerDirectoryPath;
 
@@ -25,12 +26,8 @@ public class FileListenerConfig {
 
   @Bean
   public SettlementFileListener settlementFileListener(SettlementFileProcessor fileProcessor) {
-    return new SettlementFileListener(listenerDirectory(), filePatternRegex, fileProcessor);
-  }
-
-  @Bean
-  public File listenerDirectory() {
-    return new File(listenerDirectoryPath);
+    File directory = new File(listenerDirectoryPath);
+    return new SettlementFileListener(directory, filePatternRegex, fileProcessor);
   }
 
   @Bean

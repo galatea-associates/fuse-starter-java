@@ -31,6 +31,10 @@ public class SettlementFileParser {
   @NonNull
   private final ObjectMapper mapper;
 
+  /**
+   * Parse the input file into trade agreements, split by delimiter, skipping incorrectly formatted
+   * agreements.
+   */
   public List<TradeAgreement> parseTradeAgreements(File file) throws IOException {
     return Files.lines(file.toPath()).parallel()
         .map(line -> line.split(delimiter)).flatMap(Arrays::stream)
