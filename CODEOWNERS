@@ -1,0 +1,4 @@
+# See https://help.github.com/articles/about-codeowners/ for details/examples
+
+# Let's define code owners for the entire repo (we can get more fine grained if we'd like; see the examples linked to above)
+*	@GalateaRaj @j-barber @GalateaEric @paulo-reichert @hstandring @gala-dan
