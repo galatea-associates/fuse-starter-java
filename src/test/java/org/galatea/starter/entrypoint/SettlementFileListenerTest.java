@@ -71,7 +71,7 @@ public class SettlementFileListenerTest extends ASpringTest {
 
   @Test
   public void nonExistentDirectoryReturnsEmptyList() {
-    inputDirectory.delete();
+    fileListener = new SettlementFileListener(new File("nonDir"), FILE_REGEX, fileProcessor);
 
     Collection<File> processed = fileListener.processFilesInDirectory();
 
