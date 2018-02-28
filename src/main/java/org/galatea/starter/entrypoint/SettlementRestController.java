@@ -11,7 +11,7 @@ import net.sf.aspect4log.Log.Level;
 
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
-import org.galatea.starter.domain.exception.SettlementMissionNotFoundException;
+import org.galatea.starter.domain.exception.EntityNotFoundException;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.Tracer;
 import org.springframework.http.MediaType;
@@ -85,7 +85,7 @@ public class SettlementRestController {
       return ResponseEntity.ok(msn.get());
     }
 
-    throw new SettlementMissionNotFoundException(id);
+    throw new EntityNotFoundException(id.toString());
   }
 
   /**

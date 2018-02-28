@@ -6,27 +6,27 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import junitparams.FileParameters;
+import junitparams.JUnitParamsRunner;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.galatea.starter.ASpringTest;
-import org.galatea.starter.ApiError;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
-import org.galatea.starter.domain.exception.SettlementMissionNotFoundException;
 import org.galatea.starter.service.SettlementService;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,9 +44,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import junitparams.FileParameters;
-import junitparams.JUnitParamsRunner;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -141,17 +139,34 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testGetMissionNotFound() throws Exception {
     long msnId = 1091L;
 
-    SettlementMissionNotFoundException exception = new SettlementMissionNotFoundException(msnId);
-
     given(this.mockSettlementService.findMission(msnId)).willReturn(Optional.empty());
 
     ResultActions resultActions = this.mvc
         .perform(get("/settlementEngine/mission/" + msnId + "?requestId=1234")
             .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isNotFound())
-        .andExpect(jsonPath("$.status", is(HttpStatus.NOT_FOUND.name())))
-        .andExpect(jsonPath("$.message", is(exception.getMessage())));
+        .andExpect(status().isNotFound());
     verifyAuditHeaders(resultActions);
+  }
+
+  @Test
+  public void testDataAccessFailure() throws Exception {
+    DataAccessException exception = dataAccessException();
+    when(mockSettlementService.findMission(MISSION_ID_1)).thenThrow(exception);
+
+    this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().is5xxServerError())
+        .andExpect(jsonPath("$.status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())))
+        .andExpect(jsonPath("$.message", is(ExceptionUtils.getStackTrace(exception))));
+  }
+
+  private DataAccessException dataAccessException() {
+    return new DataAccessException("") {
+      @Override
+      public StackTraceElement[] getStackTrace() {
+        return new StackTraceElement[0];
+      }
+    };
   }
 
   /**
