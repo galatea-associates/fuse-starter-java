@@ -1,0 +1,32 @@
+# For documentation on log4j2: https://logging.apache.org/log4j/2.x/manual/
+
+# For configuration details: springframework.guru/log4j-2-configuration-using-yaml
+# and: http://logging.apache.org/log4j/2.x/manual/configuration.html
+
+# Sending all logs to stdout, useful for running in the cloud
+    
+Configuration:
+  name: Default
+
+
+  Appenders:
+  
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level %logger{1.} - %X{internal-request-id}%X{external-request-id}%msg%n"
+        
+    Async:
+      - name: AsyncAppender
+        bufferSize: 50000
+        AppenderRef:
+          - ref: Console            
+          
+  Loggers:
+    # Define some defaults
+    Root:
+      level: info 
+      AppenderRef:
+        - ref: AsyncAppender               
+    

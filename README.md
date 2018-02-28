@@ -59,9 +59,11 @@ We use this branching model in fuse-starter-java:  http://nvie.com/posts/a-succe
 - Sonar: https://sonarcloud.io/dashboard?id=org.galatea%3Afuse-starter-java (can login using GitHub account)
 - To integrate into eclipse
  - Install SonarLint
- - r-click on fuse-starter-java -> SonarLint -> Change binding...
- - Replace the current binding with 'https://sonarqube.com' in the URL
- - Search 'fuse-starter-java' and accept
+ - r-click on fuse-starter-java -> SonarLint -> Bind to a SonarQube project...
+ - Select 'Connect to a SonarQube server...'
+ - Select SonarCloud and generate a token to continue.
+ - Search for the Organization 'Open Source' (there are a few, pick the one with the Description "This organization gathers..."
+ - Bind to 'starter-java' and accept
 
 ##  Components
 FUSE suggests that you break up your application into the following components.  Many of these correspond to spring stereotypes:

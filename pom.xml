@@ -22,6 +22,8 @@
 			-Dlog4j.configurationFile=log4j2.yml,log4j2-debug.yml
 		</argLine>
 		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java</sonar.coverage.exclusions>
+		<!-- Allow us to skip Unit Tests only, if need be, with -Dskip.surefire.tests, but retain the skip all tests functionality of -DskipTests -->
+		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
 	</properties>
 
 	<parent>
@@ -97,9 +99,7 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
-		<!-- We use H2 as an EXTERNAL database in the same way as sybase, oracle, 
-			etc. We do not treat it as an embedded database. You should replace this 
-			dependency with your actual database -->
+    <!-- H2 database for persistence -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -135,16 +135,10 @@
 		</dependency>
 
 
-		<!-- Ehcache for caching -->
+		<!-- Ehcache for caching. Having ehcache.xml in src/main/resources tells SpringBoot to use EhCache as the caching implementation for @Cacheable -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-		</dependency>
-
-		<!-- Support for various caches -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
 		</dependency>
 
 		<dependency>
@@ -206,6 +200,10 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<excludedGroups>org.galatea.starter.IntegrationTestCategory</excludedGroups>
+					<!-- skips surefire tests without skipping failsafe tests. Property 
+						value seems to magically default to false -->
+					<!-- See https://stackoverflow.com/questions/6612344/prevent-unit-tests-in-maven-but-allow-integration-tests -->
+					<skipTests>${skip.surefire.tests}</skipTests>
 				</configuration>
 			</plugin>
 			<plugin>
