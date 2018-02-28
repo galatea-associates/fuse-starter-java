@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
@@ -100,7 +99,7 @@ public class SettlementRestControllerTest extends ASpringTest {
     ResultActions resultActions = this.mvc
         .perform(post("/settlementEngine?requestId=1234")
             .contentType(MediaType.APPLICATION_JSON_VALUE).content(agreementJson))
-        .andExpect(status().isAccepted())
+        .andExpect(status().isOk())
         .andExpect(jsonPath("$", containsInAnyOrder(expectedResponseJsonList.toArray())));
 
     verifyAuditHeaders(resultActions);
@@ -117,7 +116,6 @@ public class SettlementRestControllerTest extends ASpringTest {
     SettlementMission testMission = SettlementMission.builder().id(MISSION_ID_1).depot(depot)
         .externalParty(externapParty).instrument(instrument).direction(direction).qty(qty).build();
     log.info("Test mission: {}", testMission);
-
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(testMission));
@@ -149,24 +147,34 @@ public class SettlementRestControllerTest extends ASpringTest {
   }
 
   @Test
+  public void testIncorrectlyFormattedAgreement() throws Exception {
+    String expectedMessage = "Incorrectly formatted message.  Please consult the documentation.";
+
+    this.mvc.perform(post("/settlementEngine?requestId=1234")
+        .contentType(MediaType.APPLICATION_JSON_VALUE).content("invalidAgreementJson"))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.name())))
+        .andExpect(jsonPath("$.message", is(expectedMessage)));
+  }
+
+  @Test
   public void testDataAccessFailure() throws Exception {
-    DataAccessException exception = dataAccessException();
+    DataAccessException exception = new TestDataAccessException();
     when(mockSettlementService.findMission(MISSION_ID_1)).thenThrow(exception);
 
     this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
         .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().is5xxServerError())
         .andExpect(jsonPath("$.status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())))
-        .andExpect(jsonPath("$.message", is(ExceptionUtils.getStackTrace(exception))));
+        .andExpect(jsonPath("$.message", is("An internal application error occurred.")));
   }
 
-  private DataAccessException dataAccessException() {
-    return new DataAccessException("") {
-      @Override
-      public StackTraceElement[] getStackTrace() {
-        return new StackTraceElement[0];
-      }
-    };
+  // stub DataAccessException class for testing
+  private class TestDataAccessException extends DataAccessException {
+
+    public TestDataAccessException() {
+      super("");
+    }
   }
 
   /**
