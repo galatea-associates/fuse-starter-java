@@ -38,6 +38,7 @@ public class SettlementFileParser {
   public List<TradeAgreement> parseTradeAgreements(File file) throws IOException {
     return Files.lines(file.toPath()).parallel()
         .map(line -> line.split(delimiter)).flatMap(Arrays::stream)
+        .filter(line -> !line.trim().isEmpty())
         .map(this::parseTradeAgreement)
         .filter(Optional::isPresent).map(Optional::get)
         .collect(Collectors.toList());

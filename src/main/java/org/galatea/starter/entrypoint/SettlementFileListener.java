@@ -37,7 +37,7 @@ public class SettlementFileListener {
 
   private final Set<File> processedFiles = new HashSet<>();
 
-  @Scheduled(fixedRate = 5000)
+  @Scheduled(fixedRate = 10000)
   public Collection<File> processFilesInDirectory() {
     if (!directory.isDirectory()) {
       log.error("File input directory {} does not exist", directory.getName());
