@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A file parser that converts delimiter split JSON into POJOs, skipping and logging any
@@ -35,12 +36,14 @@ public class DelimitedJsonFileParser {
    * Utilises Java 8 parallel streams to process multiple lines of the file simultaneously
    */
   public <T> List<T> parseFile(File file, Class<T> target) throws IOException {
-    return Files.lines(file.toPath()).parallel()
-        .map(line -> line.split(delimiter)).flatMap(Arrays::stream)
-        .filter(line -> !line.trim().isEmpty())
-        .map(line -> parseLine(line, target))
-        .filter(Optional::isPresent).map(Optional::get)
-        .collect(Collectors.toList());
+    try (Stream<String> lines = Files.lines(file.toPath())) {
+      return lines.parallel()
+          .map(line -> line.split(delimiter)).flatMap(Arrays::stream)
+          .filter(line -> !line.trim().isEmpty())
+          .map(line -> parseLine(line, target))
+          .filter(Optional::isPresent).map(Optional::get)
+          .collect(Collectors.toList());
+    }
   }
 
   private <T> Optional<T> parseLine(String line, Class<T> target) {
