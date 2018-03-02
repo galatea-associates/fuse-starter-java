@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.utils.DelimitedJsonFileParser;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -21,11 +22,11 @@ public class SettlementFileProcessorTest extends ASpringTest {
   private SettlementService settlementService;
 
   @Mock
-  private SettlementFileParser fileParser;
+  private DelimitedJsonFileParser delimitedJsonFileParser;
 
   @Before
   public void setUp() {
-    fileProcessor = new SettlementFileProcessor(settlementService, fileParser);
+    fileProcessor = new SettlementFileProcessor(settlementService, delimitedJsonFileParser);
   }
 
   @Test
@@ -41,11 +42,11 @@ public class SettlementFileProcessorTest extends ASpringTest {
         .build()
     );
 
-    when(fileParser.parseTradeAgreements(testFile)).thenReturn(agreements);
+    when(delimitedJsonFileParser.parseFile(testFile, TradeAgreement.class)).thenReturn(agreements);
 
-    fileProcessor.processFiles(Collections.singleton(testFile));
+    fileProcessor.processFile(testFile);
 
-    verify(fileParser).parseTradeAgreements(testFile);
+    verify(delimitedJsonFileParser).parseFile(testFile, TradeAgreement.class);
     verify(settlementService).spawnMissions(agreements);
   }
 

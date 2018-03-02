@@ -7,12 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 
 import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.utils.DelimitedJsonFileParser;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -26,26 +25,19 @@ public class SettlementFileProcessor {
   private final SettlementService settlementService;
 
   @NonNull
-  private final SettlementFileParser settlementFileParser;
+  private final DelimitedJsonFileParser fileParser;
 
-  public Collection<File> processFiles(Collection<File> files) {
-    Collection<File> processed = new ArrayList<>();
+  public void processFile(File file) {
+    try {
+      List<TradeAgreement> agreements = fileParser.parseFile(file, TradeAgreement.class);
+      log.info("Handling agreements {}", agreements);
 
-    for (File file : files) {
-      try {
-        List<TradeAgreement> agreements = settlementFileParser.parseTradeAgreements(file);
-        log.info("Handling agreements {}", agreements);
-
-        Set<Long> missionIds = settlementService.spawnMissions(agreements);
-        log.info("Created missions {}", missionIds);
-
-        processed.add(file);
-      } catch (IOException exception) {
-        log.error("Unable to parse file {}", file.getName());
-      }
+      Set<Long> missionIds = settlementService.spawnMissions(agreements);
+      log.info("Created missions {}", missionIds);
+      
+    } catch (IOException exception) {
+      log.error("Unable to parse file {}", file.getName());
     }
-
-    return processed;
   }
 
 }

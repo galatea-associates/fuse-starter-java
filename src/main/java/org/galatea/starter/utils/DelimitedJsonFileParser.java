@@ -1,4 +1,4 @@
-package org.galatea.starter.service;
+package org.galatea.starter.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -8,9 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import net.sf.aspect4log.Log;
 
-import org.galatea.starter.domain.TradeAgreement;
-import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,11 +16,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * A file parser that converts delimiter split JSON into POJOs, skipping and logging any
+ * incorrectly formatted input.
+ */
 @RequiredArgsConstructor
 @Slf4j
 @Log
-@Component
-public class SettlementFileParser {
+public class DelimitedJsonFileParser {
 
   @NonNull
   private final String delimiter;
@@ -32,23 +32,22 @@ public class SettlementFileParser {
   private final ObjectMapper mapper;
 
   /**
-   * Parse the input file into trade agreements, split by delimiter, skipping incorrectly formatted
-   * agreements.
+   * Utilises Java 8 parallel streams to process multiple lines of the file simultaneously
    */
-  public List<TradeAgreement> parseTradeAgreements(File file) throws IOException {
+  public <T> List<T> parseFile(File file, Class<T> target) throws IOException {
     return Files.lines(file.toPath()).parallel()
         .map(line -> line.split(delimiter)).flatMap(Arrays::stream)
         .filter(line -> !line.trim().isEmpty())
-        .map(this::parseTradeAgreement)
+        .map(line -> parseLine(line, target))
         .filter(Optional::isPresent).map(Optional::get)
         .collect(Collectors.toList());
   }
 
-  private Optional<TradeAgreement> parseTradeAgreement(String line) {
+  private <T> Optional<T> parseLine(String line, Class<T> target) {
     try {
-      return Optional.ofNullable(mapper.readValue(line, TradeAgreement.class));
+      return Optional.ofNullable(mapper.readValue(line, target));
     } catch (IOException e) {
-      log.error("Unable to parse Trade Agreement from line: {}", line);
+      log.error("Unable to parse object of type {} from line: {}", target.getSimpleName(), line);
       return Optional.empty();
     }
   }
