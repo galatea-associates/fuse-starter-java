@@ -16,9 +16,6 @@ public class FilePollerConfig {
   @Value("${entrypoint.file.directory}")
   private String inputPath;
 
-  @Value("${entrypoint.file.filePatternRegex}")
-  private String filePatternRegex;
-
   @Value("${entrypoint.file.contentDelimiter}")
   private String inputDelimiter;
 
