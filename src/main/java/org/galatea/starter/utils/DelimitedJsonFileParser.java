@@ -18,8 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * A file parser that converts delimiter split JSON into POJOs, skipping and logging any
- * incorrectly formatted input.
+ * Converts delimiter split JSON into POJOs, skipping and logging any incorrectly formatted input.
  */
 @RequiredArgsConstructor
 @Slf4j
@@ -33,7 +32,8 @@ public class DelimitedJsonFileParser {
   private final ObjectMapper mapper;
 
   /**
-   * Utilises Java 8 parallel streams to process multiple lines of the file simultaneously
+   * Utilises Java 8 try-with-resources and parallel streams to process multiple lines of the file
+   * simultaneously
    */
   public <T> List<T> parseFile(File file, Class<T> target) throws IOException {
     try (Stream<String> lines = Files.lines(file.toPath())) {

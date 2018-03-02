@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 /**
  * Polls a configuration defined directory every 10 seconds for new files, passing the identified
- * files into SettlementFileProcessor.processFile().
+ * files into SettlementFileProcessor#processFile(File) .
  */
 @RequiredArgsConstructor
 @Component
