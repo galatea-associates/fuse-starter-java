@@ -59,10 +59,8 @@ public class SettlementRestController {
     processRequestId(requestId);
 
     Set<Long> missionIds = settlementService.spawnMissions(agreements);
-    Set<String> missionIdUris =
-        missionIds.stream().map(id -> GET_MISSION_PATH + id).collect(Collectors.toSet());
 
-    return missionIdUris;
+    return missionIds.stream().map(id -> GET_MISSION_PATH + id).collect(Collectors.toSet());
   }
 
   /**
