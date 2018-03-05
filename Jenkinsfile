@@ -57,7 +57,7 @@ pipeline {
                     target: "https://api.run.pivotal.io/",
                     organization: "FUSE",
                     cloudSpace: "development",
-                    credentialsId: "cf-credentials",
+                    credentialsId: "PIVOTAL_WEB",
                     manifestChoice: [
                         value: "jenkinsConfig",
                         appName: "fuse-rest-dev-${env.GIT_COMMIT}",
