@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 /**
  * A centralized REST handler that intercepts exceptions thrown by controller calls, enabling a
  * custom response to be returned.
+ *
+ * The returned ResponseEntity body object will be serialised into JSON (hence the need for the
+ * ApiError wrapper class).
  */
 @ControllerAdvice
 @Slf4j
