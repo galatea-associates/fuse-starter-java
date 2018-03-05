@@ -2,7 +2,6 @@ package org.galatea.starter.service;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.galatea.starter.ApiError;
 import org.galatea.starter.domain.exception.EntityNotFoundException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
