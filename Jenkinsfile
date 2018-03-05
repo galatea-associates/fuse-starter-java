@@ -119,6 +119,10 @@ pipeline {
             }
         }
     }
+    // Sends slack notifications to Slack for success, failed or aborted builds. notifySlack() will check
+    // whether the branch is a deploy branch before sending the message.
+    // alertChannel - indicates whether a mention to @channel needs to be included in the message. Currently
+    // done only for failed builds only.
     post {
         success {
             notifySlack("Successful!", 'fuse-java-builds', "good", false)
@@ -140,8 +144,6 @@ def isDeployBranch() {
    }
 }
 
-// alertChannel - indicates whether a mention to @channel needs to be included in the message.
-// method will only send messages to Slack if it is a deploy branch.
 def notifySlack(titlePrefix, channel, color, alertChannel) {
     if (!isDeployBranch()) {
       return
