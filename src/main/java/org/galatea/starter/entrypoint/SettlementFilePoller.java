@@ -1,8 +1,11 @@
 package org.galatea.starter.entrypoint;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import org.galatea.starter.utils.DelimitedJsonFileParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.core.MessageSource;
@@ -56,6 +59,12 @@ public class SettlementFilePoller {
         new RegexPatternFileListFilter(regex))
     ));
     return scanner;
+  }
+
+  @Bean
+  public DelimitedJsonFileParser fileParser(ObjectMapper mapper,
+      @Value("${entrypoint.file.contentDelimiter}") String delimiter) {
+    return new DelimitedJsonFileParser(delimiter, mapper);
   }
 
 }
