@@ -140,6 +140,8 @@ def isDeployBranch() {
    }
 }
 
+// alertChannel - indicates whether a mention to @channel needs to be included in the message.
+// method will only send messages to Slack if it is a deploy branch.
 def notifySlack(titlePrefix, channel, color, alertChannel) {
     if (!isDeployBranch()) {
       return
