@@ -12,21 +12,15 @@ import java.io.File;
 @Configuration
 public class FilePollerConfig {
 
-  // inject value from application properties (see application.yml)
-  @Value("${entrypoint.file.directory}")
-  private String inputPath;
-
-  @Value("${entrypoint.file.contentDelimiter}")
-  private String inputDelimiter;
-
   @Bean
-  public File inboundDirectory() {
+  public File inboundDirectory(@Value("${entrypoint.file.directory}") String inputPath) {
     return new File(inputPath);
   }
 
   @Bean
-  public DelimitedJsonFileParser fileParser(ObjectMapper mapper) {
-    return new DelimitedJsonFileParser(inputDelimiter, mapper);
+  public DelimitedJsonFileParser fileParser(ObjectMapper mapper,
+      @Value("${entrypoint.file.contentDelimiter}") String delimiter) {
+    return new DelimitedJsonFileParser(delimiter, mapper);
   }
 
 }
