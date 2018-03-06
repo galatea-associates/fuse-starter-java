@@ -11,7 +11,7 @@ import net.sf.aspect4log.Log.Level;
 
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
-import org.galatea.starter.domain.exception.EntityNotFoundException;
+import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.Tracer;
 import org.springframework.http.MediaType;

@@ -1,4 +1,4 @@
-package org.galatea.starter.service;
+package org.galatea.starter.entrypoint;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

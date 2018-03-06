@@ -1,4 +1,4 @@
-package org.galatea.starter.domain.exception;
+package org.galatea.starter.entrypoint.exception;
 
 public class EntityNotFoundException extends RuntimeException {
 
