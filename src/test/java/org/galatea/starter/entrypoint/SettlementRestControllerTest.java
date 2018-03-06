@@ -6,17 +6,18 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import junitparams.FileParameters;
+import junitparams.JUnitParamsRunner;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -33,6 +34,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -40,9 +43,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import junitparams.FileParameters;
-import junitparams.JUnitParamsRunner;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -99,7 +99,7 @@ public class SettlementRestControllerTest extends ASpringTest {
     ResultActions resultActions = this.mvc
         .perform(post("/settlementEngine?requestId=1234")
             .contentType(MediaType.APPLICATION_JSON_VALUE).content(agreementJson))
-        .andExpect(status().isAccepted())
+        .andExpect(status().isOk())
         .andExpect(jsonPath("$", containsInAnyOrder(expectedResponseJsonList.toArray())));
 
     verifyAuditHeaders(resultActions);
@@ -116,7 +116,6 @@ public class SettlementRestControllerTest extends ASpringTest {
     SettlementMission testMission = SettlementMission.builder().id(MISSION_ID_1).depot(depot)
         .externalParty(externapParty).instrument(instrument).direction(direction).qty(qty).build();
     log.info("Test mission: {}", testMission);
-
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(testMission));
@@ -143,8 +142,39 @@ public class SettlementRestControllerTest extends ASpringTest {
     ResultActions resultActions = this.mvc
         .perform(get("/settlementEngine/mission/" + msnId + "?requestId=1234")
             .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isNotFound()).andExpect(content().string(""));
+        .andExpect(status().isNotFound());
     verifyAuditHeaders(resultActions);
+  }
+
+  @Test
+  public void testIncorrectlyFormattedAgreement() throws Exception {
+    String expectedMessage = "Incorrectly formatted message.  Please consult the documentation.";
+
+    this.mvc.perform(post("/settlementEngine?requestId=1234")
+        .contentType(MediaType.APPLICATION_JSON_VALUE).content("invalidAgreementJson"))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.name())))
+        .andExpect(jsonPath("$.message", is(expectedMessage)));
+  }
+
+  @Test
+  public void testDataAccessFailure() throws Exception {
+    DataAccessException exception = new TestDataAccessException();
+    when(mockSettlementService.findMission(MISSION_ID_1)).thenThrow(exception);
+
+    this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().is5xxServerError())
+        .andExpect(jsonPath("$.status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())))
+        .andExpect(jsonPath("$.message", is("An internal application error occurred.")));
+  }
+
+  // stub DataAccessException class for testing
+  private class TestDataAccessException extends DataAccessException {
+
+    public TestDataAccessException() {
+      super("");
+    }
   }
 
   /**
