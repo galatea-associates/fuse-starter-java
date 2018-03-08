@@ -9,7 +9,6 @@ pipeline {
         stage('Build') {
             steps {
                 populateGlobalVariables()
-                notifySlack("Starting", 'fuse-java-builds', "#2fc2e0")
                 sh 'mvn clean compile'
             }
         }
@@ -57,7 +56,7 @@ pipeline {
                     target: "https://api.run.pivotal.io/",
                     organization: "FUSE",
                     cloudSpace: "development",
-                    credentialsId: "cf-credentials",
+                    credentialsId: "PIVOTAL-WEB",
                     manifestChoice: [
                         value: "jenkinsConfig",
                         appName: "fuse-rest-dev-${env.GIT_COMMIT}",
@@ -120,18 +119,19 @@ pipeline {
             }
         }
     }
+    // Sends slack notifications to Slack for success, failed or aborted builds. notifySlack() will check
+    // whether the branch is a deploy branch before sending the message.
+    // alertChannel - indicates whether a mention to @channel needs to be included in the message. Currently
+    // done only for failed builds only.
     post {
         success {
-            notifySlack("Successful!", 'fuse-java-builds', "good")
+            notifySlack("Successful!", 'fuse-java-builds', "good", false)
         }
         failure {
-            notifySlack("Failed", 'fuse-java-builds', "danger")
-        }
-        unstable {
-            notifySlack("Unstable", 'fuse-java-builds', "warning")
+            notifySlack("Failed", 'fuse-java-builds', "danger", true)
         }
         aborted {
-            notifySlack("Aborted", 'fuse-java-builds', "#d3d3d3")
+            notifySlack("Aborted", 'fuse-java-builds', "#d3d3d3", false)
         }
     }
 }
@@ -144,10 +144,23 @@ def isDeployBranch() {
    }
 }
 
-def notifySlack(titlePrefix, channel, color) {
+def notifySlack(titlePrefix, channel, color, alertChannel) {
+    if (!isDeployBranch()) {
+      return
+    }
+
+    def messageText
+    script {
+      if (alertChannel) {
+        messageText = "<!channel>: Triggered by ${author}"
+      } else {
+        messageText = "Triggered by ${author}"
+      }
+    }
+
     def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 
-    def payload = JsonOutput.toJson([text: "",
+    def payload = JsonOutput.toJson([
         channel: channel,
         username: "Jenkins",
         icon_url: jenkinsIcon,
@@ -156,7 +169,7 @@ def notifySlack(titlePrefix, channel, color) {
                 title: "${titlePrefix} ${env.BRANCH_NAME}, build #${env.BUILD_NUMBER}",
                 title_link: "${env.BUILD_URL}",
                 color: "${color}",
-                text: "Triggered by ${author}",
+                text: messageText,
                 "mrkdwn_in": ["fields"],
                 fields: [
                     [
