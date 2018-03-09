@@ -11,6 +11,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import org.galatea.starter.StringMappedEnum;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,6 +43,7 @@ public class TradeAgreement {
   @NonNull
   protected String externalParty;
 
+  @StringMappedEnum(enumClass = Side.class)
   @NonNull
   protected String buySell;
 

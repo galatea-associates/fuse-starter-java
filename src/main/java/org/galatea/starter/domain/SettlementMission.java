@@ -11,6 +11,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import org.galatea.starter.StringMappedEnum;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,6 +44,7 @@ public class SettlementMission {
   @NonNull
   protected String depot;
 
+  @StringMappedEnum(enumClass = Direction.class)
   @NonNull
   protected String direction;
 
