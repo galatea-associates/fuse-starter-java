@@ -16,8 +16,8 @@ public class StringEnumerationValidator implements ConstraintValidator<StringEnu
 
   @Override
   public void initialize(final StringEnumeration stringEnumeration) {
-    Class<? extends Enum<?>> enumSelected = stringEnumeration.enumClass();
-    values = getNamesSet(enumSelected);
+    Class<? extends Enum<?>> enumClass = stringEnumeration.enumClass();
+    values = getNamesSet(enumClass);
   }
 
   @Override
@@ -25,9 +25,9 @@ public class StringEnumerationValidator implements ConstraintValidator<StringEnu
     return value == null || values.contains(value);
   }
 
-  private static Set<String> getNamesSet(final Class<? extends Enum<?>> e) {
-    Enum<?>[] enums = e.getEnumConstants();
-    return Arrays.stream(enums).map(Enum::name).collect(Collectors.toSet());
+  private static Set<String> getNamesSet(final Class<? extends Enum<?>> enumClass) {
+    Enum<?>[] enumConstants = enumClass.getEnumConstants();
+    return Arrays.stream(enumConstants).map(Enum::name).collect(Collectors.toSet());
   }
 
 }
