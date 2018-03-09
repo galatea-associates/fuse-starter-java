@@ -23,11 +23,12 @@ pipeline {
             }
         }
         stage('SonarQube analysis') {
+        	// see: https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner+for+Jenkins#AnalyzingwithSonarQubeScannerforJenkins-AnalyzinginaJenkinspipeline
             steps {
             	populateTargetBranch()
             	echo "Branch name: ${env.BRANCH_NAME} Target branch: ${targetBranch}"            	                 
                 withSonarQubeEnv('SonarCloud FUSE') {
-                  sh "mvn -Dsonar.branch.name=${env.GIT_BRANCH} -Dsonar.branch.target=${targetBranch} sonar:sonar"
+                  sh "mvn -Dsonar.organization=galatea -Dsonar.branch.name=${env.GIT_BRANCH} -Dsonar.branch.target=${targetBranch} sonar:sonar"
                 }
             }
         }
