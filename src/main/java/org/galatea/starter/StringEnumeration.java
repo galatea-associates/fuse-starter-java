@@ -15,17 +15,17 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = StringMappedEnumValidator.class)
+@Constraint(validatedBy = StringEnumerationValidator.class)
 @Target({METHOD, FIELD, ANNOTATION_TYPE, PARAMETER, CONSTRUCTOR})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface StringMappedEnum {
+public @interface StringEnumeration {
 
-  String message() default "No enum mapping found";
+  String message() default "No enum value found";
 
   Class<?>[] groups() default {};
 
   Class<? extends Payload>[] payload() default {};
 
-  Class<? extends Mappable> enumClass();
+  Class<? extends Enum<?>> enumClass();
 
 }
