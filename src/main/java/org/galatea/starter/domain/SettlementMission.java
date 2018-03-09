@@ -16,9 +16,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Positive;
 
-/* For builder since we explictly want to make the all args ctor private */
+/* For builder since we explicitly want to make the all args ctor private */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring and jackson
 @Builder
@@ -46,7 +45,6 @@ public class SettlementMission {
   @NonNull
   protected String direction;
 
-  // JSR 380 Bean Validation 2.0
   @DecimalMin(value = "0.0", inclusive = false)
   @NonNull
   protected Double qty;

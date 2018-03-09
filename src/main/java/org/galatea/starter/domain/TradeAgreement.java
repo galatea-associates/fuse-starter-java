@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.DecimalMin;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE) // For builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring and jackson
@@ -43,6 +44,7 @@ public class TradeAgreement {
   @NonNull
   protected String buySell;
 
+  @DecimalMin(value = "0.0", inclusive = false)
   @NonNull
   protected Double qty;
 
