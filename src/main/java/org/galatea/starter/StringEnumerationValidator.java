@@ -1,8 +1,8 @@
 package org.galatea.starter;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -24,11 +24,7 @@ public class StringEnumerationValidator implements ConstraintValidator<StringEnu
 
   private static Set<String> getNamesSet(Class<? extends Enum<?>> e) {
     Enum<?>[] enums = e.getEnumConstants();
-    String[] names = new String[enums.length];
-    for (int i = 0; i < enums.length; i++) {
-      names[i] = enums[i].name();
-    }
-    return new HashSet<>(Arrays.asList(names));
+    return Arrays.stream(enums).map(Enum::name).collect(Collectors.toSet());
   }
 
 }
