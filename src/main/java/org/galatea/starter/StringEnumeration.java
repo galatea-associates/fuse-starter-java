@@ -14,6 +14,10 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+/**
+ * A custom annotation which marks the target as a candidate for validation.  The target will be
+ * validated by the specified class, in this case the StringEnumerationValidator.
+ */
 @Documented
 @Constraint(validatedBy = StringEnumerationValidator.class)
 @Target({METHOD, FIELD, ANNOTATION_TYPE, PARAMETER, CONSTRUCTOR})
