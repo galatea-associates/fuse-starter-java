@@ -10,6 +10,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
+
 /**
  * A centralized REST handler that intercepts exceptions thrown by controller calls, enabling a
  * custom response to be returned.
@@ -41,6 +43,16 @@ public class RestExceptionHandler {
 
     String errorMessage = "An internal application error occurred.";
     ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, errorMessage);
+    return buildResponseEntity(error);
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  protected ResponseEntity<Object> handleConstraintViolation(
+      final ConstraintViolationException exception) {
+    log.debug("Invalid input data sent", exception);
+
+    String errorMessage = "Invalid input data.  Please consult the documentation.";
+    ApiError error = new ApiError(HttpStatus.BAD_REQUEST, errorMessage);
     return buildResponseEntity(error);
   }
 
