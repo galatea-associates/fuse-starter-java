@@ -11,7 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import org.galatea.starter.StringEnumeration;
+import org.galatea.starter.utils.validation.StringEnumeration;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

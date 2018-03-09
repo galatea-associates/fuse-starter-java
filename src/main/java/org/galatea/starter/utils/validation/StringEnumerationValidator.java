@@ -1,4 +1,4 @@
-package org.galatea.starter;
+package org.galatea.starter.utils.validation;
 
 import java.util.Arrays;
 import java.util.Set;

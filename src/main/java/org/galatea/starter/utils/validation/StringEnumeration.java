@@ -1,4 +1,4 @@
-package org.galatea.starter;
+package org.galatea.starter.utils.validation;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
