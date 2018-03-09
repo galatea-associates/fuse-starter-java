@@ -26,6 +26,6 @@ public @interface StringMappedEnum {
 
   Class<? extends Payload>[] payload() default {};
 
-  Class<? extends MappableEnum> enumClass();
+  Class<? extends Mappable> enumClass();
 
 }

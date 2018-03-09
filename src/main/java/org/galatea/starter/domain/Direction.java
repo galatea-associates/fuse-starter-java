@@ -1,11 +1,11 @@
 package org.galatea.starter.domain;
 
-import org.galatea.starter.MappableEnum;
+import org.galatea.starter.Mappable;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-public enum Direction implements MappableEnum {
+public enum Direction implements Mappable {
 
   RECEIVE("REC"),
   DELIVER("DEL");

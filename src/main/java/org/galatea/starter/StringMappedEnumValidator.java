@@ -15,7 +15,7 @@ public class StringMappedEnumValidator implements
 
   @Override
   public void initialize(StringMappedEnum stringMappedEnum) {
-    Class<? extends MappableEnum> enumSelected = stringMappedEnum.enumClass();
+    Class<? extends Mappable> enumSelected = stringMappedEnum.enumClass();
     values = getNamesSet(enumSelected);
   }
 
@@ -24,9 +24,9 @@ public class StringMappedEnumValidator implements
     return value == null || values.contains(value);
   }
 
-  private static Set<String> getNamesSet(Class<? extends MappableEnum> e) {
+  private static Set<String> getNamesSet(Class<? extends Mappable> e) {
     return Arrays.stream(e.getEnumConstants())
-        .map(MappableEnum::getMappings).flatMap(Collection::stream)
+        .map(Mappable::getMappings).flatMap(Collection::stream)
         .collect(Collectors.toSet());
   }
 
