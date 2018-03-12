@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * Ensures a given String is a member of a specified enum value set.
+ * Verifies a String is a member of an enum value set.
  */
 public class StringEnumerationValidator implements ConstraintValidator<StringEnumeration, String> {
 
