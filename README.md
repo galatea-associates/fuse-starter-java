@@ -62,7 +62,7 @@ We use this branching model in fuse-starter-java:  http://nvie.com/posts/a-succe
  - r-click on fuse-starter-java -> SonarLint -> Bind to a SonarQube project...
  - Select 'Connect to a SonarQube server...'
  - Select SonarCloud and generate a token to continue.
- - Search for the Organization 'Open Source' (there are a few, pick the one with the Description "This organization gathers..."
+ - Search for the Organization 'Galatea'
  - Bind to 'starter-java' and accept
 
 ##  Components
