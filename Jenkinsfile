@@ -46,9 +46,10 @@ pipeline {
             }
         }
         stage('Deploy') {
-            when {
-                expression { isDeployBranch() }
-            }
+        // want to spin up an instance on CF for testing... and don't kill it when done!
+        //    when {
+        //        expression { isDeployBranch() }
+        //    }
             steps {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
                 sh 'mvn package -DskipTests'
@@ -66,7 +67,7 @@ pipeline {
                         appPath: "target/fuse-starter-java-0.0.1-SNAPSHOT.jar",
                         envVars: [
                           [key: "SPRING_PROFILES_ACTIVE", value: "dev"],
-                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml"]
+                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml -javaagent:$PWD/.java-buildpack/jacoco_agent/jacocoagent.jar=address=*,output=tcpserver"]
                         ]
                     ],
                     pluginTimeout: 240 // default value is 120
@@ -211,7 +212,9 @@ def populateGlobalVariables() {
 
 def appStarted = false;
 def doShutdown() {
-  if (isDeployBranch() && appStarted) {
+// never shutdown!!
+  if (false) {
+//  if (isDeployBranch() && appStarted) {
     timeout(time: 2, unit: 'MINUTES') {
       withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
           // make sure the password does not contain single quotes otherwise the escaping fails
