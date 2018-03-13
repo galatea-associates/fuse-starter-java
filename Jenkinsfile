@@ -62,12 +62,13 @@ pipeline {
                     manifestChoice: [
                         value: "jenkinsConfig",
                         appName: "fuse-rest-dev-${env.GIT_COMMIT}",
+                        buildpack: "http://github.com/cloudfoundry/java-buildpack.git#529-jacoco",
                         memory: 768,
                         instances: 1,
                         appPath: "target/fuse-starter-java-0.0.1-SNAPSHOT.jar",
                         envVars: [
                           [key: "SPRING_PROFILES_ACTIVE", value: "dev"],
-                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml -javaagent:$PWD/.java-buildpack/jacoco_agent/jacocoagent.jar=address=*,output=tcpserver"]
+                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml"]
                         ]
                     ],
                     pluginTimeout: 240 // default value is 120
