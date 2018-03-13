@@ -1,6 +1,6 @@
 Issue Description
 --
-[Description of the issue. Should be complete before Review is approved]
+[Description of the issue, with example/screenshot. Description of what the desired behavior should be. Should be complete before Review is approved]
 
 Design
 --
