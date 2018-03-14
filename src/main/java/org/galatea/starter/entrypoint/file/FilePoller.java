@@ -48,8 +48,7 @@ public class FilePoller implements IFilePoller {
 
   private Collection<File> filesInDirectory() throws IOException {
     try (Stream<Path> filePaths = Files.walk(directory.toPath())) {
-      return filePaths
-          .filter(Files::isRegularFile)
+      return filePaths.filter(Files::isRegularFile)
           .map(Path::toFile)
           .collect(Collectors.toList());
     }
