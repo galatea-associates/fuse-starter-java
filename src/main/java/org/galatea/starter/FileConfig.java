@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 
 /**
- * Handles the creation of our file listener related beans based on values defined in our external
+ * Handles the creation of our file entrypoint related beans based on values defined in our external
  * configuration (application.yml)
  */
 @Configuration
