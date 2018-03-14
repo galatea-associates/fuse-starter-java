@@ -50,11 +50,12 @@ public class RestExceptionHandler {
   protected ResponseEntity<Object> handleConstraintViolation(
       final ConstraintViolationException exception) {
     log.debug("Invalid input data sent", exception);
+    String errorMessage = ConstraintViolationMessageFormatter.toMessage(exception);
 
-    String errorMessage = "Invalid input data.  Please consult the documentation.";
     ApiError error = new ApiError(HttpStatus.BAD_REQUEST, errorMessage);
     return buildResponseEntity(error);
   }
+
 
   private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
     return new ResponseEntity<>(apiError, apiError.getStatus());

@@ -23,6 +23,20 @@ public class SettlementMissionTest {
   }
 
   @Test
+  public void validSettlementMission() {
+    SettlementMission mission = SettlementMission.builder()
+        .instrument("I")
+        .externalParty("ECP")
+        .direction("DEL")
+        .depot("DTC")
+        .qty(10D).build();
+
+    Set<ConstraintViolation<SettlementMission>> constraintViolations = validator.validate(mission);
+
+    assertEquals(0, constraintViolations.size());
+  }
+
+  @Test
   public void qtyMustBePositive() {
     double invalidQty = 0d;
 
@@ -36,7 +50,8 @@ public class SettlementMissionTest {
     Set<ConstraintViolation<SettlementMission>> constraintViolations = validator
         .validate(mission);
 
-    assertEquals("must be greater than 0.0", constraintViolations.iterator().next().getMessage());
+    assertEquals("Quantity must be greater than 0",
+        constraintViolations.iterator().next().getMessage());
     assertEquals(1, constraintViolations.size());
   }
 
@@ -54,7 +69,7 @@ public class SettlementMissionTest {
     Set<ConstraintViolation<SettlementMission>> constraintViolations = validator
         .validate(mission);
 
-    assertEquals("No enum value found", constraintViolations.iterator().next().getMessage());
+    assertEquals("Direction must be valid", constraintViolations.iterator().next().getMessage());
     assertEquals(1, constraintViolations.size());
   }
 

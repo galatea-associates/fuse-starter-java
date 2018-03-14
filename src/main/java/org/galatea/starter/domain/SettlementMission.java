@@ -44,11 +44,11 @@ public class SettlementMission {
   @NonNull
   protected String depot;
 
-  @StringEnumeration(enumClass = Direction.class)
+  @StringEnumeration(enumClass = Direction.class, message = "Direction must be valid")
   @NonNull
   protected String direction;
 
-  @DecimalMin(value = "0.0", inclusive = false)
+  @DecimalMin(value = "0.0", inclusive = false, message = "Quantity must be greater than 0")
   @NonNull
   protected Double qty;
 

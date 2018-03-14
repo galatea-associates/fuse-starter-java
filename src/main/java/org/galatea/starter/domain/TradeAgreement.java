@@ -43,11 +43,11 @@ public class TradeAgreement {
   @NonNull
   protected String externalParty;
 
-  @StringEnumeration(enumClass = Side.class)
+  @StringEnumeration(enumClass = Side.class, message = "Buy/Sell side must be valid")
   @NonNull
   protected String buySell;
 
-  @DecimalMin(value = "0.0", inclusive = false)
+  @DecimalMin(value = "0.0", inclusive = false, message = "Quantity must be greater than 0")
   @NonNull
   protected Double qty;
 
