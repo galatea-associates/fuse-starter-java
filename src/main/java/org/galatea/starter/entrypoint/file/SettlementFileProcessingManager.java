@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Manages the processing of settlement files.  Handles the reprocessing of files that fail to
+ * process.  Not thread safe.
+ */
 @RequiredArgsConstructor
 @Slf4j
 @Component
@@ -25,21 +29,11 @@ public class SettlementFileProcessingManager {
 
   private final List<File> processingQueue = new ArrayList<>();
 
-  private final Set<File> processedFiles = new HashSet<>();
-
   public Collection<File> processFiles(final Collection<File> files) {
-    Collection<File> filesToProcess = removeDuplicates(files);
-
-    processingQueue.addAll(filesToProcess);
+    log.debug("Adding files to the processing queue {}", files);
+    processingQueue.addAll(files);
 
     return processQueue();
-  }
-
-  private Collection<File> removeDuplicates(Collection<File> files) {
-    return files.stream().distinct()
-        .filter(file -> !processingQueue.contains(file))
-        .filter(file -> !processedFiles.contains(file))
-        .collect(Collectors.toList());
   }
 
   private Collection<File> processQueue() {
@@ -49,7 +43,6 @@ public class SettlementFileProcessingManager {
       log.debug("Processing file {}", file.getName());
       try {
         fileProcessor.processFile(file);
-        processedFiles.add(file);
         processed.add(file);
       } catch (IOException exception) {
         log.error("Unable to process file {}", file.getName(), exception);

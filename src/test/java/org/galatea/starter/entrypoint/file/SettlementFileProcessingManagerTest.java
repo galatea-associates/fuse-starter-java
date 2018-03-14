@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -38,17 +39,6 @@ public class SettlementFileProcessingManagerTest {
   }
 
   @Test
-  public void duplicateFilesAreNotProcessed() throws Exception {
-    File file = inputFolder.newFile();
-
-    Collection<File> processed = fileProcessingManager
-        .processFiles(Arrays.asList(file, file));
-
-    verify(fileProcessor, times(1)).processFile(file);
-    assertEquals(1, processed.size());
-  }
-
-  @Test
   public void fileRemainsInQueueAfterProcessingFailure() throws Exception {
     File file = inputFolder.newFile();
     List<File> files = singletonList(file);
@@ -60,7 +50,7 @@ public class SettlementFileProcessingManagerTest {
 
     doNothing().when(fileProcessor).processFile(file);
 
-    processed = fileProcessingManager.processFiles(files);
+    processed = fileProcessingManager.processFiles(Collections.emptyList());
     assertEquals(1, processed.size());
   }
 
