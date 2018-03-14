@@ -26,10 +26,10 @@ public class FilePoller implements IFilePoller {
 
   private boolean firstPoll = true;
 
-  public FilePoller(final String directory, final String regex) throws IOException {
-    this.directory = new File(directory);
+  public FilePoller(final FileWatcher fileWatcher, final String regex) {
     this.regex = regex;
-    this.fileWatcher = new FileWatcher(directory);
+    this.fileWatcher = fileWatcher;
+    this.directory = new File(fileWatcher.getDirectory());
   }
 
   @Override

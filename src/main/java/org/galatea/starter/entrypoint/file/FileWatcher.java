@@ -22,9 +22,17 @@ public class FileWatcher {
   @NonNull
   private final WatchService watchService;
 
+  @NonNull
+  private final String directory;
+
   public FileWatcher(final String directory) throws IOException {
+    this.directory = directory;
     this.watchService = FileSystems.getDefault().newWatchService();
-    // watch for NEW files (ignore modified & deleted files)
+    initialize(directory);
+  }
+
+  private void initialize(String directory) throws IOException {
+    // watch for NEW files (ignore modification and deletion events)
     Paths.get(directory).register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
   }
 
@@ -46,6 +54,10 @@ public class FileWatcher {
     }
 
     return files;
+  }
+
+  public String getDirectory() {
+    return directory;
   }
 
 }

@@ -3,6 +3,7 @@ package org.galatea.starter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.galatea.starter.entrypoint.file.FilePoller;
+import org.galatea.starter.entrypoint.file.FileWatcher;
 import org.galatea.starter.entrypoint.file.IFilePoller;
 import org.galatea.starter.utils.DelimitedJsonFileParser;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,10 +20,15 @@ import java.io.IOException;
 public class FileConfig {
 
   @Bean
-  public IFilePoller filePoller(
-      @Value("${entrypoint.file.directory}") String directory,
-      @Value("${entrypoint.file.filePatternRegex}") String fileRegex) throws IOException {
-    return new FilePoller(directory, fileRegex);
+  public FileWatcher fileWatcher(@Value("${entrypoint.file.directory}") String directory)
+      throws IOException {
+    return new FileWatcher(directory);
+  }
+
+  @Bean
+  public IFilePoller filePoller(FileWatcher fileWatcher,
+      @Value("${entrypoint.file.filePatternRegex}") String fileRegex) {
+    return new FilePoller(fileWatcher, fileRegex);
   }
 
   @Bean

@@ -2,16 +2,23 @@ package org.galatea.starter.entrypoint.file;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
 import java.util.Collection;
 
+@RunWith(MockitoJUnitRunner.class)
 public class FilePollerTest {
 
   // files with extension .txt
@@ -20,15 +27,20 @@ public class FilePollerTest {
   @ClassRule
   public final static TemporaryFolder inputFolder = new TemporaryFolder();
 
+  @Mock
+  private FileWatcher fileWatcher;
+
   private FilePoller filePoller;
   private File preexistingFile;
 
   @Before
   public void setUp() throws Exception {
+    when(fileWatcher.getDirectory()).thenReturn(inputFolder.getRoot().getPath());
+
     // this must be created BEFORE FilePoller is initialized
     preexistingFile = inputFolder.newFile("first.txt");
-    File directory = inputFolder.getRoot();
-    filePoller = new FilePoller(directory.toPath().toString(), FILE_REGEX);
+
+    filePoller = new FilePoller(fileWatcher, FILE_REGEX);
   }
 
   @After
@@ -45,16 +57,14 @@ public class FilePollerTest {
   }
 
   @Test
-  public void onlyNewFilesReturnedAfterFirstPoll() throws Exception {
-    filePoller.poll();
+  public void fileWatcherPolledAfterFirstPoll() throws Exception {
+    filePoller.poll(); // first poll
 
-    File secondFile = inputFolder.newFile("second.txt");
-    Collection<File> secondPoll = filePoller.poll();
+    verify(fileWatcher, times(0)).poll();
 
-    assertEquals(1, secondPoll.size());
-    assertEquals(secondFile, secondPoll.iterator().next());
+    filePoller.poll(); // second poll
 
-    secondFile.delete();
+    verify(fileWatcher, times(1)).poll();
   }
 
   @Test
@@ -68,6 +78,5 @@ public class FilePollerTest {
 
     invalid.delete();
   }
-
 
 }
