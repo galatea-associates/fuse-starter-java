@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.entrypoint.file.SettlementFileProcessor;
 import org.galatea.starter.utils.DelimitedJsonFileParser;
 import org.junit.Before;
 import org.junit.Test;

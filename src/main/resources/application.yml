@@ -44,4 +44,4 @@ entrypoint:
    file:
       directory: testDir
       filePatternRegex: ^.*\.txt$
-      contentDelimiter:  \|
+      delimiter:  \|
