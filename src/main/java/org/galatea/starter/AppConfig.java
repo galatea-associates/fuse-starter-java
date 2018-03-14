@@ -1,9 +1,7 @@
 package org.galatea.starter;
 
 import lombok.extern.slf4j.Slf4j;
-
 import net.sf.aspect4log.aspect.LogAspect;
-
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.service.IAgreementTransformer;
 import org.springframework.cache.annotation.EnableCaching;
@@ -32,6 +30,6 @@ public class AppConfig {
     return agreement -> SettlementMission.builder().instrument(agreement.getInstrument())
         .externalParty(agreement.getExternalParty()).depot("DTC").qty(agreement.getQty())
         .direction("B".equals(agreement.getBuySell()) ? "REC" : "DEL").build();
-  }
 
+  }
 }
