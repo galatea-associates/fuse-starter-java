@@ -12,39 +12,6 @@ pipeline {
                 sh 'mvn clean compile'
             }
         }
-        stage('Unit tests') {
-            steps {
-                sh 'mvn org.jacoco:jacoco-maven-plugin:0.8.0:prepare-agent test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('SonarQube analysis') {
-        	// see: https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner+for+Jenkins#AnalyzingwithSonarQubeScannerforJenkins-AnalyzinginaJenkinspipeline
-            steps {
-            	populateTargetBranch()
-            	echo "Branch name: ${env.BRANCH_NAME} Target branch: ${targetBranch}"            	                 
-                withSonarQubeEnv('SonarCloud FUSE') {
-                  sh "mvn -Dsonar.organization=galatea -Dsonar.branch.name=${env.GIT_BRANCH} -Dsonar.branch.target=${targetBranch} sonar:sonar"
-                }
-            }
-        }
-        stage('Quality gate') {
-            steps {
-                // Just in case something goes wrong, pipeline will be killed after a timeout
-                timeout(time: 2, unit: 'MINUTES') {
-                    script {
-                        def qg = waitForQualityGate()
-                        if (qg.status != 'OK') {
-                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                        }
-                    }
-                }
-            }
-        }
         stage('Deploy') {
         // want to spin up an instance on CF for testing... and don't kill it when done!
         //    when {
@@ -67,7 +34,7 @@ pipeline {
                         appPath: "target/fuse-starter-java-0.0.1-SNAPSHOT.jar",
                         envVars: [
                           [key: "SPRING_PROFILES_ACTIVE", value: "dev"],
-                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml -javaagent:/home/vcap/app/BOOT-INF/lib/org.jacoco.agent-0.8.0-runtime.jar=output=tcpserver,address=*,port=6300"]
+                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml -javaagent:/home/vcap/app/lib/org.jacoco.agent-0.8.0-runtime.jar=output=tcpserver,address=*,port=6300"]
                         ]
                     ],
                     pluginTimeout: 240 // default value is 120
