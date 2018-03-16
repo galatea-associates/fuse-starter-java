@@ -37,13 +37,21 @@ public class DelimitedJsonFileParser {
    */
   public <T> List<T> parseFile(File file, Class<T> target) throws IOException {
     try (Stream<String> lines = Files.lines(file.toPath())) {
-      return lines.parallel()
-          .map(line -> line.split(delimiter)).flatMap(Arrays::stream)
-          .filter(line -> !line.trim().isEmpty())
-          .map(line -> parseLine(line, target))
-          .filter(Optional::isPresent).map(Optional::get)
-          .collect(Collectors.toList());
+      return parseLines(lines.parallel(), target);
     }
+  }
+
+  private <T> List<T> parseLines(Stream<String> delimitedLines, Class<T> target) {
+    return splitByDelimiter(delimitedLines)
+        .map(line -> parseLine(line, target))
+        .filter(Optional::isPresent).map(Optional::get)
+        .collect(Collectors.toList());
+  }
+
+  private Stream<String> splitByDelimiter(Stream<String> lines) {
+    return lines.map(line -> line.split(delimiter))
+        .flatMap(Arrays::stream)
+        .filter(line -> !line.trim().isEmpty());
   }
 
   private <T> Optional<T> parseLine(String line, Class<T> target) {

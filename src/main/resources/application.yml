@@ -42,6 +42,6 @@ spring:
 ---
 entrypoint:
    file:
-      directory: testDir
+      directory: inputFiles
       filePatternRegex: ^.*\.txt$
       delimiter:  \|
