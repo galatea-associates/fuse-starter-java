@@ -14,3 +14,7 @@ Test Evidence
 Validation in Develop
 -- 
 [Proof issue is resolved in Develop. Should be complete before Issue is closed]
+
+Documentation Changes
+--
+[Description of changes necessary to the Fuse documentation due to the changes in response to this issue]
