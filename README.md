@@ -46,6 +46,12 @@ This readme will contain an index to features and their location in code.
 
 ### Postman
  - You can import our Postman collection (src/postman/Fuse-Starter-Java.postman_collection.json) for sample REST calls that can be made to the application once it has been started.
+#### Create a new Environment
+ - Click on the Cog in the top right
+ - Click Add.
+ - Make the Environment Name "Local"
+ - Add a new key "host" with a value of "localhost:8080"
+ - Save the changes and select "Local" in the drop down menu on the top right
  
 ## Branching model
 We use this branching model in fuse-starter-java:  http://nvie.com/posts/a-successful-git-branching-model/
