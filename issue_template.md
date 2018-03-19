@@ -8,7 +8,7 @@ Design
 
 Documentation Changes
 --
-[Description of changes necessary to the Fuse documentation due to the changes in response to this issue]
+[Description of changes necessary to the Fuse documentation due to the changes in response to this issue. Should be complete before Review is approved]
 
 Test Evidence
 --
