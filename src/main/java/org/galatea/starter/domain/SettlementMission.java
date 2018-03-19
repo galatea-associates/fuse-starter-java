@@ -13,7 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-/* For builder since we explictly want to make the all args ctor private */
+/* For builder since we explicitly want to make the all args ctor private */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring and jackson
 @Builder
