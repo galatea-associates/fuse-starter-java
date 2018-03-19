@@ -6,6 +6,10 @@ Design
 --
 [Description of the root cause for the issue and how to resolve it. Should be complete before Review is approved]
 
+Documentation Changes
+--
+[Description of changes necessary to the Fuse documentation due to the changes in response to this issue]
+
 Test Evidence
 --
 [include relevant tests and output. Should be complete before Review is approved]
@@ -14,7 +18,3 @@ Test Evidence
 Validation in Develop
 -- 
 [Proof issue is resolved in Develop. Should be complete before Issue is closed]
-
-Documentation Changes
---
-[Description of changes necessary to the Fuse documentation due to the changes in response to this issue]
