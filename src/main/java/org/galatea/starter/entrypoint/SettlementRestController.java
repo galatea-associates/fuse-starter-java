@@ -15,6 +15,7 @@ import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.Tracer;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 /**
  * REST Controller that generates and listens to http endpoints which allow the caller to create
  * Missions from TradeAgreements and query them back out.
@@ -36,6 +39,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @Slf4j
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
+@Validated
 @RestController
 public class SettlementRestController {
 
@@ -52,7 +56,7 @@ public class SettlementRestController {
   // @RequestBody to have the post request body deserialized into a list of TradeAgreement objects
   @PostMapping(value = SETTLE_MISSION_PATH, consumes = {MediaType.APPLICATION_JSON_VALUE})
   public Set<String> settleAgreement(
-      @RequestBody final List<TradeAgreement> agreements,
+      @RequestBody @Valid final List<TradeAgreement> agreements,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
     // if an external request id was provided, grab it
