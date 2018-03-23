@@ -1,5 +1,6 @@
 package org.galatea.starter.utils.validation;
 
+import static org.galatea.starter.utils.validation.StringEnumerationValidatorTest.TestSetup.TestEnum.VAL;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -15,7 +16,7 @@ public class StringEnumerationValidatorTest {
   @Before
   public void setUp() {
     StringEnumeration enumAnnotation = mock(StringEnumeration.class);
-    when(enumAnnotation.enumClass()).thenReturn((Class) TestEnum.class);
+    when(enumAnnotation.enumClass()).thenReturn((Class) TestSetup.TestEnum.class);
 
     validator = new StringEnumerationValidator();
     validator.initialize(enumAnnotation);
@@ -23,12 +24,20 @@ public class StringEnumerationValidatorTest {
 
   @Test
   public void validEnumMember() {
-    assertTrue(validator.isValid(TestEnum.VAL.name(), null));
+    assertTrue(validator.isValid(VAL.name(), null));
   }
 
   @Test
   public void invalidEnumMember() {
     assertFalse(validator.isValid("invalidVal", null));
+  }
+
+  static class TestSetup {
+
+    enum TestEnum {
+      VAL
+    }
+
   }
 
 }
