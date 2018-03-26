@@ -30,13 +30,11 @@ import java.util.Random;
 @RestController
 public class HalRestController {
 
-  public static final String HAL_PATH = "/hal";
-
   /**
    * Retrieve the result of a coin flip
    */
   // @GetMapping to link http GET request to this method
-  @GetMapping(value = HAL_PATH + "/coin-flip", produces = {MediaType.TEXT_PLAIN_VALUE})
+  @GetMapping(value = "${webservice.halpath}" + "/coin-flip", produces = {MediaType.TEXT_PLAIN_VALUE})
   public String coinFlip() {
     Random randomNum = new Random();
     int result = randomNum.nextInt(2);
@@ -52,9 +50,9 @@ public class HalRestController {
    * Retrieve the number of Galateans
    */
   // @GetMapping to link http GET request to this method
-  @GetMapping(value = HAL_PATH + "/num-galateans", produces = {MediaType.APPLICATION_JSON_VALUE})
+  @GetMapping(value = "${webservice.halpath}" + "/num-galateans", produces = {MediaType.APPLICATION_JSON_VALUE})
   public Map<String, Integer> numGalateans() {
-    Map<String, Integer> map = new HashMap<String, Integer>();
+    Map<String, Integer> map = new HashMap<>();
     map.put("Florida" , 6);
     map.put("London", 13);
     map.put("Boston", 50);
@@ -66,7 +64,7 @@ public class HalRestController {
    * Retrieve link to the recommended reading list
    */
   // @GetMapping to link http GET request to this method
-  @GetMapping(value = HAL_PATH + "/rec-reading", produces = {MediaType.TEXT_HTML_VALUE})
+  @GetMapping(value = "${webservice.halpath}" + "/rec-reading", produces = {MediaType.TEXT_HTML_VALUE})
   public String recReading() {
     return "https://docs.google.com/spreadsheets/d/1rxtbvuoMvKRdAbgIUKuis-8c5Pdyptvg03m23hikOIM/";
   }
@@ -75,7 +73,7 @@ public class HalRestController {
    * Retrieve a movie quote
    */
   // @GetMapping to link http GET request to this method
-  @GetMapping(value = HAL_PATH + "/movie-quote", produces = {MediaType.TEXT_PLAIN_VALUE})
+  @GetMapping(value = "${webservice.halpath}" + "/movie-quote", produces = {MediaType.TEXT_PLAIN_VALUE})
   public String movieQuote() {
     return "This mission is too important for me to allow you to jeopardize it";
   }
@@ -84,7 +82,7 @@ public class HalRestController {
    * Return derp
    */
   // @GetMapping to link http GET request to this method
-  @GetMapping(value = HAL_PATH + "/derp", produces = {MediaType.TEXT_PLAIN_VALUE})
+  @GetMapping(value = "${webservice.halpath}" + "/derp", produces = {MediaType.TEXT_PLAIN_VALUE})
   public String derp() {
     return "derp!";
   }
