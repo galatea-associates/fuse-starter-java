@@ -1,8 +1,9 @@
 package org.galatea.starter.entrypoint;
 
+import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import junitparams.JUnitParamsRunner;
 import lombok.EqualsAndHashCode;
@@ -16,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
@@ -44,7 +46,8 @@ public class HalRestControllerTest extends ASpringTest {
 
     given(this.mockHalService.processText("coin-flip")).willReturn(result);
 
-    this.mvc.perform(get("/hal?text=coin-flip")).andExpect(content().string(result));
+    this.mvc.perform(get("/hal?text=coin-flip").accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(jsonPath("$", is(result)));
   }
 
 }
