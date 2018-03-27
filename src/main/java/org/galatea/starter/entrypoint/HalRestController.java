@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * REST Controller that generates and listens to http endpoints which allow the caller to create
- * Missions from TradeAgreements and query them back out.
+ * REST Controller that listens to http endpoints and allows the caller to send text to be
+ * processed
  */
 @RequiredArgsConstructor
 @ToString
@@ -31,7 +31,7 @@ public class HalRestController {
   HalService halService;
 
   /**
-   * Retrieve the result of a coin flip from the Hal Service
+   * Send the received text to the HalService to be processed and send the result out
    */
   // @GetMapping to link http GET request to this method
   // @RequestParam to take a parameter from the url
@@ -41,6 +41,5 @@ public class HalRestController {
     ObjectMapper mapper = new ObjectMapper();
     return mapper.writerWithDefaultPrettyPrinter()
         .writeValueAsString(halService.processText(text));
-
   }
 }
