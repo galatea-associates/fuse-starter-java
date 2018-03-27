@@ -36,7 +36,7 @@ public class SettlementJmsListener {
     log.info("Received message. Translating.");
     TradeAgreement agreement = tradeAgreementTranslator.translate(message);
 
-    log.info("Handling agreements {}", agreement);
+    log.info("Handling agreement {}", agreement);
 
     Set<Long> missionIds = settlementService.spawnMissions(Arrays.asList(agreement));
     log.info("Created missions {}", missionIds);

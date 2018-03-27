@@ -93,12 +93,6 @@ public class SettlementRestController {
     throw new EntityNotFoundException(SettlementMission.class, id.toString());
   }
 
-  @GetMapping(value = "/test/", produces = "application/x-protobuf")
-  public Messages.SettlementMissionMessage getMsg() {
-    return Messages.SettlementMissionMessage.newBuilder().setId(1L).setQty(20).setDepot("dt")
-        .setDirection("del").setExternalParty("ecp").setInstrument("int").build();
-  }
-
   /**
    * Adds the specified requestId to the context for this request (if not null).
    */
