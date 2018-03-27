@@ -26,7 +26,7 @@ public class HalService {
   private static final String DERP = "derp!";
 
   /**
-   * Process the text from GET command
+   * Process the text from GET command into the appropriate command
    *
    * @param text the full text from the GET command. Wit.ai will break this down
    * @return the result of executing the command with the given parameters

@@ -44,9 +44,10 @@ public class HalRestControllerTest extends ASpringTest {
     String paramVal = "coin-flip";
     String result = "Processed String";
 
-    given(this.mockHalService.processText("coin-flip")).willReturn(result);
+    given(this.mockHalService.processText(paramVal)).willReturn(result);
 
-    this.mvc.perform(get("/hal?text=coin-flip").accept(MediaType.APPLICATION_JSON_VALUE))
+    this.mvc.perform(
+        get("/hal").param(param, paramVal).accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(jsonPath("$", is(result)));
   }
 
