@@ -13,24 +13,37 @@ import org.junit.Test;
 public class HalServiceTest extends ASpringTest {
 
   @Test
-  public void testProcessTestCoinFlip() throws Exception {
+  public void testProcessTestCoinFlipHeads() {
     String text = "coin-flip";
     String expResult = "Heads";
-    ;
 
     HalService service = new HalService();
     HalService spyService = spy(service);
 
     doReturn(COIN.HEADS).when(spyService).coinFlipRand();
 
-    String result = service.processText(text);
+    String result = spyService.processText(text);
     assertEquals(expResult, result);
   }
 
   @Test
-  public void testProcessTestGetNumGalateans() throws Exception {
+  public void testProcessTestCoinFlipTails() {
+    String text = "coin-flip";
+    String expResult = "Tails";
+
+    HalService service = new HalService();
+    HalService spyService = spy(service);
+
+    doReturn(COIN.TAILS).when(spyService).coinFlipRand();
+
+    String result = spyService.processText(text);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testProcessTestGetNumGalateans() {
     String text = "num-galateans";
-    Map<String, Integer> map = new HashMap<String, Integer>();
+    Map<String, Integer> map = new HashMap<>();
     map.put("Florida", 6);
     map.put("London", 13);
     map.put("Boston", 50);
@@ -45,7 +58,7 @@ public class HalServiceTest extends ASpringTest {
   }
 
   @Test
-  public void testProcessTestGetRecReading() throws Exception {
+  public void testProcessTestGetRecReading() {
     String text = "rec-reading";
     String expResult = "https://docs.google.com/spreadsheets/d/1rxtbvuoMvKRdAbgIUKuis-8c5Pdyptvg03m23hikOIM/";
 
@@ -56,7 +69,7 @@ public class HalServiceTest extends ASpringTest {
   }
 
   @Test
-  public void testProcessTestGetMovieQuote() throws Exception {
+  public void testProcessTestGetMovieQuote() {
     String text = "movie-quote";
     String expResult = "This mission is too important for me to allow you to jeopardize it";
 
@@ -67,9 +80,20 @@ public class HalServiceTest extends ASpringTest {
   }
 
   @Test
-  public void testProcessTestGetDerp() throws Exception {
+  public void testProcessTestGetDerp() {
     String text = "derp";
     String expResult = "derp!";
+
+    HalService service = new HalService();
+
+    String result = service.processText(text);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testUnsupportedInput() {
+    String text = "Unsupported";
+    String expResult = "Unsupported command";
 
     HalService service = new HalService();
 
