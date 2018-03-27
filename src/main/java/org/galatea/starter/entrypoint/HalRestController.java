@@ -39,7 +39,6 @@ public class HalRestController {
   // @RequestParam to take a parameter from the url
   @GetMapping(value = "${webservice.halpath}", produces = {MediaType.APPLICATION_JSON_VALUE})
   public String halEndpoint(@RequestParam(value = "text", required = true) String text) {
-    //todo: Return JSON rather than just plain string
     return halService.processText(text);
   }
 }
