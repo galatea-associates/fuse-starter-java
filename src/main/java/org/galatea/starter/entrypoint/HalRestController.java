@@ -39,9 +39,8 @@ public class HalRestController {
   public String halEndpoint(@RequestParam(value = "text", required = true) String text)
       throws JsonProcessingException {
     ObjectMapper mapper = new ObjectMapper();
-    String jsonStr = mapper.writerWithDefaultPrettyPrinter()
+    return mapper.writerWithDefaultPrettyPrinter()
         .writeValueAsString(halService.processText(text));
 
-    return jsonStr;
   }
 }
