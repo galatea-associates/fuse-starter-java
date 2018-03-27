@@ -3,6 +3,7 @@ package org.galatea.starter.entrypoint;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
 
+import org.galatea.starter.service.HalService;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,60 +32,55 @@ import java.util.Random;
 @RestController
 public class HalRestController {
 
+  @NonNull
+  HalService halService;
+
   /**
-   * Retrieve the result of a coin flip
+   * Retrieve the result of a coin flip from the Hal Service
    */
   // @GetMapping to link http GET request to this method
-  @GetMapping(value = "${webservice.halpath}" + "/coin-flip", produces = {MediaType.TEXT_PLAIN_VALUE})
+  @GetMapping(value = "${webservice.halpath}" + "/coin-flip", produces = {
+      MediaType.TEXT_PLAIN_VALUE})
   public String coinFlip() {
-    Random randomNum = new Random();
-    int result = randomNum.nextInt(2);
-
-    if (result == 0) {
-      return "Tails";
-    } else {
-      return "Heads";
-    }
+    return halService.coinFlip();
   }
 
   /**
-   * Retrieve the number of Galateans
+   * Retrieve the number of Galateans from the Hal Service
    */
   // @GetMapping to link http GET request to this method
-  @GetMapping(value = "${webservice.halpath}" + "/num-galateans", produces = {MediaType.APPLICATION_JSON_VALUE})
+  @GetMapping(value = "${webservice.halpath}" + "/num-galateans", produces = {
+      MediaType.APPLICATION_JSON_VALUE})
   public Map<String, Integer> numGalateans() {
-    Map<String, Integer> map = new HashMap<>();
-    map.put("Florida" , 6);
-    map.put("London", 13);
-    map.put("Boston", 50);
-    map.put("North Carolina", 5);
-    return map;
+    return halService.getNumGalateans();
   }
 
   /**
-   * Retrieve link to the recommended reading list
+   * Retrieve link to the recommended reading list from the Hal Service
    */
   // @GetMapping to link http GET request to this method
-  @GetMapping(value = "${webservice.halpath}" + "/rec-reading", produces = {MediaType.TEXT_HTML_VALUE})
+  @GetMapping(value = "${webservice.halpath}" + "/rec-reading", produces = {
+      MediaType.TEXT_HTML_VALUE})
   public String recReading() {
-    return "https://docs.google.com/spreadsheets/d/1rxtbvuoMvKRdAbgIUKuis-8c5Pdyptvg03m23hikOIM/";
+    return halService.getRecReading();
   }
 
   /**
-   * Retrieve a movie quote
+   * Retrieve a movie quote from the Hal Service
    */
   // @GetMapping to link http GET request to this method
-  @GetMapping(value = "${webservice.halpath}" + "/movie-quote", produces = {MediaType.TEXT_PLAIN_VALUE})
+  @GetMapping(value = "${webservice.halpath}" + "/movie-quote", produces = {
+      MediaType.TEXT_PLAIN_VALUE})
   public String movieQuote() {
-    return "This mission is too important for me to allow you to jeopardize it";
+    return halService.getMovieQuote();
   }
 
   /**
-   * Return derp
+   * Return derp from the Hal Service
    */
   // @GetMapping to link http GET request to this method
   @GetMapping(value = "${webservice.halpath}" + "/derp", produces = {MediaType.TEXT_PLAIN_VALUE})
   public String derp() {
-    return "derp!";
+    return halService.getDerp();
   }
 }
