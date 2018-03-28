@@ -8,7 +8,7 @@
     <option name="MAIN_CLASS_NAME" value="org.galatea.starter.UnitTestRunner" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="class" />
-    <option name="VM_PARAMETERS" value="-Dapplication.name=my-fuse-app -Dapplication.log-dir=$PROJECT_DIR$/../../../${USERNAME}/logs -Dapplication.log-archive-root-dir=$PROJECT_DIR$/../../../${USERNAME}/logs/archive" />
+    <option name="VM_PARAMETERS" value="-Dapplication.name=my-fuse-app -Dapplication.log-dir=c:/Users/${USERNAME}/logs -Dapplication.log-archive-root-dir=c:/Users/${USERNAME}/logs/archive" />
     <option name="PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
     <option name="ENV_VARIABLES" />
