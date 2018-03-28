@@ -121,14 +121,14 @@ Configuration:
   Loggers:
     # Define some defaults
     Root:
-      level: debug
+      level: info
       AppenderRef:
         - ref: AsyncAppender
         
     Logger:
       # Let's send all messages from a specific logger somewhere else as well
       - name: org.galatea.starter.entrypoint.SettlementRestController
-        level: info
+        level: debug
         AppenderRef:
           - ref: AsyncRestRequestAppender 
         
