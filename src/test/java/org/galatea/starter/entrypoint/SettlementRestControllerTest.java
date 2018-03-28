@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
@@ -58,7 +59,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = true)
 // We don't load the entire spring application context for this test.
 @WebMvcTest(SettlementRestController.class)
-// Import Beans from a Configuration file so we can Autowire them
+// Import Beans from Configuration, enabling them to be Autowired
 @Import(MvcConfig.class)
 // Use this runner since we want to parameterize certain tests.
 // See runner's javadoc for more usage.
@@ -89,7 +90,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   @Test
   @FileParameters(value = "src/test/resources/testSettleAgreement.data",
       mapper = JsonTestFileMapper.class)
-  public void testSettleAgreementJson(final String agreementJson,
+  public void testSettleAgreement_JSON(final String agreementJson,
       final String expectedMissionIdJson)
       throws Exception {
 
@@ -126,7 +127,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   }
 
   @Test
-  public void testSettleAgreementProtobuf() throws Exception {
+  public void testSettleAgreement_Protobuf() throws Exception {
 
     TradeAgreementMessage message = TradeAgreementMessage.newBuilder()
         .setInstrument("IBM").setInternalParty("INT-1")
@@ -149,7 +150,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   }
 
   @Test
-  public void testGetMissionFoundJson() throws Exception {
+  public void testGetMissionFound_JSON() throws Exception {
     String depot = "DTC";
     String externapParty = "EXT-1";
     String instrument = "IBM";
@@ -176,7 +177,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   }
 
   @Test
-  public void testGetMissionFoundProtobuf() throws Exception {
+  public void testGetMissionFound_Protobuf() throws Exception {
     String depot = "DTC";
     String externapParty = "EXT-1";
     String instrument = "IBM";
@@ -194,6 +195,33 @@ public class SettlementRestControllerTest extends ASpringTest {
         get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
             .accept(APPLICATION_X_PROTOBUF))
         .andExpect(status().isOk());
+
+    verifyAuditHeaders(resultActions);
+  }
+
+  @Test
+  public void testGetMissionFound_XML() throws Exception {
+    String depot = "DTC";
+    String externalParty = "EXT-1";
+    String instrument = "IBM";
+    String direction = "REC";
+    double qty = 100;
+
+    SettlementMission testMission = SettlementMission.builder().id(MISSION_ID_1).depot(depot)
+        .externalParty(externalParty).instrument(instrument).direction(direction).qty(qty).build();
+    log.info("Test mission: {}", testMission);
+
+    given(this.mockSettlementService.findMission(MISSION_ID_1))
+        .willReturn(Optional.of(testMission));
+
+    ResultActions resultActions =
+        this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+            .accept(MediaType.APPLICATION_XML)).andExpect(status().isOk())
+            .andExpect(xpath("//id").string(MISSION_ID_1.toString()))
+            .andExpect(xpath("//external_party").string(externalParty))
+            .andExpect(xpath("//instrument").string(instrument))
+            .andExpect(xpath("//direction").string(direction))
+            .andExpect(xpath("//qty").string(String.valueOf(qty)));
 
     verifyAuditHeaders(resultActions);
   }
