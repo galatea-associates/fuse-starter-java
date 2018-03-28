@@ -65,7 +65,8 @@ public class SettlementRestController {
    */
   // @PostMapping to link http POST requests to this method
   // @RequestBody to have the post request body deserialized into a list of TradeAgreement objects
-  @PostMapping(value = SETTLE_MISSION_PATH, consumes = { APPLICATION_X_PROTOBUF, MediaType.APPLICATION_JSON_VALUE})
+  @PostMapping(value = SETTLE_MISSION_PATH, consumes = { APPLICATION_X_PROTOBUF,
+      MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
   public Set<String> settleAgreement(
       @RequestBody final TradeAgreementMessage message,
       @RequestParam(value = "requestId", required = false) String requestId) {
