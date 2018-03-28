@@ -1,4 +1,4 @@
-package org.galatea.starter;
+package org.galatea.starter.domain;
 
 
 import lombok.Data;

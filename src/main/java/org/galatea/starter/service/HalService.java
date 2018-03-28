@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
+import org.galatea.starter.domain.Quote;
+import org.galatea.starter.restClient.QuoteGetter;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -22,7 +25,11 @@ public class HalService {
   private static final String REC_READING =
       "https://docs.google.com/spreadsheets/d/1rxtbvuoMvKRdAbgIUKuis-8c5Pdyptvg03m23hikOIM/";
 
-  private static final String MOVIE_QUOTE = "This mission is too important for me to allow you to jeopardize it";
+  @NonNull
+  QuoteGetter quoteGetter;
+
+  //private final String MOVIE_QUOTE = "FUCK";
+
   private static final String DERP = "derp!";
 
   /**
@@ -87,6 +94,9 @@ public class HalService {
    * @return movie quote string
    */
   public String getMovieQuote() {
+    Quote quote = quoteGetter.getQuote();
+    final String MOVIE_QUOTE = quote.getQuote() + ", from: " + quote.getAuthor();
+    System.out.println(MOVIE_QUOTE);
     return MOVIE_QUOTE;
   }
 

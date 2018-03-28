@@ -3,6 +3,8 @@ package org.galatea.starter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.galatea.starter.domain.Quote;
+import org.galatea.starter.restClient.QuoteGetter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -24,17 +26,15 @@ public class Application {
    * @param args command line args
    */
   public static void main(final String[] args) {
-    //log.info("Starting spring application {}", System.getProperty("application.name"));
-    //SpringApplication.run(Application.class, args);
+    log.info("Starting spring application {}", System.getProperty("application.name"));
+    SpringApplication.run(Application.class, args);
 
-    //The above code runs the standard application
 
-    //The following code retrieves a quote and prints it to the log.
+    /*
     ApplicationContext context = SpringApplication.run(Application.class, args);
     QuoteGetter quoteGetter = context.getBean(QuoteGetter.class);
     Quote quote = quoteGetter.getQuote();
-    log.info("Quote: " + quote.getQuote() + ", Author: " + quote.getAuthor() + ", Category:" + quote.getCategory());
-
-
+    System.out.println(quote);
+    */
   }
 }

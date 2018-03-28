@@ -43,3 +43,9 @@ spring:
 # Mappings for Rest Controllers
 webservice:
   halpath: /hal
+
+---
+#Properties for Quote Getter
+quote-getter:
+  url: https://andruxnet-random-famous-quotes.p.mashape.com/?cat=movies
+  header: "X-Mashape-Key: o3chJTJnj2mshT5rvZpAZ0BUaiUVp1Ho4XKjsn2JYPspbxkcBk"
