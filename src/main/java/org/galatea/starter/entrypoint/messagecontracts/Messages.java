@@ -3,7 +3,6 @@
 
 package org.galatea.starter.entrypoint.messagecontracts;
 
-@javax.annotation.Generated("protoc")
 public final class Messages {
   private Messages() {}
   public static void registerAllExtensions(

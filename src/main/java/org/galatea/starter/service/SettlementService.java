@@ -12,6 +12,7 @@ import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.domain.rpsy.ISettlementMissionRpsy;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +20,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Slf4j
 @Log
+@Validated
 @Service
 public class SettlementService {
 
@@ -39,7 +43,7 @@ public class SettlementService {
    * @param agreements the agreements used to generate missions
    * @return the ids of the missions that were created
    */
-  public Set<Long> spawnMissions(final List<TradeAgreement> agreements) {
+  public Set<Long> spawnMissions(@Valid final List<TradeAgreement> agreements) {
 
     // Map each agreement to a mission, collect to a list, and then same in bulk
     Iterable<SettlementMission> savedMissions = missionrpsy.save(agreements.stream()

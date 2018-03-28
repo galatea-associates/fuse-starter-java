@@ -37,7 +37,7 @@ public class JmsConfig {
    * @return a translator to convert binary protobuf messages to trade agreements.
    */
   @Bean
-  public ITranslator<byte[], TradeAgreement> tradeAgreementMessageTranslator () {
+  public ITranslator<byte[], TradeAgreement> tradeAgreementMessageParser() {
     return msg -> {
       TradeAgreementMessage message;
 

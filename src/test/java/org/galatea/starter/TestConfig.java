@@ -29,4 +29,5 @@ public class TestConfig {
     return () -> TradeAgreementMessage.newBuilder().setInstrument("IBM").setInternalParty("INT-1")
         .setExternalParty("EXT-1").setBuySell("B").setQty(100).build();
   }
+
 }
