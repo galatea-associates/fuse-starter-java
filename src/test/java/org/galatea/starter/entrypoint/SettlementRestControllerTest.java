@@ -28,7 +28,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.ASpringTest;
-import org.galatea.starter.MvcConfig;
+import org.galatea.starter.MessageTranslationConfig;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
@@ -60,7 +60,7 @@ import java.util.stream.Collectors;
 // We don't load the entire spring application context for this test.
 @WebMvcTest(SettlementRestController.class)
 // Import Beans from Configuration, enabling them to be Autowired
-@Import(MvcConfig.class)
+@Import(MessageTranslationConfig.class)
 // Use this runner since we want to parameterize certain tests.
 // See runner's javadoc for more usage.
 @RunWith(JUnitParamsRunner.class)
