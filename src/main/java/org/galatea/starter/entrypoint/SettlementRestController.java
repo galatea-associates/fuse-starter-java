@@ -67,7 +67,7 @@ public class SettlementRestController {
   // @RequestBody to have the post request body deserialized into a list of TradeAgreement objects
   @PostMapping(value = SETTLE_MISSION_PATH, consumes = {APPLICATION_X_PROTOBUF,
       MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-  public Set<String> settleAgreement(
+  public SettlementResponse settleAgreement(
       @RequestBody final TradeAgreementMessage message,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
@@ -78,7 +78,10 @@ public class SettlementRestController {
 
     Set<Long> missionIds = settlementService.spawnMissions(singletonList(agreement));
 
-    return missionIds.stream().map(id -> GET_MISSION_PATH + id).collect(Collectors.toSet());
+    Set<String> missionPaths = missionIds.stream().map(id -> GET_MISSION_PATH + id)
+        .collect(Collectors.toSet());
+    
+    return new SettlementResponse(missionPaths);
   }
 
   /**
@@ -89,7 +92,7 @@ public class SettlementRestController {
   // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
   @GetMapping(value = GET_MISSION_PATH + "{id}", produces = {MediaType.APPLICATION_JSON_VALUE,
       MediaType.APPLICATION_XML_VALUE, APPLICATION_X_PROTOBUF})
-  public @ResponseBody SettlementMissionMessage getMission(@PathVariable final Long id,
+  public SettlementMissionMessage getMission(@PathVariable final Long id,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
     // if an external request id was provided, grab it
