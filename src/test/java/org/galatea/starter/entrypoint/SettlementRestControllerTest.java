@@ -17,8 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-import com.googlecode.protobuf.format.JsonFormat;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 
 import junitparams.FileParameters;
 import junitparams.JUnitParamsRunner;
@@ -29,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.MessageTranslationConfig;
+import org.galatea.starter.MessageUtil;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
@@ -48,7 +47,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -91,8 +89,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   @FileParameters(value = "src/test/resources/testSettleAgreement.data",
       mapper = JsonTestFileMapper.class)
   public void testSettleAgreement_JSON(final String agreementJson,
-      final String expectedMissionIdJson)
-      throws Exception {
+      final String expectedMissionIdJson) throws Exception {
 
     log.info("Agreement json to post {}", agreementJson);
 
@@ -103,7 +100,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
     log.info("Expected json response {}", expectedResponseJsonList);
 
-    TradeAgreementMessage message = jsonToMessage(agreementJson);
+    TradeAgreementMessage message = MessageUtil.jsonToTradeAgreement(agreementJson);
     log.info("Agreement objects that the service will expect {}", message);
 
     given(this.mockSettlementService.spawnMissions(singletonList(transformAgreement(message))))
@@ -116,14 +113,6 @@ public class SettlementRestControllerTest extends ASpringTest {
         .andExpect(jsonPath("$", containsInAnyOrder(expectedResponseJsonList.toArray())));
 
     verifyAuditHeaders(resultActions);
-  }
-
-  private TradeAgreementMessage jsonToMessage(String json) throws IOException {
-    byte[] bytes = json.getBytes();
-    ByteInputStream bis = new ByteInputStream(json.getBytes(), bytes.length);
-    TradeAgreementMessage.Builder builder = TradeAgreementMessage.newBuilder();
-    new JsonFormat().merge(bis, builder);
-    return builder.build();
   }
 
   @Test
@@ -252,8 +241,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testDataAccessFailure() throws Exception {
-    DataAccessException exception = new DataAccessException("msg") {
-    };
+    DataAccessException exception = new DataAccessException("msg") {};
     when(mockSettlementService.findMission(MISSION_ID_1)).thenThrow(exception);
 
     this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
