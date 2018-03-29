@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
+import com.googlecode.protobuf.format.XmlFormat;
 
 import junitparams.FileParameters;
 import junitparams.JUnitParamsRunner;
@@ -115,7 +116,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .perform(post("/settlementEngine?requestId=1234")
             .contentType(MediaType.APPLICATION_JSON_VALUE).content(agreementJson))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", containsInAnyOrder(expectedResponseJsonList.toArray())));
+        .andExpect(jsonPath("$.spawnedMissions", containsInAnyOrder(expectedResponseJsonList.toArray())));
 
     verifyAuditHeaders(resultActions);
   }
@@ -134,7 +135,28 @@ public class SettlementRestControllerTest extends ASpringTest {
         .contentType(APPLICATION_X_PROTOBUF)
         .content(message.toByteArray()))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", containsInAnyOrder("/settlementEngine/mission/1")));
+        .andExpect(jsonPath("$.spawnedMissions", containsInAnyOrder("/settlementEngine/mission/1")));
+
+    verifyAuditHeaders(resultActions);
+  }
+
+  @Test
+  public void testSettleAgreement_XML() throws Exception {
+
+    TradeAgreementMessage message = TradeAgreementMessage.newBuilder()
+        .setInstrument("IBM").setInternalParty("INT-1")
+        .setExternalParty("EXT-1").setBuySell("B").setQty(100).build();
+
+    String xml = new XmlFormat().printToString(message);
+
+    given(this.mockSettlementService.spawnMissions(singletonList(transformAgreement(message))))
+        .willReturn(Sets.newTreeSet(singletonList(1L)));
+
+    ResultActions resultActions = this.mvc.perform(post("/settlementEngine?requestId=1234")
+        .contentType(MediaType.APPLICATION_XML)
+        .accept(MediaType.APPLICATION_XML)
+        .content(xml))
+        .andExpect(status().isOk());
 
     verifyAuditHeaders(resultActions);
   }
