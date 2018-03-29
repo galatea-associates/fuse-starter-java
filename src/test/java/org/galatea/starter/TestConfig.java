@@ -1,5 +1,6 @@
 package org.galatea.starter;
 
+import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
 import org.galatea.starter.utils.ObjectSupplier;
@@ -28,6 +29,12 @@ public class TestConfig {
   public ObjectSupplier<TradeAgreementMessage> tradeAgreementMessageSupplier() {
     return () -> TradeAgreementMessage.newBuilder().setInstrument("IBM").setInternalParty("INT-1")
         .setExternalParty("EXT-1").setBuySell("B").setQty(100).build();
+  }
+
+  @Bean
+  public ObjectSupplier<SettlementMission> settlementMissionSupplier() {
+    return () -> SettlementMission.builder().id(100L).depot("DTC").externalParty("EXT-1")
+        .instrument("IBM").direction("REC").qty(100d).build();
   }
 
 }

@@ -28,10 +28,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.MessageTranslationConfig;
 import org.galatea.starter.MessageUtil;
+import org.galatea.starter.TestConfig;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
 import org.galatea.starter.service.SettlementService;
+import org.galatea.starter.utils.ObjectSupplier;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,11 +60,14 @@ import java.util.stream.Collectors;
 // We don't load the entire spring application context for this test.
 @WebMvcTest(SettlementRestController.class)
 // Import Beans from Configuration, enabling them to be Autowired
-@Import(MessageTranslationConfig.class)
+@Import({MessageTranslationConfig.class, TestConfig.class})
 // Use this runner since we want to parameterize certain tests.
 // See runner's javadoc for more usage.
 @RunWith(JUnitParamsRunner.class)
 public class SettlementRestControllerTest extends ASpringTest {
+
+  @Autowired
+  private ObjectSupplier<SettlementMission> settlementMissionSupplier;
 
   @Autowired
   private ITranslator<TradeAgreementMessage, TradeAgreement> agreementTranslator;
@@ -140,45 +145,31 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMissionFound_JSON() throws Exception {
-    String depot = "DTC";
-    String externapParty = "EXT-1";
-    String instrument = "IBM";
-    String direction = "REC";
-    double qty = 100;
-
-    SettlementMission testMission = SettlementMission.builder().id(MISSION_ID_1).depot(depot)
-        .externalParty(externapParty).instrument(instrument).direction(direction).qty(qty).build();
-    log.info("Test mission: {}", testMission);
+    SettlementMission mission = settlementMissionSupplier.get();
+    log.info("Test mission: {}", mission);
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
-        .willReturn(Optional.of(testMission));
+        .willReturn(Optional.of(mission));
 
     ResultActions resultActions =
         this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
             .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(MISSION_ID_1.intValue())))
-            .andExpect(jsonPath("$.external_party", is(externapParty)))
-            .andExpect(jsonPath("$.instrument", is(instrument)))
-            .andExpect(jsonPath("$.direction", is(direction)))
-            .andExpect(jsonPath("$.qty", is(qty)));
+            .andExpect(jsonPath("$.id", is(mission.getId().intValue())))
+            .andExpect(jsonPath("$.external_party", is(mission.getExternalParty())))
+            .andExpect(jsonPath("$.instrument", is(mission.getInstrument())))
+            .andExpect(jsonPath("$.direction", is(mission.getDirection())))
+            .andExpect(jsonPath("$.qty", is(mission.getQty())));
 
     verifyAuditHeaders(resultActions);
   }
 
   @Test
   public void testGetMissionFound_Protobuf() throws Exception {
-    String depot = "DTC";
-    String externapParty = "EXT-1";
-    String instrument = "IBM";
-    String direction = "REC";
-    double qty = 100;
-
-    SettlementMission testMission = SettlementMission.builder().id(MISSION_ID_1).depot(depot)
-        .externalParty(externapParty).instrument(instrument).direction(direction).qty(qty).build();
-    log.info("Test mission: {}", testMission);
+    SettlementMission mission = settlementMissionSupplier.get();
+    log.info("Test mission: {}", mission);
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
-        .willReturn(Optional.of(testMission));
+        .willReturn(Optional.of(mission));
 
     ResultActions resultActions = this.mvc.perform(
         get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
@@ -190,27 +181,20 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMissionFound_XML() throws Exception {
-    String depot = "DTC";
-    String externalParty = "EXT-1";
-    String instrument = "IBM";
-    String direction = "REC";
-    double qty = 100;
-
-    SettlementMission testMission = SettlementMission.builder().id(MISSION_ID_1).depot(depot)
-        .externalParty(externalParty).instrument(instrument).direction(direction).qty(qty).build();
-    log.info("Test mission: {}", testMission);
+    SettlementMission mission = settlementMissionSupplier.get();
+    log.info("Test mission: {}", mission);
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
-        .willReturn(Optional.of(testMission));
+        .willReturn(Optional.of(mission));
 
     ResultActions resultActions =
         this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
             .accept(MediaType.APPLICATION_XML)).andExpect(status().isOk())
-            .andExpect(xpath("//id").string(MISSION_ID_1.toString()))
-            .andExpect(xpath("//external_party").string(externalParty))
-            .andExpect(xpath("//instrument").string(instrument))
-            .andExpect(xpath("//direction").string(direction))
-            .andExpect(xpath("//qty").string(String.valueOf(qty)));
+            .andExpect(xpath("//id").string(mission.getId().toString()))
+            .andExpect(xpath("//external_party").string(mission.getExternalParty()))
+            .andExpect(xpath("//instrument").string(mission.getInstrument()))
+            .andExpect(xpath("//direction").string(mission.getDirection()))
+            .andExpect(xpath("//qty").string(String.valueOf(mission.getQty())));
 
     verifyAuditHeaders(resultActions);
   }
