@@ -6,8 +6,6 @@ import lombok.ToString;
 import org.galatea.starter.domain.Wit.Entity;
 
 @Data
-@EqualsAndHashCode
-@ToString
 public class EntityStore {
   private Entity[] intent;
   private Entity[] lunch_keywords;

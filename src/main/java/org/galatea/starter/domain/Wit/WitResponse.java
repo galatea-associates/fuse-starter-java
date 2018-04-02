@@ -1,15 +1,17 @@
 package org.galatea.starter.domain.Wit;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.galatea.starter.domain.Wit.EntityStore;
+import lombok.NonNull;
 
 @Data
 public class WitResponse {
 
+  @NonNull
   private String _text;
+
+  @NonNull
   private EntityStore entities;
+
   private String msg_id;
 
 }

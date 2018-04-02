@@ -104,7 +104,6 @@ public class HalService {
   public String getMovieQuote() {
     Quote quote = quoteGetter.getQuote();
     final String MOVIE_QUOTE = quote.getQuote() + ", from: " + quote.getAuthor();
-    System.out.println(MOVIE_QUOTE);
     return MOVIE_QUOTE;
   }
 

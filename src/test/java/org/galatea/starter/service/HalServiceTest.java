@@ -1,5 +1,6 @@
 package org.galatea.starter.service;
 
+import static org.mockito.BDDMockito.given;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
@@ -7,6 +8,8 @@ import static org.mockito.Mockito.spy;
 import java.util.HashMap;
 import java.util.Map;
 import org.galatea.starter.ASpringTest;
+import org.galatea.starter.domain.Wit.Entity;
+import org.galatea.starter.domain.Wit.EntityStore;
 import org.galatea.starter.domain.Wit.WitResponse;
 import org.galatea.starter.restClient.QuoteGetter;
 import org.galatea.starter.restClient.WitGetter;
@@ -30,6 +33,14 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
     HalService spyService = spy(service);
 
+    Entity ent = new Entity(1, text);
+    Entity[] eArr = new Entity[1];
+    eArr[0] = ent;
+    EntityStore eStore = new EntityStore();
+    eStore.setIntent(eArr);
+    WitResponse witRe = new WitResponse(text, eStore);
+
+    given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
     doReturn(COIN.HEADS).when(spyService).coinFlipRand();
 
     String result = spyService.processText(text);
@@ -44,6 +55,14 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
     HalService spyService = spy(service);
 
+    Entity ent = new Entity(1, text);
+    Entity[] eArr = new Entity[1];
+    eArr[0] = ent;
+    EntityStore eStore = new EntityStore();
+    eStore.setIntent(eArr);
+    WitResponse witRe = new WitResponse(text, eStore);
+
+    given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
     doReturn(COIN.TAILS).when(spyService).coinFlipRand();
 
     String result = spyService.processText(text);
@@ -63,6 +82,15 @@ public class HalServiceTest extends ASpringTest {
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
+    Entity ent = new Entity(1, text);
+    Entity[] eArr = new Entity[1];
+    eArr[0] = ent;
+    EntityStore eStore = new EntityStore();
+    eStore.setIntent(eArr);
+    WitResponse witRe = new WitResponse(text, eStore);
+
+    given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
+
     String result = service.processText(text);
     assertEquals(expResult, result);
   }
@@ -73,6 +101,15 @@ public class HalServiceTest extends ASpringTest {
     String expResult = "https://docs.google.com/spreadsheets/d/1rxtbvuoMvKRdAbgIUKuis-8c5Pdyptvg03m23hikOIM/";
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
+
+    Entity ent = new Entity(1, text);
+    Entity[] eArr = new Entity[1];
+    eArr[0] = ent;
+    EntityStore eStore = new EntityStore();
+    eStore.setIntent(eArr);
+    WitResponse witRe = new WitResponse(text, eStore);
+
+    given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
 
     String result = service.processText(text);
     assertEquals(expResult, result);
@@ -85,6 +122,15 @@ public class HalServiceTest extends ASpringTest {
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
+    Entity ent = new Entity(1, text);
+    Entity[] eArr = new Entity[1];
+    eArr[0] = ent;
+    EntityStore eStore = new EntityStore();
+    eStore.setIntent(eArr);
+    WitResponse witRe = new WitResponse(text, eStore);
+
+    given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
+
     String result = service.processText(text);
     assertEquals(expResult, result);
   }
@@ -96,6 +142,15 @@ public class HalServiceTest extends ASpringTest {
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
+    Entity ent = new Entity(1, text);
+    Entity[] eArr = new Entity[1];
+    eArr[0] = ent;
+    EntityStore eStore = new EntityStore();
+    eStore.setIntent(eArr);
+    WitResponse witRe = new WitResponse(text, eStore);
+
+    given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
+
     String result = service.processText(text);
     assertEquals(expResult, result);
   }
@@ -106,6 +161,15 @@ public class HalServiceTest extends ASpringTest {
     String expResult = "Unsupported command";
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
+
+    Entity ent = new Entity(1, text);
+    Entity[] eArr = new Entity[1];
+    eArr[0] = ent;
+    EntityStore eStore = new EntityStore();
+    eStore.setIntent(eArr);
+    WitResponse witRe = new WitResponse(text, eStore);
+
+    given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
 
     String result = service.processText(text);
     assertEquals(expResult, result);
