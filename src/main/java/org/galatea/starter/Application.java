@@ -36,7 +36,7 @@ public class Application {
     /*
     ApplicationContext context = SpringApplication.run(Application.class, args);
     WitGetter witGetter = context.getBean(WitGetter.class);
-    WitResponse witResponse = witGetter.getWitResponse();
+    WitResponse witResponse = witGetter.getWitResponse("flip a coin");
     System.out.println(witResponse.getEntities().getIntent()[0]);
     */
   }

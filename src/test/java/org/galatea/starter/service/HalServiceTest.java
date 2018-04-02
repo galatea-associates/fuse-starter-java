@@ -7,7 +7,9 @@ import static org.mockito.Mockito.spy;
 import java.util.HashMap;
 import java.util.Map;
 import org.galatea.starter.ASpringTest;
+import org.galatea.starter.domain.Wit.WitResponse;
 import org.galatea.starter.restClient.QuoteGetter;
+import org.galatea.starter.restClient.WitGetter;
 import org.galatea.starter.service.HalService.COIN;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,12 +19,15 @@ public class HalServiceTest extends ASpringTest {
   @MockBean
   private QuoteGetter mockQuoteGetter;
 
+  @MockBean
+  private WitGetter mockWitGetter;
+
   @Test
   public void testProcessTestCoinFlipHeads() {
     String text = "coin-flip";
     String expResult = "Heads";
 
-    HalService service = new HalService(mockQuoteGetter);
+    HalService service = new HalService(mockQuoteGetter, mockWitGetter);
     HalService spyService = spy(service);
 
     doReturn(COIN.HEADS).when(spyService).coinFlipRand();
@@ -36,7 +41,7 @@ public class HalServiceTest extends ASpringTest {
     String text = "coin-flip";
     String expResult = "Tails";
 
-    HalService service = new HalService(mockQuoteGetter);
+    HalService service = new HalService(mockQuoteGetter, mockWitGetter);
     HalService spyService = spy(service);
 
     doReturn(COIN.TAILS).when(spyService).coinFlipRand();
@@ -56,7 +61,7 @@ public class HalServiceTest extends ASpringTest {
 
     String expResult = map.toString();
 
-    HalService service = new HalService(mockQuoteGetter);
+    HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
     String result = service.processText(text);
     assertEquals(expResult, result);
@@ -67,7 +72,7 @@ public class HalServiceTest extends ASpringTest {
     String text = "rec-reading";
     String expResult = "https://docs.google.com/spreadsheets/d/1rxtbvuoMvKRdAbgIUKuis-8c5Pdyptvg03m23hikOIM/";
 
-    HalService service = new HalService(mockQuoteGetter);
+    HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
     String result = service.processText(text);
     assertEquals(expResult, result);
@@ -78,7 +83,7 @@ public class HalServiceTest extends ASpringTest {
     String text = "movie-quote";
     String expResult = "This mission is too important for me to allow you to jeopardize it";
 
-    HalService service = new HalService(mockQuoteGetter);
+    HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
     String result = service.processText(text);
     assertEquals(expResult, result);
@@ -89,7 +94,7 @@ public class HalServiceTest extends ASpringTest {
     String text = "derp";
     String expResult = "derp!";
 
-    HalService service = new HalService(mockQuoteGetter);
+    HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
     String result = service.processText(text);
     assertEquals(expResult, result);
@@ -100,7 +105,7 @@ public class HalServiceTest extends ASpringTest {
     String text = "Unsupported";
     String expResult = "Unsupported command";
 
-    HalService service = new HalService(mockQuoteGetter);
+    HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
     String result = service.processText(text);
     assertEquals(expResult, result);

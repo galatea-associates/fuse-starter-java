@@ -1,12 +1,13 @@
 package org.galatea.starter.restClient;
 
 import feign.Headers;
+import feign.Param;
 import feign.RequestLine;
 import org.galatea.starter.domain.Wit.WitResponse;
 
 public interface WitGetter {
-  @Headers("Authorization: Bearer RZMD4U2WQB4ZYBUEKJ3RASFG3GIW5NKN")
-  @RequestLine("GET")
-  WitResponse getWitResponse();
+  @Headers("Authorization: Bearer MMGURXBKQ3YVKYMGDUJQ2K3CKBNMNEVS")
+  @RequestLine("GET /message?q={text}")
+  WitResponse getWitResponse(@Param("text") String text);
 
 }

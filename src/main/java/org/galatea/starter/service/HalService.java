@@ -11,7 +11,9 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import org.galatea.starter.domain.Quote;
+import org.galatea.starter.domain.Wit.WitResponse;
 import org.galatea.starter.restClient.QuoteGetter;
+import org.galatea.starter.restClient.WitGetter;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -28,6 +30,9 @@ public class HalService {
   @NonNull
   QuoteGetter quoteGetter;
 
+  @NonNull
+  WitGetter witGetter;
+
   //private final String MOVIE_QUOTE = "FUCK";
 
   private static final String DERP = "derp!";
@@ -39,7 +44,10 @@ public class HalService {
    * @return the result of executing the command with the given parameters
    */
   public String processText(String text) {
-    switch (text) {
+    /* Send raw text to wit.ai */
+    WitResponse witResponse = witGetter.getWitResponse(text);
+
+    switch (witResponse.getEntities().getIntent()[0].getValue().toString()) {
       case "coin-flip":
         return coinFlip();
       case "num-galateans":

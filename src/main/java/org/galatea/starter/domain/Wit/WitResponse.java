@@ -6,8 +6,6 @@ import lombok.ToString;
 import org.galatea.starter.domain.Wit.EntityStore;
 
 @Data
-@EqualsAndHashCode
-@ToString
 public class WitResponse {
 
   private String _text;
