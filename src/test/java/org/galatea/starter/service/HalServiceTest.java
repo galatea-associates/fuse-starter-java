@@ -115,6 +115,7 @@ public class HalServiceTest extends ASpringTest {
     assertEquals(expResult, result);
   }
 
+  /*
   @Test
   public void testProcessTestGetMovieQuote() {
     String text = "movie-quote";
@@ -134,6 +135,7 @@ public class HalServiceTest extends ASpringTest {
     String result = service.processText(text);
     assertEquals(expResult, result);
   }
+  */
 
   @Test
   public void testProcessTestGetDerp() {
