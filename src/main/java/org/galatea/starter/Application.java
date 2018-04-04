@@ -28,16 +28,16 @@ public class Application {
    * @param args command line args
    */
   public static void main(final String[] args) {
-    log.info("Starting spring application {}", System.getProperty("application.name"));
-    SpringApplication.run(Application.class, args);
+    //log.info("Starting spring application {}", System.getProperty("application.name"));
+    //SpringApplication.run(Application.class, args);
 
 
     //Comment out above code and uncomment below to run an example Wit request and print to command line
-    /*
+
     ApplicationContext context = SpringApplication.run(Application.class, args);
     WitGetter witGetter = context.getBean(WitGetter.class);
     WitResponse witResponse = witGetter.getWitResponse("flip a coin");
     System.out.println(witResponse.getEntities().getIntent()[0]);
-    */
+
   }
 }
