@@ -12,6 +12,10 @@ package fuse_java_starter;
 option java_package = "org.galatea.starter.entrypoint.messagecontracts";
 option java_outer_classname = "Messages";
 
+message TradeAgreementMessages {
+  repeated TradeAgreementMessage message = 1;
+}
+
 /* defines the message format for trade agreements */
 message TradeAgreementMessage {
   int64 id = 1;
@@ -20,6 +24,10 @@ message TradeAgreementMessage {
   string external_party = 4;
   string buy_sell = 5;
   double qty = 6;
+}
+
+message SettlementMissionMessages {
+  repeated SettlementMissionMessage message = 1;
 }
 
 /* defines the message format for settlement missions */

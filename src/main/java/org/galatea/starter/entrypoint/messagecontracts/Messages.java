@@ -14,6 +14,763 @@ public final class Messages {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
+  public interface TradeAgreementMessagesOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fuse_java_starter.TradeAgreementMessages)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+     */
+    java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage> 
+        getMessageList();
+    /**
+     * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+     */
+    org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage getMessage(int index);
+    /**
+     * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+     */
+    int getMessageCount();
+    /**
+     * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+     */
+    java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessageOrBuilder> 
+        getMessageOrBuilderList();
+    /**
+     * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+     */
+    org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessageOrBuilder getMessageOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code fuse_java_starter.TradeAgreementMessages}
+   */
+  public  static final class TradeAgreementMessages extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fuse_java_starter.TradeAgreementMessages)
+      TradeAgreementMessagesOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use TradeAgreementMessages.newBuilder() to construct.
+    private TradeAgreementMessages(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private TradeAgreementMessages() {
+      message_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private TradeAgreementMessages(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                message_ = new java.util.ArrayList<org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              message_.add(
+                  input.readMessage(org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.parser(), extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          message_ = java.util.Collections.unmodifiableList(message_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.galatea.starter.entrypoint.messagecontracts.Messages.internal_static_fuse_java_starter_TradeAgreementMessages_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.galatea.starter.entrypoint.messagecontracts.Messages.internal_static_fuse_java_starter_TradeAgreementMessages_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages.class, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages.Builder.class);
+    }
+
+    public static final int MESSAGE_FIELD_NUMBER = 1;
+    private java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage> message_;
+    /**
+     * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+     */
+    public java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage> getMessageList() {
+      return message_;
+    }
+    /**
+     * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+     */
+    public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessageOrBuilder> 
+        getMessageOrBuilderList() {
+      return message_;
+    }
+    /**
+     * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+     */
+    public int getMessageCount() {
+      return message_.size();
+    }
+    /**
+     * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+     */
+    public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage getMessage(int index) {
+      return message_.get(index);
+    }
+    /**
+     * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+     */
+    public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessageOrBuilder getMessageOrBuilder(
+        int index) {
+      return message_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      for (int i = 0; i < message_.size(); i++) {
+        output.writeMessage(1, message_.get(i));
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < message_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, message_.get(i));
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages)) {
+        return super.equals(obj);
+      }
+      org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages other = (org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages) obj;
+
+      boolean result = true;
+      result = result && getMessageList()
+          .equals(other.getMessageList());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (getMessageCount() > 0) {
+        hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getMessageList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code fuse_java_starter.TradeAgreementMessages}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fuse_java_starter.TradeAgreementMessages)
+        org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessagesOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.galatea.starter.entrypoint.messagecontracts.Messages.internal_static_fuse_java_starter_TradeAgreementMessages_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.galatea.starter.entrypoint.messagecontracts.Messages.internal_static_fuse_java_starter_TradeAgreementMessages_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages.class, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages.Builder.class);
+      }
+
+      // Construct using org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getMessageFieldBuilder();
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        if (messageBuilder_ == null) {
+          message_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          messageBuilder_.clear();
+        }
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.galatea.starter.entrypoint.messagecontracts.Messages.internal_static_fuse_java_starter_TradeAgreementMessages_descriptor;
+      }
+
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages getDefaultInstanceForType() {
+        return org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages.getDefaultInstance();
+      }
+
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages build() {
+        org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages buildPartial() {
+        org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages result = new org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages(this);
+        int from_bitField0_ = bitField0_;
+        if (messageBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            message_ = java.util.Collections.unmodifiableList(message_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.message_ = message_;
+        } else {
+          result.message_ = messageBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages) {
+          return mergeFrom((org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages other) {
+        if (other == org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages.getDefaultInstance()) return this;
+        if (messageBuilder_ == null) {
+          if (!other.message_.isEmpty()) {
+            if (message_.isEmpty()) {
+              message_ = other.message_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureMessageIsMutable();
+              message_.addAll(other.message_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.message_.isEmpty()) {
+            if (messageBuilder_.isEmpty()) {
+              messageBuilder_.dispose();
+              messageBuilder_ = null;
+              message_ = other.message_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              messageBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getMessageFieldBuilder() : null;
+            } else {
+              messageBuilder_.addAllMessages(other.message_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage> message_ =
+        java.util.Collections.emptyList();
+      private void ensureMessageIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          message_ = new java.util.ArrayList<org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage>(message_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessageOrBuilder> messageBuilder_;
+
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage> getMessageList() {
+        if (messageBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(message_);
+        } else {
+          return messageBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public int getMessageCount() {
+        if (messageBuilder_ == null) {
+          return message_.size();
+        } else {
+          return messageBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage getMessage(int index) {
+        if (messageBuilder_ == null) {
+          return message_.get(index);
+        } else {
+          return messageBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public Builder setMessage(
+          int index, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage value) {
+        if (messageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMessageIsMutable();
+          message_.set(index, value);
+          onChanged();
+        } else {
+          messageBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public Builder setMessage(
+          int index, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.Builder builderForValue) {
+        if (messageBuilder_ == null) {
+          ensureMessageIsMutable();
+          message_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          messageBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public Builder addMessage(org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage value) {
+        if (messageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMessageIsMutable();
+          message_.add(value);
+          onChanged();
+        } else {
+          messageBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public Builder addMessage(
+          int index, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage value) {
+        if (messageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMessageIsMutable();
+          message_.add(index, value);
+          onChanged();
+        } else {
+          messageBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public Builder addMessage(
+          org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.Builder builderForValue) {
+        if (messageBuilder_ == null) {
+          ensureMessageIsMutable();
+          message_.add(builderForValue.build());
+          onChanged();
+        } else {
+          messageBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public Builder addMessage(
+          int index, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.Builder builderForValue) {
+        if (messageBuilder_ == null) {
+          ensureMessageIsMutable();
+          message_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          messageBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public Builder addAllMessage(
+          java.lang.Iterable<? extends org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage> values) {
+        if (messageBuilder_ == null) {
+          ensureMessageIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, message_);
+          onChanged();
+        } else {
+          messageBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public Builder clearMessage() {
+        if (messageBuilder_ == null) {
+          message_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          messageBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public Builder removeMessage(int index) {
+        if (messageBuilder_ == null) {
+          ensureMessageIsMutable();
+          message_.remove(index);
+          onChanged();
+        } else {
+          messageBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.Builder getMessageBuilder(
+          int index) {
+        return getMessageFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessageOrBuilder getMessageOrBuilder(
+          int index) {
+        if (messageBuilder_ == null) {
+          return message_.get(index);  } else {
+          return messageBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessageOrBuilder> 
+           getMessageOrBuilderList() {
+        if (messageBuilder_ != null) {
+          return messageBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(message_);
+        }
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.Builder addMessageBuilder() {
+        return getMessageFieldBuilder().addBuilder(
+            org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.Builder addMessageBuilder(
+          int index) {
+        return getMessageFieldBuilder().addBuilder(
+            index, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .fuse_java_starter.TradeAgreementMessage message = 1;</code>
+       */
+      public java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.Builder> 
+           getMessageBuilderList() {
+        return getMessageFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessageOrBuilder> 
+          getMessageFieldBuilder() {
+        if (messageBuilder_ == null) {
+          messageBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessageOrBuilder>(
+                  message_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          message_ = null;
+        }
+        return messageBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fuse_java_starter.TradeAgreementMessages)
+    }
+
+    // @@protoc_insertion_point(class_scope:fuse_java_starter.TradeAgreementMessages)
+    private static final org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages();
+    }
+
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<TradeAgreementMessages>
+        PARSER = new com.google.protobuf.AbstractParser<TradeAgreementMessages>() {
+      public TradeAgreementMessages parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new TradeAgreementMessages(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<TradeAgreementMessages> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<TradeAgreementMessages> getParserForType() {
+      return PARSER;
+    }
+
+    public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface TradeAgreementMessageOrBuilder extends
       // @@protoc_insertion_point(interface_extends:fuse_java_starter.TradeAgreementMessage)
       com.google.protobuf.MessageOrBuilder {
@@ -1083,6 +1840,763 @@ public final class Messages {
     }
 
     public org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface SettlementMissionMessagesOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fuse_java_starter.SettlementMissionMessages)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+     */
+    java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage> 
+        getMessageList();
+    /**
+     * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+     */
+    org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage getMessage(int index);
+    /**
+     * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+     */
+    int getMessageCount();
+    /**
+     * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+     */
+    java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessageOrBuilder> 
+        getMessageOrBuilderList();
+    /**
+     * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+     */
+    org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessageOrBuilder getMessageOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code fuse_java_starter.SettlementMissionMessages}
+   */
+  public  static final class SettlementMissionMessages extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fuse_java_starter.SettlementMissionMessages)
+      SettlementMissionMessagesOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SettlementMissionMessages.newBuilder() to construct.
+    private SettlementMissionMessages(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SettlementMissionMessages() {
+      message_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SettlementMissionMessages(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                message_ = new java.util.ArrayList<org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              message_.add(
+                  input.readMessage(org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.parser(), extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          message_ = java.util.Collections.unmodifiableList(message_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.galatea.starter.entrypoint.messagecontracts.Messages.internal_static_fuse_java_starter_SettlementMissionMessages_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.galatea.starter.entrypoint.messagecontracts.Messages.internal_static_fuse_java_starter_SettlementMissionMessages_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages.class, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages.Builder.class);
+    }
+
+    public static final int MESSAGE_FIELD_NUMBER = 1;
+    private java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage> message_;
+    /**
+     * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+     */
+    public java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage> getMessageList() {
+      return message_;
+    }
+    /**
+     * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+     */
+    public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessageOrBuilder> 
+        getMessageOrBuilderList() {
+      return message_;
+    }
+    /**
+     * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+     */
+    public int getMessageCount() {
+      return message_.size();
+    }
+    /**
+     * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+     */
+    public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage getMessage(int index) {
+      return message_.get(index);
+    }
+    /**
+     * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+     */
+    public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessageOrBuilder getMessageOrBuilder(
+        int index) {
+      return message_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      for (int i = 0; i < message_.size(); i++) {
+        output.writeMessage(1, message_.get(i));
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < message_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, message_.get(i));
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages)) {
+        return super.equals(obj);
+      }
+      org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages other = (org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages) obj;
+
+      boolean result = true;
+      result = result && getMessageList()
+          .equals(other.getMessageList());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (getMessageCount() > 0) {
+        hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getMessageList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code fuse_java_starter.SettlementMissionMessages}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fuse_java_starter.SettlementMissionMessages)
+        org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessagesOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.galatea.starter.entrypoint.messagecontracts.Messages.internal_static_fuse_java_starter_SettlementMissionMessages_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.galatea.starter.entrypoint.messagecontracts.Messages.internal_static_fuse_java_starter_SettlementMissionMessages_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages.class, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages.Builder.class);
+      }
+
+      // Construct using org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getMessageFieldBuilder();
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        if (messageBuilder_ == null) {
+          message_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          messageBuilder_.clear();
+        }
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.galatea.starter.entrypoint.messagecontracts.Messages.internal_static_fuse_java_starter_SettlementMissionMessages_descriptor;
+      }
+
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages getDefaultInstanceForType() {
+        return org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages.getDefaultInstance();
+      }
+
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages build() {
+        org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages buildPartial() {
+        org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages result = new org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages(this);
+        int from_bitField0_ = bitField0_;
+        if (messageBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            message_ = java.util.Collections.unmodifiableList(message_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.message_ = message_;
+        } else {
+          result.message_ = messageBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages) {
+          return mergeFrom((org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages other) {
+        if (other == org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages.getDefaultInstance()) return this;
+        if (messageBuilder_ == null) {
+          if (!other.message_.isEmpty()) {
+            if (message_.isEmpty()) {
+              message_ = other.message_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureMessageIsMutable();
+              message_.addAll(other.message_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.message_.isEmpty()) {
+            if (messageBuilder_.isEmpty()) {
+              messageBuilder_.dispose();
+              messageBuilder_ = null;
+              message_ = other.message_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              messageBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getMessageFieldBuilder() : null;
+            } else {
+              messageBuilder_.addAllMessages(other.message_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage> message_ =
+        java.util.Collections.emptyList();
+      private void ensureMessageIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          message_ = new java.util.ArrayList<org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage>(message_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessageOrBuilder> messageBuilder_;
+
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage> getMessageList() {
+        if (messageBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(message_);
+        } else {
+          return messageBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public int getMessageCount() {
+        if (messageBuilder_ == null) {
+          return message_.size();
+        } else {
+          return messageBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage getMessage(int index) {
+        if (messageBuilder_ == null) {
+          return message_.get(index);
+        } else {
+          return messageBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public Builder setMessage(
+          int index, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage value) {
+        if (messageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMessageIsMutable();
+          message_.set(index, value);
+          onChanged();
+        } else {
+          messageBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public Builder setMessage(
+          int index, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.Builder builderForValue) {
+        if (messageBuilder_ == null) {
+          ensureMessageIsMutable();
+          message_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          messageBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public Builder addMessage(org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage value) {
+        if (messageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMessageIsMutable();
+          message_.add(value);
+          onChanged();
+        } else {
+          messageBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public Builder addMessage(
+          int index, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage value) {
+        if (messageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMessageIsMutable();
+          message_.add(index, value);
+          onChanged();
+        } else {
+          messageBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public Builder addMessage(
+          org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.Builder builderForValue) {
+        if (messageBuilder_ == null) {
+          ensureMessageIsMutable();
+          message_.add(builderForValue.build());
+          onChanged();
+        } else {
+          messageBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public Builder addMessage(
+          int index, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.Builder builderForValue) {
+        if (messageBuilder_ == null) {
+          ensureMessageIsMutable();
+          message_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          messageBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public Builder addAllMessage(
+          java.lang.Iterable<? extends org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage> values) {
+        if (messageBuilder_ == null) {
+          ensureMessageIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, message_);
+          onChanged();
+        } else {
+          messageBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public Builder clearMessage() {
+        if (messageBuilder_ == null) {
+          message_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          messageBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public Builder removeMessage(int index) {
+        if (messageBuilder_ == null) {
+          ensureMessageIsMutable();
+          message_.remove(index);
+          onChanged();
+        } else {
+          messageBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.Builder getMessageBuilder(
+          int index) {
+        return getMessageFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessageOrBuilder getMessageOrBuilder(
+          int index) {
+        if (messageBuilder_ == null) {
+          return message_.get(index);  } else {
+          return messageBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessageOrBuilder> 
+           getMessageOrBuilderList() {
+        if (messageBuilder_ != null) {
+          return messageBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(message_);
+        }
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.Builder addMessageBuilder() {
+        return getMessageFieldBuilder().addBuilder(
+            org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.Builder addMessageBuilder(
+          int index) {
+        return getMessageFieldBuilder().addBuilder(
+            index, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .fuse_java_starter.SettlementMissionMessage message = 1;</code>
+       */
+      public java.util.List<org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.Builder> 
+           getMessageBuilderList() {
+        return getMessageFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessageOrBuilder> 
+          getMessageFieldBuilder() {
+        if (messageBuilder_ == null) {
+          messageBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessageOrBuilder>(
+                  message_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          message_ = null;
+        }
+        return messageBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fuse_java_starter.SettlementMissionMessages)
+    }
+
+    // @@protoc_insertion_point(class_scope:fuse_java_starter.SettlementMissionMessages)
+    private static final org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages();
+    }
+
+    public static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SettlementMissionMessages>
+        PARSER = new com.google.protobuf.AbstractParser<SettlementMissionMessages>() {
+      public SettlementMissionMessages parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SettlementMissionMessages(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SettlementMissionMessages> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SettlementMissionMessages> getParserForType() {
+      return PARSER;
+    }
+
+    public org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessages getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2163,10 +3677,20 @@ public final class Messages {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fuse_java_starter_TradeAgreementMessages_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fuse_java_starter_TradeAgreementMessages_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_fuse_java_starter_TradeAgreementMessage_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fuse_java_starter_TradeAgreementMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fuse_java_starter_SettlementMissionMessages_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fuse_java_starter_SettlementMissionMessages_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_fuse_java_starter_SettlementMissionMessage_descriptor;
   private static final 
@@ -2181,16 +3705,20 @@ public final class Messages {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\016Messages.proto\022\021fuse_java_starter\"\206\001\n\025" +
-      "TradeAgreementMessage\022\n\n\002id\030\001 \001(\003\022\022\n\nins" +
-      "trument\030\002 \001(\t\022\026\n\016internal_party\030\003 \001(\t\022\026\n" +
-      "\016external_party\030\004 \001(\t\022\020\n\010buy_sell\030\005 \001(\t\022" +
-      "\013\n\003qty\030\006 \001(\001\"\201\001\n\030SettlementMissionMessag" +
-      "e\022\n\n\002id\030\001 \001(\003\022\022\n\ninstrument\030\002 \001(\t\022\026\n\016ext" +
-      "ernal_party\030\003 \001(\t\022\r\n\005depot\030\004 \001(\t\022\021\n\tdire" +
-      "ction\030\005 \001(\t\022\013\n\003qty\030\006 \001(\001B;\n/org.galatea." +
-      "starter.entrypoint.messagecontractsB\010Mes" +
-      "sagesb\006proto3"
+      "\n\016Messages.proto\022\021fuse_java_starter\"S\n\026T" +
+      "radeAgreementMessages\0229\n\007message\030\001 \003(\0132(" +
+      ".fuse_java_starter.TradeAgreementMessage" +
+      "\"\206\001\n\025TradeAgreementMessage\022\n\n\002id\030\001 \001(\003\022\022" +
+      "\n\ninstrument\030\002 \001(\t\022\026\n\016internal_party\030\003 \001" +
+      "(\t\022\026\n\016external_party\030\004 \001(\t\022\020\n\010buy_sell\030\005" +
+      " \001(\t\022\013\n\003qty\030\006 \001(\001\"Y\n\031SettlementMissionMe" +
+      "ssages\022<\n\007message\030\001 \003(\0132+.fuse_java_star" +
+      "ter.SettlementMissionMessage\"\201\001\n\030Settlem" +
+      "entMissionMessage\022\n\n\002id\030\001 \001(\003\022\022\n\ninstrum" +
+      "ent\030\002 \001(\t\022\026\n\016external_party\030\003 \001(\t\022\r\n\005dep" +
+      "ot\030\004 \001(\t\022\021\n\tdirection\030\005 \001(\t\022\013\n\003qty\030\006 \001(\001" +
+      "B;\n/org.galatea.starter.entrypoint.messa" +
+      "gecontractsB\010Messagesb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2204,14 +3732,26 @@ public final class Messages {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_fuse_java_starter_TradeAgreementMessage_descriptor =
+    internal_static_fuse_java_starter_TradeAgreementMessages_descriptor =
       getDescriptor().getMessageTypes().get(0);
+    internal_static_fuse_java_starter_TradeAgreementMessages_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fuse_java_starter_TradeAgreementMessages_descriptor,
+        new java.lang.String[] { "Message", });
+    internal_static_fuse_java_starter_TradeAgreementMessage_descriptor =
+      getDescriptor().getMessageTypes().get(1);
     internal_static_fuse_java_starter_TradeAgreementMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fuse_java_starter_TradeAgreementMessage_descriptor,
         new java.lang.String[] { "Id", "Instrument", "InternalParty", "ExternalParty", "BuySell", "Qty", });
+    internal_static_fuse_java_starter_SettlementMissionMessages_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_fuse_java_starter_SettlementMissionMessages_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fuse_java_starter_SettlementMissionMessages_descriptor,
+        new java.lang.String[] { "Message", });
     internal_static_fuse_java_starter_SettlementMissionMessage_descriptor =
-      getDescriptor().getMessageTypes().get(1);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_fuse_java_starter_SettlementMissionMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fuse_java_starter_SettlementMissionMessage_descriptor,

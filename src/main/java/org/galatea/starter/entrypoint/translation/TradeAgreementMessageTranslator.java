@@ -17,4 +17,5 @@ public class TradeAgreementMessageTranslator implements
         .internalParty(message.getInternalParty())
         .qty(message.getQty()).build();
   }
+
 }

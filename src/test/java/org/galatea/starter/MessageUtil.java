@@ -9,10 +9,10 @@ import java.io.IOException;
 
 public class MessageUtil {
 
-  public static Messages.TradeAgreementMessage jsonToTradeAgreement(String json)
+  public static Messages.TradeAgreementMessages jsonToTradeAgreementMessages(String json)
       throws IOException {
     ByteArrayInputStream bis = new ByteArrayInputStream(json.getBytes());
-    Messages.TradeAgreementMessage.Builder builder = Messages.TradeAgreementMessage.newBuilder();
+    Messages.TradeAgreementMessages.Builder builder = Messages.TradeAgreementMessages.newBuilder();
     new JsonFormat().merge(bis, builder);
     return builder.build();
   }

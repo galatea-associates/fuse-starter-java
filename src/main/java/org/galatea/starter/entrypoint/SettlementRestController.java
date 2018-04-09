@@ -1,8 +1,6 @@
 package org.galatea.starter.entrypoint;
 
-import static java.util.Collections.singletonList;
 import static org.galatea.starter.entrypoint.messagecontracts.Messages.SettlementMissionMessage;
-import static org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -16,6 +14,7 @@ import net.sf.aspect4log.Log.Level;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
+import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.Tracer;
 import org.galatea.starter.utils.translation.ITranslator;
@@ -28,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,7 +52,7 @@ public class SettlementRestController {
   ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator;
 
   @NonNull
-  ITranslator<TradeAgreementMessage, TradeAgreement> tradeAgreementTranslator;
+  ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
 
   public static final String SETTLE_MISSION_PATH = "/settlementEngine";
   public static final String GET_MISSION_PATH = SETTLE_MISSION_PATH + "/mission/";
@@ -67,15 +67,15 @@ public class SettlementRestController {
   @PostMapping(value = SETTLE_MISSION_PATH, consumes = {APPLICATION_X_PROTOBUF,
       MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
   public SettlementResponse settleAgreement(
-      @RequestBody final TradeAgreementMessage message,
+      @RequestBody final TradeAgreementMessages messages,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
     // if an external request id was provided, grab it
     processRequestId(requestId);
 
-    TradeAgreement agreement = tradeAgreementTranslator.translate(message);
+    List<TradeAgreement> agreements = tradeAgreementTranslator.translate(messages);
 
-    Set<Long> missionIds = settlementService.spawnMissions(singletonList(agreement));
+    Set<Long> missionIds = settlementService.spawnMissions(agreements);
 
     Set<String> missionPaths = missionIds.stream().map(id -> GET_MISSION_PATH + id)
         .collect(Collectors.toSet());
