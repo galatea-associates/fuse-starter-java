@@ -21,6 +21,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "settlementResponse")
 public class SettlementResponse {
 
-  private Set<String> spawnedMissions;
+  private Set<String> spawnedMissionPaths;
 
 }

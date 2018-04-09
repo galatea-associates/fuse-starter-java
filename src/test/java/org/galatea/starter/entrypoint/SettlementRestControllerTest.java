@@ -117,7 +117,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .perform(post("/settlementEngine?requestId=1234")
             .contentType(MediaType.APPLICATION_JSON_VALUE).content(agreementJson))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.spawnedMissions", containsInAnyOrder(expectedResponseJsonList.toArray())));
+        .andExpect(jsonPath("$.spawnedMissionPaths", containsInAnyOrder(expectedResponseJsonList.toArray())));
 
     verifyAuditHeaders(resultActions);
   }
@@ -139,7 +139,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .contentType(APPLICATION_X_PROTOBUF)
         .content(messages.toByteArray()))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.spawnedMissions", containsInAnyOrder("/settlementEngine/mission/1")));
+        .andExpect(jsonPath("$.spawnedMissionPaths", containsInAnyOrder("/settlementEngine/mission/1")));
 
     verifyAuditHeaders(resultActions);
   }
