@@ -109,7 +109,7 @@ public class SettlementRestControllerTest extends ASpringTest {
     TradeAgreementMessage message = MessageUtil.jsonToTradeAgreement(agreementJson);
     log.info("Agreement objects that the service will expect {}", message);
 
-    given(this.mockSettlementService.spawnMissions(singletonList(transformAgreement(message))))
+    given(this.mockSettlementService.spawnMissions(singletonList(toTradeAgreement(message))))
         .willReturn(Sets.newTreeSet(expectedMissionIds));
 
     ResultActions resultActions = this.mvc
@@ -128,7 +128,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .setInstrument("IBM").setInternalParty("INT-1")
         .setExternalParty("EXT-1").setBuySell("B").setQty(100).build();
 
-    given(this.mockSettlementService.spawnMissions(singletonList(transformAgreement(message))))
+    given(this.mockSettlementService.spawnMissions(singletonList(toTradeAgreement(message))))
         .willReturn(Sets.newTreeSet(singletonList(1L)));
 
     ResultActions resultActions = this.mvc.perform(post("/settlementEngine?requestId=1234")
@@ -149,7 +149,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
     String xml = new XmlFormat().printToString(message);
 
-    given(this.mockSettlementService.spawnMissions(singletonList(transformAgreement(message))))
+    given(this.mockSettlementService.spawnMissions(singletonList(toTradeAgreement(message))))
         .willReturn(Sets.newTreeSet(singletonList(1L)));
 
     ResultActions resultActions = this.mvc.perform(post("/settlementEngine?requestId=1234")
@@ -161,7 +161,7 @@ public class SettlementRestControllerTest extends ASpringTest {
     verifyAuditHeaders(resultActions);
   }
 
-  private TradeAgreement transformAgreement(TradeAgreementMessage message) {
+  private TradeAgreement toTradeAgreement(TradeAgreementMessage message) {
     return agreementTranslator.translate(message);
   }
 

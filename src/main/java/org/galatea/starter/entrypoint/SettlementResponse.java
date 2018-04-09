@@ -10,7 +10,7 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * This container object is required in order to return our a set of Strings from the controller.
+ * This container object is required in order to return a set of Strings from the controller.
  * Note the XmlRootElement annotation, which the XML HttpMessageConverter uses to detect XML writing
  * capabilities of an object.
  */
