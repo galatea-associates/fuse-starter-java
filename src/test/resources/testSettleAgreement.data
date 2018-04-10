@@ -1,2 +1,2 @@
-{ "messages" : [{"instrument": "IBM","internalParty": "INT-1","externalParty": "EXT-1","buySell": "B","qty": 100}]}|[1091]
+{ "message" : [{"instrument": "IBM","internal_party": "INT-1","external_party": "EXT-1","buy_sell": "B","qty": 100}]}|[1091]
 

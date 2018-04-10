@@ -98,6 +98,9 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testSettleAgreement_JSON(final String agreementJson,
       final String expectedMissionIdJson) throws Exception {
 
+    TradeAgreement expectedAgreement = TradeAgreement.builder().id(0L).instrument("IBM")
+        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).build();
+
     log.info("Agreement json to post {}", agreementJson);
 
     List<Long> expectedMissionIds = missionIdJsonTester.parse(expectedMissionIdJson).getObject();
@@ -110,7 +113,7 @@ public class SettlementRestControllerTest extends ASpringTest {
     Messages.TradeAgreementMessages messages = MessageUtil.jsonToTradeAgreementMessages(agreementJson);
     log.info("Agreement objects that the service will expect {}", messages);
 
-    given(this.mockSettlementService.spawnMissions(toTradeAgreements(messages)))
+    given(this.mockSettlementService.spawnMissions(singletonList(expectedAgreement)))
         .willReturn(Sets.newTreeSet(expectedMissionIds));
 
     ResultActions resultActions = this.mvc
