@@ -1,10 +1,59 @@
 {
 	"info": {
 		"name": "Fuse-Starter-Java",
-		"_postman_id": "488c4049-a1c6-f053-1047-15fbf34064c4",
+		"_postman_id": "c661560d-22ef-4bc2-a928-62c4dd6dfed0",
+		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "SE - Get mission",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host}}/settlementEngine/mission/1",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"settlementEngine",
+						"mission",
+						"1"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "Run Trace",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host}}/trace",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"trace"
+					]
+				},
+				"description": null
+			},
+			"response": []
+		},
 		{
 			"name": "SE - Create missions",
 			"request": {
@@ -21,58 +70,20 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n\t{\n\t\t\"instrument\": \"IBM\",\n\t\t\"internalParty\": \"INT-1\",\n\t\t\"externalParty\": \"EXT-1\",\n\t\t\"buySell\": \"B\",\n\t\t\"qty\": 100\n\t}\n]"
+					"raw": "{ \"message\" : \n    [{\n\t\t\"instrument\": \"IBM\",\n\t\t\"internal_party\": \"INT-1\",\n\t\t\"externa_party\": \"EXT-1\",\n\t\t\"buy_sell\": \"B\",\n\t\t\"qty\": 100\n\t}]\n}"
 				},
 				"url": {
-					"raw": "http://{{host}}/settlementEngine",
+					"raw": "http://localhost:8080/settlementEngine",
 					"protocol": "http",
 					"host": [
-						"{{host}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"settlementEngine"
 					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "SE - Get mission",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://{{host}}/settlementEngine/mission/1",
-					"protocol": "http",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"settlementEngine",
-						"mission",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Run Trace",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://{{host}}/trace",
-					"protocol": "http",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"trace"
-					]
-				}
+				},
+				"description": ""
 			},
 			"response": []
 		}
