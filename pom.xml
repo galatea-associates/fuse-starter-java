@@ -22,7 +22,7 @@
 			-Dlog4j.configurationFile=log4j2.yml,log4j2-debug.yml
 		</argLine>
 		<sonar.exclusions>**/Messages.java</sonar.exclusions>
-		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java,**/Messages.java</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java</sonar.coverage.exclusions>
 		<!-- Allow us to skip Unit Tests only, if need be, with -Dskip.surefire.tests, but retain the skip all tests functionality of -DskipTests -->
 		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
 	</properties>
