@@ -39,3 +39,7 @@ message SettlementMissionMessage {
   string direction = 5;
   double qty = 6;
 }
+
+message SettlementResponseMessage {
+  repeated string spawnedMissionPaths = 1;
+}

@@ -14,6 +14,7 @@ import net.sf.aspect4log.Log.Level;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
+import org.galatea.starter.entrypoint.messagecontracts.Messages;
 import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.Tracer;
@@ -65,8 +66,9 @@ public class SettlementRestController {
   // @PostMapping to link http POST requests to this method
   // @RequestBody to have the post request body deserialized into a list of TradeAgreement objects
   @PostMapping(value = SETTLE_MISSION_PATH, consumes = {APPLICATION_X_PROTOBUF,
-      MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-  public SettlementResponse settleAgreement(
+      MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, produces = {
+      APPLICATION_X_PROTOBUF, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+  public Messages.SettlementResponseMessage settleAgreement(
       @RequestBody final TradeAgreementMessages messages,
       @RequestParam(value = "requestId", required = false) String requestId) {
 
@@ -79,8 +81,9 @@ public class SettlementRestController {
 
     Set<String> missionPaths = missionIds.stream().map(id -> GET_MISSION_PATH + id)
         .collect(Collectors.toSet());
-    
-    return new SettlementResponse(missionPaths);
+
+    return Messages.SettlementResponseMessage.newBuilder()
+        .addAllSpawnedMissionPaths(missionPaths).build();
   }
 
   /**
