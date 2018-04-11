@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class HalService {
 
+  /* We need to have these constants so sonar qube doesn't complain */
+  String EMPTY_STRING = "";
+  String DERP = "derp!";
+
   /**
    * Process the text from GET command into the appropriate command
    *
@@ -58,7 +62,7 @@ public class HalService {
    * @return Empty string
    */
   public String getNumGalateans() {
-    return "";
+    return EMPTY_STRING;
   }
 
   /**
@@ -67,7 +71,7 @@ public class HalService {
    * @return Empty string
    */
   public String getRecReading() {
-    return "";
+    return EMPTY_STRING;
   }
 
   /**
@@ -76,7 +80,7 @@ public class HalService {
    * @return Empty string
    */
   public String getMovieQuote() {
-    return "";
+    return EMPTY_STRING;
   }
 
   /**
@@ -85,7 +89,7 @@ public class HalService {
    * @return "derp"
    */
   public String getDerp() {
-    return "derp!";
+    return DERP;
   }
 
   /**
