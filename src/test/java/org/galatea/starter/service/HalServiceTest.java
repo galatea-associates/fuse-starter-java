@@ -43,13 +43,7 @@ public class HalServiceTest extends ASpringTest {
   @Test
   public void testProcessTestGetNumGalateans() {
     String text = "num-galateans";
-    Map<String, Integer> map = new HashMap<>();
-    map.put("Florida", 6);
-    map.put("London", 13);
-    map.put("Boston", 50);
-    map.put("NorthCarolina", 5);
-
-    String expResult = map.toString();
+    String expResult = "";
 
     HalService service = new HalService();
 
@@ -60,7 +54,7 @@ public class HalServiceTest extends ASpringTest {
   @Test
   public void testProcessTestGetRecReading() {
     String text = "rec-reading";
-    String expResult = "https://docs.google.com/spreadsheets/d/1rxtbvuoMvKRdAbgIUKuis-8c5Pdyptvg03m23hikOIM/";
+    String expResult = "";
 
     HalService service = new HalService();
 
@@ -71,7 +65,7 @@ public class HalServiceTest extends ASpringTest {
   @Test
   public void testProcessTestGetMovieQuote() {
     String text = "movie-quote";
-    String expResult = "This mission is too important for me to allow you to jeopardize it";
+    String expResult = "";
 
     HalService service = new HalService();
 

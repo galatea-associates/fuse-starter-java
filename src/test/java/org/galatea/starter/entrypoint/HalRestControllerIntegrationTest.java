@@ -8,29 +8,35 @@ import feign.Param;
 import feign.RequestLine;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.galatea.starter.ASpringTest;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 
 @RequiredArgsConstructor
 @Slf4j
 @ToString
 @EqualsAndHashCode
 @Category(org.galatea.starter.IntegrationTestCategory.class)
-public class HalRestControllerIntegrationTest {
+@SpringBootTest
+public class HalRestControllerIntegrationTest extends ASpringTest {
+
+  @Value("${cloud-foundry.dev}")
+  private String FuseCfHostName;
 
   @Test
   public void testCoinFlip() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      // TODO: the base URL should probably be moved to a src/test/resources properties file
-      fuseHostName = "http://fuse-rest-dev.cfapps.io";
+      fuseHostName = FuseCfHostName;
     }
+
+    System.out.println(FuseCfHostName);
 
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
         .target(FuseServer.class, fuseHostName);
@@ -45,69 +51,61 @@ public class HalRestControllerIntegrationTest {
   public void testNumGalateans() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      // TODO: the base URL should probably be moved to a src/test/resources properties file
-      fuseHostName = "http://fuse-rest-dev.cfapps.io";
+      fuseHostName = FuseCfHostName;
     }
 
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
         .target(FuseServer.class, fuseHostName);
 
-    Map<String, Integer> map = new HashMap<>();
-    map.put("Florida", 6);
-    map.put("London", 13);
-    map.put("Boston", 50);
-    map.put("NorthCarolina", 5);
+    String expResult = "";
 
     String halResponse = fuseServer.halEndpoint("num-galateans");
     log.info("Number of Galateans response: {}", halResponse);
 
-    assertEquals(halResponse, map.toString());
+    assertEquals(expResult, halResponse);
   }
 
   @Test
   public void testRecReading() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      // TODO: the base URL should probably be moved to a src/test/resources properties file
-      fuseHostName = "http://fuse-rest-dev.cfapps.io";
+      fuseHostName = FuseCfHostName;
     }
 
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
         .target(FuseServer.class, fuseHostName);
 
-    String expResult = "https://docs.google.com/spreadsheets/d/1rxtbvuoMvKRdAbgIUKuis-8c5Pdyptvg03m23hikOIM/";
+    String expResult = "";
 
     String halResponse = fuseServer.halEndpoint("rec-reading");
     log.info("Recommended Reading response: {}", halResponse);
 
-    assertEquals(halResponse, expResult);
+    assertEquals(expResult, halResponse);
   }
 
   @Test
   public void testMovieQuote() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      // TODO: the base URL should probably be moved to a src/test/resources properties file
-      fuseHostName = "http://fuse-rest-dev.cfapps.io";
+      fuseHostName = FuseCfHostName;
     }
 
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
         .target(FuseServer.class, fuseHostName);
 
-    String expResult = "This mission is too important for me to allow you to jeopardize it";
+    String expResult = "";
 
     String halResponse = fuseServer.halEndpoint("movie-quote");
     log.info("Movie Quote response: {}", halResponse);
 
-    assertEquals(halResponse, expResult);
+    assertEquals(expResult, halResponse);
   }
 
   @Test
   public void testDerp() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      // TODO: the base URL should probably be moved to a src/test/resources properties file
-      fuseHostName = "http://fuse-rest-dev.cfapps.io";
+      fuseHostName = FuseCfHostName;
     }
 
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
@@ -118,7 +116,7 @@ public class HalRestControllerIntegrationTest {
     String halResponse = fuseServer.halEndpoint("derp");
     log.info("Derp response: {}", halResponse);
 
-    assertEquals(halResponse, expResult);
+    assertEquals(expResult, halResponse);
   }
 
   interface FuseServer {

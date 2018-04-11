@@ -1,8 +1,5 @@
 package org.galatea.starter.service;
 
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +16,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class HalService {
 
-  private static final String REC_READING =
-      "https://docs.google.com/spreadsheets/d/1rxtbvuoMvKRdAbgIUKuis-8c5Pdyptvg03m23hikOIM/";
-
-  private static final String MOVIE_QUOTE = "This mission is too important for me to allow you to jeopardize it";
-  private static final String DERP = "derp!";
-
   /**
    * Process the text from GET command into the appropriate command
    *
@@ -36,7 +27,7 @@ public class HalService {
       case "coin-flip":
         return coinFlip();
       case "num-galateans":
-        return getNumGalateans().toString();
+        return getNumGalateans();
       case "rec-reading":
         return getRecReading();
       case "movie-quote":
@@ -50,6 +41,7 @@ public class HalService {
 
   /**
    * Flip a coin
+   *
    * @return "Heads" or "Tails"
    */
   public String coinFlip() {
@@ -62,44 +54,43 @@ public class HalService {
 
   /**
    * Get the number of Galateans in each office
-   * @return Map<String, Integer> where String is the location and Integer is the number of workers
+   *
+   * @return Empty string
    */
-  public Map<String, Integer> getNumGalateans() {
-    Map<String, Integer> map = new HashMap<>();
-    map.put("Florida", 6);
-    map.put("London", 13);
-    map.put("Boston", 50);
-    map.put("NorthCarolina", 5);
-
-    return map;
+  public String getNumGalateans() {
+    return "";
   }
 
   /**
    * Get the recommended reading list
-   * @return link to the recommended reading list
+   *
+   * @return Empty string
    */
   public String getRecReading() {
-    return REC_READING;
+    return "";
   }
 
   /**
    * Get a movie quote
-   * @return movie quote string
+   *
+   * @return Empty string
    */
   public String getMovieQuote() {
-    return MOVIE_QUOTE;
+    return "";
   }
 
   /**
    * Get derp
+   *
    * @return "derp"
    */
   public String getDerp() {
-    return DERP;
+    return "derp!";
   }
 
   /**
    * Helper method used so we can test the coinFlip() without mocking the Random class
+   *
    * @return COIN.HEADS or COIN.TAILS
    */
   protected COIN coinFlipRand() {
