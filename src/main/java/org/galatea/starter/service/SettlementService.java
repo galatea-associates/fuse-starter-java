@@ -1,9 +1,7 @@
 package org.galatea.starter.service;
 
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import net.sf.aspect4log.Log;
@@ -23,8 +21,6 @@ import java.util.stream.StreamSupport;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
-@ToString
-@EqualsAndHashCode
 @Slf4j
 @Log
 @Validated
