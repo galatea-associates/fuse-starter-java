@@ -34,6 +34,7 @@ import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.Messages;
 import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
+import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.ObjectSupplier;
 import org.galatea.starter.utils.translation.ITranslator;
@@ -72,7 +73,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   private ObjectSupplier<SettlementMission> settlementMissionSupplier;
 
   @Autowired
-  ITranslator<Messages.TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
+  ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
 
   @Autowired
   private MockMvc mvc;
@@ -110,7 +111,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
     log.info("Expected json response {}", expectedResponseJsonList);
 
-    Messages.TradeAgreementMessages messages = MessageUtil.jsonToTradeAgreementMessages(agreementJson);
+    TradeAgreementMessages messages = MessageUtil.jsonToTradeAgreementMessages(agreementJson);
     log.info("Agreement objects that the service will expect {}", messages);
 
     given(this.mockSettlementService.spawnMissions(singletonList(expectedAgreement)))
@@ -132,7 +133,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .setInstrument("IBM").setInternalParty("INT-1")
         .setExternalParty("EXT-1").setBuySell("B").setQty(100).build();
 
-    Messages.TradeAgreementMessages messages = Messages.TradeAgreementMessages.newBuilder()
+    TradeAgreementMessages messages = TradeAgreementMessages.newBuilder()
         .addMessage(message).build();
 
     given(this.mockSettlementService.spawnMissions(toTradeAgreements(messages)))
@@ -154,7 +155,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .setInstrument("IBM").setInternalParty("INT-1")
         .setExternalParty("EXT-1").setBuySell("B").setQty(100).build();
 
-    Messages.TradeAgreementMessages messages = Messages.TradeAgreementMessages.newBuilder()
+    TradeAgreementMessages messages = TradeAgreementMessages.newBuilder()
         .addMessage(message).build();
 
     String xml = new XmlFormat().printToString(messages);
@@ -171,7 +172,7 @@ public class SettlementRestControllerTest extends ASpringTest {
     verifyAuditHeaders(resultActions);
   }
 
-  private List<TradeAgreement> toTradeAgreements(Messages.TradeAgreementMessages messages) {
+  private List<TradeAgreement> toTradeAgreements(TradeAgreementMessages messages) {
     return tradeAgreementTranslator.translate(messages);
   }
 

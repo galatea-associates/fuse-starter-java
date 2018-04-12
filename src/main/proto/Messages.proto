@@ -12,6 +12,7 @@ package fuse_java_starter;
 option java_package = "org.galatea.starter.entrypoint.messagecontracts";
 option java_outer_classname = "Messages";
 
+/* enables us to handle multiple TradeAgreementMessages */
 message TradeAgreementMessages {
   repeated TradeAgreementMessage message = 1;
 }
