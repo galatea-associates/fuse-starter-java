@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.service.HalService.COIN;
 import org.junit.Test;
@@ -37,39 +35,6 @@ public class HalServiceTest extends ASpringTest {
     doReturn(COIN.TAILS).when(spyService).coinFlipRand();
 
     String result = spyService.processText(text);
-    assertEquals(expResult, result);
-  }
-
-  @Test
-  public void testProcessTestGetNumGalateans() {
-    String text = "num-galateans";
-    String expResult = "";
-
-    HalService service = new HalService();
-
-    String result = service.processText(text);
-    assertEquals(expResult, result);
-  }
-
-  @Test
-  public void testProcessTestGetRecReading() {
-    String text = "rec-reading";
-    String expResult = "";
-
-    HalService service = new HalService();
-
-    String result = service.processText(text);
-    assertEquals(expResult, result);
-  }
-
-  @Test
-  public void testProcessTestGetMovieQuote() {
-    String text = "movie-quote";
-    String expResult = "";
-
-    HalService service = new HalService();
-
-    String result = service.processText(text);
     assertEquals(expResult, result);
   }
 

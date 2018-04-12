@@ -48,60 +48,6 @@ public class HalRestControllerIntegrationTest extends ASpringTest {
   }
 
   @Test
-  public void testNumGalateans() {
-    String fuseHostName = System.getProperty("fuse.sandbox.url");
-    if (fuseHostName == null || fuseHostName.isEmpty()) {
-      fuseHostName = FuseCfHostName;
-    }
-
-    FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
-        .target(FuseServer.class, fuseHostName);
-
-    String expResult = "";
-
-    String halResponse = fuseServer.halEndpoint("num-galateans");
-    log.info("Number of Galateans response: {}", halResponse);
-
-    assertEquals(expResult, halResponse);
-  }
-
-  @Test
-  public void testRecReading() {
-    String fuseHostName = System.getProperty("fuse.sandbox.url");
-    if (fuseHostName == null || fuseHostName.isEmpty()) {
-      fuseHostName = FuseCfHostName;
-    }
-
-    FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
-        .target(FuseServer.class, fuseHostName);
-
-    String expResult = "";
-
-    String halResponse = fuseServer.halEndpoint("rec-reading");
-    log.info("Recommended Reading response: {}", halResponse);
-
-    assertEquals(expResult, halResponse);
-  }
-
-  @Test
-  public void testMovieQuote() {
-    String fuseHostName = System.getProperty("fuse.sandbox.url");
-    if (fuseHostName == null || fuseHostName.isEmpty()) {
-      fuseHostName = FuseCfHostName;
-    }
-
-    FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
-        .target(FuseServer.class, fuseHostName);
-
-    String expResult = "";
-
-    String halResponse = fuseServer.halEndpoint("movie-quote");
-    log.info("Movie Quote response: {}", halResponse);
-
-    assertEquals(expResult, halResponse);
-  }
-
-  @Test
   public void testDerp() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {

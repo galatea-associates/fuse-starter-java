@@ -16,9 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class HalService {
 
-  /* We need to have these constants so sonar qube doesn't complain */
-  String EMPTY_STRING = "";
-  String DERP = "derp!";
+  /* We need to have this constant so sonar qube doesn't complain */
+  private static final String DERP = "derp!";
 
   /**
    * Process the text from GET command into the appropriate command
@@ -30,12 +29,6 @@ public class HalService {
     switch (text) {
       case "coin-flip":
         return coinFlip();
-      case "num-galateans":
-        return getNumGalateans();
-      case "rec-reading":
-        return getRecReading();
-      case "movie-quote":
-        return getMovieQuote();
       case "derp":
         return getDerp();
       default:
@@ -54,33 +47,6 @@ public class HalService {
     } else {
       return "Heads";
     }
-  }
-
-  /**
-   * Get the number of Galateans in each office
-   *
-   * @return Empty string
-   */
-  public String getNumGalateans() {
-    return EMPTY_STRING;
-  }
-
-  /**
-   * Get the recommended reading list
-   *
-   * @return Empty string
-   */
-  public String getRecReading() {
-    return EMPTY_STRING;
-  }
-
-  /**
-   * Get a movie quote
-   *
-   * @return Empty string
-   */
-  public String getMovieQuote() {
-    return EMPTY_STRING;
   }
 
   /**
