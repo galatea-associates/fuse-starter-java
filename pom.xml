@@ -52,6 +52,12 @@
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-feign</artifactId>
+			<version>1.4.4.RELEASE</version>
+		</dependency>
+
 		<!-- Required for log4j to process log4j2.yml -->
 		<!-- See: springframework.guru/log4j-2-configuration-using-yaml -->
 		<dependency>
