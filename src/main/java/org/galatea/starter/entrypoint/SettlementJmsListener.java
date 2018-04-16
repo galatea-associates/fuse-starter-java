@@ -1,10 +1,8 @@
 
 package org.galatea.starter.entrypoint;
 
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.domain.TradeAgreement;
@@ -15,10 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Set;
 
-
 @RequiredArgsConstructor
-@ToString
-@EqualsAndHashCode
 @Slf4j
 @Component
 public class SettlementJmsListener {

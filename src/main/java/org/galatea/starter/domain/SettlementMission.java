@@ -3,12 +3,9 @@ package org.galatea.starter.domain;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.utils.validation.StringEnumeration;
@@ -23,10 +20,7 @@ import javax.validation.constraints.DecimalMin;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring and jackson
 @Builder
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
 @Slf4j
 @Entity
 public class SettlementMission {
