@@ -39,3 +39,7 @@ spring:
    datasource:
       username: sa
       password:
+---
+# Mappings for Rest Controllers
+webservice:
+  halpath: /hal
