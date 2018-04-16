@@ -26,17 +26,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class HalRestControllerIntegrationTest extends ASpringTest {
 
-  @Value("${cloud-foundry.dev}")
-  private String FuseCfHostName;
+  @Value("${fuse-host.url}")
+  private String FuseHostName;
 
   @Test
   public void testCoinFlip() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      fuseHostName = FuseCfHostName;
+      fuseHostName = FuseHostName;
     }
-
-    System.out.println(FuseCfHostName);
 
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
         .target(FuseServer.class, fuseHostName);
@@ -51,7 +49,7 @@ public class HalRestControllerIntegrationTest extends ASpringTest {
   public void testDerp() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      fuseHostName = FuseCfHostName;
+      fuseHostName = FuseHostName;
     }
 
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())

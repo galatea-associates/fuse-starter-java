@@ -23,6 +23,7 @@ import feign.Param;
 import feign.RequestLine;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
+import org.springframework.beans.factory.annotation.Value;
 
 
 @RequiredArgsConstructor
@@ -31,6 +32,9 @@ import feign.gson.GsonEncoder;
 @EqualsAndHashCode
 @Category(org.galatea.starter.IntegrationTestCategory.class)
 public class SettlementRestControllerIntegrationTest {
+
+  @Value("${fuse-host.url}")
+  private String FuseHostName;
 
   interface FuseServer {
     @RequestLine("POST /settlementEngine")
@@ -45,8 +49,7 @@ public class SettlementRestControllerIntegrationTest {
   public void testMissionCreation() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      // TODO: the base URL should probably be moved to a src/test/resources properties file
-      fuseHostName = "http://fuse-rest-dev.cfapps.io";
+      fuseHostName = FuseHostName;
     }
 
     FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
