@@ -1,5 +1,6 @@
 package org.galatea.starter.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
@@ -36,6 +37,14 @@ public class HalServiceTest extends ASpringTest {
 
     String result = spyService.processText(text);
     assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testCoinFlipRand() {
+    HalService service = new HalService();
+
+    COIN result = service.coinFlipRand();
+    assertThat(result).isIn(COIN.HEADS, COIN.TAILS);
   }
 
   @Test
