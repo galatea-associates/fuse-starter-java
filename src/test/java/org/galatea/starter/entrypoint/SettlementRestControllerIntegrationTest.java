@@ -29,6 +29,14 @@ import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import java.util.ArrayList;
 import java.util.List;
 
+import feign.Feign;
+import feign.Headers;
+import feign.Param;
+import feign.RequestLine;
+import feign.gson.GsonDecoder;
+import feign.gson.GsonEncoder;
+import org.springframework.beans.factory.annotation.Value;
+
 
 @RequiredArgsConstructor
 @Slf4j
@@ -38,6 +46,9 @@ import java.util.List;
 public class SettlementRestControllerIntegrationTest {
 
   private ObjectFactory<HttpMessageConverters> messageConverters;
+
+  @Value("${fuse-host.url}")
+  private String FuseHostName;
 
   interface FuseServer {
 
@@ -58,8 +69,7 @@ public class SettlementRestControllerIntegrationTest {
   public void testMissionCreation() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      // TODO: the base URL should probably be moved to a src/test/resources properties file
-      fuseHostName = "http://fuse-rest-dev.cfapps.io";
+      fuseHostName = FuseHostName;
     }
 
     FuseServer fuseServer = Feign.builder()
