@@ -1,7 +1,5 @@
 package org.galatea.starter.entrypoint;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +34,7 @@ public class HalRestController {
   // @GetMapping to link http GET request to this method
   // @RequestParam to take a parameter from the url
   @GetMapping(value = "${webservice.halpath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public String halEndpoint(@RequestParam(value = "text", required = true) String text)
-      throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
-    return mapper.writerWithDefaultPrettyPrinter()
-        .writeValueAsString(halService.processText(text));
+  public String halEndpoint(@RequestParam(value = "text") String text) {
+    return halService.processText(text);
   }
 }
