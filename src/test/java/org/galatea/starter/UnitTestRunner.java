@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(WildcardPatternSuite.class)
 @SuiteClasses("**/*Test.class")
-@ExcludeCategories({IntegrationTestCategory.class})
+//@ExcludeCategories({IntegrationTestCategory.class})
 public class UnitTestRunner {
 
 }

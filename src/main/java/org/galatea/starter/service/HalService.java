@@ -11,7 +11,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import org.galatea.starter.domain.Quote;
-import org.galatea.starter.domain.Wit.WitResponse;
+import org.galatea.starter.domain.wit.WitResponse;
 import org.galatea.starter.restClient.QuoteGetter;
 import org.galatea.starter.restClient.WitGetter;
 import org.springframework.stereotype.Service;
@@ -33,21 +33,20 @@ public class HalService {
   @NonNull
   WitGetter witGetter;
 
-  //private final String MOVIE_QUOTE = "FUCK";
 
   private static final String DERP = "derp!";
 
   /**
    * Process the text from GET command into the appropriate command
    *
-   * @param text the full text from the GET command. Wit.ai will break this down
+   * @param text the full text from the GET command. wit.ai will break this down
    * @return the result of executing the command with the given parameters
    */
   public String processText(String text) {
     /* Send raw text to wit.ai */
     WitResponse witResponse = witGetter.getWitResponse(text);
 
-    switch (witResponse.getEntities().getIntent()[0].getValue().toString()) {
+    switch (witResponse.getEntities().getIntent()[0].getValue()) {
       case "coin-flip":
         return coinFlip();
       case "num-galateans":
@@ -97,13 +96,14 @@ public class HalService {
     return REC_READING;
   }
 
+
   /**
    * Get a movie quote
    * @return movie quote string
    */
   public String getMovieQuote() {
     Quote quote = quoteGetter.getQuote();
-    final String MOVIE_QUOTE = quote.getQuote() + ", from: " + quote.getAuthor();
+    final String MOVIE_QUOTE = "Quote: " + quote.getQuote() + ", from: " + quote.getAuthor();
     return MOVIE_QUOTE;
   }
 

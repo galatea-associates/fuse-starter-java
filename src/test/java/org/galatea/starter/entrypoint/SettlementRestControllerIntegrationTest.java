@@ -43,7 +43,7 @@ public class SettlementRestControllerIntegrationTest {
 
   @Test
   public void testMissionCreation() {
-    String fuseHostName = System.getProperty("fuse.sandbox.url");
+    String fuseHostName = "http://localhost:8080";
     if (fuseHostName == null || fuseHostName.isEmpty()) {
       // TODO: the base URL should probably be moved to a src/test/resources properties file
       fuseHostName = "http://fuse-rest-dev.cfapps.io";

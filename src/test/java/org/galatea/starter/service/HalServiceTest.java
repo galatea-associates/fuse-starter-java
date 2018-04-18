@@ -8,9 +8,10 @@ import static org.mockito.Mockito.spy;
 import java.util.HashMap;
 import java.util.Map;
 import org.galatea.starter.ASpringTest;
-import org.galatea.starter.domain.Wit.Entity;
-import org.galatea.starter.domain.Wit.EntityStore;
-import org.galatea.starter.domain.Wit.WitResponse;
+import org.galatea.starter.domain.Quote;
+import org.galatea.starter.domain.wit.Entity;
+import org.galatea.starter.domain.wit.EntityStore;
+import org.galatea.starter.domain.wit.WitResponse;
 import org.galatea.starter.restClient.QuoteGetter;
 import org.galatea.starter.restClient.WitGetter;
 import org.galatea.starter.service.HalService.COIN;
@@ -33,6 +34,7 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
     HalService spyService = spy(service);
 
+    //Create a mock witResponse object and assign "coin-flip" as the intent with confidence of 1
     Entity ent = new Entity(1, text);
     Entity[] eArr = new Entity[1];
     eArr[0] = ent;
@@ -55,6 +57,7 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
     HalService spyService = spy(service);
 
+    //Create a mock witResponse object and assign "coin-flip" as the intent with confidence of 1
     Entity ent = new Entity(1, text);
     Entity[] eArr = new Entity[1];
     eArr[0] = ent;
@@ -82,6 +85,7 @@ public class HalServiceTest extends ASpringTest {
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
+    //Create a mock witResponse object and assign "num-galateans" as the intent with confidence of 1
     Entity ent = new Entity(1, text);
     Entity[] eArr = new Entity[1];
     eArr[0] = ent;
@@ -102,6 +106,7 @@ public class HalServiceTest extends ASpringTest {
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
+    //Create a mock witResponse object and assign "rec-reading" as the intent with confidence of 1
     Entity ent = new Entity(1, text);
     Entity[] eArr = new Entity[1];
     eArr[0] = ent;
@@ -115,14 +120,19 @@ public class HalServiceTest extends ASpringTest {
     assertEquals(expResult, result);
   }
 
-  /*
+
   @Test
   public void testProcessTestGetMovieQuote() {
     String text = "movie-quote";
-    String expResult = "This mission is too important for me to allow you to jeopardize it";
+    String quoteText = "This mission is too important for me to allow you to jeopardize it";
+    String quoteFrom = "2001 A Space Odyssey";
+    Quote quote = new Quote();
+    quote.setQuote(quoteText);
+    quote.setAuthor(quoteFrom);
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
+    //Create a mock witResponse object and assign "movie-quote" as the intent with confidence of 1
     Entity ent = new Entity(1, text);
     Entity[] eArr = new Entity[1];
     eArr[0] = ent;
@@ -130,12 +140,14 @@ public class HalServiceTest extends ASpringTest {
     eStore.setIntent(eArr);
     WitResponse witRe = new WitResponse(text, eStore);
 
+    //Mock the behavior of methods that will be called by HalService when it encounters a "movie-quote" intent
+    given(this.mockQuoteGetter.getQuote()).willReturn(quote);
     given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
 
     String result = service.processText(text);
-    assertEquals(expResult, result);
+    assertEquals(("Quote: "+quoteText+", from: 2001 A Space Odyssey"), result);
   }
-  */
+
 
   @Test
   public void testProcessTestGetDerp() {
@@ -144,6 +156,7 @@ public class HalServiceTest extends ASpringTest {
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
+    //Create a mock witResponse object and assign "derp" as the intent with confidence of 1
     Entity ent = new Entity(1, text);
     Entity[] eArr = new Entity[1];
     eArr[0] = ent;
@@ -157,6 +170,8 @@ public class HalServiceTest extends ASpringTest {
     assertEquals(expResult, result);
   }
 
+  //This test will change when we define a way to handle requests with no identified intent.
+
   @Test
   public void testUnsupportedInput() {
     String text = "Unsupported";
@@ -164,6 +179,7 @@ public class HalServiceTest extends ASpringTest {
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
+    //Create a mock witResponse object and assign "unsupported" as the intent with confidence of 1
     Entity ent = new Entity(1, text);
     Entity[] eArr = new Entity[1];
     eArr[0] = ent;

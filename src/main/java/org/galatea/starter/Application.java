@@ -3,13 +3,8 @@ package org.galatea.starter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.galatea.starter.domain.Quote;
-import org.galatea.starter.domain.Wit.WitResponse;
-import org.galatea.starter.restClient.QuoteGetter;
-import org.galatea.starter.restClient.WitGetter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 
 
 /**
@@ -28,16 +23,7 @@ public class Application {
    * @param args command line args
    */
   public static void main(final String[] args) {
-    //log.info("Starting spring application {}", System.getProperty("application.name"));
-    //SpringApplication.run(Application.class, args);
-
-
-    //Comment out above code and uncomment below to run an example Wit request and print to command line
-
-    ApplicationContext context = SpringApplication.run(Application.class, args);
-    WitGetter witGetter = context.getBean(WitGetter.class);
-    WitResponse witResponse = witGetter.getWitResponse("flip a coin");
-    System.out.println(witResponse.getEntities().getIntent()[0]);
-
+    log.info("Starting spring application {}", System.getProperty("application.name"));
+    SpringApplication.run(Application.class, args);
   }
 }
