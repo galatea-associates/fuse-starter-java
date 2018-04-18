@@ -12,30 +12,21 @@ import feign.Feign;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.cloud.netflix.feign.support.SpringDecoder;
 import org.springframework.cloud.netflix.feign.support.SpringEncoder;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import feign.Feign;
-import feign.Headers;
-import feign.Param;
-import feign.RequestLine;
-import feign.gson.GsonDecoder;
-import feign.gson.GsonEncoder;
-import org.springframework.beans.factory.annotation.Value;
 
 
 @RequiredArgsConstructor
