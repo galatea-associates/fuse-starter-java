@@ -21,7 +21,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n\t{\n\t\t\"instrument\": \"IBM\",\n\t\t\"internalParty\": \"INT-1\",\n\t\t\"externalParty\": \"EXT-1\",\n\t\t\"buySell\": \"B\",\n\t\t\"qty\": 100\n\t}\n]"
+					"raw": "{ \"message\" : \n    [{\n\t\t\"instrument\": \"IBM\",\n\t\t\"internal_party\": \"INT-1\",\n\t\t\"externa_party\": \"EXT-1\",\n\t\t\"buy_sell\": \"B\",\n\t\t\"qty\": 100\n\t}]\n}"
 				},
 				"url": {
 					"raw": "http://{{host}}/settlementEngine",

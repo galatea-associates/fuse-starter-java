@@ -9,14 +9,8 @@ import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFac
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
-import org.springframework.jms.annotation.JmsListenerConfigurer;
 import org.springframework.jms.config.JmsListenerContainerFactory;
-import org.springframework.jms.config.JmsListenerEndpointRegistrar;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.converter.MessageConverter;
-import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
-import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 
 import java.util.function.BiConsumer;
 
@@ -26,7 +20,7 @@ import javax.jms.Message;
 @Slf4j
 @Configuration
 @EnableJms
-public class JmsConfig implements JmsListenerConfigurer {
+public class JmsConfig {
 
   /**
    * @return an implementation of failed message consumer that simply logs the message.
@@ -35,11 +29,6 @@ public class JmsConfig implements JmsListenerConfigurer {
   public BiConsumer<Message, Exception> failedMessageConsumer() {
     return (msg, err) -> log.error(
         "Message {} failed to process after retries.  Removing message from queue", msg, err);
-  }
-
-  @Bean
-  public MessageConverter jacksonJmsMessageConverter() {
-    return new MappingJackson2MessageConverter();
   }
 
   /**
@@ -71,25 +60,6 @@ public class JmsConfig implements JmsListenerConfigurer {
     // TODO: override any defaults in the listener factory before we return the object
 
     return listenerFactory;
-  }
-
-
-  /**
-   * @return a new handler factory that uses a different message converter than the default one.
-   */
-  @Bean
-  public MessageHandlerMethodFactory jmsHandlerMethodFactory() {
-    DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
-
-    // Note that we use the spring messaging converter instead of the spring jms converter. The two
-    // behave differently.
-    factory.setMessageConverter(jacksonJmsMessageConverter());
-    return factory;
-  }
-
-  @Override
-  public void configureJmsListeners(final JmsListenerEndpointRegistrar registrar) {
-    registrar.setMessageHandlerMethodFactory(jmsHandlerMethodFactory());
   }
 }
 
