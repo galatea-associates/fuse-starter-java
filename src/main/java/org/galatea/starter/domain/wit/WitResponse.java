@@ -1,4 +1,4 @@
-package org.galatea.starter.domain.Wit;
+package org.galatea.starter.domain.wit;
 
 import lombok.Data;
 import lombok.NonNull;
