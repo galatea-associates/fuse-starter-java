@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -28,9 +29,18 @@ public class WitNlpIntegrationTest {
     String halEndpoint(@Param("rawText") String text);
   }
 
-  private FuseServer fuseServer=Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
-      .target(FuseServer.class, "http://localhost:8080");
+  private FuseServer fuseServer;
 
+  @Before
+  public void setup(){
+    String fuseHostName = System.getProperty("fuse.sandbox.url");
+    if (fuseHostName == null || fuseHostName.isEmpty()) {
+      // TODO: the base URL should probably be moved to a src/test/resources properties file
+      fuseHostName = "http://fuse-rest-dev.cfapps.io";
+    }
+    fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
+        .target(FuseServer.class, fuseHostName);
+  }
   /*
   The following tests ensure that when a message is sent to wit.ai that it will return a json
   containing the entities that it extracts, and also that those entities are the ones we would
