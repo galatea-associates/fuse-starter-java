@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class WitConfig {
 
   @Bean
-  public WitGetter defaultWitGetter(@Value("https://api.wit.ai") final String witUrl){
+  public WitGetter defaultWitGetter(@Value("${wit.url}") final String witUrl){
     return Feign.builder().decoder(new GsonDecoder()).target(WitGetter.class, witUrl);
   }
 

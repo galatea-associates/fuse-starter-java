@@ -1,5 +1,6 @@
 package org.galatea.starter.domain.wit;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -7,11 +8,13 @@ import lombok.NonNull;
 public class WitResponse {
 
   @NonNull
-  private String _text;
+  @SerializedName("_text")
+  private String text;
 
   @NonNull
   private EntityStore entities;
 
-  private String msg_id;
+  @SerializedName("msg_id")
+  private String msgId;
 
 }

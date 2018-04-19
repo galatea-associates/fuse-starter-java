@@ -32,8 +32,7 @@ public class WitNlpIntegrationTest {
     String halEndpoint(@Param("rawText") String text);
   }
 
-  //Any reason we should use @before like in other tests?
-  public FuseServer fuseServer=Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
+  private FuseServer fuseServer=Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
       .target(FuseServer.class, "http://localhost:8080");
 
   /*

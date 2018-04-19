@@ -26,21 +26,24 @@ public class HalServiceTest extends ASpringTest {
   @MockBean
   private WitGetter mockWitGetter;
 
-  @Test
-  public void testProcessTestCoinFlipHeads() {
-    String text = "coin-flip";
-    String expResult = "Heads";
-
-    HalService service = new HalService(mockQuoteGetter, mockWitGetter);
-    HalService spyService = spy(service);
-
-    //Create a mock witResponse object and assign "coin-flip" as the intent with confidence of 1
-    Entity ent = new Entity(1, text);
+  private WitResponse CreateTestResponse(String intent){
+    Entity ent = new Entity(1, intent);
     Entity[] eArr = new Entity[1];
     eArr[0] = ent;
     EntityStore eStore = new EntityStore();
     eStore.setIntent(eArr);
-    WitResponse witRe = new WitResponse(text, eStore);
+    WitResponse witRe = new WitResponse(intent, eStore);
+    return witRe;
+  }
+
+  @Test
+  public void testProcessTestCoinFlipHeads() {
+    String text = "coin-flip";
+    String expResult = "Heads";
+    HalService service = new HalService(mockQuoteGetter, mockWitGetter);
+    HalService spyService = spy(service);
+    //Create a mock witResponse object and assign "coin-flip" as the intent with confidence of 1
+    WitResponse witRe = CreateTestResponse(text);
 
     given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
     doReturn(COIN.HEADS).when(spyService).coinFlipRand();
@@ -53,17 +56,10 @@ public class HalServiceTest extends ASpringTest {
   public void testProcessTestCoinFlipTails() {
     String text = "coin-flip";
     String expResult = "Tails";
-
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
     HalService spyService = spy(service);
-
     //Create a mock witResponse object and assign "coin-flip" as the intent with confidence of 1
-    Entity ent = new Entity(1, text);
-    Entity[] eArr = new Entity[1];
-    eArr[0] = ent;
-    EntityStore eStore = new EntityStore();
-    eStore.setIntent(eArr);
-    WitResponse witRe = new WitResponse(text, eStore);
+    WitResponse witRe = CreateTestResponse(text);
 
     given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
     doReturn(COIN.TAILS).when(spyService).coinFlipRand();
@@ -86,12 +82,7 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
     //Create a mock witResponse object and assign "num-galateans" as the intent with confidence of 1
-    Entity ent = new Entity(1, text);
-    Entity[] eArr = new Entity[1];
-    eArr[0] = ent;
-    EntityStore eStore = new EntityStore();
-    eStore.setIntent(eArr);
-    WitResponse witRe = new WitResponse(text, eStore);
+    WitResponse witRe = CreateTestResponse(text);
 
     given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
 
@@ -107,12 +98,7 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
     //Create a mock witResponse object and assign "rec-reading" as the intent with confidence of 1
-    Entity ent = new Entity(1, text);
-    Entity[] eArr = new Entity[1];
-    eArr[0] = ent;
-    EntityStore eStore = new EntityStore();
-    eStore.setIntent(eArr);
-    WitResponse witRe = new WitResponse(text, eStore);
+    WitResponse witRe = CreateTestResponse(text);
 
     given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
 
@@ -133,12 +119,7 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
     //Create a mock witResponse object and assign "movie-quote" as the intent with confidence of 1
-    Entity ent = new Entity(1, text);
-    Entity[] eArr = new Entity[1];
-    eArr[0] = ent;
-    EntityStore eStore = new EntityStore();
-    eStore.setIntent(eArr);
-    WitResponse witRe = new WitResponse(text, eStore);
+    WitResponse witRe = CreateTestResponse(text);
 
     //Mock the behavior of methods that will be called by HalService when it encounters a "movie-quote" intent
     given(this.mockQuoteGetter.getQuote()).willReturn(quote);
@@ -157,12 +138,7 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
     //Create a mock witResponse object and assign "derp" as the intent with confidence of 1
-    Entity ent = new Entity(1, text);
-    Entity[] eArr = new Entity[1];
-    eArr[0] = ent;
-    EntityStore eStore = new EntityStore();
-    eStore.setIntent(eArr);
-    WitResponse witRe = new WitResponse(text, eStore);
+    WitResponse witRe = CreateTestResponse(text);
 
     given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
 
@@ -180,12 +156,7 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
     //Create a mock witResponse object and assign "unsupported" as the intent with confidence of 1
-    Entity ent = new Entity(1, text);
-    Entity[] eArr = new Entity[1];
-    eArr[0] = ent;
-    EntityStore eStore = new EntityStore();
-    eStore.setIntent(eArr);
-    WitResponse witRe = new WitResponse(text, eStore);
+    WitResponse witRe = CreateTestResponse(text);
 
     given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
 
