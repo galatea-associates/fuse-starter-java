@@ -12,8 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import org.galatea.starter.domain.Quote;
 import org.galatea.starter.domain.wit.WitResponse;
-import org.galatea.starter.restClient.QuoteGetter;
-import org.galatea.starter.restClient.WitGetter;
+import org.galatea.starter.restclient.QuoteGetter;
+import org.galatea.starter.restclient.WitGetter;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -103,8 +103,7 @@ public class HalService {
    */
   public String getMovieQuote() {
     Quote quote = quoteGetter.getQuote();
-    final String MOVIE_QUOTE = "Quote: " + quote.getQuote() + ", from: " + quote.getAuthor();
-    return MOVIE_QUOTE;
+    return "Quote: " + quote.getQuoteText() + ", from: " + quote.getAuthor();
   }
 
   /**

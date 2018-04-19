@@ -12,8 +12,8 @@ import org.galatea.starter.domain.Quote;
 import org.galatea.starter.domain.wit.Entity;
 import org.galatea.starter.domain.wit.EntityStore;
 import org.galatea.starter.domain.wit.WitResponse;
-import org.galatea.starter.restClient.QuoteGetter;
-import org.galatea.starter.restClient.WitGetter;
+import org.galatea.starter.restclient.QuoteGetter;
+import org.galatea.starter.restclient.WitGetter;
 import org.galatea.starter.service.HalService.COIN;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -113,7 +113,7 @@ public class HalServiceTest extends ASpringTest {
     String quoteText = "This mission is too important for me to allow you to jeopardize it";
     String quoteFrom = "2001 A Space Odyssey";
     Quote quote = new Quote();
-    quote.setQuote(quoteText);
+    quote.setQuoteText(quoteText);
     quote.setAuthor(quoteFrom);
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);

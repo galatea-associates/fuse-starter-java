@@ -1,4 +1,4 @@
-package org.galatea.starter.restClient;
+package org.galatea.starter.restclient;
 
 import feign.Headers;
 import feign.Param;

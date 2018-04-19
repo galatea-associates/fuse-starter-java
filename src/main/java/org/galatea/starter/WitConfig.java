@@ -3,7 +3,7 @@ package org.galatea.starter;
 
 import feign.Feign;
 import feign.gson.GsonDecoder;
-import org.galatea.starter.restClient.WitGetter;
+import org.galatea.starter.restclient.WitGetter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

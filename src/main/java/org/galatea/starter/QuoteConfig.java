@@ -2,7 +2,7 @@ package org.galatea.starter;
 
 import feign.Feign;
 import feign.gson.GsonDecoder;
-import org.galatea.starter.restClient.QuoteGetter;
+import org.galatea.starter.restclient.QuoteGetter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

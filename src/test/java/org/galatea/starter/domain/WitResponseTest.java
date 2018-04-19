@@ -7,7 +7,7 @@ import feign.Feign;
 import feign.gson.GsonDecoder;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.wit.WitResponse;
-import org.galatea.starter.restClient.WitGetter;
+import org.galatea.starter.restclient.WitGetter;
 import org.junit.Test;
 
 

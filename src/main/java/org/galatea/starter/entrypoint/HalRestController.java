@@ -9,7 +9,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
-import org.galatea.starter.restClient.QuoteGetter;
 import org.galatea.starter.service.HalService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
