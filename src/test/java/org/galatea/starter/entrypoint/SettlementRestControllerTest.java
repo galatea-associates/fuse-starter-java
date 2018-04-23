@@ -82,7 +82,6 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   private JacksonTester<List<Long>> missionIdJsonTester;
 
-  private static final String APPLICATION_X_PROTOBUF = "application/x-protobuf";
 
   private static final Long MISSION_ID_1 = 1091L;
 

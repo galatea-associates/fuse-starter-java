@@ -1,10 +1,13 @@
 package org.galatea.starter;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
+import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.galatea.starter.utils.translation.TranslationException;
 import org.springframework.context.annotation.Bean;
@@ -45,5 +48,12 @@ public class ProtoMessageTranslationConfig {
         .setDepot(msg.getDepot()).setDirection(msg.getDirection())
         .setExternalParty(msg.getExternalParty()).setInstrument(msg.getInstrument())
         .setQty(msg.getQty()).build();
+  }
+
+  @Bean
+  public ITranslator<TradeAgreementProtoMessages, List<TradeAgreement>> tradeAgreementProtoMessagesTranslator(
+      ITranslator<TradeAgreementProtoMessage, TradeAgreement> translator) {
+    return msg -> msg.getMessageList().stream().map(translator::translate)
+        .collect(Collectors.toList());
   }
 }

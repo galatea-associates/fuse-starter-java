@@ -14,6 +14,10 @@ spring:
          ddl-auto: update
       database-platform: org.hibernate.dialect.MySQLDialect
 mvc:
+   settleMissionPath: /settlementEngine
+   getMissionPath: /settlementEngine/mission/
+   settleMissionProtoPath:  /settlementEngineProto
+   getMissionProtoPath: /settlementEngineProto/mission/
    max-size-trace-payload: 50000
 jms:
    listener-concurrency: 1-5
