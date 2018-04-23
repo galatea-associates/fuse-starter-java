@@ -5,6 +5,7 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.TradeAgreement;
-import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
+import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.ObjectSupplier;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class SettlementJmsListenerTest extends ASpringTest {
   protected JmsTemplate jmsTemplate;
 
   @Autowired
-  protected ObjectSupplier<TradeAgreementMessage> messageSupplier;
+  protected ObjectSupplier<TradeAgreementProtoMessage> messageSupplier;
 
   @Autowired
   protected ObjectSupplier<TradeAgreement> agreementSupplier;
@@ -47,11 +48,11 @@ public class SettlementJmsListenerTest extends ASpringTest {
 
   @Test
   public void testSettleOneAgreement() {
-    TradeAgreementMessage message = messageSupplier.get();
+    TradeAgreementProtoMessage message = messageSupplier.get();
     TradeAgreement agreement = agreementSupplier.get();
 
     log.info("Agreement message to put on queue {}", message);
-    List<TradeAgreement> agreements = Arrays.asList(agreement);
+    List<TradeAgreement> agreements = Collections.singletonList(agreement);
     log.info("Agreement objects that the service will expect {}", agreements);
 
     jmsTemplate.convertAndSend(queueName, message.toByteArray());

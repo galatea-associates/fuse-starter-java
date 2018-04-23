@@ -17,24 +17,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-import com.googlecode.protobuf.format.XmlFormat;
-
+import java.io.StringWriter;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import junitparams.FileParameters;
 import junitparams.JUnitParamsRunner;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.MessageTranslationConfig;
-import org.galatea.starter.MessageUtil;
 import org.galatea.starter.TestConfig;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
-import org.galatea.starter.entrypoint.messagecontracts.Messages;
-import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
-import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessages;
+import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
+import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.ObjectSupplier;
 import org.galatea.starter.utils.translation.ITranslator;
@@ -51,10 +52,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -81,6 +78,8 @@ public class SettlementRestControllerTest extends ASpringTest {
   @MockBean
   private SettlementService mockSettlementService;
 
+  private JacksonTester<TradeAgreementMessages> agreementJsonTester;
+
   private JacksonTester<List<Long>> missionIdJsonTester;
 
   private static final String APPLICATION_X_PROTOBUF = "application/x-protobuf";
@@ -98,8 +97,7 @@ public class SettlementRestControllerTest extends ASpringTest {
       mapper = JsonTestFileMapper.class)
   public void testSettleAgreement_JSON(final String agreementJson,
       final String expectedMissionIdJson) throws Exception {
-
-    TradeAgreement expectedAgreement = TradeAgreement.builder().id(0L).instrument("IBM")
+    TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
         .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).build();
 
     log.info("Agreement json to post {}", agreementJson);
@@ -111,8 +109,8 @@ public class SettlementRestControllerTest extends ASpringTest {
 
     log.info("Expected json response {}", expectedResponseJsonList);
 
-    TradeAgreementMessages messages = MessageUtil.jsonToTradeAgreementMessages(agreementJson);
-    log.info("Agreement objects that the service will expect {}", messages);
+    TradeAgreementMessages agreementMessages = agreementJsonTester.parse(agreementJson).getObject();
+    log.info("Agreement objects that the service will expect {}", agreementMessages);
 
     given(this.mockSettlementService.spawnMissions(singletonList(expectedAgreement)))
         .willReturn(Sets.newTreeSet(expectedMissionIds));
@@ -121,29 +119,8 @@ public class SettlementRestControllerTest extends ASpringTest {
         .perform(post("/settlementEngine?requestId=1234")
             .contentType(MediaType.APPLICATION_JSON_VALUE).content(agreementJson))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.spawnedMissionPaths", containsInAnyOrder(expectedResponseJsonList.toArray())));
-
-    verifyAuditHeaders(resultActions);
-  }
-
-  @Test
-  public void testSettleAgreement_Protobuf() throws Exception {
-
-    TradeAgreementMessage message = TradeAgreementMessage.newBuilder()
-        .setInstrument("IBM").setInternalParty("INT-1")
-        .setExternalParty("EXT-1").setBuySell("B").setQty(100).build();
-
-    TradeAgreementMessages messages = TradeAgreementMessages.newBuilder()
-        .addMessage(message).build();
-
-    given(this.mockSettlementService.spawnMissions(toTradeAgreements(messages)))
-        .willReturn(Sets.newTreeSet(singletonList(1L)));
-
-    ResultActions resultActions = this.mvc.perform(post("/settlementEngine?requestId=1234")
-        .contentType(APPLICATION_X_PROTOBUF)
-        .content(messages.toByteArray()))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.spawnedMissionPaths", containsInAnyOrder("/settlementEngine/mission/1")));
+        .andExpect(jsonPath("$.spawnedMissions",
+            containsInAnyOrder(expectedResponseJsonList.toArray())));
 
     verifyAuditHeaders(resultActions);
   }
@@ -151,14 +128,16 @@ public class SettlementRestControllerTest extends ASpringTest {
   @Test
   public void testSettleAgreement_XML() throws Exception {
 
-    TradeAgreementMessage message = TradeAgreementMessage.newBuilder()
-        .setInstrument("IBM").setInternalParty("INT-1")
-        .setExternalParty("EXT-1").setBuySell("B").setQty(100).build();
+    TradeAgreementMessages messages = TradeAgreementMessages.builder().agreement(
+        TradeAgreementMessage.builder().instrument("IBM").internalParty("INT-1")
+            .externalParty("EXT-1").buySell("B").qty(100d).build())
+        .build();
 
-    TradeAgreementMessages messages = TradeAgreementMessages.newBuilder()
-        .addMessage(message).build();
-
-    String xml = new XmlFormat().printToString(messages);
+    JAXBContext context = JAXBContext.newInstance(TradeAgreementMessages.class);
+    Marshaller m = context.createMarshaller();
+    StringWriter writer = new StringWriter();
+    m.marshal(messages, writer);
+    String xml = writer.toString();
 
     given(this.mockSettlementService.spawnMissions(toTradeAgreements(messages)))
         .willReturn(Sets.newTreeSet(singletonList(1L)));
@@ -188,7 +167,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
             .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(mission.getId().intValue())))
-            .andExpect(jsonPath("$.external_party", is(mission.getExternalParty())))
+            .andExpect(jsonPath("$.externalParty", is(mission.getExternalParty())))
             .andExpect(jsonPath("$.instrument", is(mission.getInstrument())))
             .andExpect(jsonPath("$.direction", is(mission.getDirection())))
             .andExpect(jsonPath("$.qty", is(mission.getQty())));
@@ -196,21 +175,7 @@ public class SettlementRestControllerTest extends ASpringTest {
     verifyAuditHeaders(resultActions);
   }
 
-  @Test
-  public void testGetMissionFound_Protobuf() throws Exception {
-    SettlementMission mission = settlementMissionSupplier.get();
-    log.info("Test mission: {}", mission);
 
-    given(this.mockSettlementService.findMission(MISSION_ID_1))
-        .willReturn(Optional.of(mission));
-
-    ResultActions resultActions = this.mvc.perform(
-        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-            .accept(APPLICATION_X_PROTOBUF))
-        .andExpect(status().isOk());
-
-    verifyAuditHeaders(resultActions);
-  }
 
   @Test
   public void testGetMissionFound_XML() throws Exception {
@@ -224,7 +189,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
             .accept(MediaType.APPLICATION_XML)).andExpect(status().isOk())
             .andExpect(xpath("//id").string(mission.getId().toString()))
-            .andExpect(xpath("//external_party").string(mission.getExternalParty()))
+            .andExpect(xpath("//externalParty").string(mission.getExternalParty()))
             .andExpect(xpath("//instrument").string(mission.getInstrument()))
             .andExpect(xpath("//direction").string(mission.getDirection()))
             .andExpect(xpath("//qty").string(String.valueOf(mission.getQty())));
@@ -250,7 +215,7 @@ public class SettlementRestControllerTest extends ASpringTest {
     String expectedMessage = "Incorrectly formatted message.  Please consult the documentation.";
 
     this.mvc.perform(post("/settlementEngine?requestId=1234")
-        .contentType(APPLICATION_X_PROTOBUF).content("invalidAgreementBytes"))
+        .contentType(MediaType.APPLICATION_JSON).content("invalidAgreementBytes"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.name())))
         .andExpect(jsonPath("$.message", is(expectedMessage)));
@@ -258,7 +223,8 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testDataAccessFailure() throws Exception {
-    DataAccessException exception = new DataAccessException("msg") {};
+    DataAccessException exception = new DataAccessException("msg") {
+    };
     when(mockSettlementService.findMission(MISSION_ID_1)).thenThrow(exception);
 
     this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
