@@ -4,6 +4,7 @@ import static java.util.Collections.singleton;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,4 +55,10 @@ public class RestExceptionHandlerTest {
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
 
+  @Test
+  public void handleJsonProcessingException() {
+    JsonProcessingException exception = new JsonProcessingException("msg") {};
+    ResponseEntity<Object> response = handler.handleJsonProcessingException(exception);
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+  }
 }

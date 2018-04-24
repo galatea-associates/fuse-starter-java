@@ -48,13 +48,15 @@ public abstract class ASpringTest {
       return Arrays.stream(lines).map(objLine -> (String) objLine).filter(line -> !line.trim().isEmpty())
           .map(line -> line.split(DELIM)).collect(Collectors.toList()).toArray();
     }
-
   }
-
 
   public static String readData(final String fileName) throws IOException {
     return IOUtils.toString(ASpringTest.class.getClassLoader().getResourceAsStream(fileName))
         .trim();
+  }
+
+  public static byte[] readBytes(final String fileName) throws IOException {
+    return IOUtils.toByteArray(ASpringTest.class.getClassLoader().getResourceAsStream(fileName));
   }
 
   /**
@@ -84,8 +86,6 @@ public abstract class ASpringTest {
           + " registry since we came across an exception", err);
     }
 
-
   }
-
 
 }
