@@ -36,10 +36,16 @@ public abstract class BaseSettlementRestController {
     }
   }
 
+  /**
+   * Invokes the settlement service to spawn missions for the specified trade agreements.
+   */
   protected Set<Long> settleAgreementInternal(List<TradeAgreement> agreements) {
     return settlementService.spawnMissions(agreements);
   }
 
+  /**
+   * Retrieves settlement missions from the settlement service.
+   */
   protected Optional<SettlementMission> getMissionInternal(final Long id) {
     return settlementService.findMission(id);
   }
