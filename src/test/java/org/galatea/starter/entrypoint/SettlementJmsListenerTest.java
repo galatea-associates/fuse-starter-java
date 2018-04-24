@@ -4,9 +4,10 @@ package org.galatea.starter.entrypoint;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import javax.jms.TextMessage;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -16,6 +17,7 @@ import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.ObjectSupplier;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,11 +45,35 @@ public class SettlementJmsListenerTest extends ASpringTest {
   @MockBean
   private SettlementService mockSettlementService;
 
-  @Value("${jms.agreement-queue}")
-  protected String queueName;
+  @Value("${jms.agreement-queue-json}")
+  protected String jsonQueueName;
+
+  @Value("${jms.agreement-queue-proto}")
+  protected String protoQueueName;
 
   @Test
-  public void testSettleOneAgreement() {
+  @Ignore
+  public void testSettleOneAgreementJson() throws IOException {
+    String message = readData("Test_IBM_Agreement.json").replace("\n", "").replace("[", "")
+        .replace("]", "");
+
+    TradeAgreement agreement = TradeAgreement.builder().instrument("IBM").internalParty("INT-1")
+        .externalParty("EXT-1").buySell("B").qty(100d).build();
+    List<TradeAgreement> expectedAgreements = Collections.singletonList(agreement);
+
+    log.info("Agreement JSON to put int he queue: {}", message);
+    log.info("Agreement objects the service will expect {}", expectedAgreements);
+
+    jmsTemplate.send(jsonQueueName, s -> {
+      TextMessage msg = s.createTextMessage(message);
+      return msg;
+    });
+
+    verify(mockSettlementService, timeout(10000)).spawnMissions(expectedAgreements);
+  }
+
+  @Test
+  public void testSettleOneAgreementProto() {
     TradeAgreementProtoMessage message = messageSupplier.get();
     TradeAgreement agreement = agreementSupplier.get();
 
@@ -55,7 +81,7 @@ public class SettlementJmsListenerTest extends ASpringTest {
     List<TradeAgreement> agreements = Collections.singletonList(agreement);
     log.info("Agreement objects that the service will expect {}", agreements);
 
-    jmsTemplate.convertAndSend(queueName, message.toByteArray());
+    jmsTemplate.convertAndSend(protoQueueName,  message.toByteArray());
 
     // We use verify since the jms listener doesn't actually do anything with the returns from the
     // service
