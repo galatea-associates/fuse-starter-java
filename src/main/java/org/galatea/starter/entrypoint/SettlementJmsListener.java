@@ -32,8 +32,7 @@ public class SettlementJmsListener {
   /**
    * Spawns Missions for any TradeAgreements pulled off the jms queue in JSON format.
    */
-  @JmsListener(destination = "${jms.agreement-queue-json}", concurrency = "${jms.listener-concurrency}",
-      containerFactory = "jsonJmsListenerContainerFactory")
+  @JmsListener(destination = "${jms.agreement-queue-json}", concurrency = "${jms.listener-concurrency}")
   public void settleAgreementJson(final TradeAgreementMessage agreementMessage) {
     log.info("Handling agreements {}", agreementMessage);
 
@@ -45,8 +44,7 @@ public class SettlementJmsListener {
   /**
    * Spawns missions for any TradeAgreements pulled off the jms queue in protobuf format.
    */
-  @JmsListener(destination = "${jms.agreement-queue-proto}", concurrency = "${jms.listener-concurrency}",
-      containerFactory = "binaryJmsListenerContainerFactory")
+  @JmsListener(destination = "${jms.agreement-queue-proto}", concurrency = "${jms.listener-concurrency}")
   public void settleAgreementProto(final byte[] message) {
     log.info("Received message. Translating.");
     TradeAgreement agreement = tradeAgreementProtoTranslator.translate(message);

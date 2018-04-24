@@ -20,7 +20,6 @@ import javax.jms.ConnectionFactory;
 import javax.jms.Message;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
-import org.springframework.jms.support.converter.SimpleMessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 
@@ -57,7 +56,7 @@ public class JmsConfig implements JmsListenerConfigurer{
    * @return the factory.
    */
   @Bean
-  public JmsListenerContainerFactory<DefaultMessageListenerContainer> jsonJmsListenerContainerFactory(
+  public JmsListenerContainerFactory<DefaultMessageListenerContainer> jmsListenerContainerFactory(
       final ConnectionFactory queueConnectionFactory,
       final DefaultJmsListenerContainerFactoryConfigurer configurer,
       final FuseTraceRepository tracerRpsy,
@@ -74,31 +73,6 @@ public class JmsConfig implements JmsListenerConfigurer{
     configurer.configure(listenerFactory, queueConnectionFactory);
 
     // TODO: override any defaults in the listener factory before we return the object
-    return listenerFactory;
-  }
-
-  /**
-   * We provide our own listener container factory since we want to use our own implementation of a
-   * listener container which adds tracing of how the message is handled. This will also configure
-   * the message converter to the SimpleMessageConverter as this will be used for protobuf messages
-   * where the deserialization of the payload will be done in our code.
-   *
-   * @param queueConnectionFactory injected by spring
-   * @param configurer injected by spring
-   * @param tracerRpsy injected by spring
-   * @return the factory.
-   */
-  @Bean
-  public JmsListenerContainerFactory<DefaultMessageListenerContainer> binaryJmsListenerContainerFactory(
-      final ConnectionFactory queueConnectionFactory,
-      final DefaultJmsListenerContainerFactoryConfigurer configurer,
-      final FuseTraceRepository tracerRpsy,
-      final BiConsumer<Message, Exception> failedMessageConsumer) {
-    FuseJmsListenerContainerFactory listenerFactory =
-        new FuseJmsListenerContainerFactory(tracerRpsy, failedMessageConsumer);
-
-    configurer.configure(listenerFactory, queueConnectionFactory);
-    listenerFactory.setMessageConverter(new SimpleMessageConverter());
     return listenerFactory;
   }
 
@@ -130,10 +104,6 @@ public class JmsConfig implements JmsListenerConfigurer{
    */
   @Override
   public void configureJmsListeners(final JmsListenerEndpointRegistrar registrar) {
-    // note that we do not want to set this message handler method factory to all
-    // container factories, but only the one we set up for JMS. We identify it
-    // by name here.
-    registrar.setContainerFactoryBeanName("jsonJmsListenerContainerFactory");
     registrar.setMessageHandlerMethodFactory(jmsHandlerMethodFactory());
   }
 }
