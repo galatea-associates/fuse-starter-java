@@ -6,8 +6,8 @@ import static org.junit.Assert.assertEquals;
 import feign.Feign;
 import feign.Param;
 import feign.RequestLine;
-import feign.gson.GsonDecoder;
-import feign.gson.GsonEncoder;
+import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -36,7 +36,7 @@ public class HalRestControllerIntegrationTest extends ASpringTest {
       fuseHostName = FuseHostName;
     }
 
-    FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
+    FuseServer fuseServer = Feign.builder().decoder(new JacksonDecoder()).encoder(new JacksonEncoder())
         .target(FuseServer.class, fuseHostName);
 
     String halResponse = fuseServer.halEndpoint("coin-flip");
@@ -52,7 +52,7 @@ public class HalRestControllerIntegrationTest extends ASpringTest {
       fuseHostName = FuseHostName;
     }
 
-    FuseServer fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
+    FuseServer fuseServer = Feign.builder().decoder(new JacksonDecoder()).encoder(new JacksonEncoder())
         .target(FuseServer.class, fuseHostName);
 
     String expResult = "derp!";
