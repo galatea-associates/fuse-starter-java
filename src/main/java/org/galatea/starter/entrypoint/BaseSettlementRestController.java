@@ -16,6 +16,10 @@ import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.Tracer;
 
+/**
+ * Implements a base class for settlement rest controllers to avoid duplicating
+ * the logic of calling the settlement service.
+ */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @EqualsAndHashCode

@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class ProtoMessageTranslationConfig {
 
   /**
-   * @return a translator to convert binary protobuf messages to TradeAgreements
+   * Implements a translator to convert binary protobuf messages to TradeAgreements
    */
   @Bean
   public ITranslator<byte[], TradeAgreement> tradeAgreementBinaryProtobufTranslator(
@@ -35,6 +35,10 @@ public class ProtoMessageTranslationConfig {
     };
   }
 
+  /**
+   * Implements a translator to convert TradeAgreement protobuf messages to TradeAgreement domain
+   * objects.
+   */
   @Bean
   public ITranslator<TradeAgreementProtoMessage, TradeAgreement> tradeAgreementProtoTranslator() {
     return msg -> TradeAgreement.builder().id(msg.getId()).buySell(msg.getBuySell())
@@ -42,6 +46,10 @@ public class ProtoMessageTranslationConfig {
         .instrument(msg.getInstrument()).qty(msg.getQty()).build();
   }
 
+  /**
+   * Implements a translator to convert domain SettlementMission objects to SettlementMission protobuf
+   * messages.
+   */
   @Bean
   public ITranslator<SettlementMission, SettlementMissionProtoMessage> settlementMissionProtoTranslator() {
     return msg -> SettlementMissionProtoMessage.newBuilder().setId(msg.getId())
@@ -50,6 +58,10 @@ public class ProtoMessageTranslationConfig {
         .setQty(msg.getQty()).build();
   }
 
+  /**
+   * Implements a translator to convert a TradeAgreement protobuf collection to a list of
+   * TradeAgreement domain objects.
+   */
   @Bean
   public ITranslator<TradeAgreementProtoMessages, List<TradeAgreement>> tradeAgreementProtoMessagesTranslator(
       ITranslator<TradeAgreementProtoMessage, TradeAgreement> translator) {

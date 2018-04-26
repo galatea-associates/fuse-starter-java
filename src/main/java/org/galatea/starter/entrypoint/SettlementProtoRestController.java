@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
 @Validated
 @RestController
-public class SettlementRestProtoController extends BaseSettlementRestController {
+public class SettlementProtoRestController extends BaseSettlementRestController {
 
   private static final String APPLICATION_X_PROTOBUF = "application/x-protobuf";
 
@@ -58,7 +58,7 @@ public class SettlementRestProtoController extends BaseSettlementRestController 
    * spring boot. This constructor was manually added because of the base class that has no default
    * constructor, necessitating a call to super() from here.
    */
-  public SettlementRestProtoController(SettlementService settlementService,
+  public SettlementProtoRestController(SettlementService settlementService,
       ITranslator<TradeAgreementProtoMessages, List<TradeAgreement>> tradeAgreementTranslator,
       ITranslator<SettlementMission, SettlementMissionProtoMessage> settlementMissionTranslator) {
     super(settlementService);
@@ -66,6 +66,9 @@ public class SettlementRestProtoController extends BaseSettlementRestController 
     this.tradeAgreementTranslator = tradeAgreementTranslator;
   }
 
+  /**
+   * Spawn settlement missions from the supplied trade agreement messages.
+   */
   @PostMapping(value = "${mvc.settleMissionProtoPath}", consumes = APPLICATION_X_PROTOBUF,
       produces = APPLICATION_X_PROTOBUF)
   public SettlementResponseProtoMessage settleAgreement(
@@ -84,6 +87,9 @@ public class SettlementRestProtoController extends BaseSettlementRestController 
         .build();
   }
 
+  /**
+   * Retrieves existing settlement mission messages.
+   */
   @GetMapping(value = "${mvc.getMissionProtoPath}" + "{id}", produces = APPLICATION_X_PROTOBUF)
   public SettlementMissionProtoMessage getMission(@PathVariable final Long id,
       @RequestParam(value = "requestId", required = false) String requestId) {

@@ -45,7 +45,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 // We don't load the entire spring application context for this test.
-@WebMvcTest(SettlementRestProtoController.class)
+@WebMvcTest(SettlementProtoRestController.class)
 // Import Beans from Configuration, enabling them to be Autowired
 @Import({ProtoMessageTranslationConfig.class, TestConfig.class, RestExceptionHandler.class})
 // Use this runner since we want to parameterize certain tests.
