@@ -1,20 +1,19 @@
 package org.galatea.starter.domain.wit;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.ToString;
+
 
 @Data
+@EqualsAndHashCode
+@ToString
 public class WitResponse {
-
-  @NonNull
-  @SerializedName("_text")
+  @JsonProperty("_text")
   private String text;
-
-  @NonNull
   private EntityStore entities;
-
-  @SerializedName("msg_id")
-  private String msgId;
+  private String msg_id;
 
 }

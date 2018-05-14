@@ -1,11 +1,13 @@
 package org.galatea.starter.restclient;
-
-import feign.Headers;
-import feign.RequestLine;
 import org.galatea.starter.domain.Quote;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+
+@FeignClient(name="QuoteGetter", url = "${quote-getter.url}")
 public interface QuoteGetter {
-  @Headers("X-Mashape-Key: o3chJTJnj2mshT5rvZpAZ0BUaiUVp1Ho4XKjsn2JYPspbxkcBk")
-  @RequestLine("GET")
+  @RequestMapping(method = RequestMethod.GET,headers = "X-Mashape-Key=${quote-getter.token}")
   Quote getQuote();
 }

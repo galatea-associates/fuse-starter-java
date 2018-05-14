@@ -44,7 +44,7 @@ public class HalService {
    */
   public String processText(String text) {
     /* Send raw text to wit.ai */
-    WitResponse witResponse = witGetter.getWitResponse(text);
+    WitResponse witResponse = witGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE", text);
 
     switch (witResponse.getEntities().getIntent()[0].getValue()) {
       case "coin-flip":
@@ -103,7 +103,7 @@ public class HalService {
    */
   public String getMovieQuote() {
     Quote quote = quoteGetter.getQuote();
-    return "Quote: " + quote.getQuoteText() + ", from: " + quote.getAuthor();
+    return "Quote: " + quote.getQuote() + ", from: " + quote.getAuthor();
   }
 
   /**

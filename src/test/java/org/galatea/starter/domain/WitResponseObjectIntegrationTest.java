@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.wit.EntityStore;
 import org.junit.Test;
 import java.lang.reflect.Field;
+import org.junit.experimental.categories.Category;
+
 import static org.junit.Assert.assertEquals;
 
 
@@ -22,7 +24,8 @@ import static org.junit.Assert.assertEquals;
 @Slf4j
 @ToString
 @EqualsAndHashCode
-public class WitResponseObjectTest {
+@Category(org.galatea.starter.IntegrationTestCategory.class)
+public class WitResponseObjectIntegrationTest {
 
   /*
   Here we define an interface similar to that in the class WitGetter.java except here we
