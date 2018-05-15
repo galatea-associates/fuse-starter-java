@@ -13,13 +13,12 @@ import net.sf.aspect4log.Log.Level;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
-import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
-import org.galatea.starter.entrypoint.messagecontracts.SettlementResponseMessage;
-import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
+import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage;
+import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementResponseProtoMessage;
+import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * REST Controller that generates and listens to http endpoints which allow the caller to create
- * Missions from TradeAgreements and query them back out.
+ * REST controller that mimics the behavior of SettlementRestController but accepts and returns only
+ * protobuf messages.
  */
 @ToString
 @EqualsAndHashCode
@@ -38,18 +37,20 @@ import org.springframework.web.bind.annotation.RestController;
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
 @Validated
 @RestController
-public class SettlementRestController extends BaseSettlementRestController {
+public class SettlementProtoRestController extends BaseSettlementRestController {
+
+  private static final String APPLICATION_X_PROTOBUF = "application/x-protobuf";
 
   @NonNull
-  ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator;
+  private ITranslator<SettlementMission, SettlementMissionProtoMessage> settlementMissionTranslator;
 
   @NonNull
-  ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
+  private ITranslator<TradeAgreementProtoMessages, List<TradeAgreement>> tradeAgreementTranslator;
 
-  @Value("${mvc.settleMissionPath}")
+  @Value("${mvc.settleMissionProtoPath}")
   private String settleMissionPath;
 
-  @Value("${mvc.getMissionPath}")
+  @Value("${mvc.getMissionProtoPath}")
   private String getMissionPath;
 
   /**
@@ -57,51 +58,41 @@ public class SettlementRestController extends BaseSettlementRestController {
    * spring boot. This constructor was manually added because of the base class that has no default
    * constructor, necessitating a call to super() from here.
    */
-  public SettlementRestController(SettlementService settlementService,
-      ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator,
-      ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator) {
+  public SettlementProtoRestController(SettlementService settlementService,
+      ITranslator<TradeAgreementProtoMessages, List<TradeAgreement>> tradeAgreementTranslator,
+      ITranslator<SettlementMission, SettlementMissionProtoMessage> settlementMissionTranslator) {
     super(settlementService);
-    this.tradeAgreementTranslator = tradeAgreementTranslator;
     this.settlementMissionTranslator = settlementMissionTranslator;
+    this.tradeAgreementTranslator = tradeAgreementTranslator;
   }
 
   /**
-   * Generate Missions from a provided TradeAgreement.
+   * Spawn settlement missions from the supplied trade agreement messages.
    */
-  // @PostMapping to link http POST requests to this method
-  // @RequestBody to have the post request body deserialized into a list of TradeAgreement objects
-  @PostMapping(value = "${mvc.settleMissionPath}", consumes = {MediaType.APPLICATION_JSON_VALUE,
-      MediaType.APPLICATION_XML_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE,
-      MediaType.APPLICATION_XML_VALUE})
-  public SettlementResponseMessage settleAgreement(
-      @RequestBody final TradeAgreementMessages messages,
+  @PostMapping(value = "${mvc.settleMissionProtoPath}", consumes = APPLICATION_X_PROTOBUF,
+      produces = APPLICATION_X_PROTOBUF)
+  public SettlementResponseProtoMessage settleAgreement(
+      @RequestBody final TradeAgreementProtoMessages messages,
       @RequestParam(value = "requestId", required = false) String requestId) {
-
     // if an external request id was provided, grab it
     processRequestId(requestId);
 
     List<TradeAgreement> agreements = tradeAgreementTranslator.translate(messages);
 
     Set<Long> missionIds = settleAgreementInternal(agreements);
-
     Set<String> missionPaths = missionIds.stream().map(id -> getMissionPath + id)
         .collect(Collectors.toSet());
 
-    return SettlementResponseMessage.builder().spawnedMissions(missionPaths).build();
+    return SettlementResponseProtoMessage.newBuilder().addAllSpawnedMissionPaths(missionPaths)
+        .build();
   }
 
   /**
-   * Retrieve a previously generated Mission.
+   * Retrieves existing settlement mission messages.
    */
-  // @GetMapping to link http GET requests to this method
-  // @PathVariable to take the id from the path and make it available as a method argument
-  // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
-  @GetMapping(value = "${mvc.getMissionPath}" + "{id}", produces = {
-      MediaType.APPLICATION_JSON_VALUE,
-      MediaType.APPLICATION_XML_VALUE})
-  public SettlementMissionMessage getMission(@PathVariable final Long id,
+  @GetMapping(value = "${mvc.getMissionProtoPath}" + "{id}", produces = APPLICATION_X_PROTOBUF)
+  public SettlementMissionProtoMessage getMission(@PathVariable final Long id,
       @RequestParam(value = "requestId", required = false) String requestId) {
-
     // if an external request id was provided, grab it
     processRequestId(requestId);
 
@@ -113,5 +104,4 @@ public class SettlementRestController extends BaseSettlementRestController {
 
     throw new EntityNotFoundException(SettlementMission.class, id.toString());
   }
-
 }
