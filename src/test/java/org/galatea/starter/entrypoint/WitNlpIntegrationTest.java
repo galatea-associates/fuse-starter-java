@@ -6,8 +6,8 @@ import static org.junit.Assert.assertEquals;
 import feign.Feign;
 import feign.Param;
 import feign.RequestLine;
-import feign.gson.GsonDecoder;
-import feign.gson.GsonEncoder;
+import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -38,7 +38,7 @@ public class WitNlpIntegrationTest {
       // TODO: the base URL should probably be moved to a src/test/resources properties file
       fuseHostName = "http://fuse-rest-dev.cfapps.io";
     }
-    fuseServer = Feign.builder().decoder(new GsonDecoder()).encoder(new GsonEncoder())
+    fuseServer = Feign.builder().decoder(new JacksonDecoder()).encoder(new JacksonEncoder())
         .target(FuseServer.class, fuseHostName);
   }
   /*

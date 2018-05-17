@@ -1,5 +1,6 @@
 package org.galatea.starter;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,20 +32,21 @@ public class Application {
    */
   public static void main(final String[] args) {
 
-    System.out.println("HERHERHERHERH");
-    //log.info("Starting spring application {}", System.getProperty("application.name"));
-    //SpringApplication.run(Application.class, args);
+    log.info("Starting spring application {}", System.getProperty("application.name"));
+    SpringApplication.run(Application.class, args);
 
+
+    /*
     ApplicationContext context = SpringApplication.run(Application.class, args);
 
     System.out.println("here");
     QuoteGetter quoteGetter = context.getBean(QuoteGetter.class);
     System.out.println("here2");
 
-    Quote quote = quoteGetter.getQuote();
+    Quote[] quote = quoteGetter.getQuote();
     System.out.println("here3");
 
-    System.out.println(quote.getQuote() + ", " + quote.getAuthor());
+    System.out.println(quote[0].getQuoteText() + ", " + quote[0].getAuthor());
 
     WitGetter witGetter = context.getBean(WitGetter.class);
     System.out.println("here9999");
@@ -52,8 +54,7 @@ public class Application {
     WitResponse witResponse = witGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE", "flip a coin");
 
     System.out.println(witResponse.getText());
-
-
+  */
 
 
   }

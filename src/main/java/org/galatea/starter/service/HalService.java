@@ -102,8 +102,8 @@ public class HalService {
    * @return movie quote string
    */
   public String getMovieQuote() {
-    Quote quote = quoteGetter.getQuote();
-    return "Quote: " + quote.getQuote() + ", from: " + quote.getAuthor();
+    Quote[] quote = quoteGetter.getQuote();
+    return "Quote: " + quote[0].getQuoteText() + ", from: " + quote[0].getAuthor();
   }
 
   /**

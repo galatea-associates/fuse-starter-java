@@ -28,6 +28,7 @@ public class HalServiceTest extends ASpringTest {
 
   private WitResponse CreateTestResponse(String intent){
     Entity ent = new Entity(1, intent);
+    System.out.println(ent);
     Entity[] eArr = new Entity[1];
     eArr[0] = ent;
     EntityStore eStore = new EntityStore();
@@ -35,9 +36,10 @@ public class HalServiceTest extends ASpringTest {
     WitResponse witRe = new WitResponse();
     witRe.setEntities(eStore);
     witRe.setText("This is a sample WitResponse");
+    System.out.println(witRe.getEntities().getIntent()[0].getValue());
     return witRe;
   }
-/*
+
   @Test
   public void testProcessTestCoinFlipHeads() {
     String text = "coin-flip";
@@ -47,7 +49,7 @@ public class HalServiceTest extends ASpringTest {
     //Create a mock witResponse object and assign "coin-flip" as the intent with confidence of 1
     WitResponse witRe = CreateTestResponse(text);
 
-    given(this.mockWitGetter.getWitResponse("KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
+    given(this.mockWitGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
     doReturn(COIN.HEADS).when(spyService).coinFlipRand();
 
     String result = spyService.processText(text);
@@ -63,14 +65,14 @@ public class HalServiceTest extends ASpringTest {
     //Create a mock witResponse object and assign "coin-flip" as the intent with confidence of 1
     WitResponse witRe = CreateTestResponse(text);
 
-    given(this.mockWitGetter.getWitResponse("KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
+    given(this.mockWitGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
     doReturn(COIN.TAILS).when(spyService).coinFlipRand();
 
     String result = spyService.processText(text);
     assertEquals(expResult, result);
   }
-  */
-/*
+
+
   @Test
   public void testProcessTestGetNumGalateans() {
     String text = "num-galateans";
@@ -87,7 +89,7 @@ public class HalServiceTest extends ASpringTest {
     //Create a mock witResponse object and assign "num-galateans" as the intent with confidence of 1
     WitResponse witRe = CreateTestResponse(text);
 
-    given(this.mockWitGetter.getWitResponse("KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
+    given(this.mockWitGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
 
     String result = service.processText(text);
     assertEquals(expResult, result);
@@ -109,13 +111,16 @@ public class HalServiceTest extends ASpringTest {
     assertEquals(expResult, result);
   }
 
-/*
+
   @Test
   public void testProcessTestGetMovieQuote() {
     String text = "movie-quote";
     String quoteText = "This mission is too important for me to allow you to jeopardize it";
     String quoteFrom = "2001 A Space Odyssey";
-    Quote quote = Quote.builder().quoteText(quoteText).author(quoteFrom).build();
+    Quote[] quote = new Quote[1];
+    quote[0] = new Quote();
+    quote[0].setQuoteText(quoteText);
+    quote[0].setAuthor(quoteFrom);
 
     HalService service = new HalService(mockQuoteGetter, mockWitGetter);
 
@@ -124,13 +129,13 @@ public class HalServiceTest extends ASpringTest {
 
     //Mock the behavior of methods that will be called by HalService when it encounters a "movie-quote" intent
     given(this.mockQuoteGetter.getQuote()).willReturn(quote);
-    given(this.mockWitGetter.getWitResponse(text)).willReturn(witRe);
+    given(this.mockWitGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE", text)).willReturn(witRe);
 
     String result = service.processText(text);
     assertEquals(("Quote: "+quoteText+", from: 2001 A Space Odyssey"), result);
   }
-*/
-/*
+
+
   @Test
   public void testProcessTestGetDerp() {
     String text = "derp";
@@ -141,9 +146,10 @@ public class HalServiceTest extends ASpringTest {
     //Create a mock witResponse object and assign "derp" as the intent with confidence of 1
     WitResponse witRe = CreateTestResponse(text);
 
-    given(this.mockWitGetter.getWitResponse("KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
+    given(this.mockWitGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
 
     String result = service.processText(text);
+    System.out.println(result);
     assertEquals(expResult, result);
   }
 
@@ -159,10 +165,10 @@ public class HalServiceTest extends ASpringTest {
     //Create a mock witResponse object and assign "unsupported" as the intent with confidence of 1
     WitResponse witRe = CreateTestResponse(text);
 
-    given(this.mockWitGetter.getWitResponse("KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
+    given(this.mockWitGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
 
     String result = service.processText(text);
     assertEquals(expResult, result);
   }
-  */
+
 }

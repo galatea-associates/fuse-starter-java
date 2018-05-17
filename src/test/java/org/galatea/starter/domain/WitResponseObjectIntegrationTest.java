@@ -3,7 +3,8 @@ package org.galatea.starter.domain;
 import feign.Feign;
 import feign.Headers;
 import feign.RequestLine;
-import feign.gson.GsonDecoder;
+import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.EqualsAndHashCode;
@@ -38,7 +39,7 @@ public class WitResponseObjectIntegrationTest {
   }
   //Any reason we should use @before like in other tests?
   TestWitGetter testGetter = Feign.builder()
-      .decoder(new GsonDecoder()).target(TestWitGetter.class, "https://api.wit.ai");
+      .decoder(new JacksonDecoder()).target(TestWitGetter.class, "https://api.wit.ai");
 
   /*
   make sure our custom Entities defined in wit.ai match those specified in EntityStore.java.
