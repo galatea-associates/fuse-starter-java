@@ -14,6 +14,7 @@ import org.galatea.starter.domain.Quote;
 import org.galatea.starter.domain.wit.WitResponse;
 import org.galatea.starter.restclient.QuoteGetter;
 import org.galatea.starter.restclient.WitGetter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -33,7 +34,8 @@ public class HalService {
   @NonNull
   WitGetter witGetter;
 
-
+  @Value("${wit.token}")
+  private String witToken;
   private static final String DERP = "derp!";
 
   /**
@@ -43,6 +45,9 @@ public class HalService {
    * @return the result of executing the command with the given parameters
    */
   public String processText(String text) {
+
+
+
     /* Send raw text to wit.ai */
     WitResponse witResponse = witGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE", text);
 

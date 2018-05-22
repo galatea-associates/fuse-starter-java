@@ -7,26 +7,37 @@ import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import junitparams.JUnitParamsRunner;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.galatea.starter.ASpringTest;
+import org.galatea.starter.RestClientConfig;
 import org.galatea.starter.domain.wit.EntityStore;
 import org.junit.Test;
 import java.lang.reflect.Field;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
+import org.springframework.cloud.netflix.feign.FeignAutoConfiguration;
+import org.springframework.cloud.netflix.feign.ribbon.FeignRibbonClientAutoConfiguration;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertEquals;
 
 
 
 //Should we extend ASpringTest?
-@RequiredArgsConstructor
-@Slf4j
-@ToString
-@EqualsAndHashCode
+@RunWith(JUnitParamsRunner.class)
+@ContextConfiguration(classes = {RestClientConfig.class},initializers = ConfigFileApplicationContextInitializer.class)
+@TestPropertySource(locations = {"classpath:application.yml"})
+@ImportAutoConfiguration({RibbonAutoConfiguration.class, FeignRibbonClientAutoConfiguration.class, FeignAutoConfiguration.class})
 @Category(org.galatea.starter.IntegrationTestCategory.class)
-public class WitResponseObjectIntegrationTest {
+public class WitResponseObjectIntegrationTest extends ASpringTest{
 
   /*
   Here we define an interface similar to that in the class WitGetter.java except here we

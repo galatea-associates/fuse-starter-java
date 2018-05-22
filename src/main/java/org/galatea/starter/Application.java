@@ -1,5 +1,6 @@
 package org.galatea.starter;
 
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Value;
+
 
 
 /**
@@ -30,14 +33,27 @@ public class Application {
    *
    * @param args command line args
    */
+
+
   public static void main(final String[] args) {
 
     log.info("Starting spring application {}", System.getProperty("application.name"));
     SpringApplication.run(Application.class, args);
 
-
     /*
+
     ApplicationContext context = SpringApplication.run(Application.class, args);
+
+    WitGetter witGetter = context.getBean(WitGetter.class);
+    System.out.println("here9999");
+
+    WitResponse witResponse = witGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE", "flip a coin");
+
+    System.out.println(witResponse.getText());
+
+    System.out.println("${wit.token}");
+
+
 
     System.out.println("here");
     QuoteGetter quoteGetter = context.getBean(QuoteGetter.class);
@@ -48,13 +64,13 @@ public class Application {
 
     System.out.println(quote[0].getQuoteText() + ", " + quote[0].getAuthor());
 
-    WitGetter witGetter = context.getBean(WitGetter.class);
-    System.out.println("here9999");
+    List stuff = Arrays.asList(context.getBeanDefinitionNames());
+    System.out.println(Arrays.asList(context.getBeanDefinitionNames()));
+    for (int i = 0; i < stuff.size();i++){
+      System.out.println("\n" + stuff.get(i));
+    }
+    */
 
-    WitResponse witResponse = witGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE", "flip a coin");
-
-    System.out.println(witResponse.getText());
-  */
 
 
   }
