@@ -16,6 +16,7 @@ import org.galatea.starter.restclient.QuoteGetter;
 import org.galatea.starter.restclient.WitGetter;
 import org.galatea.starter.service.HalService.COIN;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 public class HalServiceTest extends ASpringTest {
@@ -25,6 +26,9 @@ public class HalServiceTest extends ASpringTest {
 
   @MockBean
   private WitGetter mockWitGetter;
+
+  @Value("${wit.token}")
+  private String witToken;
 
   private WitResponse CreateTestResponse(String intent){
     Entity ent = new Entity(1, intent);
@@ -49,7 +53,9 @@ public class HalServiceTest extends ASpringTest {
     //Create a mock witResponse object and assign "coin-flip" as the intent with confidence of 1
     WitResponse witRe = CreateTestResponse(text);
 
-    given(this.mockWitGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE",text)).willReturn(witRe);
+    System.out.println("RESPONSE-teXt " + witRe.getEntities().getIntent()[0].getValue());
+
+    given(this.mockWitGetter.getWitResponse("Bearer " + witToken,text)).willReturn(witRe);
     doReturn(COIN.HEADS).when(spyService).coinFlipRand();
 
     String result = spyService.processText(text);
