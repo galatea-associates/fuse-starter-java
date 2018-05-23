@@ -3,7 +3,6 @@ package org.galatea.starter.entrypoint;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
@@ -82,10 +81,7 @@ public class SettlementRestController extends BaseSettlementRestController {
 
     List<TradeAgreement> agreements = tradeAgreementTranslator.translate(messages);
 
-    Set<Long> missionIds = settleAgreementInternal(agreements);
-
-    Set<String> missionPaths = missionIds.stream().map(id -> getMissionPath + id)
-        .collect(Collectors.toSet());
+    Set<String> missionPaths = settleAgreementInternal(agreements, getMissionPath);
 
     return SettlementResponseMessage.builder().spawnedMissions(missionPaths).build();
   }

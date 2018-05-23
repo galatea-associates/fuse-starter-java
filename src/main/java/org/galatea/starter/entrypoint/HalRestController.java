@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
 @RestController
-public class HalRestController {
+public class HalRestController extends BaseRestController {
 
   @NonNull
   HalService halService;
@@ -34,7 +34,9 @@ public class HalRestController {
   // @GetMapping to link http GET request to this method
   // @RequestParam to take a parameter from the url
   @GetMapping(value = "${webservice.halpath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public String halEndpoint(@RequestParam(value = "text") String text) {
+  public String halEndpoint(@RequestParam(value = "text") String text,
+      @RequestParam(value = "requestId", required = false) String requestId) {
+    processRequestId(requestId);
     return halService.processText(text);
   }
 }

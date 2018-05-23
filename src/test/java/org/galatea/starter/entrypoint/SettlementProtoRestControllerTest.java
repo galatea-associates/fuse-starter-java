@@ -91,7 +91,7 @@ public class SettlementProtoRestControllerTest extends ASpringTest {
         .willReturn(Sets.newTreeSet(singletonList(expectedId)));
 
     MvcResult result = this.mvc.perform(
-        post("/settlementEngineProto?requestId=1234").contentType(APPLICATION_X_PROTOBUF)
+        post("/settlementEngine?requestId=1234").contentType(APPLICATION_X_PROTOBUF)
             .accept(APPLICATION_X_PROTOBUF).content(messages.toByteArray()))
         .andExpect(status().isOk()).andReturn();
 
@@ -99,7 +99,7 @@ public class SettlementProtoRestControllerTest extends ASpringTest {
         .parseFrom(result.getResponse().getContentAsByteArray());
     assertTrue(!received.getSpawnedMissionPathsList().isEmpty());
     assertTrue(received.getSpawnedMissionPathsList()
-        .contains("/settlementEngineProto/mission/" + expectedId));
+        .contains("/settlementEngine/mission/" + expectedId));
   }
 
   @Test
@@ -112,7 +112,7 @@ public class SettlementProtoRestControllerTest extends ASpringTest {
     given(this.mockSettlementService.findMission(MISSION_ID_1)).willReturn(Optional.of(mission));
 
     MvcResult result = this.mvc.perform(
-        get("/settlementEngineProto/mission/" + MISSION_ID_1 + "?requesId=1234")
+        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requesId=1234")
             .accept(APPLICATION_X_PROTOBUF)).andExpect(status().isOk()).andReturn();
 
     SettlementMissionProtoMessage message = SettlementMissionProtoMessage

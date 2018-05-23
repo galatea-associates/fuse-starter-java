@@ -3,6 +3,7 @@ package org.galatea.starter.entrypoint;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -14,7 +15,6 @@ import net.sf.aspect4log.Log.Level;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
-import org.galatea.starter.utils.Tracer;
 
 /**
  * Implements a base class for settlement rest controllers to avoid duplicating
@@ -25,26 +25,20 @@ import org.galatea.starter.utils.Tracer;
 @EqualsAndHashCode
 @Slf4j
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
-public abstract class BaseSettlementRestController {
+public abstract class BaseSettlementRestController extends BaseRestController {
 
   @NonNull
   SettlementService settlementService;
 
   /**
-   * Adds the specified requestId to the context for this request (if not null).
-   */
-  protected void processRequestId(String requestId) {
-    if (requestId != null) {
-      log.info("Request received with id: {}", requestId);
-      Tracer.setExternalRequestId(requestId);
-    }
-  }
-
-  /**
    * Invokes the settlement service to spawn missions for the specified trade agreements.
    */
-  protected Set<Long> settleAgreementInternal(List<TradeAgreement> agreements) {
-    return settlementService.spawnMissions(agreements);
+  protected Set<String> settleAgreementInternal(List<TradeAgreement> agreements, String getMissionPath) {
+
+    Set<Long> missionIds = settlementService.spawnMissions(agreements);
+    Set<String> missionPaths = missionIds.stream().map(id -> getMissionPath + id)
+        .collect(Collectors.toSet());
+    return missionPaths;
   }
 
   /**

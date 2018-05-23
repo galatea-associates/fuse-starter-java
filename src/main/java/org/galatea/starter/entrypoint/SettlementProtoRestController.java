@@ -3,7 +3,6 @@ package org.galatea.starter.entrypoint;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
@@ -47,10 +46,10 @@ public class SettlementProtoRestController extends BaseSettlementRestController 
   @NonNull
   private ITranslator<TradeAgreementProtoMessages, List<TradeAgreement>> tradeAgreementTranslator;
 
-  @Value("${mvc.settleMissionProtoPath}")
+  @Value("${mvc.settleMissionPath}")
   private String settleMissionPath;
 
-  @Value("${mvc.getMissionProtoPath}")
+  @Value("${mvc.getMissionPath}")
   private String getMissionPath;
 
   /**
@@ -69,7 +68,7 @@ public class SettlementProtoRestController extends BaseSettlementRestController 
   /**
    * Spawn settlement missions from the supplied trade agreement messages.
    */
-  @PostMapping(value = "${mvc.settleMissionProtoPath}", consumes = APPLICATION_X_PROTOBUF,
+  @PostMapping(value = "${mvc.settleMissionPath}", consumes = APPLICATION_X_PROTOBUF,
       produces = APPLICATION_X_PROTOBUF)
   public SettlementResponseProtoMessage settleAgreement(
       @RequestBody final TradeAgreementProtoMessages messages,
@@ -78,10 +77,7 @@ public class SettlementProtoRestController extends BaseSettlementRestController 
     processRequestId(requestId);
 
     List<TradeAgreement> agreements = tradeAgreementTranslator.translate(messages);
-
-    Set<Long> missionIds = settleAgreementInternal(agreements);
-    Set<String> missionPaths = missionIds.stream().map(id -> getMissionPath + id)
-        .collect(Collectors.toSet());
+    Set<String> missionPaths = settleAgreementInternal(agreements, getMissionPath);
 
     return SettlementResponseProtoMessage.newBuilder().addAllSpawnedMissionPaths(missionPaths)
         .build();
@@ -90,7 +86,7 @@ public class SettlementProtoRestController extends BaseSettlementRestController 
   /**
    * Retrieves existing settlement mission messages.
    */
-  @GetMapping(value = "${mvc.getMissionProtoPath}" + "{id}", produces = APPLICATION_X_PROTOBUF)
+  @GetMapping(value = "${mvc.getMissionPath}" + "{id}", produces = APPLICATION_X_PROTOBUF)
   public SettlementMissionProtoMessage getMission(@PathVariable final Long id,
       @RequestParam(value = "requestId", required = false) String requestId) {
     // if an external request id was provided, grab it

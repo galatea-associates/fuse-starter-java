@@ -8,7 +8,6 @@ import feign.Feign;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
-import feign.jackson.JacksonDecoder;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -21,7 +20,6 @@ import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementResponseMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.ObjectFactory;
@@ -53,12 +51,12 @@ public class SettlementRestControllerIntegrationTest {
     @RequestLine("GET /settlementEngine/mission/{id}")
     SettlementMissionMessage getSettlementMissionJson(@Param("id") Long id);
 
-    @RequestLine("POST /settlementEngineProto")
+    @RequestLine("POST /settlementEngine")
     @Headers({"Content-Type: application/x-protobuf", "Accept: application/x-protobuf"})
     SettlementResponseProtoMessage sendTradeAgreementProto(
         TradeAgreementProtoMessages tradeAgreements);
 
-    @RequestLine("GET /settlementEngineProto/mission/{id}")
+    @RequestLine("GET /settlementEngine/mission/{id}")
     @Headers({"Accept: application/x-protobuf"})
     SettlementMissionProtoMessage getSettlementMissionProto(@Param("id") Long id);
 
