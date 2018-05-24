@@ -42,7 +42,6 @@ public class WitResponseIntegrationTest extends ASpringTest{
   public void testIntentRecognition(){
 
     String test = "flip a coin";
-    System.out.println(witToken);
     WitResponse witRe = testGetter.getWitResponse("Bearer " + witToken,test);
     //Check that the correct intent is extracted from the above String by wit.ai.
     assertEquals("coin-flip",witRe.getEntities().getIntent()[0].getValue());

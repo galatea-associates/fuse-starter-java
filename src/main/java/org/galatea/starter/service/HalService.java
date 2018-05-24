@@ -35,7 +35,8 @@ public class HalService {
   WitGetter witGetter;
 
   @Value("${wit.token}")
-  private String witToken;
+  String witToken;
+
   private static final String DERP = "derp!";
 
   /**
@@ -46,10 +47,8 @@ public class HalService {
    */
   public String processText(String text) {
 
-
-
     /* Send raw text to wit.ai */
-    WitResponse witResponse = witGetter.getWitResponse("Bearer KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE", text);
+    WitResponse witResponse = witGetter.getWitResponse("Bearer " + witToken, text);
 
     switch (witResponse.getEntities().getIntent()[0].getValue()) {
       case "coin-flip":
