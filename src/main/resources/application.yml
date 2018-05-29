@@ -14,10 +14,13 @@ spring:
          ddl-auto: update
       database-platform: org.hibernate.dialect.MySQLDialect
 mvc:
+   settleMissionPath: /settlementEngine
+   getMissionPath: /settlementEngine/mission/
    max-size-trace-payload: 50000
 jms:
    listener-concurrency: 1-5
-   agreement-queue: sandbox.agreement
+   agreement-queue-json: sandbox.agreement
+   agreement-queue-proto: sandbox.agreement.proto
 ---
 # Test properties go here
 spring:

@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.TradeAgreement;
-import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
+import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
 import org.galatea.starter.utils.ObjectSupplier;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.galatea.starter.utils.translation.TranslationException;
@@ -26,7 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TradeAgreementTranslatorTest extends ASpringTest {
 
   @Autowired
-  protected ObjectSupplier<TradeAgreementMessage> messageSupplier;
+  protected ObjectSupplier<TradeAgreementProtoMessage> messageSupplier;
 
   @Autowired
   protected ObjectSupplier<TradeAgreement> agreementSupplier;
@@ -36,7 +36,7 @@ public class TradeAgreementTranslatorTest extends ASpringTest {
 
   @Test
   public void translateGoodMessage() {
-    TradeAgreementMessage message = messageSupplier.get();
+    TradeAgreementProtoMessage message = messageSupplier.get();
     TradeAgreement agreement = agreementSupplier.get();
 
     TradeAgreement result = translator.translate(message.toByteArray());

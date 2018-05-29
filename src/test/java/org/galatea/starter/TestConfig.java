@@ -2,7 +2,8 @@ package org.galatea.starter;
 
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
-import org.galatea.starter.entrypoint.messagecontracts.Messages.TradeAgreementMessage;
+import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
+import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.utils.ObjectSupplier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,7 @@ public class TestConfig {
    */
   @Bean
   public ObjectSupplier<TradeAgreement> tradeAgreementSupplier() {
-    return () -> TradeAgreement.builder().id(0l).instrument("IBM").internalParty("INT-1")
+    return () -> TradeAgreement.builder().id(0L).instrument("IBM").internalParty("INT-1")
         .externalParty("EXT-1").buySell("B").qty(100d).build();
   }
 
@@ -27,8 +28,14 @@ public class TestConfig {
    */
   @Bean
   public ObjectSupplier<TradeAgreementMessage> tradeAgreementMessageSupplier() {
-    return () -> TradeAgreementMessage.newBuilder().setInstrument("IBM").setInternalParty("INT-1")
-        .setExternalParty("EXT-1").setBuySell("B").setQty(100).build();
+    return () -> TradeAgreementMessage.builder().instrument("IBM").internalParty("INT-1")
+        .externalParty("EXT-1").buySell("B").qty(100d).build();
+  }
+
+  @Bean
+  public ObjectSupplier<TradeAgreementProtoMessage> tradeAgreementProtoMessageSupplier() {
+    return () -> TradeAgreementProtoMessage.newBuilder().setInstrument("IBM")
+        .setInternalParty("INT-1").setExternalParty("EXT-1").setBuySell("B").setQty(100).build();
   }
 
   @Bean

@@ -10,15 +10,15 @@ syntax = "proto3";
 package fuse_java_starter;
 
 option java_package = "org.galatea.starter.entrypoint.messagecontracts";
-option java_outer_classname = "Messages";
+option java_outer_classname = "ProtobufMessages";
 
 /* enables us to handle multiple TradeAgreementMessages */
-message TradeAgreementMessages {
-  repeated TradeAgreementMessage message = 1;
+message TradeAgreementProtoMessages {
+  repeated TradeAgreementProtoMessage message = 1;
 }
 
 /* defines the message format for trade agreements */
-message TradeAgreementMessage {
+message TradeAgreementProtoMessage {
   int64 id = 1;
   string instrument = 2;
   string internal_party = 3;
@@ -27,12 +27,12 @@ message TradeAgreementMessage {
   double qty = 6;
 }
 
-message SettlementMissionMessages {
-  repeated SettlementMissionMessage message = 1;
+message SettlementMissionProtoMessages {
+  repeated SettlementMissionProtoMessage message = 1;
 }
 
 /* defines the message format for settlement missions */
-message SettlementMissionMessage {
+message SettlementMissionProtoMessage {
   int64 id = 1;
   string instrument = 2;
   string external_party = 3;
@@ -41,6 +41,6 @@ message SettlementMissionMessage {
   double qty = 6;
 }
 
-message SettlementResponseMessage {
+message SettlementResponseProtoMessage {
   repeated string spawnedMissionPaths = 1;
 }
