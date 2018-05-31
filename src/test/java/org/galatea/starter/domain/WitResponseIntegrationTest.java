@@ -3,32 +3,21 @@ package org.galatea.starter.domain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import feign.Feign;
-import feign.jackson.JacksonDecoder;
-import junitparams.JUnitParamsRunner;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.RestClientConfig;
 import org.galatea.starter.domain.wit.WitResponse;
 import org.galatea.starter.restclient.WitGetter;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.netflix.feign.FeignAutoConfiguration;
-import org.springframework.cloud.netflix.feign.ribbon.FeignRibbonClientAutoConfiguration;
-import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.context.annotation.Import;
 
-@ContextConfiguration(classes = {RestClientConfig.class},initializers = ConfigFileApplicationContextInitializer.class)
-@TestPropertySource(locations = {"classpath:application.yml"})
-@ImportAutoConfiguration({RibbonAutoConfiguration.class, FeignRibbonClientAutoConfiguration.class, FeignAutoConfiguration.class})
+//This allows us to autowire the beans defined in RestClientConfig.java
+@SpringBootTest(classes = {RestClientConfig.class})
+@Import({FeignAutoConfiguration.class})
 @Category(org.galatea.starter.IntegrationTestCategory.class)
 public class WitResponseIntegrationTest extends ASpringTest{
 
@@ -40,7 +29,6 @@ public class WitResponseIntegrationTest extends ASpringTest{
 
   @Test
   public void testIntentRecognition(){
-
     String test = "flip a coin";
     WitResponse witRe = testGetter.getWitResponse("Bearer " + witToken,test);
     //Check that the correct intent is extracted from the above String by wit.ai.

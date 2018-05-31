@@ -59,4 +59,9 @@ wit:
   url: https://api.wit.ai
   token: "KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE"
 
+---
+# Properties for testing the Fuse server
+fuse:
+  url: "http://localhost:8080/"
+
 
