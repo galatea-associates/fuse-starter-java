@@ -23,7 +23,6 @@ import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.cloud.netflix.feign.support.SpringDecoder;
 import org.springframework.cloud.netflix.feign.support.SpringEncoder;
@@ -39,8 +38,8 @@ import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 public class SettlementRestControllerIntegrationTest {
 
 
-  @Value("${fuse-host.url}")
-  private String FuseHostName;
+  //@Value("${fuse-host.url}")
+  private String FuseHostName = "http://localhost:8080";
 
   interface FuseServer {
 

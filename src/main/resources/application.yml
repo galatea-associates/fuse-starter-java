@@ -46,3 +46,22 @@ spring:
 # Mappings for Rest Controllers
 webservice:
   halpath: /hal
+
+---
+#Properties for Quote Getter
+quote-getter:
+  url: https://andruxnet-random-famous-quotes.p.mashape.com/
+  token: "o3chJTJnj2mshT5rvZpAZ0BUaiUVp1Ho4XKjsn2JYPspbxkcBk"
+
+---
+# Properties for Wit.ai
+wit:
+  url: https://api.wit.ai
+  token: "KGPXCMYTIUAJAWE7R4IVBBL7OTE7L7UE"
+
+---
+# Properties for testing the Fuse server
+fuse:
+  url: "http://localhost:8080/"
+
+
