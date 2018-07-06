@@ -29,13 +29,15 @@ public class WitResponseObjectIntegrationTest extends ASpringTest{
   /*
   Here we define an interface similar to that in the class WitGetter.java except here we
   are getting a list of all entities our app uses.
+
+  TODO: Can we use a Spring Boot FeignClient similar to QuoteGetter.java or WitGetter.java here
+  instead of the standard Feign interface / builder?
    */
   public interface TestWitGetter{
     @Headers("Authorization: Bearer MMGURXBKQ3YVKYMGDUJQ2K3CKBNMNEVS")
     @RequestLine("GET /entities?")
     String[] getWitResponse();
   }
-  //Any reason we should use @before like in other tests?
   TestWitGetter testGetter = Feign.builder()
       .decoder(new JacksonDecoder()).target(TestWitGetter.class, "https://api.wit.ai");
 
@@ -45,7 +47,7 @@ public class WitResponseObjectIntegrationTest extends ASpringTest{
   and Fuse wont extract them from wit.ai
    */
   @Test
-  public void allCustomFieldsMatch() throws Exception {
+  public void allCustomFieldsMatch() {
     boolean failed = false;
     /*
     get an array of the fields declared in our EntityStore object.
