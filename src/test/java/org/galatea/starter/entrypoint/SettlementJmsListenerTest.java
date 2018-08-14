@@ -4,29 +4,26 @@ package org.galatea.starter.entrypoint;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import javax.jms.TextMessage;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
 import org.galatea.starter.service.SettlementService;
-import org.junit.Before;
+import org.galatea.starter.utils.ObjectSupplier;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jms.core.JmsTemplate;
-
-import java.util.Arrays;
-import java.util.List;
-
-import javax.jms.TextMessage;
+import org.springframework.test.annotation.DirtiesContext;
 
 
 @RequiredArgsConstructor
@@ -39,43 +36,63 @@ public class SettlementJmsListenerTest extends ASpringTest {
   @Autowired
   protected JmsTemplate jmsTemplate;
 
-  private JacksonTester<TradeAgreement> json;
+  @Autowired
+  protected ObjectSupplier<TradeAgreementProtoMessage> messageSupplier;
+
+  @Autowired
+  protected ObjectSupplier<TradeAgreement> agreementSupplier;
 
   @MockBean
   private SettlementService mockSettlementService;
 
-  @Value("${jms.agreement-queue}")
-  protected String queueName;
+  @Value("${jms.agreement-queue-json}")
+  protected String jsonQueueName;
 
-  @Before
-  public void setup() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    JacksonTester.initFields(this, objectMapper);
-  }
+  @Value("${jms.agreement-queue-proto}")
+  protected String protoQueueName;
 
+  /*
+  The ActiveMQ broker doesn't get shutdown after each test so we have the cleanup method in the base
+  class to kill it manually. The side effect of that method is that it kills the listener containers
+  so the next test that runs in the same class will not have any active listeners in the queue.
+
+  By annotating tests with @DirtiesContext we force the spring context used by one test to be discarded
+  and a new context to be supplied for the following test.
+   */
 
   @Test
-  public void testSettleOneAgreement() throws Exception {
-    // Read the json file but get rid of the array bookends since the jms entry point doesn't
-    // support that
-    String agreementJson =
-        readData("Test_IBM_Agreement.json").replace("\n", "").replace("[", "").replace("]", "");
+  @DirtiesContext
+  public void testSettleOneAgreementJson() throws IOException {
+    String message = readData("Test_IBM_Agreement.json").replace("\n", "")
+        .replace("[", "").replace("]", "");
 
-    log.info("Agreement json to put on queue {}", agreementJson);
+    TradeAgreement agreement = TradeAgreement.builder().instrument("IBM").internalParty("INT-1")
+        .externalParty("EXT-1").buySell("B").qty(100d).build();
+    List<TradeAgreement> expectedAgreements = Collections.singletonList(agreement);
 
-    List<TradeAgreement> agreements = Arrays.asList(json.parse(agreementJson).getObject());
-    log.info("Agreement objects that the service will expect {}", agreements);
+    log.info("Agreement JSON to put int he queue: {}", message);
+    log.info("Agreement objects the service will expect {}", expectedAgreements);
 
-    jmsTemplate.send(queueName, s -> {
-      TextMessage msg = s.createTextMessage(agreementJson);
+    jmsTemplate.send(jsonQueueName, s -> {
+      TextMessage msg = s.createTextMessage(message);
       return msg;
     });
 
-    // We use verify since the jms listener doesn't actually do anything with the returns from the
-    // service
-    verify(mockSettlementService, timeout(10000)).spawnMissions(agreements);
-
+    verify(mockSettlementService, timeout(10000)).spawnMissions(expectedAgreements);
   }
 
+  @Test
+  @DirtiesContext
+  public void testSettleOneAgreementProto() {
+    TradeAgreementProtoMessage message = messageSupplier.get();
+    TradeAgreement agreement = agreementSupplier.get();
 
+    log.info("Agreement message to put on queue {}", message);
+    List<TradeAgreement> agreements = Collections.singletonList(agreement);
+    log.info("Agreement objects that the service will expect {}", agreements);
+
+    jmsTemplate.convertAndSend(protoQueueName, message.toByteArray());
+
+    verify(mockSettlementService, timeout(10000)).spawnMissions(agreements);
+  }
 }
