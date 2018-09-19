@@ -61,7 +61,7 @@ pipeline {
                     manifestChoice: [
                         value: "jenkinsConfig",
                         appName: "fuse-rest-dev-${env.GIT_COMMIT}",
-                        memory: 768,
+                        memory: "768",
                         instances: "1",
                         appPath: "target/fuse-starter-java-0.0.1-SNAPSHOT.jar",
                         envVars: [
