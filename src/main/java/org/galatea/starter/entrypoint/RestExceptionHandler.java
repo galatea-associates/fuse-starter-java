@@ -24,7 +24,7 @@ public class RestExceptionHandler {
 
   @ExceptionHandler(EntityNotFoundException.class)
   protected ResponseEntity<Object> handleEntityNotFound(final EntityNotFoundException exception) {
-    ApiError error = new ApiError(HttpStatus.NOT_FOUND, exception.getMessage());
+    ApiError error = new ApiError(HttpStatus.NOT_FOUND, exception.toString());
     return buildResponseEntity(error);
   }
 
@@ -59,7 +59,7 @@ public class RestExceptionHandler {
   protected ResponseEntity<Object> handleJsonProcessingException(
       final JsonProcessingException exception) {
     log.debug("Error converting to JSON", exception);
-    ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+    ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, exception.toString());
     return buildResponseEntity(error);
   }
 
