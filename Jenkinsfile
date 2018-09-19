@@ -69,7 +69,7 @@ pipeline {
                           [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml"]
                         ]
                     ],
-                    pluginTimeout: 240 // default value is 120
+                    pluginTimeout: "240" // default value is 120
                 )
             }
             post {
