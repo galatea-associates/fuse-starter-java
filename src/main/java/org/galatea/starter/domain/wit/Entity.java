@@ -3,7 +3,6 @@ package org.galatea.starter.domain.wit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.NonNull;
 
 @Data
 @EqualsAndHashCode
