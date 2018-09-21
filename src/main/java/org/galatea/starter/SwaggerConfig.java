@@ -24,6 +24,8 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
         .paths(PathSelectors.any()).build();
   }
 
+  // the documentation says this shouldn't be necessary, but swagger-ui.html wasn't available
+  // without it...
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("swagger-ui.html")
