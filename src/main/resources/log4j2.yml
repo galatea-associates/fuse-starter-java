@@ -20,8 +20,9 @@ Configuration:
         # ending the zip-suffix with .gz will cause rolled logs to get gzipped
       - name: zip-suffix
         value: "%d{yyyyMMdd.HH}.%i.log.gz"
+        # Log throwables (exceptions) on one line, split by the pipe delimiter
       - name: log-pattern
-        value: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level %logger{1.} - %X{internal-request-id}%X{external-request-id}%msg%n"
+        value: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level %logger{1.} - %X{internal-request-id}%X{external-request-id}%msg%n%xThrowable{separator(|)}"
 
 # Create some appenders
   Appenders:
@@ -34,7 +35,7 @@ Configuration:
         # Define where to put logs when rolling
         filePattern: ${log-archive-dir}/${log-file-prefix}.${zip-suffix}
         # Define what the log output will look like 
-        PatternLayout: 
+        PatternLayout:
           Pattern: ${log-pattern}
         Policies:
           # Logs should be rolled based on time. Rolled logs should be gz (defined by zip-suffix)
@@ -71,7 +72,7 @@ Configuration:
       - name: ErrorRollingFileAppender
         filename: ${log-dir}/${log-file-prefix}.errors.log
         filePattern: ${log-archive-dir}/${log-file-prefix}.errors.${zip-suffix}
-        PatternLayout: 
+        PatternLayout:
           Pattern: ${log-pattern}
         Policies:
           TimeBasedTriggeringPolicy:
@@ -120,7 +121,7 @@ Configuration:
   Loggers:
     # Define some defaults
     Root:
-      level: info 
+      level: info
       AppenderRef:
         - ref: AsyncAppender
         

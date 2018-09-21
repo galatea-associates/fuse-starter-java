@@ -13,20 +13,20 @@ import org.springframework.jms.annotation.JmsListenerConfigurer;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerEndpointRegistrar;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.converter.MessageConverter;
-import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
-import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 
 import java.util.function.BiConsumer;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.Message;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.converter.MessageConverter;
+import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
+import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 
 @Slf4j
 @Configuration
 @EnableJms
-public class JmsConfig implements JmsListenerConfigurer {
+public class JmsConfig implements JmsListenerConfigurer{
 
   /**
    * @return an implementation of failed message consumer that simply logs the message.
@@ -37,6 +37,9 @@ public class JmsConfig implements JmsListenerConfigurer {
         "Message {} failed to process after retries.  Removing message from queue", msg, err);
   }
 
+  /**
+   * Returns a message converter to handle JSON formatted messages.
+   */
   @Bean
   public MessageConverter jacksonJmsMessageConverter() {
     return new MappingJackson2MessageConverter();
@@ -44,7 +47,8 @@ public class JmsConfig implements JmsListenerConfigurer {
 
   /**
    * We provide our own listener container factory since we want to use our own implementation of a
-   * listener container which adds tracing of how the message is handled.
+   * listener container which adds tracing of how the message is handled. We also manually set the
+   * message converter to ensure that it is using the correct message format.
    *
    * @param queueConnectionFactory injected by spring
    * @param configurer injected by spring
@@ -69,12 +73,18 @@ public class JmsConfig implements JmsListenerConfigurer {
     configurer.configure(listenerFactory, queueConnectionFactory);
 
     // TODO: override any defaults in the listener factory before we return the object
-
     return listenerFactory;
   }
 
-
   /**
+   * For JSON messages we want to use the spring messaging converter instead of the spring jms
+   * converter. The spring jms converter expects the type of object to deserialize the json to
+   * being specified in the message itself, while the spring messaging converter will do what
+   * you expect and convert to the type of the input parameter in the listener.
+   *
+   * In order to use a spring messaging converter we have to implement JmsListenerConfigurer and
+   * set the custom MessageHandlerMethodFactory.
+   *
    * @return a new handler factory that uses a different message converter than the default one.
    */
   @Bean
@@ -87,6 +97,11 @@ public class JmsConfig implements JmsListenerConfigurer {
     return factory;
   }
 
+  /**
+   * This sets the custom MessageHandlerMethodFactory for the listener registrar for the
+   * connection factory that we've set up for JSON.
+   * @param registrar
+   */
   @Override
   public void configureJmsListeners(final JmsListenerEndpointRegistrar registrar) {
     registrar.setMessageHandlerMethodFactory(jmsHandlerMethodFactory());
