@@ -6,14 +6,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.galatea.starter.RestClientConfig;
 
 /**
  * A FeignClient that makes GET requests to Wit.ai for natural language processing
  * Defines a bean that can be used to call getWitResponse which takes a Bearer token and a
  * plain english expression. This expression is sent to Wit.ai which tries to extract and return meaning
  */
-@FeignClient(name="WitGetter", url = "${wit.url}", configuration = RestClientConfig.class)
+@FeignClient(name="WitGetter", url = "${wit.url}")
 public interface WitGetter {
   @RequestMapping(method = RequestMethod.GET, value = "/message?v=20180509&q={text}", consumes = "application/json")
 
