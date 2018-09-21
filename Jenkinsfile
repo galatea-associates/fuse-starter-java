@@ -66,7 +66,7 @@ pipeline {
                         appPath: "target/fuse-starter-java-0.0.1-SNAPSHOT.jar",
                         envVars: [
                           [key: "SPRING_PROFILES_ACTIVE", value: "dev"],
-                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml -javaagent:/BOOT_INF/lib/org.jacoco.agent.0.8.0-runtime.jar="]
+                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml"]
                         ]
                     ],
                     pluginTimeout: "240" // default value is 120
@@ -212,15 +212,15 @@ def populateGlobalVariables() {
 def appStarted = false;
 def doShutdown() {
   if (isDeployBranch() && appStarted) {
-//    timeout(time: 2, unit: 'MINUTES') {
-//      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
-//          // make sure the password does not contain single quotes otherwise the escaping fails
-//          sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
-//          sh "cf stop fuse-rest-dev-${env.GIT_COMMIT}"
-//          sh "cf delete fuse-rest-dev-${env.GIT_COMMIT} -r -f"
-//          sh 'cf logout'
-//      }
-//    }
+    timeout(time: 2, unit: 'MINUTES') {
+      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'cf-credentials', usernameVariable: 'CF_USERNAME', passwordVariable: 'CF_PASSWORD']]) {
+          // make sure the password does not contain single quotes otherwise the escaping fails
+          sh "cf login -u ${CF_USERNAME} -p '${CF_PASSWORD}' -o FUSE -s development -a https://api.run.pivotal.io"
+          sh "cf stop fuse-rest-dev-${env.GIT_COMMIT}"
+          sh "cf delete fuse-rest-dev-${env.GIT_COMMIT} -r -f"
+          sh 'cf logout'
+      }
+    }
 
     appStarted = false;
   }
