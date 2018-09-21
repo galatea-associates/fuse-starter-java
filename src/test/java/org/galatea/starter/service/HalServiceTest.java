@@ -38,7 +38,11 @@ public class HalServiceTest extends ASpringTest {
   private String witToken;
 
   private WitResponse CreateTestResponse(String intent){
-    Entity ent = new Entity(1, intent);
+    Entity ent = Entity.builder()
+                        .confidence(1.0)
+                        .value(intent)
+                        .build();
+                        
     Entity[] eArr = new Entity[1];
     eArr[0] = ent;
     EntityStore eStore = new EntityStore();
