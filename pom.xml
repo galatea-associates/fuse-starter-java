@@ -20,6 +20,7 @@
 			-Dapplication.log-dir=target/logs
 			-Dapplication.log-archive-root-dir=target/logs/archive
 			-Dlog4j.configurationFile=log4j2.yml,log4j2-debug.yml
+			-Dserver.port=8080
 		</argLine>
 		<sonar.exclusions>**/ProtobufMessages.java</sonar.exclusions>
 		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java</sonar.coverage.exclusions>
