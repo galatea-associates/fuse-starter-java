@@ -12,6 +12,7 @@ import lombok.ToString;
 public class WitResponse {
   @JsonProperty("_text")
   private String text;
+  @JsonProperty("entities")
   private EntityStore entities;
   @JsonProperty("msg_id")
   private String msgId;
