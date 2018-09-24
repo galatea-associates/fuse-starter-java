@@ -1,16 +1,12 @@
 package org.galatea.starter.service;
 
 import java.util.Random;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
-@ToString
-@EqualsAndHashCode
 @Slf4j
 @Log
 @Service
