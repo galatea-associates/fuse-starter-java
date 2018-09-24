@@ -1,6 +1,5 @@
 package org.galatea.starter;
 
-import com.google.common.base.Preconditions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -24,8 +23,6 @@ public class Application {
    */
   public static void main(final String[] args) {
     log.info("Starting spring application {}", System.getProperty("application.name"));
-    log.info("Preconditions loaded from: {}",
-        Preconditions.class.getProtectionDomain().getCodeSource().getLocation());
     SpringApplication.run(Application.class, args);
 
   }
