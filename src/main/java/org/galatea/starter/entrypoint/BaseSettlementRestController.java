@@ -5,10 +5,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
@@ -21,8 +19,6 @@ import org.galatea.starter.service.SettlementService;
  * the logic of calling the settlement service.
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
-@EqualsAndHashCode
 @Slf4j
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
 public abstract class BaseSettlementRestController extends BaseRestController {

@@ -6,9 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import junitparams.JUnitParamsRunner;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.service.HalService;
@@ -23,8 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @RequiredArgsConstructor
 @Slf4j
-@ToString
-@EqualsAndHashCode
 // We don't load the entire spring application context for this test.
 @WebMvcTest(HalRestController.class)
 // Use this runner since we want to parameterize certain tests.
