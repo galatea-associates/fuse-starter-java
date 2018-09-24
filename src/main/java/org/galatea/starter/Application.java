@@ -17,8 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application {
 
   /**
-   * Start up the spring context. java -Dcapsule.log=verbose -Dcapsule.mode=uat -jar
-   * target/fuse-starter-java-0.0.1-SNAPSHOT-capsule.jar
+   * Start up the spring context.
    *
    * @param args command line args
    */

@@ -1,9 +1,7 @@
 package org.galatea.starter.entrypoint;
 
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
  * processed
  */
 @RequiredArgsConstructor
-@ToString
-@EqualsAndHashCode
 @Slf4j
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
 @RestController
