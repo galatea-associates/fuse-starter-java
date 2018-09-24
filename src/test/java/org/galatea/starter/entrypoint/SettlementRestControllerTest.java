@@ -25,9 +25,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import junitparams.FileParameters;
 import junitparams.JUnitParamsRunner;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.MessageTranslationConfig;
@@ -55,8 +53,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @RequiredArgsConstructor
 @Slf4j
-@ToString
-@EqualsAndHashCode(callSuper = true)
 // We don't load the entire spring application context for this test.
 @WebMvcTest(SettlementRestController.class)
 // Import Beans from Configuration, enabling them to be Autowired
