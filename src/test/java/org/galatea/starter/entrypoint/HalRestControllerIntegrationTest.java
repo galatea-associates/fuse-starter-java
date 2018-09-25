@@ -8,9 +8,7 @@ import feign.Param;
 import feign.RequestLine;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.junit.Test;
@@ -20,8 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @RequiredArgsConstructor
 @Slf4j
-@ToString
-@EqualsAndHashCode
 @Category(org.galatea.starter.IntegrationTestCategory.class)
 @SpringBootTest
 public class HalRestControllerIntegrationTest extends ASpringTest {
