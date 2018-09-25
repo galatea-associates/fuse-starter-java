@@ -12,6 +12,7 @@ This readme will contain an index to features and their location in code.
 - Run stuff:
   - src/main/java/org/galatea/starter/Application.java -> r-click -> run as Java Application.  This will start a jms listener and REST services.  Note, there is an eclipse .launch file provided which configures some VM and Program args.  
     - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
+    - Note, the server port on which the application runs is set via program argument in the run configuration, --server.port=8080.  If you need to change which port to run on, change the argument in the run configuration.
   - src/test/java/org/galatea/starter/UnitTestRunner.java -> r-click -> run as Junit test to run just the unit tests.
   - src/test/java/org/galatea/starter/AllTestRunner.java -> r-click -> run as Junit test to run the unit and integration tests.
 
@@ -27,6 +28,7 @@ This readme will contain an index to features and their location in code.
 - Run stuff:
   - src/main/java/org/galatea/starter/Application.java -> r-click -> Run Application.main().  This will start a jms listener and REST services.  Note, there is a supplied Run Configurations for this class in .idea/runConfigurations which sets up some VM and Program args for this class.  If IntelliJ didn't automatically find them you may have to manually set them.
     - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
+    - Note, the server port on which the application runs is set via program argument in the run configuration, --server.port=8080.  If you need to change which port to run on, change the argument in the run configuration.
   - src/test/java/org/galatea/starter/UnitTestRunner.java -> r-click -> run UnitTestRunner to run just the unit tests.
   - src/test/java/org/galatea/starter/AllTestRunner.java -> r-click -> run AllTestRunner to run the unit and integration tests.
 

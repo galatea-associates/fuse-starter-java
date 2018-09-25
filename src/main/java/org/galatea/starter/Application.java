@@ -2,6 +2,10 @@ package org.galatea.starter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.galatea.starter.utils.exception.MissingOptionException;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -13,7 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @RequiredArgsConstructor
 @Slf4j
 @SpringBootApplication
-public class Application {
+public class Application implements ApplicationRunner{
 
   /**
    * Start up the spring context.
@@ -24,5 +28,17 @@ public class Application {
     log.info("Starting spring application {}", System.getProperty("application.name"));
     SpringApplication.run(Application.class, args);
 
+  }
+
+  /**
+   * Ensure that server port is passed in as a command line argument.
+   * @param args command line arguments
+   * @throws MissingOptionException if server port not provided as argument
+   */
+  @Override
+  public void run(ApplicationArguments args) {
+    if (!args.containsOption("server.port") && System.getProperty("server.port") == null) {
+      throw new MissingOptionException("Server port must be set via command line parameter");
+    }
   }
 }
