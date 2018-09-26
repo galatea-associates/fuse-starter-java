@@ -7,4 +7,5 @@ applications:
   env:
     SPRING_PROFILES_ACTIVE: local
     JAVA_OPTS: '-Dapplication.name=basu-fuse-app'
+    JBP_CONFIG_JAVA_MAIN: '{arguments: "--server.port=\$PORT" }'
 

@@ -8,9 +8,7 @@ import feign.Feign;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementResponseProtoMessage;
@@ -33,8 +31,6 @@ import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 
 @RequiredArgsConstructor
 @Slf4j
-@ToString
-@EqualsAndHashCode
 @Category(org.galatea.starter.IntegrationTestCategory.class)
 public class SettlementRestControllerIntegrationTest {
 

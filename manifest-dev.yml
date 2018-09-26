@@ -7,3 +7,4 @@ applications:
   env:
     SPRING_PROFILES_ACTIVE: dev
     JAVA_OPTS: '-Dapplication.name=my-fuse-app -Dlog4j.configurationFile=log4j2-stdout.yml'
+    JBP_CONFIG_JAVA_MAIN: '{arguments: "--server.port=\$PORT" }'

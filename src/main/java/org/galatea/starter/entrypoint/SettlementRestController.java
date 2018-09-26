@@ -3,9 +3,7 @@ package org.galatea.starter.entrypoint;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
@@ -31,8 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
  * REST Controller that generates and listens to http endpoints which allow the caller to create
  * Missions from TradeAgreements and query them back out.
  */
-@ToString
-@EqualsAndHashCode
 @Slf4j
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
 @Validated

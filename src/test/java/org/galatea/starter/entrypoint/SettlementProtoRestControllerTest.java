@@ -11,9 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.google.common.collect.Sets;
 import java.util.Optional;
 import junitparams.JUnitParamsRunner;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.ProtoMessageTranslationConfig;
@@ -42,8 +40,6 @@ import org.springframework.test.web.servlet.MvcResult;
  */
 @RequiredArgsConstructor
 @Slf4j
-@ToString
-@EqualsAndHashCode(callSuper = true)
 // We don't load the entire spring application context for this test.
 @WebMvcTest(SettlementProtoRestController.class)
 // Import Beans from Configuration, enabling them to be Autowired
