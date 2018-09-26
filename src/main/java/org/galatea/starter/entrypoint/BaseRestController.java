@@ -18,12 +18,12 @@ public abstract class BaseRestController {
    */
   protected String encode(String message){
 
-    message = message.replace( '\n', ENCODER_SEPERATOR ).replace( '\r', ENCODER_SEPERATOR )
+    String encodedMessage = message.replace( '\n', ENCODER_SEPERATOR ).replace( '\r', ENCODER_SEPERATOR )
       .replace( '\t', ENCODER_SEPERATOR );
     
-    message = ESAPI.encoder().encodeForHTML( message );
+    encodedMessage = ESAPI.encoder().encodeForHTML( encodedMessage );
 
-    return message;
+    return encodedMessage;
   }
 
 
