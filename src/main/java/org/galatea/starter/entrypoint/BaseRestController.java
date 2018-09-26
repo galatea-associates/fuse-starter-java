@@ -21,9 +21,7 @@ public abstract class BaseRestController {
     String encodedMessage = message.replace( '\n', ENCODER_SEPARATOR ).replace( '\r', ENCODER_SEPARATOR )
       .replace( '\t', ENCODER_SEPARATOR );
     
-    encodedMessage = ESAPI.encoder().encodeForHTML( encodedMessage );
-
-    return encodedMessage;
+    return ESAPI.encoder().encodeForHTML( encodedMessage );
   }
 
 
