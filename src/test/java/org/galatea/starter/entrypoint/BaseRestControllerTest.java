@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(JUnitParamsRunner.class)
 public class BaseRestControllerTest extends BaseRestController {
 
-    static final String TARGET_ENCODED_MESSAGE = "Log Passed_Log created";
+  private static final String TARGET_ENCODED_MESSAGE = "Log Passed_Log created";
 
   @Test
   public void testMessageEncodingNewLine(){

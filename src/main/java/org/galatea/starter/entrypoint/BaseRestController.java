@@ -11,7 +11,7 @@ import org.owasp.esapi.ESAPI;
 @Slf4j
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
 public abstract class BaseRestController {
-  static final char ENCODER_SEPARATOR = '_';
+  protected static final char ENCODER_SEPARATOR = '_';
 
   /** 
    * Encodes specified message, to avoid any log forging.
