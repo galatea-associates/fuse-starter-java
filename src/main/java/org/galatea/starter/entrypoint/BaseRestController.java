@@ -11,15 +11,15 @@ import org.owasp.esapi.ESAPI;
 @Slf4j
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
 public abstract class BaseRestController {
-  static final char ENCODER_SEPERATOR = '_';
+  static final char ENCODER_SEPARATOR = '_';
 
   /** 
    * Encodes specified message, to avoid any log forging.
    */
   protected String encode(String message){
 
-    String encodedMessage = message.replace( '\n', ENCODER_SEPERATOR ).replace( '\r', ENCODER_SEPERATOR )
-      .replace( '\t', ENCODER_SEPERATOR );
+    String encodedMessage = message.replace( '\n', ENCODER_SEPARATOR ).replace( '\r', ENCODER_SEPARATOR )
+      .replace( '\t', ENCODER_SEPARATOR );
     
     encodedMessage = ESAPI.encoder().encodeForHTML( encodedMessage );
 
