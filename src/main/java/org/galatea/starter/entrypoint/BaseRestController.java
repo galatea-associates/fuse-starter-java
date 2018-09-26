@@ -32,8 +32,9 @@ public abstract class BaseRestController {
    */
   protected void processRequestId(String requestId) {
     if (requestId != null) {
-      log.info("Request received with id: {}", encode(requestId));
-      Tracer.setExternalRequestId(encode(requestId));
+      String encodedRequestId = encode(requestId);
+      log.info("Request received with id: {}", encodedRequestId);
+      Tracer.setExternalRequestId(encodedRequestId);
     }
   }
 }
