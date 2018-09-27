@@ -1,5 +1,6 @@
 package org.galatea.starter.entrypoint;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
@@ -16,6 +17,7 @@ public abstract class BaseRestController {
   /** 
    * Encodes specified message, to avoid any log forging.
    */
+  @NonNull
   protected String encode(String message){
 
     String encodedMessage = message.replace( '\n', ENCODER_SEPARATOR ).replace( '\r', ENCODER_SEPARATOR )
