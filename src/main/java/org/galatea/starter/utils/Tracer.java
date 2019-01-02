@@ -227,6 +227,9 @@ public class Tracer {
       String internallyGeneratedId =
           Integer.toString(QUERY_ID_GENERATOR.nextInt(Integer.MAX_VALUE));
 
+      // set the thread name to the internal request id
+      Thread.currentThread().setName(INTERNAL_REQUEST_ID + "-" + internallyGeneratedId);
+
       // Add request id to Trace
       addTraceInfo(Tracer.class, INTERNAL_REQUEST_ID, internallyGeneratedId);
       log.debug("Created internal request id: {}", internallyGeneratedId);
