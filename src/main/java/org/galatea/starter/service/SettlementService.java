@@ -9,6 +9,8 @@ import net.sf.aspect4log.Log;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.domain.rpsy.ISettlementMissionRpsy;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -25,6 +27,8 @@ import javax.validation.Valid;
 @Log
 @Validated
 @Service
+// Exposing this as an MBean as an example of how to interact with JMX over HTTP with Jolokia
+@ManagedResource
 public class SettlementService {
 
   @NonNull
@@ -39,6 +43,7 @@ public class SettlementService {
    * @param agreements the agreements used to generate missions
    * @return the ids of the missions that were created
    */
+  @ManagedOperation
   public Set<Long> spawnMissions(@Valid final List<TradeAgreement> agreements) {
 
     // Map each agreement to a mission, collect to a list, and then same in bulk
@@ -54,7 +59,7 @@ public class SettlementService {
 
     return idSet;
   }
-
+  @ManagedOperation
   public Optional<SettlementMission> findMission(final Long id) {
     return Optional.ofNullable(missionrpsy.findOne(id));
   }

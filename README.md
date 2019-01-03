@@ -90,6 +90,19 @@ FUSE currently shows how to read from a queue (not a topic).
 `org.galatea.starter.JmsConfig` - is the spring java config related to jms
 `org.galatea.starter.entrypoint.SettlementJmsListenerTest` - shows you how to test a jms listener.  SpringBoot fires up an embedded ActiveMQ broker for the test.  It's important to look at the mentiod annotated with @After in ASpringTest.  You'll see that we tear down the jms connection after each test to ensure isolation between tests.  This is important.
 
+## JMX
+FUSE utilizes Jolokia (jolokia.org) to interact with JMX over HTTP.
+
+`org.galatea.starter.service.SettlementService` - shows how to expose a class as an MBean and methods as Managed Operations.
+`application.yml` - shows Jolokia properties
+
+- Jolokia Examples:
+- List all MBeans including their operations: http://localhost:8080/jolokia/list
+- Force GC: http://localhost:8080/jolokia/exec/java.lang:type=Memory/gc
+- Calling a methods on a @ManagedResource: http://localhost:8080/jolokia/exec/org.galatea.starter.service:name=settlementService,type=SettlementService/findMission/123
+- Read log4j2 Logger Level: http://localhost:8080/jolokia/read/org.apache.logging.log4j2:component=Loggers,name=,type=18b4aac2/Level
+- Change log4j2 Logger Level: http://localhost:8080/jolokia/write/org.apache.logging.log4j2:component=Loggers,name=,type=18b4aac2/Level/DEBUG
+
 ## Logging
 - For the main configuration see: src/main/resources/log4j2.yml 
 - For configuring logging to the console and selectively enabling debug logging for local testing see: src/test/resources/log4j2-debug.yml 

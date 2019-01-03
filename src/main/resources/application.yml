@@ -26,8 +26,6 @@ jms:
 management.endpoint.jolokia.enabled: true
 management.endpoint.jolokia.config.debug: true
 
-# Jolokia examples
-# http://localhost:8080/jolokia/read/java.lang:type=*
 
 # By default Jolokia is treated as a "sensitive" resource, and therefore /jolokia/** requires
 # authentication. We want to disable this.
@@ -40,6 +38,7 @@ spring:
    datasource:
       username: sa
       password:
+
 ---
 # Dev properties go here
 spring:
@@ -49,6 +48,7 @@ spring:
       password:
 # set debug to get spring to log the classpath (and other things) on startup     
 debug: true
+
 ---
 # UAT properties go here
 spring:
@@ -56,6 +56,7 @@ spring:
    datasource:
       username: sa
       password:
+
 ---
 # Mappings for Rest Controllers
 webservice:
