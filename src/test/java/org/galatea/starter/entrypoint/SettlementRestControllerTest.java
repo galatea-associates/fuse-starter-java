@@ -7,7 +7,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -46,6 +49,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -228,6 +232,26 @@ public class SettlementRestControllerTest extends ASpringTest {
         .andExpect(jsonPath("$.status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())))
         .andExpect(jsonPath("$.message", is("An internal application error occurred.")));
   }
+
+  @Test
+  public void testDeleteMission() throws Exception {
+    doNothing().when(mockSettlementService).deleteMission(MISSION_ID_1);
+
+    this.mvc.perform(delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testDeleteFakeMission() throws Exception {
+    doThrow(EmptyResultDataAccessException.class).when(mockSettlementService)
+        .deleteMission(MISSION_ID_1);
+
+    this.mvc.perform(delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isNotFound());
+  }
+
 
   /**
    * Verifies required audit fields are present
