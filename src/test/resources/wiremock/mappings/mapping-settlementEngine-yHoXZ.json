@@ -1,0 +1,25 @@
+{
+  "id" : "e81eabdd-adfb-3927-846e-7cd3c48eb71d",
+  "request" : {
+    "url" : "/settlementEngine",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalTo" : "\n\"\b�\u001F\u0012\u0003IBM\u001A\u0005icp-1\"\u0005ecp-1*\u0001B1\u0000\u0000\u0000\u0000\u0000��@\n#\b��\u0002\u0012\u0003IBM\u001A\u0005icp-2\"\u0005ecp-2*\u0001B1\u0000\u0000\u0000\u0000\u0000��@"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-settlementEngine-yHoXZ.txt",
+    "headers" : {
+      "Date" : "Thu, 03 Jan 2019 21:27:21 GMT",
+      "X-Application-Context" : "application:dev:8081",
+      "Content-Type" : "application/x-protobuf",
+      "X-Protobuf-Schema" : "ProtobufMessages.proto",
+      "X-Protobuf-Message" : "fuse_java_starter.SettlementResponseProtoMessage",
+      "internalQueryId" : "1607486257",
+      "requestReceivedTime" : "2019-01-03T21:27:21.155Z",
+      "requestElapsedTimeMillis" : "403"
+    }
+  },
+  "uuid" : "e81eabdd-adfb-3927-846e-7cd3c48eb71d"
+}

@@ -1,13 +1,12 @@
 
 package org.galatea.starter.entrypoint;
 
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import feign.Feign;
-import feign.Headers;
-import feign.Param;
-import feign.RequestLine;
+import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
+import feign.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage;
@@ -18,6 +17,8 @@ import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementResponseMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.ObjectFactory;
@@ -38,6 +39,9 @@ public class SettlementRestControllerIntegrationTest {
   @Value("${fuse-host.url}")
   private String FuseHostName;
 
+  private static final Integer WIREMOCK_PORT = 8089;
+  private static final String WIREMORK_URL = "http://localhost:8089/";
+
   interface FuseServer {
 
     @RequestLine("POST /settlementEngine")
@@ -56,13 +60,22 @@ public class SettlementRestControllerIntegrationTest {
     @Headers({"Accept: application/x-protobuf"})
     SettlementMissionProtoMessage getSettlementMissionProto(@Param("id") Long id);
 
+
   }
+
+  @ClassRule
+  public static WireMockClassRule wireMockRule =
+          new WireMockClassRule(options().port(WIREMOCK_PORT).usingFilesUnderClasspath("wiremock"));
+  @Rule
+  public WireMockClassRule instanceRule = wireMockRule;
+
+
 
   @Test
   public void testMissionCreationProto() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      fuseHostName = FuseHostName;
+      fuseHostName = FuseHostName == null ? WIREMORK_URL : FuseHostName;
     }
 
     ObjectFactory<HttpMessageConverters> messageConverters = () -> new HttpMessageConverters(
@@ -110,7 +123,8 @@ public class SettlementRestControllerIntegrationTest {
   public void testMissionCreationJson() {
     String fuseHostName = System.getProperty("fuse.sandbox.url");
     if (fuseHostName == null || fuseHostName.isEmpty()) {
-      fuseHostName = FuseHostName;
+      fuseHostName = FuseHostName == null ? WIREMORK_URL : FuseHostName;
+
     }
 
     ObjectFactory<HttpMessageConverters> messageConverters = () -> new HttpMessageConverters(

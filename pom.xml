@@ -240,6 +240,13 @@
 			<artifactId>junit-toolbox</artifactId>
 			<version>2.2</version>
 		</dependency>
+		<!-- Wiremock used to stubbing out external REST calls -->
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock</artifactId>
+			<version>2.20.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

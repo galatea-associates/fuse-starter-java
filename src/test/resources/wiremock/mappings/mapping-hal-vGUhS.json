@@ -1,0 +1,20 @@
+{
+  "id" : "b9988d16-ba6c-3f5f-841e-2fc160e60375",
+  "request" : {
+    "url" : "/hal?text=coin-flip",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-hal-vGUhS.json",
+    "headers" : {
+      "Date" : "Thu, 03 Jan 2019 22:11:07 GMT",
+      "X-Application-Context" : "application:dev:8080",
+      "Content-Type" : "application/json;charset=utf-8",
+      "internalQueryId" : "272536118",
+      "requestReceivedTime" : "2019-01-03T22:11:07.629Z",
+      "requestElapsedTimeMillis" : "259"
+    }
+  },
+  "uuid" : "b9988d16-ba6c-3f5f-841e-2fc160e60375"
+}

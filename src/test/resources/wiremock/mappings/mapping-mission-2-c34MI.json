@@ -1,0 +1,22 @@
+{
+  "id" : "248fd006-1d76-3c2c-ae28-05ffa20a65b4",
+  "request" : {
+    "url" : "/settlementEngine/mission/2",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-mission-2-c34MI.txt",
+    "headers" : {
+      "Date" : "Thu, 03 Jan 2019 21:41:06 GMT",
+      "X-Application-Context" : "application:dev:8081",
+      "Content-Type" : "application/x-protobuf",
+      "X-Protobuf-Schema" : "ProtobufMessages.proto",
+      "X-Protobuf-Message" : "fuse_java_starter.SettlementMissionProtoMessage",
+      "internalQueryId" : "1918067373",
+      "requestReceivedTime" : "2019-01-03T21:41:06.012Z",
+      "requestElapsedTimeMillis" : "6"
+    }
+  },
+  "uuid" : "248fd006-1d76-3c2c-ae28-05ffa20a65b4"
+}

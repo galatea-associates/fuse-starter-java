@@ -1,0 +1,25 @@
+{
+  "id" : "3442140c-f62f-39ed-ae36-5fe0c97d3fe3",
+  "request" : {
+    "url" : "/settlementEngine",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\r\n  \"agreements\": [\r\n    {\r\n      \"id\": 4000,\r\n      \"instrument\": \"IBM\",\r\n      \"internalParty\": \"icp-1\",\r\n      \"externalParty\": \"ecp-1\",\r\n      \"buySell\": \"B\",\r\n      \"qty\": 4500.0\r\n    },\r\n    {\r\n      \"id\": 40001,\r\n      \"instrument\": \"IBM\",\r\n      \"internalParty\": \"icp-2\",\r\n      \"externalParty\": \"ecp-2\",\r\n      \"buySell\": \"B\",\r\n      \"qty\": 4600.0\r\n    }\r\n  ]\r\n}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-settlementEngine-41xDW.json",
+    "headers" : {
+      "Date" : "Thu, 03 Jan 2019 20:12:03 GMT",
+      "X-Application-Context" : "application:dev:8080",
+      "Content-Type" : "application/json;charset=utf-8",
+      "internalQueryId" : "417778050",
+      "requestReceivedTime" : "2019-01-03T20:12:03.406Z",
+      "requestElapsedTimeMillis" : "56"
+    }
+  },
+  "uuid" : "3442140c-f62f-39ed-ae36-5fe0c97d3fe3"
+}
