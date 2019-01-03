@@ -15,6 +15,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedResource;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE) // For builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring and jackson
@@ -22,6 +25,7 @@ import javax.validation.constraints.DecimalMin;
 @Data
 @Slf4j
 @Entity
+@ManagedResource
 public class TradeAgreement {
 
   @Id
