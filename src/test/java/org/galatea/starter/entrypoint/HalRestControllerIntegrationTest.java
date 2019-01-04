@@ -29,7 +29,7 @@ public class HalRestControllerIntegrationTest {
   private String FuseHostName;
 
   private static final Integer WIREMOCK_PORT = 8089;
-  private static final String WIREMORK_URL = "http://localhost:8089/";
+  private static final String WIREMORK_URL =  String.format("http://localhost:%d/", WIREMOCK_PORT) ;
 
   @ClassRule
   public static WireMockClassRule wireMockRule =
