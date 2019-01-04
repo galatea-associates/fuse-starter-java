@@ -21,6 +21,7 @@ jms:
    listener-concurrency: 1-5
    agreement-queue-json: sandbox.agreement
    agreement-queue-proto: sandbox.agreement.proto
+cache-config: ehcache.xml
 ---
 # Test properties go here
 spring:
