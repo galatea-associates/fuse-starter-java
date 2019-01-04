@@ -4,6 +4,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
 
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.SettlementMission;
@@ -73,5 +75,50 @@ public class SettlementServiceTest extends ASpringTest {
 
     Set<Long> missionIds = service.spawnMissions(Collections.singletonList(testTradeAgreement));
     assertEquals(1, missionIds.size());
+  }
+
+  @Test
+  public void testUpdateMission() {
+
+    SettlementMission testSettlementMission = SettlementMission.builder().id(35L).depot("DTC")
+        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).build();
+
+    TradeAgreement testTradeAgreement = TradeAgreement.builder().id(45L).instrument("instr-1")
+        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).build();
+
+    given(mockAgreementTransformer.transform(any()))
+        .willReturn(testSettlementMission);
+    given(this.mockSettlementMissionRpsy.save(testSettlementMission))
+        .willReturn(testSettlementMission);
+
+    SettlementService service =
+        new SettlementService(this.mockSettlementMissionRpsy, this.mockAgreementTransformer);
+
+    Optional<SettlementMission> settlementMissionOptional = service.updateMission(35L, testTradeAgreement);
+    assertEquals((Long) 35L, settlementMissionOptional.get().getId());
+  }
+
+  @Test
+  public void testMissionExists() {
+
+    given(this.mockSettlementMissionRpsy.exists(35L))
+        .willReturn(true);
+
+    SettlementService service =
+        new SettlementService(this.mockSettlementMissionRpsy, this.mockAgreementTransformer);
+
+    boolean missionExists = service.missionExists(35L);
+    assertTrue(missionExists);
+  }
+
+  @Test
+  public void testDeleteMission() {
+
+    doNothing().when(this.mockSettlementMissionRpsy).delete(35L);
+
+    SettlementService service =
+        new SettlementService(this.mockSettlementMissionRpsy, this.mockAgreementTransformer);
+
+    service.deleteMission(35L);
   }
 }

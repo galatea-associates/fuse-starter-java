@@ -13,11 +13,13 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import java.io.StringWriter;
@@ -82,12 +84,14 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   private JacksonTester<List<Long>> missionIdJsonTester;
 
+  private ObjectMapper objectMapper;
+
 
   private static final Long MISSION_ID_1 = 1091L;
 
   @Before
   public void setup() {
-    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper = new ObjectMapper();
     JacksonTester.initFields(this, objectMapper);
   }
 
@@ -231,6 +235,39 @@ public class SettlementRestControllerTest extends ASpringTest {
         .andExpect(status().is5xxServerError())
         .andExpect(jsonPath("$.status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())))
         .andExpect(jsonPath("$.message", is("An internal application error occurred.")));
+  }
+
+  @Test
+  public void testUpdateMission() throws Exception {
+    TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
+        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).build();
+    SettlementMission settlementMission = settlementMissionSupplier.get();
+
+    when(mockSettlementService.missionExists(MISSION_ID_1))
+        .thenReturn(true);
+    when(mockSettlementService.updateMission(MISSION_ID_1, expectedAgreement))
+        .thenReturn(Optional.of(settlementMission));
+
+    this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .content(objectMapper.convertValue(expectedAgreement, JsonNode.class).toString())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testUpdateNonExistentMission() throws Exception {
+    TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
+        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).build();
+
+    when(mockSettlementService.missionExists(MISSION_ID_1))
+        .thenReturn(false);
+
+    this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .content(objectMapper.convertValue(expectedAgreement, JsonNode.class).toString())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isNotFound());
   }
 
   @Test
