@@ -21,6 +21,16 @@ jms:
    listener-concurrency: 1-5
    agreement-queue-json: sandbox.agreement
    agreement-queue-proto: sandbox.agreement.proto
+
+# Enable Jolokia and Jolokia debug
+management.endpoint.jolokia.enabled: true
+management.endpoint.jolokia.config.debug: true
+
+
+# By default Jolokia is treated as a "sensitive" resource, and therefore /jolokia/** requires
+# authentication. We want to disable this.
+endpoints.jolokia.sensitive: false
+
 ---
 # Test properties go here
 spring:
@@ -28,6 +38,7 @@ spring:
    datasource:
       username: sa
       password:
+
 ---
 # Dev properties go here
 spring:
@@ -37,6 +48,7 @@ spring:
       password:
 # set debug to get spring to log the classpath (and other things) on startup     
 debug: true
+
 ---
 # UAT properties go here
 spring:
@@ -44,6 +56,7 @@ spring:
    datasource:
       username: sa
       password:
+
 ---
 # Mappings for Rest Controllers
 webservice:
