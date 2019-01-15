@@ -4,13 +4,18 @@
 # and: http://logging.apache.org/log4j/2.x/manual/configuration.html
 
 # Spring-boot seems to require a file named "log4j2.yml" to determine that we're using log4j2.
-    
+
 Configuration:
   name: Default
 
 # Some properties so we're not tempted to hard-code anything below
   Properties:
     Property:
+      # Currently we are creating 3 application log files on startup, because there are three events
+      # during Spring Boot initialization which usually happen about a second apart which create
+      # new log files since the log file name below is formatted with seconds (HHmmss). We COULD
+      # mask this by removing seconds from this config, but it would still create multiple files if
+      # the JVM was started right as the minute changes. Not a big deal so we're leaving it for now.
       - name: log-file-prefix
         value: ${date:yyyyMMddHHmmss}.${sys:application.name}
       - name: log-dir
@@ -26,7 +31,6 @@ Configuration:
 
 # Create some appenders
   Appenders:
-  
     # Log to a specific file
     # For details of configuration options, see: https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender
     RollingFile:
@@ -34,7 +38,9 @@ Configuration:
         filename: ${log-dir}/${log-file-prefix}.log
         # Define where to put logs when rolling
         filePattern: ${log-archive-dir}/${log-file-prefix}.${zip-suffix}
-        # Define what the log output will look like 
+        # Only create the log file when there's logs to put in it (no empty log files)
+        createOnDemand: true
+        # Define what the log output will look like
         PatternLayout:
           Pattern: ${log-pattern}
         Policies:
@@ -53,6 +59,7 @@ Configuration:
       - name: WarnRollingFileAppender
         filename: ${log-dir}/${log-file-prefix}.warnings.log
         filePattern: ${log-archive-dir}/${log-file-prefix}.warnings.${zip-suffix}
+        createOnDemand: true
         PatternLayout: 
           Pattern: ${log-pattern}
         Policies:
@@ -72,6 +79,7 @@ Configuration:
       - name: ErrorRollingFileAppender
         filename: ${log-dir}/${log-file-prefix}.errors.log
         filePattern: ${log-archive-dir}/${log-file-prefix}.errors.${zip-suffix}
+        createOnDemand: true
         PatternLayout:
           Pattern: ${log-pattern}
         Policies:
@@ -91,6 +99,7 @@ Configuration:
       - name: RestRequestRollingFileAppender
         filename: ${log-dir}/${log-file-prefix}.rest.log
         filePattern: ${log-archive-dir}/${log-file-prefix}.rest.${zip-suffix}
+        createOnDemand: true
         PatternLayout: 
           Pattern: ${log-pattern}
         Policies:
@@ -103,7 +112,7 @@ Configuration:
         
     # Logging should be done asynchronously    
     # TODO: may want to investigate a bit, given this warning:
-    # http://logging.apache.org/log4j/2.x/manual/appenders.html#AsyncAppender: 
+    # http://logging.apache.org/log4j/2.x/manual/appenders.html#AsyncAppender:
     # Note that multi-threaded applications should exercise care when using this appender as such the blocking queue is susceptible to lock contention and our tests showed performance may become worse when more threads are logging concurrently.
     Async:
       - name: AsyncAppender
@@ -124,12 +133,12 @@ Configuration:
       level: info
       AppenderRef:
         - ref: AsyncAppender
-        
+
     Logger:
       # Let's send all messages from a specific logger somewhere else as well
       - name: org.galatea.starter.entrypoint.SettlementRestController
         level: debug
         AppenderRef:
-          - ref: AsyncRestRequestAppender 
+          - ref: AsyncRestRequestAppender
         
     
