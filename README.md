@@ -98,6 +98,7 @@ FUSE currently shows how to read from a queue (not a topic).
 - For creation of external request id for Rest requests see: SettlementRestController.java
 - For creation of external request id for JMS requests see: FuseMessageListenerContainer.java
 - For inclusion of internal/external request ids in log statements see: log4j2.yml's log-pattern definition
+- To log to console instead of logging to file, set -Dlog4j.configurationFile=log4j2-stdout.yml as a VM option
 
 ## Request Audit
 For inclusion of audit details in the response headers see: FuseWebRequestTraceFilter.addAuditHeaders()
