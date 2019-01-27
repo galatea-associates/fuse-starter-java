@@ -1,6 +1,7 @@
 package org.galatea.starter.entrypoint;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import lombok.NonNull;
@@ -12,15 +13,19 @@ import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementResponseMessage;
+import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -104,6 +109,67 @@ public class SettlementRestController extends BaseSettlementRestController {
     }
 
     throw new EntityNotFoundException(SettlementMission.class, id.toString());
+  }
+
+  /**
+   * Update an existing mission given an ID using a TradeAgreement.
+   */
+  // @PutMapping to link http PUT requests to this method
+  // @PathVariable to take the id from the path and make it available as a method argument
+  // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
+  @PutMapping(value = "${mvc.updateMissionPath}" + "{id}",
+      consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+      produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+  public void updateMission(@PathVariable final Long id,
+      @RequestBody final TradeAgreementMessage tradeAgreementMessage,
+      @RequestParam(value = "requestId", required = false) String requestId) {
+
+    // if an external request id was provided, grab it
+    processRequestId(requestId);
+
+    // The trade agreement translator only takes in a TradeAgreementMessages so the
+    // TradeAgreementMessage must be placed into one
+    TradeAgreementMessages messages = TradeAgreementMessages.builder()
+        .agreement(tradeAgreementMessage)
+        .build();
+
+    // Translate the message and get it back from the list
+    List<TradeAgreement> agreements = tradeAgreementTranslator.translate(messages);
+    Optional<TradeAgreement> tradeAgreement = agreements.stream().findFirst();
+    if (!tradeAgreement.isPresent()) {
+      // This exception should never occur since we always provide one TradeAgreementMessage
+      throw new NoSuchElementException("Trade agreement was not found");
+    }
+
+    Optional<SettlementMission> msn = updateMissionInternal(id, tradeAgreement.get());
+
+    if (!msn.isPresent()) {
+      // The mission was not found and could not be updated
+      throw new EntityNotFoundException(SettlementMission.class, id.toString());
+    }
+  }
+
+  /**
+   * Delete a previously created mission.
+   */
+  // @DeleteMapping to link http DELETE requests to this method
+  // @PathVariable to take the id from the path and make it available as a method argument
+  // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
+  @DeleteMapping(value = "${mvc.deleteMissionPath}" + "{id}", produces = {
+      MediaType.APPLICATION_JSON_VALUE,
+      MediaType.APPLICATION_XML_VALUE})
+  public void deleteMission(@PathVariable final Long id,
+      @RequestParam(value = "requestId", required = false) String requestId) {
+
+    // if an external request id was provided, grab it
+    processRequestId(requestId);
+
+    try {
+      deleteMissionInternal(id);
+    } catch (EmptyResultDataAccessException e) {
+      // The entity could not be deleted because it does not exist
+      throw new EntityNotFoundException(SettlementMission.class, id.toString());
+    }
   }
 
 }

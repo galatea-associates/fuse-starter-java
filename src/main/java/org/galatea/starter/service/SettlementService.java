@@ -58,4 +58,38 @@ public class SettlementService {
   public Optional<SettlementMission> findMission(final Long id) {
     return Optional.ofNullable(missionrpsy.findOne(id));
   }
+
+  /**
+   * Update the mission with the ID using the given TradeAgreement.
+   *
+   * @param id identifier of the mission
+   * @param agreement the agreement used to update the mission to
+   * @return optional containing the saved mission
+   */
+  public Optional<SettlementMission> updateMission(final Long id, final TradeAgreement agreement) {
+    SettlementMission settlementMission = agreementTransformer.transform(agreement);
+    settlementMission.setId(id);
+    SettlementMission savedMission = missionrpsy.save(settlementMission);
+    log.info("The following mission was updated: {}", savedMission);
+    return Optional.ofNullable(savedMission);
+  }
+
+  /**
+   * @param id identifier of the mission
+   * @return does a mission with the id exist?
+   */
+  public boolean missionExists(final Long id) {
+    return missionrpsy.exists(id);
+  }
+
+  /**
+   * Delete the mission by ID.
+   * This removes the mission from the cache as well.
+   *
+   * @param id identifier of the mission to delete
+   */
+  public void deleteMission(final Long id) {
+    missionrpsy.delete(id);
+    log.info("Mission with id '{}' was deleted", id);
+  }
 }
