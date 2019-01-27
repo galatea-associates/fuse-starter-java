@@ -8,17 +8,15 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface ISettlementMissionRpsy extends CrudRepository<SettlementMission, Long> {
-
-  String MISSIONS_CACHE = "missions";
-
+  
   List<SettlementMission> findByDepot(String depot);
 
   @Override
-  @Cacheable(cacheNames = MISSIONS_CACHE, sync = true)
+  @Cacheable(cacheNames = "missions", sync = true)
   SettlementMission findOne(Long id);
 
   @Override
-  @CacheEvict(cacheNames = MISSIONS_CACHE)
+  @CacheEvict(cacheNames = "missions")
   void delete(Long id);
 
   /**
@@ -26,6 +24,6 @@ public interface ISettlementMissionRpsy extends CrudRepository<SettlementMission
    * specified. You must use position parameter bindings otherwise.
    */
   @Override
-  @CacheEvict(cacheNames = MISSIONS_CACHE, key = "#p0.getId()")
+  @CacheEvict(cacheNames = "missions", key = "#p0.getId()")
   <S extends SettlementMission> S save(S entity);
 }
