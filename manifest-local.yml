@@ -1,11 +1,25 @@
+# Used to deploy a local version of Fuse to Cloud Foundry for manual testing purposes.
+
+# To use this manifest, the CF CLI must be installed: https://docs.cloudfoundry.org/cf-cli/install-go-cli.html
+# You must also have created a CloudFoundry account under the Fuse organization at https://console.run.pivotal.io/organizations/8d015cf8-216f-40fc-9257-50aa9c1b6307
+
+# To deploy using this manifest, run the following commands from the project directory:
+# cf login -a api.run.pivotal.io
+# mvn clean package -Dskiptests && cf push -f manifest-local.yml
+
+# Delete your app instance from CloudFoundry when finished with testing.
+
+# Note that if any part of the app configuration (such as env vars) is changed, the app will likely
+# need to be restaged after the changes are pushed in order for those changes to take effect.
+# Restaging can be done via `cf restage my-app-name` or on the app overview page of the CF Web UI.
 ---
 applications:
-- name: fuse-rest-eric
+# Replace "myname" with your name so that app instances can be identified
+- name: fuse-rest-local-myname
   memory: 768M
   instances: 1
   path: target\fuse-starter-java-0.0.1-SNAPSHOT.jar
   env:
-    SPRING_PROFILES_ACTIVE: local
-    JAVA_OPTS: '-Dapplication.name=basu-fuse-app'
-    JBP_CONFIG_JAVA_MAIN: '{arguments: "--server.port=\$PORT" }'
-
+    SPRING_PROFILES_ACTIVE: dev
+    JAVA_OPTS: '-Dapplication.name=my-fuse-app -Dlog4j.configurationFile=log4j2-stdout.yml'
+    JBP_CONFIG_JAVA_MAIN: '{arguments: \"--server.port=\$PORT\" }'
