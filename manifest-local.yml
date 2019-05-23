@@ -1,17 +1,22 @@
-# Used to deploy a local version of Fuse to Cloud Foundry for manual testing purposes.
+# Used to deploy a local version of FUSE to Cloud Foundry for manual testing purposes.
+# We use the Pivotal Web Services implementation of Cloud Foundry, which has a web UI at
+# https://console.run.pivotal.io/organizations/8d015cf8-216f-40fc-9257-50aa9c1b6307
 
 # To use this manifest, the CF CLI must be installed: https://docs.cloudfoundry.org/cf-cli/install-go-cli.html
-# You must also have created a CloudFoundry account under the Fuse organization at https://console.run.pivotal.io/organizations/8d015cf8-216f-40fc-9257-50aa9c1b6307
+# You must also ask an admin to invite you to the FUSE organization on Pivotal Web Services.
 
-# To deploy using this manifest, run the following commands from the project directory:
-# cf login -a api.run.pivotal.io
+# To use CLI commands, first run `cf login -a api.run.pivotal.io`.
+# To deploy your local code using this manifest, run the following from the project directory:
 # mvn clean package -Dskiptests && cf push -f manifest-local.yml
+# Logs can be viewed on the web UI or with `cf logs fuse-rest-local-myname`.
 
-# Delete your app instance from CloudFoundry when finished with testing.
-
-# Note that if any part of the app configuration (such as env vars) is changed, the app will likely
+# Note that if any part of the app configuration (such as env vars) is changed, the app will usually
 # need to be restaged after the changes are pushed in order for those changes to take effect.
-# Restaging can be done via `cf restage my-app-name` or on the app overview page of the CF Web UI.
+# Restaging can be done via `cf restage my-app-name` or on the web UI.
+
+# Delete your app instance from Cloud Foundry when finished with testing to reduce clutter:
+# cf delete -r fuse-rest-local-myname
+# This is also be useful before a cf push to ensure a clean app deployment.
 ---
 applications:
 # Replace "myname" with your name so that app instances can be identified
