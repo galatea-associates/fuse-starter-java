@@ -1,7 +1,7 @@
 # Global properties go here
 spring:
    profiles:
-      active: test
+      active:
    datasource:
       # this maps to an in-memory database that lives within a single VM.
       # in case you want to use H2 with a file persistence or as a service
@@ -47,4 +47,4 @@ spring:
 ---
 # Mappings for Rest Controllers
 webservice:
-  halpath: /hal
+  halpath: /prices

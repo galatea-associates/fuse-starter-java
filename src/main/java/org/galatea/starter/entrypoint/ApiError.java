@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
-
 import org.springframework.http.HttpStatus;
 
 @Getter
@@ -19,3 +18,5 @@ public class ApiError {
   private String message;
 
 }
+
+

@@ -1,5 +1,10 @@
 package org.galatea.starter.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.DecimalMin;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,15 +12,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.utils.validation.StringEnumeration;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.DecimalMin;
-import javax.xml.bind.annotation.XmlRootElement;
+//import javax.xml.bind.annotation.XmlRootElement;
 
 /* For builder since we explicitly want to make the all args ctor private */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -24,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Data
 @Slf4j
 @Entity
-@XmlRootElement(name="settlementMission")
+//@XmlRootElement(name="settlementMission")
 public class SettlementMission {
 
   @Id

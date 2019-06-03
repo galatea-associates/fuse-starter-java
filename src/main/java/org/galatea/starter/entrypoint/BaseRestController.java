@@ -15,10 +15,15 @@ public abstract class BaseRestController {
   /**
    * Adds the specified requestId to the context for this request (if not null).
    */
-  protected void processRequestId(String requestId) {
-    if (requestId != null) {
-      log.info("Request received with id: {}", requestId);
-      Tracer.setExternalRequestId(requestId);
+  protected void processStock (String stock, String daysToLookBack) {
+    if (stock != null) {
+      log.info("Request received with stock: {}", stock);
+      Tracer.setExternalRequestId(stock);
     }
-  }
-}
+    if (daysToLookBack != null) {
+      log.info("Request received with # of days: 1");
+      Tracer.setExternalRequestId(daysToLookBack);
+
+     }
+   }
+ }

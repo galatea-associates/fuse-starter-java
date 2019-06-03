@@ -6,42 +6,44 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 import org.galatea.starter.ASpringTest;
-import org.galatea.starter.service.HalService.COIN;
+import org.galatea.starter.service.PriceService.COIN;
 import org.junit.Test;
 
 public class HalServiceTest extends ASpringTest {
 
   @Test
   public void testProcessTestCoinFlipHeads() {
-    String text = "coin-flip";
+    String stock = "MSFT";
+    String daysToLookBack = "10";
     String expResult = "Heads";
 
-    HalService service = new HalService();
-    HalService spyService = spy(service);
+    PriceService service = new PriceService();
+    PriceService spyService = spy(service);
 
     doReturn(COIN.HEADS).when(spyService).coinFlipRand();
 
-    String result = spyService.processText(text);
+    String result = spyService.processStock(stock, daysToLookBack);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testProcessTestCoinFlipTails() {
-    String text = "coin-flip";
+    String stock = "MSFT";
+    String daysToLookBack = "10";
     String expResult = "Tails";
 
-    HalService service = new HalService();
-    HalService spyService = spy(service);
+    PriceService service = new PriceService();
+    PriceService spyService = spy(service);
 
     doReturn(COIN.TAILS).when(spyService).coinFlipRand();
 
-    String result = spyService.processText(text);
+    String result = spyService.processStock(stock, daysToLookBack);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testCoinFlipRand() {
-    HalService service = new HalService();
+    PriceService service = new PriceService();
 
     COIN result = service.coinFlipRand();
     assertThat(result).isIn(COIN.HEADS, COIN.TAILS);
@@ -49,23 +51,25 @@ public class HalServiceTest extends ASpringTest {
 
   @Test
   public void testProcessTestGetDerp() {
-    String text = "derp";
+    String stock = "MSFT";
+    String daysToLookBack = "10";
     String expResult = "derp!";
 
-    HalService service = new HalService();
+    PriceService service = new PriceService();
 
-    String result = service.processText(text);
+    String result = service.processStock(stock, daysToLookBack);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testUnsupportedInput() {
-    String text = "Unsupported";
+    String stock = "MSFT";
+    String daysToLookBack = "10";
     String expResult = "Unsupported command";
 
-    HalService service = new HalService();
+    PriceService service = new PriceService();
 
-    String result = service.processText(text);
+    String result = service.processStock(stock, daysToLookBack);
     assertEquals(expResult, result);
   }
 }
