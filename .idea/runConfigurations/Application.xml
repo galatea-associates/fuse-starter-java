@@ -6,7 +6,7 @@
     <option name="VM_PARAMETERS" value="-Dapplication.name=my-fuse-app -Dapplication.log-dir=$PROJECT_DIR$/../../../${USERNAME}/logs -Dapplication.log-archive-root-dir=$PROJECT_DIR$/../../../${USERNAME}/logs/archive" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="org.galatea.starter.*" />
+        <option name="PATTERN" value="org.galatea.starter.entrypoint.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

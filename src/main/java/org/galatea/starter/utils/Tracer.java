@@ -93,8 +93,8 @@ public class Tracer {
     // Add request id to Trace
     addTraceInfo(Tracer.class, EXTERNAL_REQUEST_ID, externalRequestId);
 
-    //log.debug("External request id: {}", externalRequestId);
-    //log.debug("traceInfo: {}", traceInfo.get());
+    log.debug("External request id: {}", externalRequestId);
+    log.debug("traceInfo: {}", traceInfo.get());
 
 
     // And add to MDC so it will show up in the logs

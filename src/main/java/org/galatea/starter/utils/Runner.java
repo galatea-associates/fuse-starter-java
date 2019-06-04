@@ -13,7 +13,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.galatea.starter.domain.TradeAgreement;
 import org.springframework.util.StopWatch;
 
 /**
@@ -96,21 +95,6 @@ public class Runner {
     } finally {
       Thread.currentThread().setName(oldName);
     }
-  }
-
-  /**
-   * Generates a suffix by looking for TradeAgreement objects in the arguments list and pulling out
-   * the instrument id from the trade.
-   */
-  public static String getSuffixFor(final Object... args) {
-
-    String suffix = "";
-    for (int i = 0; i < args.length; i++) {
-      if (args[i] instanceof TradeAgreement) {
-        suffix = ((TradeAgreement) args[i]).getInstrument();
-      }
-    }
-    return suffix;
   }
 
 }

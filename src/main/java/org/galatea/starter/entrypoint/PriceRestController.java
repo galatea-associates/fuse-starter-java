@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class PriceRestController extends BaseRestController {
 
-  public static String stock;
-  public static String daysToLookback;
 
   @NonNull
   PriceService priceService;
@@ -37,10 +35,11 @@ public class PriceRestController extends BaseRestController {
   // @GetMapping to link http GET request to this method
   // @RequestParam to take a parameter from the url
   @GetMapping(value = "${webservice.halpath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public String halEndpoint(
+  public String priceEndpoint(
       @RequestParam(value = "stock") String stock,
-      @RequestParam(value = "daysToLookBack", defaultValue="One") String daysToLookBack){
-    processStock (stock, daysToLookBack);
+      @RequestParam(value = "daysToLookBack", defaultValue= "1", required = false) int daysToLookBack,
+      @RequestParam (value = "requestId", required = false) String requestId) {
+    processRequestId (requestId);
     return priceService.processStock(stock, daysToLookBack);
   }
 }

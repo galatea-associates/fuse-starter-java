@@ -23,7 +23,6 @@
 		<sonar.exclusions>**/ProtobufMessages.java</sonar.exclusions>
 		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java</sonar.coverage.exclusions>
 		<!-- Allow us to skip Unit Tests only, if need be, with -Dskip.surefire.tests, but retain the skip all tests functionality of -DskipTests -->
-		<skip.surefire.tests>true</skip.surefire.tests>
 	</properties>
 
 	<parent>
@@ -209,7 +208,11 @@
       <artifactId>feign-core</artifactId>
       <version>9.5.1</version>
     </dependency>
-
+		<dependency>
+			<groupId>io.github.openfeign</groupId>
+			<artifactId>feign-okhttp</artifactId>
+			<version>9.5.1</version>
+		</dependency>
     <dependency>
       <groupId>io.github.openfeign</groupId>
       <artifactId>feign-jackson</artifactId>
@@ -278,7 +281,6 @@
 					<!-- skips surefire tests without skipping failsafe tests. Property 
 						value seems to magically default to false -->
 					<!-- See https://stackoverflow.com/questions/6612344/prevent-unit-tests-in-maven-but-allow-integration-tests -->
-					<skipTests>${skip.surefire.tests}</skipTests>
 				</configuration>
 			</plugin>
 			<plugin>

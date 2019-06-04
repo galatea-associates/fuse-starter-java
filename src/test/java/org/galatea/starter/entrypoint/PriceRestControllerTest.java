@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class HalRestControllerTest extends ASpringTest {
+public class PriceRestControllerTest extends ASpringTest {
 
   @Autowired
   private MockMvc mvc;
@@ -39,17 +39,20 @@ public class HalRestControllerTest extends ASpringTest {
 
 
   @Test
-  public void testHalEndpoint() throws Exception {
+  public void testPriceEndpoint() throws Exception {
     String param1 = "stock";
     String paramVal1 = "MSFT";
     String param2 = "daysToLookBack";
-    String paramVal2 = "2";
-    String result = "MSFT" + " " + "2";
+    int paramVal2 = 104;
+    String result = "MSFT" + " " + 104;
 
     given(this.mockPriceService.processStock(paramVal1, paramVal2)).willReturn(result);
 
     this.mvc.perform(
-        get("/price").param(param1, paramVal1).param(param2, paramVal2).accept(MediaType.APPLICATION_JSON))
+        get("/prices")
+            .param(param1, paramVal1)
+            .param(param2, "104")
+            .accept(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", is(result))); //$: root object
   }
 
