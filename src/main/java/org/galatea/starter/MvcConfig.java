@@ -2,9 +2,7 @@
 package org.galatea.starter;
 
 import com.google.common.collect.Sets;
-
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.rest.FuseWebRequestTraceFilter;
 import org.springframework.beans.factory.ObjectProvider;
@@ -16,15 +14,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
-import java.util.List;
 
 @Slf4j
 @Configuration
@@ -61,6 +53,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     return new FuseTraceRepository();
   }
 
+
+
   @Override
   public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
     configurer.favorParameter(true) // give precedence to url request parameters
@@ -68,6 +62,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         .useJaf(false) // let's not fallback on the Java Activation Framework
         .defaultContentType(MediaType.APPLICATION_JSON);
   }
+
+  /* commenting out the override for the proto call buffer
 
   @Override
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -78,5 +74,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     converters.add(new Jaxb2RootElementHttpMessageConverter()); // XML
     super.configureMessageConverters(converters);
   }
+
+   */
 
 }

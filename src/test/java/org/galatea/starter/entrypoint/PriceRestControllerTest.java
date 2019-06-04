@@ -9,7 +9,7 @@ import junitparams.JUnitParamsRunner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
-import org.galatea.starter.service.HalService;
+import org.galatea.starter.service.PriceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,29 +22,38 @@ import org.springframework.test.web.servlet.MockMvc;
 @RequiredArgsConstructor
 @Slf4j
 // We don't load the entire spring application context for this test.
-@WebMvcTest(HalRestController.class)
+@WebMvcTest(PriceRestController.class)
 // Use this runner since we want to parameterize certain tests.
 // See runner's javadoc for more usage.
+
+
 @RunWith(JUnitParamsRunner.class)
-public class HalRestControllerTest extends ASpringTest {
+public class PriceRestControllerTest extends ASpringTest {
 
   @Autowired
   private MockMvc mvc;
 
+
   @MockBean
-  private HalService mockHalService;
+  private PriceService mockPriceService;
+
 
   @Test
-  public void testHalEndpoint() throws Exception {
-    String param = "text";
-    String paramVal = "coin-flip";
-    String result = "Processed String";
+  public void testPriceEndpoint() throws Exception {
+    String param1 = "stock";
+    String paramVal1 = "MSFT";
+    String param2 = "daysToLookBack";
+    int paramVal2 = 104;
+    String result = "MSFT" + " " + 104;
 
-    given(this.mockHalService.processText(paramVal)).willReturn(result);
+    given(this.mockPriceService.processStock(paramVal1, paramVal2)).willReturn(result);
 
     this.mvc.perform(
-        get("/hal").param(param, paramVal).accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(jsonPath("$", is(result)));
+        get("/prices")
+            .param(param1, paramVal1)
+            .param(param2, "104")
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$", is(result))); //$: root object
   }
 
 }

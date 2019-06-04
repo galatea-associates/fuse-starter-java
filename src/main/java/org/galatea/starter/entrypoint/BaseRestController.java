@@ -15,10 +15,10 @@ public abstract class BaseRestController {
   /**
    * Adds the specified requestId to the context for this request (if not null).
    */
-  protected void processRequestId(String requestId) {
+  protected void processRequestId (String requestId) {
     if (requestId != null) {
-      log.info("Request received with id: {}", requestId);
+      log.info("Request received with stock: {}", requestId);
       Tracer.setExternalRequestId(requestId);
     }
-  }
-}
+   }
+ }

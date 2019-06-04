@@ -2,21 +2,18 @@
 package org.galatea.starter.utils;
 
 import com.google.common.collect.Maps;
-
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.collections4.keyvalue.MultiKey;
-import org.slf4j.MDC;
-import org.springframework.util.StopWatch;
-
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Callable;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.keyvalue.MultiKey;
+import org.slf4j.MDC;
+import org.springframework.util.StopWatch;
 
 @Slf4j
 @ToString
@@ -99,6 +96,7 @@ public class Tracer {
     log.debug("External request id: {}", externalRequestId);
     log.debug("traceInfo: {}", traceInfo.get());
 
+
     // And add to MDC so it will show up in the logs
     // The key used here must align with the key defined in the logging config's log-pattern
     MDC.put(EXTERNAL_REQUEST_ID, externalRequestId + " - ");
@@ -162,6 +160,7 @@ public class Tracer {
       }
       clearTrace();
       MDC.clear();
+
     }
 
     /**
