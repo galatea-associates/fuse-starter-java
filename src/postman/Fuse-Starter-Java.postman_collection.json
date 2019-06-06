@@ -21,7 +21,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \"agreements\" : \n    [{\n    \t\"id\": 1,\n\t\t\"instrument\": \"IBM\",\n\t\t\"internalParty\": \"INT-1\",\n\t\t\"externalParty\": \"EXT-1\",\n\t\t\"buySell\": \"B\",\n\t\t\"qty\": 100\n\t}]\n}"
+					"raw": "{ \"agreements\" : \n    [\n    \t{\n\t    \t\"id\": 1,\n\t\t\t\"instrument\": \"IBM\",\n\t\t\t\"internalParty\": \"INT-1\",\n\t\t\t\"externalParty\": \"EXT-1\",\n\t\t\t\"buySell\": \"B\",\n\t\t\t\"qty\": 100\n\t\t},\n    \t{\n\t    \t\"id\": 2,\n\t\t\t\"instrument\": \"IBM\",\n\t\t\t\"internalParty\": \"INT-1\",\n\t\t\t\"externalParty\": \"EXT-1\",\n\t\t\t\"buySell\": \"B\",\n\t\t\t\"qty\": 100\n\t\t}\n\t]\n}"
 				},
 				"url": {
 					"raw": "http://{{host}}/settlementEngine",
@@ -52,6 +52,35 @@
 						"settlementEngine",
 						"mission",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SE - Get missions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/settlementEngine/missions?ids=1,2&format=csv",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"settlementEngine",
+						"missions"
+					],
+					"query": [
+						{
+							"key": "ids",
+							"value": "1,2"
+						},
+						{
+							"key": "format",
+							"value": "csv"
+						}
 					]
 				}
 			},

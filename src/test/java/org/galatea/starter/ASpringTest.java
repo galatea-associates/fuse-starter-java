@@ -51,8 +51,7 @@ public abstract class ASpringTest {
   }
 
   public static String readData(final String fileName) throws IOException {
-    return IOUtils.toString(ASpringTest.class.getClassLoader().getResourceAsStream(fileName))
-        .trim();
+    return IOUtils.toString(ASpringTest.class.getClassLoader().getResourceAsStream(fileName));
   }
 
   public static byte[] readBytes(final String fileName) throws IOException {

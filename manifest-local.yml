@@ -7,7 +7,7 @@
 
 # To use CLI commands, first run `cf login -a api.run.pivotal.io`.
 # To deploy your local code using this manifest, run the following from the project directory:
-# mvn clean package -Dskiptests && cf push -f manifest-local.yml
+# mvn clean package -DskipTests && cf push -f manifest-local.yml
 # Logs can be viewed on the web UI or with `cf logs fuse-rest-local-myname`.
 
 # Note that if any part of the app configuration (such as env vars) is changed, the app will usually

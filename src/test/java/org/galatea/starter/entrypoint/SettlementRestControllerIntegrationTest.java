@@ -8,6 +8,8 @@ import feign.Feign;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage;
@@ -15,6 +17,7 @@ import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.Settleme
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
+import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionList;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementResponseMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
@@ -46,6 +49,9 @@ public class SettlementRestControllerIntegrationTest {
 
     @RequestLine("GET /settlementEngine/mission/{id}")
     SettlementMissionMessage getSettlementMissionJson(@Param("id") Long id);
+
+    @RequestLine("GET /settlementEngine/missions?ids={ids}")
+    SettlementMissionList getSettlementMissionsJson(@Param("ids") String ids);
 
     @RequestLine("POST /settlementEngine")
     @Headers({"Content-Type: application/x-protobuf", "Accept: application/x-protobuf"})
@@ -139,13 +145,25 @@ public class SettlementRestControllerIntegrationTest {
 
     assertEquals(2, missionPaths.getSpawnedMissions().size());
 
+    // Fetch individual missions
+    List<String> missionIds = new ArrayList<>();
     for (String missionPath : missionPaths.getSpawnedMissions()) {
       Long missionId = Long.parseLong(missionPath.split("/")[3]); // brittle assumption...
+      missionIds.add(missionId.toString());
       SettlementMissionMessage settlementMission = fuseServer.getSettlementMissionJson(missionId);
       log.info("fetched mission: {}", settlementMission);
 
       assertTrue(b1.id(missionId).build().equals(settlementMission)
           || b2.id(missionId).build().equals(settlementMission));
     }
+
+    // Fetch multiple missions
+    SettlementMissionList settlementMissions = fuseServer.getSettlementMissionsJson(
+        String.join(",", missionIds));
+    assertEquals(2, settlementMissions.getSettlementMissions().size());
+    assertEquals(missionIds.get(0),
+        settlementMissions.getSettlementMissions().get(0).getId().toString());
+    assertEquals(missionIds.get(1),
+        settlementMissions.getSettlementMissions().get(1).getId().toString());
   }
 }
