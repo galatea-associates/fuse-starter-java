@@ -117,7 +117,7 @@ public class XlsxSerializerTest {
   }
 
   @Test
-  public void serializeToCsv_composedObject() throws Exception {
+  public void serializeToXlsx_composedObject() throws Exception {
     ClassHoldingOtherClass row1 = new ClassHoldingOtherClass(1, new BasicClass("foo", "bar"));
 
     byte[] expected;

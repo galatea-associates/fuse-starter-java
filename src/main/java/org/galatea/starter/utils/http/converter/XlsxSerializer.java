@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +40,7 @@ public class XlsxSerializer {
     // SXSSF is the streaming version of XSSF, and is useful for working with large spreadsheets
     try (Workbook wb = new XSSFWorkbook()) {
       Sheet sheet = wb.createSheet(clazz.getSimpleName());
-      List<Field> fieldsToSerialize = getFields(clazz);
+      List<Field> fieldsToSerialize = getFieldsToSerialize(clazz);
       populateHeaderRow(sheet, getHeaderValues(fieldsToSerialize));
       populateDataRows(sheet, fieldsToSerialize, rows);
       return writeSpreadsheetToBytes(wb);
@@ -48,25 +49,47 @@ public class XlsxSerializer {
 
   /*
    * Get a list of all fields in the given class, including inherited and private fields, but
-   * excluding any @JsonIgnore'd fields
+   * excluding any @JsonIgnore'd fields.
    */
-  private static List<Field> getFields(final Class<?> clazz) {
+  private static List<Field> getFieldsToSerialize(final Class<?> clazz) {
     List<Field> fields = new ArrayList<>();
-    // getFields() gets all public fields in a class including inherited fields, while
-    // getDeclaredFields() gets all fields in a class excluding inherited fields
+    // Class#getFields() gets all public fields in a class including inherited fields, while
+    // Class#getDeclaredFields() gets all fields in a class excluding inherited fields
     // To get all fields in the class, we do getDeclaredFields() all the way up the class hierarchy
     if (clazz.getSuperclass() != null) {
-      fields = getFields(clazz.getSuperclass());
+      fields = getFieldsToSerialize(clazz.getSuperclass());
     }
 
-    // Ignore any fields that have a @JsonIgnore annotation
-    for (Field field : clazz.getDeclaredFields()) {
-      JsonIgnore jsonIgnore = field.getAnnotation(JsonIgnore.class);
-      if (jsonIgnore == null || !jsonIgnore.value()) {
-        fields.add(field);
-      }
-    }
+    Arrays.stream(clazz.getDeclaredFields())
+        .filter(XlsxSerializer::shouldSerializeField)
+        .forEach(fields::add);
     return fields;
+  }
+
+  /*
+   * Check whether a field should be serialized.
+   *
+   * Returns false if the field is synthetic, transient, or @JsonIgnore-d, and true otherwise.
+   */
+  private static boolean shouldSerializeField(final Field field) {
+    // Jacoco adds a synthetic member variable "$jacocoData" to classes under test. Ignore such
+    // synthetic fields to avoid inconsistent test behavior.
+    // https://github.com/jacoco/jacoco/issues/168
+    // http://mylearningdump.blogspot.com/2017/05/java-reflection-synthetic-members-and.html
+    if (field.isSynthetic()) {
+      return false;
+    }
+    // The transient keyword indicates that a variable should not be serialized
+    if (Modifier.isTransient(field.getModifiers())) {
+      return false;
+    }
+    // Ignore any fields that have a @JsonIgnore annotation
+    JsonIgnore jsonIgnore = field.getAnnotation(JsonIgnore.class);
+    if (jsonIgnore != null && jsonIgnore.value()) {
+      return false;
+    }
+
+    return true;
   }
 
   /*
@@ -105,7 +128,6 @@ public class XlsxSerializer {
   @SneakyThrows(IllegalAccessException.class)
   private static <T> void populateDataRows(final Sheet sheet, final List<Field> fieldsToSerialize,
       final Iterable<T> rows) {
-    log.info("Fields to serialize: {}", fieldsToSerialize);
     int rowIndex = 1; // header is row 0
     for (T row : rows) {
       Row dataRow = sheet.createRow(rowIndex);
@@ -114,18 +136,21 @@ public class XlsxSerializer {
         Cell dataCell = dataRow.createCell(col);
         Object cellObject = FieldUtils.readField(fieldsToSerialize.get(col), row, true);
         dataCell.setCellValue(stringify(cellObject));
-        log.info("Field {} has value {}", fieldsToSerialize.get(col), stringify(cellObject));
       }
     }
   }
 
+  /*
+   * Get a useful string representation of the given object.
+   */
   private static String stringify(Object obj) {
     if (obj == null) {
       return "";
     } else if (obj.getClass().isArray()) {
-      // Default toString() of an array isn't useful, and a primitive array can't be automatically
-      // cast to Object[], so we copy the possibly-primitive array into a Object[] so we can pass
-      // it into Arrays.toString()
+      // Default toString() of an array isn't useful, as it just gives something like [C@6e1408
+      // We don't know whether obj is a primitive array or an object array, and primitive arrays
+      // can't be directly cast to Object[], so we copy the possibly-primitive array into
+      // an Object[] and go from there
       // https://stackoverflow.com/questions/5606338/cast-primitive-type-array-into-object-array-in-java
       int len = Array.getLength(obj);
       Object[] objectArr = new Object[len];
