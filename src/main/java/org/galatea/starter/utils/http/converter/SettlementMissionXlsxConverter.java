@@ -10,8 +10,6 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.converter.HttpMessageNotWritableException;
 
 /**
  * Custom HttpMessageConverter implementation to automatically convert a SettlementMissionList
@@ -34,14 +32,14 @@ public class SettlementMissionXlsxConverter
   @Override
   protected SettlementMissionList readInternal(
       final Class<? extends SettlementMissionList> clazz,
-      final HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+      final HttpInputMessage inputMessage) throws IOException {
     throw new UnsupportedOperationException(
         "Reading XLSX to SettlementMissionList is not supported");
   }
 
   @Override
   protected void writeInternal(final SettlementMissionList settlementMissionList,
-      final HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+      final HttpOutputMessage outputMessage) throws IOException {
     log.info("Converting SettlementMissionList to XLSX for HTTP response");
     outputMessage.getBody().write(XlsxSerializer.serializeToXlsx(
         settlementMissionList.getSettlementMissions(), SettlementMission.class));

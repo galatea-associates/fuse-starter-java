@@ -23,6 +23,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 // See XlsxSerializerTest for example output
 public class XlsxSerializer {
 
+  private XlsxSerializer() {}
+
   /**
    * Serialize the given objects to an XLSX spreadsheet.
    *
@@ -85,11 +87,7 @@ public class XlsxSerializer {
     }
     // Ignore any fields that have a @JsonIgnore annotation
     JsonIgnore jsonIgnore = field.getAnnotation(JsonIgnore.class);
-    if (jsonIgnore != null && jsonIgnore.value()) {
-      return false;
-    }
-
-    return true;
+    return jsonIgnore == null || !jsonIgnore.value();
   }
 
   /*

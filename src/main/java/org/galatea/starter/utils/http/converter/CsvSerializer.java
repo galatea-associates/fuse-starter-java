@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CsvSerializer {
 
+  private CsvSerializer() {}
+
   /**
    * Serialize the given objects to a CSV document.
    *
