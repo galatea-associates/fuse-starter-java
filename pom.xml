@@ -57,6 +57,15 @@
 			<version>1.4.4.RELEASE</version>
 		</dependency>
 
+<!--		&lt;!&ndash; Adding spring-cloud-dependencies for Feign build &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.cloud</groupId>-->
+<!--			<artifactId>spring-cloud-dependencies</artifactId>-->
+<!--			<version>1.4.4.RELEASE</version>-->
+<!--			<type>pom</type>-->
+<!--			<scope>import</scope>-->
+<!--		</dependency>-->
+
 		<!-- Required for log4j to process log4j2.yml -->
 		<!-- See: springframework.guru/log4j-2-configuration-using-yaml -->
 		<dependency>

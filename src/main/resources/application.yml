@@ -48,3 +48,17 @@ spring:
 # Mappings for Rest Controllers
 webservice:
   halpath: /prices
+
+---
+feign:
+   client:
+     config:
+       default:
+          connectTimeout: 5000
+          readTimeout: 5000
+          errorDecoder:
+   logging:
+      level:
+         project:
+            user:
+               UserClient: BASIC

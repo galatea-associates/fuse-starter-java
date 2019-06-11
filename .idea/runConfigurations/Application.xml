@@ -3,7 +3,7 @@
     <option name="MAIN_CLASS_NAME" value="org.galatea.starter.Application" />
     <module name="fuse-starter-java" />
     <option name="PROGRAM_PARAMETERS" value="--debug --spring.profiles.active=test --server.port=8080" />
-    <option name="VM_PARAMETERS" value="-Dapplication.name=my-fuse-app -Dapplication.log-dir=$PROJECT_DIR$/../../../${USERNAME}/logs -Dapplication.log-archive-root-dir=$PROJECT_DIR$/../../../${USERNAME}/logs/archive" />
+    <option name="VM_PARAMETERS" value="-Dlog4j.configurationFile=log4j2-stdout.yml -Dapplication.name=my-fuse-app -Dapplication.log-dir=$PROJECT_DIR$/../../../${USERNAME}/logs -Dapplication.log-archive-root-dir=$PROJECT_DIR$/../../../${USERNAME}/logs/archive" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.galatea.starter.entrypoint.*" />

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter @Setter // Tells Lombok to generate getters/setters for all fields below
 @AllArgsConstructor //Tells java to instantiate all fields listed
-public class StockPrice {
+public class StockPrices {
 
   private final LocalDate date;
   private final double open;

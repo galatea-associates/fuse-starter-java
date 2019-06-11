@@ -1,5 +1,6 @@
 package org.galatea.starter.entrypoint;
 
+import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,21 +26,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class PriceRestController extends BaseRestController {
 
-
   @NonNull
   PriceService priceService;
 
   /**
    * Send the received text to the PriceService to be processed and send the result out
    */
-  // @GetMapping to link http GET request to this method
-  // @RequestParam to take a parameter from the url
+//   @GetMapping to link http GET request to this method
+//   @RequestParam to take a parameter from the url
   @GetMapping(value = "${webservice.halpath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public String priceEndpoint(
+  public Object priceEndpoint(
       @RequestParam(value = "stock") String stock,
       @RequestParam(value = "daysToLookBack", defaultValue= "1", required = false) int daysToLookBack,
-      @RequestParam (value = "requestId", required = false) String requestId) {
+      @RequestParam (value = "requestId", required = false) String requestId)
+
+      throws IOException {
     processRequestId (requestId);
-    return priceService.processStock(stock, daysToLookBack);
+    return priceService.getPricesByStock(stock);
   }
 }
