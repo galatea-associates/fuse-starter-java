@@ -32,7 +32,7 @@ public class SettlementMissionCsvConverter
 
   @Override
   protected boolean supports(final Class<?> clazz) {
-    // Use .isAssignableFrom() instead of .equals() in order to support subclasses
+    // Use .isAssignableFrom() instead of .equals() if this converter can support subclasses
     // Be careful using .isAssignableFrom(), because new subclasses may be added in the future that
     // aren't supported by the conversion logic in this converter
     return SettlementMissionList.class.equals(clazz);

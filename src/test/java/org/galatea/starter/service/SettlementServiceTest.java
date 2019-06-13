@@ -16,6 +16,7 @@ import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.domain.rpsy.ISettlementMissionRpsy;
 import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
+import org.galatea.starter.testutils.TestDataGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -39,8 +40,8 @@ public class SettlementServiceTest extends ASpringTest {
   public void testFindMissionFound() {
     Long id = 1L;
 
-    SettlementMission testSettlementMission = SettlementMission.builder().id(id).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).build();
+    SettlementMission testSettlementMission
+        = TestDataGenerator.defaultSettlementMissionData().build();
 
     given(this.mockSettlementMissionRpsy.findOne(id)).willReturn(testSettlementMission);
 
@@ -52,8 +53,9 @@ public class SettlementServiceTest extends ASpringTest {
   public void testFindMissionNotFound() {
     Long id = 1L;
 
-    SettlementMission testSettlementMission = SettlementMission.builder().id(id).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).build();
+
+    SettlementMission testSettlementMission
+        = TestDataGenerator.defaultSettlementMissionData().id(id).build();
 
     given(this.mockSettlementMissionRpsy.findOne(id)).willReturn(testSettlementMission);
 
@@ -64,12 +66,10 @@ public class SettlementServiceTest extends ASpringTest {
   @Test
   public void testFindMissionsFound() {
     List<Long> ids = Arrays.asList(1L, 2L);
-    SettlementMission settlementMission1 = SettlementMission.builder()
-        .id(1L).depot("DTC").externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d)
-        .build();
-    SettlementMission settlementMission2 = SettlementMission.builder()
-        .id(2L).depot("DTC").externalParty("EXT-2").instrument("IBM").direction("REC").qty(100d)
-        .build();
+    SettlementMission settlementMission1 = TestDataGenerator.defaultSettlementMissionData()
+        .id(1L).build();
+    SettlementMission settlementMission2 = TestDataGenerator.defaultSettlementMissionData()
+        .id(2L).build();
     List<SettlementMission> settlementMissions = Arrays.asList(
         settlementMission1, settlementMission2);
 

@@ -32,15 +32,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.MessageTranslationConfig;
-import org.galatea.starter.TestConfig;
-import org.galatea.starter.domain.Direction;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionList;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
-import org.galatea.starter.utils.ObjectSupplier;
+import org.galatea.starter.testutils.TestDataGenerator;
+import org.galatea.starter.testutils.XlsxComparator;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,21 +54,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.galatea.starter.testutils.XlsxComparator;
 
 @RequiredArgsConstructor
 @Slf4j
 // We don't load the entire spring application context for this test.
 @WebMvcTest(SettlementRestController.class)
 // Import Beans from Configuration, enabling them to be Autowired
-@Import({MessageTranslationConfig.class, TestConfig.class})
+@Import({MessageTranslationConfig.class})
 // Use this runner since we want to parameterize certain tests.
 // See runner's javadoc for more usage.
 @RunWith(JUnitParamsRunner.class)
 public class SettlementRestControllerTest extends ASpringTest {
-
-  @Autowired
-  private ObjectSupplier<SettlementMission> settlementMissionSupplier;
 
   @Autowired
   ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
@@ -160,7 +155,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMissionFound_JSON() throws Exception {
-    SettlementMission mission = settlementMissionSupplier.get();
+    SettlementMission mission = TestDataGenerator.defaultSettlementMissionData().build();
     log.info("Test mission: {}", mission);
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
@@ -182,7 +177,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMissionFound_XML() throws Exception {
-    SettlementMission mission = settlementMissionSupplier.get();
+    SettlementMission mission = TestDataGenerator.defaultSettlementMissionData().build();
     log.info("Test mission: {}", mission);
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
@@ -215,8 +210,10 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMissionsFound_JSON() throws Exception {
-    SettlementMission mission1 = createSettlementMission(1L);
-    SettlementMission mission2 = createSettlementMission(2L);
+    SettlementMission mission1 = TestDataGenerator.defaultSettlementMissionData()
+        .id(1L).build();
+    SettlementMission mission2 = TestDataGenerator.defaultSettlementMissionData()
+        .id(2L).build();
     List<SettlementMission> missions = Arrays.asList(mission1, mission2);
 
     given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
@@ -233,9 +230,10 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMissionsFound_XML() throws Exception {
-    SettlementMission mission1 = createSettlementMission(1L);
-    SettlementMission mission2 = createSettlementMission(2L);
-    List<SettlementMission> missions = Arrays.asList(mission1, mission2);
+    SettlementMission mission1 = TestDataGenerator.defaultSettlementMissionData()
+        .id(1L).build();
+    SettlementMission mission2 = TestDataGenerator.defaultSettlementMissionData()
+        .id(2L).build();
 
     given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
@@ -262,9 +260,12 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMissionsFound_CSV() throws Exception {
-    SettlementMission mission1 = createSettlementMission(1L);
-    SettlementMission mission2 = createSettlementMission(2L);
-    List<SettlementMission> missions = Arrays.asList(mission1, mission2);
+    SettlementMission mission1 = SettlementMission.builder()
+        .id(1L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).build();
+    SettlementMission mission2 = SettlementMission.builder()
+        .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).build();
 
     given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
@@ -282,9 +283,12 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMissionsFound_XLSX() throws Exception {
-    SettlementMission mission1 = createSettlementMission(1L);
-    SettlementMission mission2 = createSettlementMission(2L);
-    List<SettlementMission> missions = Arrays.asList(mission1, mission2);
+    SettlementMission mission1 = SettlementMission.builder()
+        .id(1L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).build();
+    SettlementMission mission2 = SettlementMission.builder()
+        .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).build();
 
     given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
@@ -340,18 +344,6 @@ public class SettlementRestControllerTest extends ASpringTest {
         .andExpect(header().string("requestElapsedTimeMillis", not(isEmptyOrNullString())));
     resultActions.andExpect(header().string("externalQueryId", not(isEmptyOrNullString())));
     resultActions.andExpect(header().string("internalQueryId", not(isEmptyOrNullString())));
-  }
-
-  private SettlementMission createSettlementMission(long id) {
-    return SettlementMission.builder()
-        .id(id)
-        .instrument("ABC")
-        .externalParty("EXT-1")
-        .depot("DEPOT-1")
-        .direction(Direction.REC.name())
-        .qty(100.0)
-        .build();
-
   }
 
 }
