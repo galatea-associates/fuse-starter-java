@@ -20,10 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequiredArgsConstructor
 @Slf4j
-@Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
+@Log (enterLevel = Level.INFO, exitLevel = Level.INFO)
 @RestController
-
-
 public class PriceRestController extends BaseRestController {
 
   @NonNull
@@ -31,17 +29,19 @@ public class PriceRestController extends BaseRestController {
 
   /**
    * Send the received text to the PriceService to be processed and send the result out
+   * @return
    */
 //   @GetMapping to link http GET request to this method
 //   @RequestParam to take a parameter from the url
   @GetMapping(value = "${webservice.halpath}", produces = {MediaType.APPLICATION_JSON_VALUE})
   public Object priceEndpoint(
       @RequestParam(value = "stock") String stock,
-      @RequestParam(value = "daysToLookBack", defaultValue= "1", required = false) int daysToLookBack,
+      @RequestParam(value = "days", defaultValue= "1", required = false) String daysToLookBack,
       @RequestParam (value = "requestId", required = false) String requestId)
 
       throws IOException {
     processRequestId (requestId);
-    return priceService.getPricesByStock(stock);
+    return priceService.getPricesByStock(stock, daysToLookBack);
+
   }
 }

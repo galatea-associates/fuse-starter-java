@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class Prices {
+public class ResponsePrices {
 
   @JsonProperty ("1. open")
   private double open;
