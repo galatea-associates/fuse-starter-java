@@ -42,4 +42,13 @@ public abstract class BaseSettlementRestController extends BaseRestController {
   protected Optional<SettlementMission> getMissionInternal(final Long id) {
     return settlementService.findMission(id);
   }
+
+  /**
+   * Retrieves multiple settlement missions from the settlement service.
+   *
+   * @param ids a comma-separated list of IDs of the missions to retrieve
+   */
+  protected List<SettlementMission> getMissionsInternal(final List<Long> ids) {
+    return settlementService.findMissions(ids);
+  }
 }

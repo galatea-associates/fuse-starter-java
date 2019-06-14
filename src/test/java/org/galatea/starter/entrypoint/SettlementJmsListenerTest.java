@@ -16,7 +16,7 @@ import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
 import org.galatea.starter.service.SettlementService;
-import org.galatea.starter.utils.ObjectSupplier;
+import org.galatea.starter.testutils.TestDataGenerator;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,12 +35,6 @@ public class SettlementJmsListenerTest extends ASpringTest {
 
   @Autowired
   protected JmsTemplate jmsTemplate;
-
-  @Autowired
-  protected ObjectSupplier<TradeAgreementProtoMessage> messageSupplier;
-
-  @Autowired
-  protected ObjectSupplier<TradeAgreement> agreementSupplier;
 
   @MockBean
   private SettlementService mockSettlementService;
@@ -84,8 +78,9 @@ public class SettlementJmsListenerTest extends ASpringTest {
   @Test
   @DirtiesContext
   public void testSettleOneAgreementProto() {
-    TradeAgreementProtoMessage message = messageSupplier.get();
-    TradeAgreement agreement = agreementSupplier.get();
+    TradeAgreementProtoMessage message
+        = TestDataGenerator.defaultTradeAgreementProtoMessageData().build();
+    TradeAgreement agreement = TestDataGenerator.defaultTradeAgreementData().build();
 
     log.info("Agreement message to put on queue {}", message);
     List<TradeAgreement> agreements = Collections.singletonList(agreement);

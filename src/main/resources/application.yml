@@ -16,6 +16,7 @@ spring:
 mvc:
    settleMissionPath: /settlementEngine
    getMissionPath: /settlementEngine/mission/
+   getMissionsPath: /settlementEngine/missions
    max-size-trace-payload: 50000
 jms:
    listener-concurrency: 1-5

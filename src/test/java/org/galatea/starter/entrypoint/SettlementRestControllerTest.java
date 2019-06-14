@@ -6,10 +6,12 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,13 +32,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.MessageTranslationConfig;
-import org.galatea.starter.TestConfig;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionList;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
-import org.galatea.starter.utils.ObjectSupplier;
+import org.galatea.starter.testutils.TestDataGenerator;
+import org.galatea.starter.testutils.XlsxComparator;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,14 +60,11 @@ import org.springframework.test.web.servlet.ResultActions;
 // We don't load the entire spring application context for this test.
 @WebMvcTest(SettlementRestController.class)
 // Import Beans from Configuration, enabling them to be Autowired
-@Import({MessageTranslationConfig.class, TestConfig.class})
+@Import({MessageTranslationConfig.class})
 // Use this runner since we want to parameterize certain tests.
 // See runner's javadoc for more usage.
 @RunWith(JUnitParamsRunner.class)
 public class SettlementRestControllerTest extends ASpringTest {
-
-  @Autowired
-  private ObjectSupplier<SettlementMission> settlementMissionSupplier;
 
   @Autowired
   ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
@@ -74,6 +75,8 @@ public class SettlementRestControllerTest extends ASpringTest {
   @MockBean
   private SettlementService mockSettlementService;
 
+  private ObjectMapper objectMapper;
+
   private JacksonTester<TradeAgreementMessages> agreementJsonTester;
 
   private JacksonTester<List<Long>> missionIdJsonTester;
@@ -83,7 +86,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Before
   public void setup() {
-    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper = new ObjectMapper();
     JacksonTester.initFields(this, objectMapper);
   }
 
@@ -152,7 +155,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMissionFound_JSON() throws Exception {
-    SettlementMission mission = settlementMissionSupplier.get();
+    SettlementMission mission = TestDataGenerator.defaultSettlementMissionData().build();
     log.info("Test mission: {}", mission);
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
@@ -174,7 +177,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMissionFound_XML() throws Exception {
-    SettlementMission mission = settlementMissionSupplier.get();
+    SettlementMission mission = TestDataGenerator.defaultSettlementMissionData().build();
     log.info("Test mission: {}", mission);
 
     given(this.mockSettlementService.findMission(MISSION_ID_1))
@@ -202,6 +205,106 @@ public class SettlementRestControllerTest extends ASpringTest {
         .perform(get("/settlementEngine/mission/" + msnId + "?requestId=1234")
             .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound());
+    verifyAuditHeaders(resultActions);
+  }
+
+  @Test
+  public void testGetMissionsFound_JSON() throws Exception {
+    SettlementMission mission1 = TestDataGenerator.defaultSettlementMissionData()
+        .id(1L).build();
+    SettlementMission mission2 = TestDataGenerator.defaultSettlementMissionData()
+        .id(2L).build();
+    List<SettlementMission> missions = Arrays.asList(mission1, mission2);
+
+    given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
+        .willReturn(Arrays.asList(mission1, mission2));
+
+    ResultActions resultActions= this.mvc
+        .perform(get("/settlementEngine/missions?ids=1,2&format=json&requestId=1234"))
+        .andExpect(status().isOk())
+        .andExpect(content().json(
+            objectMapper.writeValueAsString(new SettlementMissionList(missions))));
+
+    verifyAuditHeaders(resultActions);
+  }
+
+  @Test
+  public void testGetMissionsFound_XML() throws Exception {
+    SettlementMission mission1 = TestDataGenerator.defaultSettlementMissionData()
+        .id(1L).build();
+    SettlementMission mission2 = TestDataGenerator.defaultSettlementMissionData()
+        .id(2L).build();
+
+    given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
+        .willReturn(Arrays.asList(mission1, mission2));
+
+    ResultActions resultActions= this.mvc
+        .perform(get("/settlementEngine/missions?ids=1,2&format=xml&requestId=1234"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/xml"))
+        // In XPath, [n] has a higher precedence than //foo, meaning //foo[n] is interpreted as
+        // //(foo[n]). What we actually want is (//foo)[n], so write that explicitly.
+        .andExpect(xpath("(//id)[1]").string(mission1.getId().toString()))
+        .andExpect(xpath("(//externalParty)[1]").string(mission1.getExternalParty()))
+        .andExpect(xpath("(//instrument)[1]").string(mission1.getInstrument()))
+        .andExpect(xpath("(//direction)[1]").string(mission1.getDirection()))
+        .andExpect(xpath("(//qty)[1]").string(String.valueOf(mission1.getQty())))
+        .andExpect(xpath("(//id)[2]").string(mission2.getId().toString()))
+        .andExpect(xpath("(//externalParty)[2]").string(mission2.getExternalParty()))
+        .andExpect(xpath("(//instrument)[2]").string(mission2.getInstrument()))
+        .andExpect(xpath("(//direction)[2]").string(mission2.getDirection()))
+        .andExpect(xpath("(//qty)[2]").string(String.valueOf(mission2.getQty())));
+
+    verifyAuditHeaders(resultActions);
+  }
+
+  @Test
+  public void testGetMissionsFound_CSV() throws Exception {
+    SettlementMission mission1 = SettlementMission.builder()
+        .id(1L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).build();
+    SettlementMission mission2 = SettlementMission.builder()
+        .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).build();
+
+    given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
+        .willReturn(Arrays.asList(mission1, mission2));
+
+    String expectedCsv = readData("SettlementMissions.csv");
+
+    ResultActions resultActions= this.mvc
+        .perform(get("/settlementEngine/missions?ids=1,2&format=csv&requestId=1234"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("text/csv"))
+        .andExpect(content().string(expectedCsv));
+
+    verifyAuditHeaders(resultActions);
+  }
+
+  @Test
+  public void testGetMissionsFound_XLSX() throws Exception {
+    SettlementMission mission1 = SettlementMission.builder()
+        .id(1L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).build();
+    SettlementMission mission2 = SettlementMission.builder()
+        .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).build();
+
+    given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
+        .willReturn(Arrays.asList(mission1, mission2));
+
+    byte[] expectedXlsx = readBytes("SettlementMissions.xlsx");
+
+    ResultActions resultActions = this.mvc
+        .perform(get("/settlementEngine/missions?ids=1,2&format=xlsx&requestId=1234"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/vnd.ms-excel"));
+
+    // Directly comparing the spreadsheet bytes fails even when the expected spreadsheet appears to
+    // be an exact copy of the actual result, so instead compare the spreadsheet contents logically
+    byte[] actualXlsx = resultActions.andReturn().getResponse().getContentAsByteArray();
+    assertTrue(XlsxComparator.equals(expectedXlsx, actualXlsx));
+
     verifyAuditHeaders(resultActions);
   }
 
