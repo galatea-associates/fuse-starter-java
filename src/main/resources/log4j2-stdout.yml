@@ -23,4 +23,9 @@ Configuration:
       level: info 
       AppenderRef:
         - ref: Console               
-    
+
+    Logger:
+      # Turn off Spring auto-configuration debug-level logging because it adds a lot of noise to startup logs
+      # If Spring debug logging is off this isn't necessary
+      - name: org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLoggingInitializer
+        level: info
