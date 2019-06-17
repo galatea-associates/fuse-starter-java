@@ -7,8 +7,8 @@
       </pattern>
     </extension>
     <option name="MAIN_CLASS_NAME" value="org.galatea.starter.Application" />
-    <option name="VM_PARAMETERS" value="-Dapplication.name=my-fuse-app -Dapplication.log-dir=c:/Users/${USERNAME}/logs -Dapplication.log-archive-root-dir=c:/Users/${USERNAME}/logs/archive" />
-    <option name="PROGRAM_PARAMETERS" value="--debug --spring.profiles.active=dev --server.port=8080" />
+    <option name="VM_PARAMETERS" value="-Dapplication.name=my-fuse-app -Dapplication.log-dir=logs -Dapplication.log-archive-root-dir=logs/archive" />
+    <option name="PROGRAM_PARAMETERS" value="--spring.profiles.active=dev --server.port=8080" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" />
