@@ -31,6 +31,7 @@ This readme will contain an index to features and their location in code.
     - Note, logs will be written to <project_directory>/logs and will not be written to stdout as is generally appropriate in a cloud-deployed setting. See Logging section for more info.
     - Note, the server port on which the application runs is set via program argument in the run configuration, --server.port=8080.  If you need to change which port to run on, change the argument in the run configuration.
   - To run unit tests, use the "Unit Tests" run config. See Testing section below for more info.
+  - To validate code style, use the "Checkstyle" run config.
 
 ### A note on spring profiles
 - The project comes with support for 3 spring profiles:
