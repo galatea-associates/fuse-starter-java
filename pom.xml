@@ -13,11 +13,11 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<!-- VM and application args used during maven steps, e.g. mvn test -->
+		<!-- Use log config that writes to stdout so that application logs during tests show up in Jenkins build logs -->
 		<argLine>
 			-Dapplication.name=${project.artifactId}
-			-Dapplication.log-dir=target/logs
-			-Dapplication.log-archive-root-dir=target/logs/archive
-			-Dlog4j.configurationFile=log4j2.yml,log4j2-debug.yml
+			-Dlog4j.configurationFile=log4j2-test.yml
 			-Dserver.port=8080
 		</argLine>
 		<sonar.exclusions>**/ProtobufMessages.java</sonar.exclusions>
