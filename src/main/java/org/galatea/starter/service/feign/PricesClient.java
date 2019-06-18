@@ -1,7 +1,7 @@
 package org.galatea.starter.service.feign;
 
 
-import org.galatea.starter.domain.ModelResponse.AlphaPrices;
+import org.galatea.starter.domain.modelresponse.AlphaPrices;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -1,4 +1,4 @@
-package org.galatea.starter.domain;
+package org.galatea.starter.domain.internal;
 
 import java.util.Date;
 import javax.persistence.Entity;
@@ -6,15 +6,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.galatea.starter.domain.modelresponse.ResponsePrices;
 
 @Getter @Setter // Tells Lombok to generate getters/setters for all fields below
 @AllArgsConstructor //Tells java to instantiate all fields listed
-
+@Builder
 @Entity
-public class StockPrices {
-
+public class StockPrices extends ResponsePrices {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

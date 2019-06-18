@@ -9,6 +9,10 @@ spring:
       # http://www.h2database.com/html/tutorial.html#using_server
       url: jdbc:h2:mem:testtest
       driver-class-name: org.h2.Driver
+
+   h2:
+      console:
+         enabled: true
    jpa:
       hibernate:
          ddl-auto: update

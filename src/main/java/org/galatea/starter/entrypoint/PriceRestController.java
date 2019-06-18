@@ -1,11 +1,13 @@
 package org.galatea.starter.entrypoint;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
+import org.galatea.starter.domain.modelresponse.AlphaPrices;
 import org.galatea.starter.service.PriceService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,24 +26,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PriceRestController extends BaseRestController {
 
+
   @NonNull
   PriceService priceService;
 
   /**
    * Send the received text to the PriceService to be processed and send the result out
-   * @return
+   *
+   * @GetMapping to link http GET request to this method
+   * @RequestParam to take a parameter from the url
    */
-//   @GetMapping to link http GET request to this method
-//   @RequestParam to take a parameter from the url
+
+
   @GetMapping(value = "${webservice.halpath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public Object priceEndpoint(
-      @RequestParam(value = "stock") String stock,
+  public AlphaPrices priceEndpoint(
+
+  @RequestParam(value = "stock") String stock,
       @RequestParam(value = "days", defaultValue= "1", required = false) String daysToLookBack,
       @RequestParam (value = "requestId", required = false) String requestId)
 
-      throws IOException {
+      throws IOException, SQLException {
     processRequestId (requestId);
-    return priceService.getPricesByStock(stock, daysToLookBack);
 
+    return priceService.getPricesByStock(stock, daysToLookBack);
   }
 }

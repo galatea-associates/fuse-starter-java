@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @RequiredArgsConstructor
@@ -23,18 +23,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 public class PriceRestControllerIntegrationTest {
 
-    @Value("${fuse-host.url}")
-    private String FuseHostName;
+  @Autowired
+  private PricesClient pricesclient;
 
-    @Test
+
+  @Test
     public void processStock() {
-      String fuseHostName = System.getProperty("fuse.sandbox.url");
-      if (fuseHostName == null || fuseHostName.isEmpty()) {
-        fuseHostName = FuseHostName;
-      }
 
       PricesClient fuseServer = Feign.builder().decoder(new JacksonDecoder()).encoder(new JacksonEncoder())
-          .target(PricesClient.class, fuseHostName);
+          .target(PricesClient.class, "http://localhost:8080/prices?stock=&days=105");
 
       String halResponse = fuseServer.halEndpoint("coin-flip");
       log.info("Coin flip response: {}", halResponse);

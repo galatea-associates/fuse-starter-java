@@ -2,6 +2,7 @@ package org.galatea.starter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.aspect4log.Log;
 import org.galatea.starter.utils.exception.MissingOptionException;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,6 +19,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @SpringBootApplication
 @Slf4j
 @EnableFeignClients
+@Log
 public class Application implements ApplicationRunner {
 
   /**
@@ -26,9 +28,14 @@ public class Application implements ApplicationRunner {
    * @param args command line args
    */
   public static void main(final String[] args) {
+
+    long startTime = System.currentTimeMillis();
     log.info("Starting spring application {}", System.getProperty("application.name"));
     SpringApplication.run(Application.class, args);
 
+    long endTime = System.currentTimeMillis();
+    long processTime = endTime - startTime;
+    log.info ("System start up time (ms): {}", (endTime - startTime));
   }
 
   /**
@@ -45,5 +52,6 @@ public class Application implements ApplicationRunner {
       throw new MissingOptionException("Server port must be set via command line parameter");
     }
   }
+
 
 }

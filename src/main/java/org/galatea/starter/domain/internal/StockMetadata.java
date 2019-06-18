@@ -1,4 +1,4 @@
-package org.galatea.starter.domain;
+package org.galatea.starter.domain.internal;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
