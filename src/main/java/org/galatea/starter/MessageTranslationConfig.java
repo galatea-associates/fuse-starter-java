@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class MessageTranslationConfig {
 
   /**
-   * @return a translator to convert SettlementMissions to protobuf messages.
+   * Returns a translator to convert SettlementMissions to protobuf messages.
    */
   @Bean
   public ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator() {
@@ -29,7 +29,7 @@ public class MessageTranslationConfig {
   }
 
   /**
-   * @return a translator to convert protobuf messages to TradeAgreements
+   * Returns a translator to convert protobuf messages to TradeAgreements.
    */
   @Bean
   public ITranslator<TradeAgreementMessage, TradeAgreement> tradeAgreementMessageTranslator() {
@@ -43,11 +43,11 @@ public class MessageTranslationConfig {
   }
 
   /**
-   * @return a translator to convert protobuf messages to a list of TradeAgreements
+   * Returns a translator to convert protobuf messages to a list of TradeAgreements.
    */
   @Bean
   public ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementMessagesTranslator(
-      ITranslator<TradeAgreementMessage, TradeAgreement> translator) {
+      final ITranslator<TradeAgreementMessage, TradeAgreement> translator) {
     return messages -> messages.getAgreements().stream().map(translator::translate)
         .collect(Collectors.toList());
   }

@@ -20,6 +20,9 @@ import org.springframework.http.converter.AbstractHttpMessageConverter;
 public class SettlementMissionCsvConverter
     extends AbstractHttpMessageConverter<SettlementMissionList> {
 
+  /**
+   * Construct a SettlementMissionCsvConverter that supports a CSV MediaType.
+   */
   public SettlementMissionCsvConverter() {
     // The media type supported by this converter
     // Incoming media type for an HTTP request is described in the Content Type header

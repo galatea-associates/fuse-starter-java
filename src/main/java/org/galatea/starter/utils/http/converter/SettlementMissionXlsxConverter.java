@@ -20,6 +20,9 @@ import org.springframework.http.converter.AbstractHttpMessageConverter;
 public class SettlementMissionXlsxConverter
     extends AbstractHttpMessageConverter<SettlementMissionList> {
 
+  /**
+   * Construct a SettlementMissionXlsxConverter that supports an Excel MediaType.
+   */
   public SettlementMissionXlsxConverter() {
     super(MvcConfig.APPLICATION_EXCEL);
   }

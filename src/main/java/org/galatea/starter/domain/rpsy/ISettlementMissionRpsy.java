@@ -7,6 +7,9 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ISettlementMissionRpsy extends CrudRepository<SettlementMission, Long> {
 
+  /**
+   * Retrieves all entities with the given depot.
+   */
   List<SettlementMission> findByDepot(String depot);
 
   @Override

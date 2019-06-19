@@ -74,10 +74,24 @@ public class Tracer {
     traceInfo.get().put(keyOf(clz, key), val);
   }
 
+  /**
+   * Retrieves a value object given a class and a key used together as a MultiKey.
+   *
+   * @param clz the class owning the 'key'
+   * @param key the key identifier
+   * @return the value associated with the class-and-key MultiKey
+   */
   public static Object get(@NonNull final Class<?> clz, @NonNull final String key) {
     return traceInfo.get().get(keyOf(clz, key));
   }
 
+
+  /**
+   * Removes an entry given a class and a key used together as a MultiKey.
+   *
+   * @param clz the class owning the 'key'
+   * @param key the key identifier
+   */
   public static void remove(@NonNull final Class<?> clz, @NonNull final String key) {
     traceInfo.get().remove(keyOf(clz, key));
   }
@@ -88,7 +102,7 @@ public class Tracer {
    *
    * @param externalRequestId The externally provided request id
    */
-  public static void setExternalRequestId(String externalRequestId) {
+  public static void setExternalRequestId(final String externalRequestId) {
     // Add request id to Trace
     addTraceInfo(Tracer.class, EXTERNAL_REQUEST_ID, externalRequestId);
 

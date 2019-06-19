@@ -5,7 +5,10 @@ package org.galatea.starter.utils.translation;
  */
 public class TranslationException extends RuntimeException {
 
-  public TranslationException(String message, Throwable cause) {
+  /**
+   * Constructs a new TranslationException with the specified detail message and cause.
+   */
+  public TranslationException(final String message, final Throwable cause) {
     super(message, cause);
   }
 }

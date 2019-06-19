@@ -151,8 +151,8 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
   /**
    * Logs header name/value and adds them to the response.
    */
-  private void logAndAddAuditHeader(HttpServletResponse response, String headerName,
-      String headerValue) {
+  private void logAndAddAuditHeader(final HttpServletResponse response, final String headerName,
+      final String headerValue) {
     log.debug("Adding audit header {}={}", headerName, headerValue);
     if (headerValue == null) {
       log.debug("Not adding header {} with null value", headerName);
@@ -215,6 +215,10 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     return payload;
   }
 
+  /**
+   * Returns maxPayloadLength, the configured max number of bytes of payload information to
+   * capture in the trace.
+   */
   public int getMaxPayloadLength() {
     return maxPayloadLength;
   }

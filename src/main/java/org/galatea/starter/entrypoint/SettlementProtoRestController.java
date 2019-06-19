@@ -53,9 +53,10 @@ public class SettlementProtoRestController extends BaseSettlementRestController 
    * spring boot. This constructor was manually added because of the base class that has no default
    * constructor, necessitating a call to super() from here.
    */
-  public SettlementProtoRestController(SettlementService settlementService,
-      ITranslator<TradeAgreementProtoMessages, List<TradeAgreement>> tradeAgreementTranslator,
-      ITranslator<SettlementMission, SettlementMissionProtoMessage> settlementMissionTranslator) {
+  public SettlementProtoRestController(final SettlementService settlementService,
+      final ITranslator<TradeAgreementProtoMessages, List<TradeAgreement>> tradeAgreementTranslator,
+      final ITranslator<SettlementMission, SettlementMissionProtoMessage>
+          settlementMissionTranslator) {
     super(settlementService);
     this.settlementMissionTranslator = settlementMissionTranslator;
     this.tradeAgreementTranslator = tradeAgreementTranslator;
@@ -68,7 +69,7 @@ public class SettlementProtoRestController extends BaseSettlementRestController 
       produces = APPLICATION_X_PROTOBUF)
   public SettlementResponseProtoMessage settleAgreement(
       @RequestBody final TradeAgreementProtoMessages messages,
-      @RequestParam(value = "requestId", required = false) String requestId) {
+      @RequestParam(value = "requestId", required = false) final String requestId) {
     // if an external request id was provided, grab it
     processRequestId(requestId);
 
@@ -84,7 +85,7 @@ public class SettlementProtoRestController extends BaseSettlementRestController 
    */
   @GetMapping(value = "${mvc.getMissionPath}" + "{id}", produces = APPLICATION_X_PROTOBUF)
   public SettlementMissionProtoMessage getMission(@PathVariable final Long id,
-      @RequestParam(value = "requestId", required = false) String requestId) {
+      @RequestParam(value = "requestId", required = false) final String requestId) {
     // if an external request id was provided, grab it
     processRequestId(requestId);
 

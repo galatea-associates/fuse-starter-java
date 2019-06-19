@@ -17,6 +17,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 // configuring w/o Spring Boot
 public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
+  /**
+   * Sets configuration for Swagger.
+   */
   @Bean
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
@@ -26,7 +29,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
   // the documentation says this shouldn't be necessary, but swagger-ui.html wasn't available
   // without it...
   @Override
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+  public void addResourceHandlers(final ResourceHandlerRegistry registry) {
     registry.addResourceHandler("swagger-ui.html")
         .addResourceLocations("classpath:/META-INF/resources/");
 

@@ -8,7 +8,10 @@ public class ConstraintViolationMessageFormatter {
   private ConstraintViolationMessageFormatter() {
   }
 
-  public static String toMessage(ConstraintViolationException exception) {
+  /**
+   * Creates a String listing all the violations held in the given ConstraintViolationException.
+   */
+  public static String toMessage(final ConstraintViolationException exception) {
     StringBuilder sb = new StringBuilder();
 
     for (ConstraintViolation<?> cv : exception.getConstraintViolations()) {

@@ -10,7 +10,7 @@ public class MissingOptionException extends RuntimeException {
    *
    * @param message exception message
    */
-  public MissingOptionException(String message) {
+  public MissingOptionException(final String message) {
     super(message);
   }
 }

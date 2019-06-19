@@ -19,14 +19,15 @@ public class ProtoMessageTranslationConfig {
   /**
    * Implements a translator to convert binary protobuf messages to TradeAgreements
    *
-   * This translator is used for the protobuf JMS listener. The SimpleMessageConverter we use in
+   * <p>This translator is used for the protobuf JMS listener. The SimpleMessageConverter we use in
    * that listener gives back a byte[] containing a serialized TradeAgreementProtoMessage, so we
    * need to perform two steps to get to the TradeAgreement we want: convert the byte array back to
    * a TradeAgreementProtoMessage and then translate it to the internal domain type.
    */
   @Bean
   public ITranslator<byte[], TradeAgreement> tradeAgreementBinaryProtobufTranslator(
-      ITranslator<TradeAgreementProtoMessage, TradeAgreement> tradeAgreementProtoMessageTranslator) {
+      final ITranslator<TradeAgreementProtoMessage, TradeAgreement>
+          tradeAgreementProtoMessageTranslator) {
     return msg -> {
       TradeAgreementProtoMessage message;
 
@@ -56,7 +57,8 @@ public class ProtoMessageTranslationConfig {
    * protobuf messages.
    */
   @Bean
-  public ITranslator<SettlementMission, SettlementMissionProtoMessage> settlementMissionProtoTranslator() {
+  public ITranslator<SettlementMission, SettlementMissionProtoMessage>
+      settlementMissionProtoTranslator() {
     return msg -> SettlementMissionProtoMessage.newBuilder().setId(msg.getId())
         .setDepot(msg.getDepot()).setDirection(msg.getDirection())
         .setExternalParty(msg.getExternalParty()).setInstrument(msg.getInstrument())
@@ -68,8 +70,9 @@ public class ProtoMessageTranslationConfig {
    * TradeAgreement domain objects.
    */
   @Bean
-  public ITranslator<TradeAgreementProtoMessages, List<TradeAgreement>> tradeAgreementProtoMessagesTranslator(
-      ITranslator<TradeAgreementProtoMessage, TradeAgreement> translator) {
+  public ITranslator<TradeAgreementProtoMessages, List<TradeAgreement>>
+      tradeAgreementProtoMessagesTranslator(
+      final ITranslator<TradeAgreementProtoMessage, TradeAgreement> translator) {
     return msg -> msg.getMessageList().stream().map(translator::translate)
         .collect(Collectors.toList());
   }

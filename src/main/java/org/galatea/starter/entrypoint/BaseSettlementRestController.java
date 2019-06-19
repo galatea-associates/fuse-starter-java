@@ -29,8 +29,8 @@ public abstract class BaseSettlementRestController extends BaseRestController {
   /**
    * Invokes the settlement service to spawn missions for the specified trade agreements.
    */
-  protected Set<String> settleAgreementInternal(List<TradeAgreement> agreements,
-      String getMissionPath) {
+  protected Set<String> settleAgreementInternal(final List<TradeAgreement> agreements,
+      final String getMissionPath) {
 
     Set<Long> missionIds = settlementService.spawnMissions(agreements);
     return missionIds.stream().map(id -> getMissionPath + id)

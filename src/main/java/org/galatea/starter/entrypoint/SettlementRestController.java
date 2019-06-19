@@ -56,9 +56,9 @@ public class SettlementRestController extends BaseSettlementRestController {
    * spring boot. This constructor was manually added because of the base class that has no default
    * constructor, necessitating a call to super() from here.
    */
-  public SettlementRestController(SettlementService settlementService,
-      ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator,
-      ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator) {
+  public SettlementRestController(final SettlementService settlementService,
+      final ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator,
+      final ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator) {
     super(settlementService);
     this.tradeAgreementTranslator = tradeAgreementTranslator;
     this.settlementMissionTranslator = settlementMissionTranslator;
@@ -74,7 +74,7 @@ public class SettlementRestController extends BaseSettlementRestController {
       MediaType.APPLICATION_XML_VALUE})
   public SettlementResponseMessage settleAgreement(
       @RequestBody final TradeAgreementMessages messages,
-      @RequestParam(value = "requestId", required = false) String requestId) {
+      @RequestParam(value = "requestId", required = false) final String requestId) {
 
     // if an external request id was provided, grab it
     processRequestId(requestId);
@@ -96,7 +96,7 @@ public class SettlementRestController extends BaseSettlementRestController {
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.APPLICATION_XML_VALUE})
   public SettlementMissionMessage getMission(@PathVariable final Long id,
-      @RequestParam(value = "requestId", required = false) String requestId) {
+      @RequestParam(value = "requestId", required = false) final String requestId) {
 
     // if an external request id was provided, grab it
     processRequestId(requestId);

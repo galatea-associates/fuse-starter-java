@@ -25,7 +25,7 @@ import org.springframework.messaging.handler.annotation.support.MessageHandlerMe
 public class JmsConfig implements JmsListenerConfigurer {
 
   /**
-   * @return an implementation of failed message consumer that simply logs the message.
+   * Returns an implementation of failed message consumer that simply logs the message.
    */
   @Bean
   public BiConsumer<Message, Exception> failedMessageConsumer() {
@@ -78,8 +78,8 @@ public class JmsConfig implements JmsListenerConfigurer {
    * specified in the message itself, while the spring messaging converter will do what you expect
    * and convert to the type of the input parameter in the listener.
    *
-   * In order to use a spring messaging converter we have to implement JmsListenerConfigurer and set
-   * the custom MessageHandlerMethodFactory.
+   * <p>In order to use a spring messaging converter we have to implement JmsListenerConfigurer and
+   * set the custom MessageHandlerMethodFactory.
    *
    * @return a new handler factory that uses a different message converter than the default one.
    */

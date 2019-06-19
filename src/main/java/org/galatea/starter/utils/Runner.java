@@ -41,6 +41,9 @@ public class Runner {
   @Setter
   protected String taskName = "";
 
+  /**
+   * Creates a Runner holding the given Runnable.
+   */
   public static Runner of(final Runnable op) {
     return new Runner(op);
   }
