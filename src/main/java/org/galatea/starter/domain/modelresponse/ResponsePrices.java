@@ -3,8 +3,10 @@ package org.galatea.starter.domain.modelresponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ResponsePrices {
 
   @JsonProperty("1. open")
@@ -23,4 +25,7 @@ public class ResponsePrices {
   private double dividendAmount;
   @JsonProperty("8. split coefficient")
   private double splitCoefficient;
+
+  private String stock;
+
 }

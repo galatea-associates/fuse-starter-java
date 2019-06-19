@@ -13,5 +13,4 @@ public class AlphaPrices {
     @JsonProperty ("Time Series (Daily)")
     private HashMap<Date, ResponsePrices> avPrices;
 
-
 }

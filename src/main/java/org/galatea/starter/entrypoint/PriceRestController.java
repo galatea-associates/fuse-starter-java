@@ -2,12 +2,13 @@ package org.galatea.starter.entrypoint;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collection;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
-import org.galatea.starter.domain.modelresponse.AlphaPrices;
+import org.galatea.starter.domain.internal.StockPrices;
 import org.galatea.starter.service.PriceService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,11 +36,12 @@ public class PriceRestController extends BaseRestController {
    *
    * @GetMapping to link http GET request to this method
    * @RequestParam to take a parameter from the url
+   * @return
    */
 
 
   @GetMapping(value = "${webservice.halpath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public AlphaPrices priceEndpoint(
+  public Collection<StockPrices> priceEndpoint(
 
   @RequestParam(value = "stock") String stock,
       @RequestParam(value = "days", defaultValue= "1", required = false) String daysToLookBack,
@@ -47,7 +49,7 @@ public class PriceRestController extends BaseRestController {
 
       throws IOException, SQLException {
     processRequestId (requestId);
-
-    return priceService.getPricesByStock(stock, daysToLookBack);
+    priceService.getPricesByStock(stock, daysToLookBack);
+    return priceService.ConvertPrices(stock);
   }
 }
