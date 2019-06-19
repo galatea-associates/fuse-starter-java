@@ -1,4 +1,3 @@
-
 package org.galatea.starter;
 
 import org.springframework.context.annotation.Bean;

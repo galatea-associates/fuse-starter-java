@@ -19,10 +19,10 @@ public class ProtoMessageTranslationConfig {
   /**
    * Implements a translator to convert binary protobuf messages to TradeAgreements
    *
-   * This translator is used for the protobuf JMS listener. The SimpleMessageConverter we use
-   * in that listener gives back a byte[] containing a serialized TradeAgreementProtoMessage, so we
-   * need to perform two steps to get to the TradeAgreement we want: convert the byte array back to a
-   * TradeAgreementProtoMessage and then translate it to the internal domain type.
+   * This translator is used for the protobuf JMS listener. The SimpleMessageConverter we use in
+   * that listener gives back a byte[] containing a serialized TradeAgreementProtoMessage, so we
+   * need to perform two steps to get to the TradeAgreement we want: convert the byte array back to
+   * a TradeAgreementProtoMessage and then translate it to the internal domain type.
    */
   @Bean
   public ITranslator<byte[], TradeAgreement> tradeAgreementBinaryProtobufTranslator(
@@ -52,8 +52,8 @@ public class ProtoMessageTranslationConfig {
   }
 
   /**
-   * Implements a translator to convert domain SettlementMission objects to SettlementMission protobuf
-   * messages.
+   * Implements a translator to convert domain SettlementMission objects to SettlementMission
+   * protobuf messages.
    */
   @Bean
   public ITranslator<SettlementMission, SettlementMissionProtoMessage> settlementMissionProtoTranslator() {

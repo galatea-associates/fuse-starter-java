@@ -37,7 +37,7 @@ public class TestDataGenerator {
    * Generate a TradeAgreementProtoMessage builder populated with some default test values.
    */
   public static ProtobufMessages.TradeAgreementProtoMessage.Builder
-      defaultTradeAgreementProtoMessageData() {
+  defaultTradeAgreementProtoMessageData() {
     return ProtobufMessages.TradeAgreementProtoMessage.newBuilder()
         .setInstrument("IBM")
         .setInternalParty("INT-1")

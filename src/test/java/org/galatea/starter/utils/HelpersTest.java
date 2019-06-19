@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang3.builder.DiffResult;
 import org.junit.Test;
 
@@ -17,6 +16,7 @@ import org.junit.Test;
 public class HelpersTest {
 
   public static class SimpleObject {
+
     private String x = "X";
 
     void setX(String x) {

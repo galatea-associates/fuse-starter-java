@@ -1,4 +1,3 @@
-
 package org.galatea.starter;
 
 import com.google.common.collect.Sets;

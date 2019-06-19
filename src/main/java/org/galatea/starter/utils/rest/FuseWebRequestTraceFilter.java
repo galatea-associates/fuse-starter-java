@@ -1,14 +1,23 @@
-
 package org.galatea.starter.utils.rest;
 
 import static org.galatea.starter.utils.Tracer.addTraceInfo;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Map;
+import java.util.function.Predicate;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.Tracer;
@@ -20,26 +29,12 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Map;
-import java.util.function.Predicate;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-
 /**
  * Builds upon spring actuator's web request tracer to capture interesting audit information. We
  * capture some additional timing data as well as the request/response payload (which is missing
  * from spring's default implementation).
  *
  * @author rbasu
- *
  */
 @ToString
 @EqualsAndHashCode(callSuper = true)
@@ -65,9 +60,10 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
    *
    * @param repository the respository where we store our trace
    * @param properties any trace properties
-   * @param pathsToSkip a predicate that will return try if we want to a skip a certain url path
-   * @param maxPayloadLength the max number of bytes of payload information that we want to capture
-   *        in the trace
+   * @param pathsToSkip a predicate that will return try if we want to a skip a certain url
+   *     path
+   * @param maxPayloadLength the max number of bytes of payload information that we want to
+   *     capture in the trace
    */
   public FuseWebRequestTraceFilter(final FuseTraceRepository repository,
       final TraceProperties properties, final Predicate<String> pathsToSkip,
@@ -228,7 +224,6 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
    * was private.
    *
    * @author rbasu
-   *
    */
   private static final class CustomStatusResponseWrapper extends HttpServletResponseWrapper {
 

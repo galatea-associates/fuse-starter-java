@@ -1,5 +1,7 @@
 package org.galatea.starter;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
@@ -8,9 +10,6 @@ import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 public class MessageTranslationConfig {

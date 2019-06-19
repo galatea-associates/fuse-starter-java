@@ -1,8 +1,9 @@
-
 package org.galatea.starter;
 
+import java.util.function.BiConsumer;
+import javax.jms.ConnectionFactory;
+import javax.jms.Message;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.jms.FuseJmsListenerContainerFactory;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -13,11 +14,6 @@ import org.springframework.jms.annotation.JmsListenerConfigurer;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerEndpointRegistrar;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
-
-import java.util.function.BiConsumer;
-
-import javax.jms.ConnectionFactory;
-import javax.jms.Message;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
@@ -26,7 +22,7 @@ import org.springframework.messaging.handler.annotation.support.MessageHandlerMe
 @Slf4j
 @Configuration
 @EnableJms
-public class JmsConfig implements JmsListenerConfigurer{
+public class JmsConfig implements JmsListenerConfigurer {
 
   /**
    * @return an implementation of failed message consumer that simply logs the message.
@@ -78,12 +74,12 @@ public class JmsConfig implements JmsListenerConfigurer{
 
   /**
    * For JSON messages we want to use the spring messaging converter instead of the spring jms
-   * converter. The spring jms converter expects the type of object to deserialize the json to
-   * being specified in the message itself, while the spring messaging converter will do what
-   * you expect and convert to the type of the input parameter in the listener.
+   * converter. The spring jms converter expects the type of object to deserialize the json to being
+   * specified in the message itself, while the spring messaging converter will do what you expect
+   * and convert to the type of the input parameter in the listener.
    *
-   * In order to use a spring messaging converter we have to implement JmsListenerConfigurer and
-   * set the custom MessageHandlerMethodFactory.
+   * In order to use a spring messaging converter we have to implement JmsListenerConfigurer and set
+   * the custom MessageHandlerMethodFactory.
    *
    * @return a new handler factory that uses a different message converter than the default one.
    */
@@ -98,9 +94,8 @@ public class JmsConfig implements JmsListenerConfigurer{
   }
 
   /**
-   * This sets the custom MessageHandlerMethodFactory for the listener registrar for the
-   * connection factory that we've set up for JSON.
-   * @param registrar
+   * This sets the custom MessageHandlerMethodFactory for the listener registrar for the connection
+   * factory that we've set up for JSON.
    */
   @Override
   public void configureJmsListeners(final JmsListenerEndpointRegistrar registrar) {

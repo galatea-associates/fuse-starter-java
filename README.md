@@ -19,12 +19,10 @@ This readme will contain an index to features and their location in code.
 ### IntelliJ
 - Import as a maven project.  A simple way to do this is to Open File and select the pom.xml.
 - Install lombok: https://projectlombok.org/setup/intellij.
-- Download the [IntelliJ Google Java Style](https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml) file
-  - In IntelliJ Navigate to File -> Settings -> Editor -> Code Style -> Java
-  - Next to Scheme click the settings icon
-  - Import Scheme
-  - IntelliJ Idea Code Style as XML
-  - Choose the downloaded file and click OK
+- Set code style settings, which will allow auto-formatting of code to match the Google style guide
+  - In IntelliJ navigate to File -> Settings -> Editor -> Code Style -> Java
+  - Next to Scheme click the settings icon -> Import Scheme -> IntelliJ Idea code style XML
+  - Choose <project_directory>/style/intellij-java-google-style.xml, and hit OK a few times
 - Run stuff:
   - FUSE has some IntelliJ run configurations checked into the repository under .idea/runConfigurations. These run configs should be automatically imported by IntelliJ and listed in a drop-down in the top-right of the screen. Next to the drop-down are buttons to run the selected run configuration, to run in debug mode, or to run with coverage measurement. If the run configs are automatically found, they may need to be manually imported.
   - To run FUSE, use the "Application" run config.  This will start a jms listener and REST services.

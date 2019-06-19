@@ -12,8 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 
 /**
- * Custom HttpMessageConverter implementation to automatically convert a SettlementMissionList
- * to an XLSX spreadsheet when returning the SettlementMissionList in an HTTP response.
+ * Custom HttpMessageConverter implementation to automatically convert a SettlementMissionList to an
+ * XLSX spreadsheet when returning the SettlementMissionList in an HTTP response.
  */
 // See comments throughout SettlementMissionCsvConverter
 @Slf4j

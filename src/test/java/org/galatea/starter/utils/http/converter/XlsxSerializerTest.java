@@ -17,8 +17,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Test;
 import org.galatea.starter.testutils.XlsxComparator;
+import org.junit.Test;
 
 @Slf4j
 public class XlsxSerializerTest {
@@ -174,6 +174,7 @@ public class XlsxSerializerTest {
   @NoArgsConstructor
   @ToString
   private static class BasicClass {
+
     private String field1;
     private String field2;
   }
@@ -181,12 +182,14 @@ public class XlsxSerializerTest {
   @AllArgsConstructor
   @NoArgsConstructor
   private static class ClassWithCollections {
+
     private int[] field1;
     private String[] field2;
     private List<String> field3;
   }
 
   private static class ChildClass extends BasicClass {
+
     private String field3;
 
     ChildClass(final String field1, final String field2, final String field3) {
@@ -197,12 +200,14 @@ public class XlsxSerializerTest {
 
   @AllArgsConstructor
   private static class ClassHoldingOtherClass {
+
     private int field1;
     private BasicClass field2;
   }
 
   @AllArgsConstructor
   private static class CustomHeadersClass {
+
     @JsonProperty("Header 1")
     private String field1;
     @JsonIgnore

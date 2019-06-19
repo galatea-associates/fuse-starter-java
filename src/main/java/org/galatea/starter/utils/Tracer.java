@@ -1,22 +1,18 @@
-
 package org.galatea.starter.utils;
 
 import com.google.common.collect.Maps;
-
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.collections4.keyvalue.MultiKey;
-import org.slf4j.MDC;
-import org.springframework.util.StopWatch;
-
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Callable;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.keyvalue.MultiKey;
+import org.slf4j.MDC;
+import org.springframework.util.StopWatch;
 
 @Slf4j
 @ToString
@@ -128,7 +124,6 @@ public class Tracer {
    * makes starting/stopping the trace easy.
    *
    * @author rbasu
-   *
    */
   public static class AutoClosedTrace implements AutoCloseable {
 

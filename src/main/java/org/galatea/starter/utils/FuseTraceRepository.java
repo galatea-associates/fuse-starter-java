@@ -1,14 +1,11 @@
-
 package org.galatea.starter.utils;
 
+import java.util.Map;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.boot.actuate.trace.InMemoryTraceRepository;
-
-import java.util.Map;
 
 @RequiredArgsConstructor
 @ToString(callSuper = true)

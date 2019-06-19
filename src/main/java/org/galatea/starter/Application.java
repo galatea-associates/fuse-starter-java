@@ -2,7 +2,6 @@ package org.galatea.starter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.galatea.starter.utils.exception.MissingOptionException;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -12,12 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * This is the entry point for the application.
- *
  */
 @RequiredArgsConstructor
 @Slf4j
 @SpringBootApplication
-public class Application implements ApplicationRunner{
+public class Application implements ApplicationRunner {
 
   /**
    * Start up the spring context.
@@ -32,6 +30,7 @@ public class Application implements ApplicationRunner{
 
   /**
    * Ensure that server port is passed in as a command line argument.
+   *
    * @param args command line arguments
    * @throws MissingOptionException if server port not provided as argument
    */

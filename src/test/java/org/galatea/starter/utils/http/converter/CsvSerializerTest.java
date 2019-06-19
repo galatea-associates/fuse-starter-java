@@ -104,6 +104,7 @@ public class CsvSerializerTest {
   @NoArgsConstructor
   @Getter
   private static class BasicClass {
+
     private String field1;
     private String field2;
   }
@@ -112,12 +113,14 @@ public class CsvSerializerTest {
   @NoArgsConstructor
   @Getter
   private static class ClassWithCollections {
+
     private String[] field1;
     private List<String> field2;
   }
 
   @Getter
   private static class ChildClass extends BasicClass {
+
     private String field3;
 
     ChildClass(final String field1, final String field2, final String field3) {
@@ -129,12 +132,14 @@ public class CsvSerializerTest {
   @AllArgsConstructor
   @Getter
   private static class ClassHoldingOtherClass {
+
     private int field1;
     private BasicClass field2;
   }
 
   @AllArgsConstructor
   private static class ClassWithoutSomeGetters {
+
     @Getter
     private String field1;
     // No Getter

@@ -20,7 +20,7 @@ import org.galatea.starter.utils.validation.StringEnumeration;
 @Builder
 @Data
 @Entity
-@XmlRootElement(name="settlementMission")
+@XmlRootElement(name = "settlementMission")
 public class SettlementMission {
 
   @Id
