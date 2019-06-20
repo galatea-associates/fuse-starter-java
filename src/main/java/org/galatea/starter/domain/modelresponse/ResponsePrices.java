@@ -26,6 +26,4 @@ public class ResponsePrices {
   @JsonProperty("8. split coefficient")
   private double splitCoefficient;
 
-  private String stock;
-
 }

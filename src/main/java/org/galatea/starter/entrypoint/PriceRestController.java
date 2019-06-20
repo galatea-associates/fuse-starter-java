@@ -49,7 +49,6 @@ public class PriceRestController extends BaseRestController {
 
       throws IOException, SQLException {
     processRequestId (requestId);
-    priceService.getPricesByStock(stock, daysToLookBack);
-    return priceService.ConvertPrices(stock);
-  }
+    return priceService.getPricesByStock(stock, daysToLookBack);
+    }
 }

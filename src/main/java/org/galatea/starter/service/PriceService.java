@@ -36,13 +36,11 @@ public  class PriceService {
 
   @Autowired
   private PricesClient pricesclient;
-  private AlphaPrices obj_prices;
-  static ArrayList<StockPrices> converted = new ArrayList<StockPrices>();
 
 
+  public Collection<StockPrices> getPricesByStock(String stock, String daysToLookBack) {
 
-  public AlphaPrices getPricesByStock(String stock, String daysToLookBack) {
-
+    long processStartTime = System.currentTimeMillis();
     String size;
 
     //Determine the response size from Alpha Vantage based on daysToLookBack
@@ -55,21 +53,28 @@ public  class PriceService {
     }
 
     //Call Alpha Vantage API based on (stock, size)
-    obj_prices = pricesclient.getPricesByStock(stock, size);
-    log.info("\n Response from Alpha Vantage for... \n stock: " + stock + " "
-        + "\n response size: " + size +
-        "\n Processing time (ms):....... trace-timing-ms" +
-        "\n Response was... \n" + obj_prices);
+    AlphaPrices objPrices = pricesclient.getPricesByStock(stock, size);
 
-    return obj_prices;
+    //Convert to internal Price Objects
+    ArrayList<StockPrices> convertedPrices = ConvertPrices(stock, objPrices);
 
+    //Filter response size, starting with T=1
+    Collection<StockPrices> filteredPrices = convertedPrices.subList(1, days);
+    long processEndTime = System.currentTimeMillis();
+    long processTime = processEndTime - processStartTime;
+    log.info("Response from Alpha Vantage for stock: {} and the response size: {}. Processing Time was {}, response object: {}.", stock, size, processTime, filteredPrices);
+    return filteredPrices;
   }
 
 
-  // Convert Alpha Vantage prices to InternalPrices object
-  public Collection<StockPrices> ConvertPrices(String stock) {
+  public ArrayList<StockPrices> ConvertPrices(String stock, AlphaPrices objPrices) {
 
-    for (Entry<Date, ResponsePrices> entry : obj_prices.getAvPrices()
+    StockPrices dataPoints;
+    ArrayList<StockPrices> converted = new ArrayList<StockPrices>();
+
+
+    // Convert Alpha Vantage prices to InternalPrices object
+    for (Entry<Date, ResponsePrices> entry : objPrices.getAvPrices()
         .entrySet()) {
 
       Date dates = entry.getKey();
@@ -84,12 +89,10 @@ public  class PriceService {
       builder.splitCoefficient(internalPrices.getSplitCoefficient());
       builder.low(internalPrices.getLow());
       builder.stock(stock);
-      StockPrices dataPoints = builder
-          .build();
+      dataPoints = builder.build();
 
       converted.add(dataPoints);
     }
     return converted;
   }
 }
-

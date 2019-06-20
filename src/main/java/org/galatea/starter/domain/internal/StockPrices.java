@@ -8,13 +8,12 @@ import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.galatea.starter.domain.modelresponse.ResponsePrices;
 
 @Data// Tells Lombok to generate getters/setters for all fields below
 @AllArgsConstructor //Tells java to instantiate all fields listed
 @Builder
 @Entity
-public class StockPrices extends ResponsePrices  {
+public class StockPrices {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
