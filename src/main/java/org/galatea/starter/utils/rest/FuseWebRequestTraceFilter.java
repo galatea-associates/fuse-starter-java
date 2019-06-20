@@ -216,8 +216,8 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
   }
 
   /**
-   * Returns maxPayloadLength, the configured max number of bytes of payload information to
-   * capture in the trace.
+   * Returns maxPayloadLength, the configured max number of bytes of payload information to capture
+   * in the trace.
    */
   public int getMaxPayloadLength() {
     return maxPayloadLength;

@@ -15,6 +15,8 @@ public class HalService {
   /* We need to have this constant so sonar qube doesn't complain */
   private static final String DERP = "derp!";
 
+  private Random randomNum = new Random();
+
   /**
    * Process the text from GET command into the appropriate command.
    *
@@ -60,7 +62,6 @@ public class HalService {
    * @return Coin.HEADS or Coin.TAILS
    */
   protected Coin coinFlipRand() {
-    Random randomNum = new Random();
     int flip = randomNum.nextInt(2);
 
     if (flip == 0) {

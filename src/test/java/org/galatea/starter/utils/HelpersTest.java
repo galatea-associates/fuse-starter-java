@@ -26,6 +26,11 @@ public class HelpersTest {
     public String getX() {
       return x;
     }
+
+    // Starts with "get" but is private, so it shouldn't be included in the diff
+    private long getNanoTime() {
+      return System.nanoTime();
+    }
   }
 
   @Test

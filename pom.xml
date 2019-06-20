@@ -21,7 +21,15 @@
 			-Dserver.port=8080
 		</argLine>
 		<sonar.exclusions>**/ProtobufMessages.java</sonar.exclusions>
-		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>
+			src/main/org/galatea/starter/domain/**,
+			src/main/org/galatea/starter/entrypoint/messagecontracts/**,
+			**/*Config.java,
+			**/*Exception.java,
+			**/FuseWebRequestTraceFilter.java,
+			**/Tracer.java,
+			**/Application.java
+		</sonar.coverage.exclusions>
 		<!-- Allow us to skip Unit Tests only, if need be, with -Dskip.surefire.tests, but retain the skip all tests functionality of -DskipTests -->
 		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
 	</properties>
