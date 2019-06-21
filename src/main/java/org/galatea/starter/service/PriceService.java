@@ -1,11 +1,5 @@
 package org.galatea.starter.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,9 +9,6 @@ import java.util.Map.Entry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
-import org.galatea.starter.domain.internal.FullResponse;
-import org.galatea.starter.domain.internal.StockMetadata;
-import org.galatea.starter.domain.internal.StockMetadata.StockMetadataBuilder;
 import org.galatea.starter.domain.internal.StockPrices;
 import org.galatea.starter.domain.internal.StockPrices.StockPricesBuilder;
 import org.galatea.starter.domain.modelresponse.AlphaPrices;
@@ -45,14 +36,14 @@ public  class PriceService {
 
   @Autowired
   private PricesClient pricesclient;
-  public long processTime;
-  public long processStartTime;
+  public long responseTime;
   public Collection<StockPrices> filteredPrices;
 
   public Collection<StockPrices> getPricesByStock(String stock, String daysToLookBack) {
 
-    processStartTime = System.currentTimeMillis();
+
     String size;
+    Long responseTimeStart = System.currentTimeMillis();
 
     //Determine the response size from Alpha Vantage based on daysToLookBack
     Integer days = Integer.parseInt(daysToLookBack);
@@ -67,18 +58,20 @@ public  class PriceService {
     AlphaPrices objPrices = pricesclient.getPricesByStock(stock, size);
 
     //Convert to internal Price Objects
-    ArrayList<StockPrices> convertedPrices = ConvertPrices(stock, objPrices);
+    ArrayList<StockPrices> convertedPrices = convertPrices(stock, objPrices);
 
     //Filter response size, starting with T=1
     Collections.sort(convertedPrices, Comparator.comparing(StockPrices::getDate).reversed());
     filteredPrices = convertedPrices.subList(1, days);
 
-    log.info("Response from Alpha Vantage for stock: {} and the response size: {}. Processing Time was {}, response object: {}.", stock, size, processTime, filteredPrices);
+    Long responseTimeEnd = System.currentTimeMillis();
+    responseTime = responseTimeEnd - responseTimeStart;
+    log.info("Response from Alpha Vantage for stock: {} and the response size: {}. Response Time was {}, response object: {}.", stock, size, responseTime, filteredPrices);
     return filteredPrices;
   }
 
 
-  public ArrayList<StockPrices> ConvertPrices(String stock, AlphaPrices objPrices) {
+  public ArrayList<StockPrices> convertPrices(String stock, AlphaPrices objPrices) {
 
     StockPrices dataPoints;
     ArrayList<StockPrices> converted = new ArrayList<>();
@@ -106,37 +99,5 @@ public  class PriceService {
     return converted;
   }
 
-  public String BuildMeta(String stock, String days)
-      throws UnknownHostException, JsonProcessingException {
 
-    StockMetadata stockMetadata;
-    ArrayList<StockMetadata> metadata = new ArrayList<>();
-
-    Long processEndTime = System.currentTimeMillis();
-    processTime = processEndTime - processStartTime;
-
-    Long process = processTime;
-    String processTime = process.toString();
-
-    Long startTime = processStartTime;
-    String start = DateFormat.getInstance().format(startTime);
-
-
-    //Construct Meta Data object
-    StockMetadataBuilder builder = StockMetadata.builder();
-    builder.endpoint("price?stock=" + stock + "&days=" + days);
-    builder.host(InetAddress.getLocalHost().getHostName());
-    builder.responseTime(processTime + "(ms)");
-    builder.timeStamp(start);
-    stockMetadata = builder.build();
-
-    metadata.add(stockMetadata);
-
-
-    // Create complete response object and pretty print JSON
-    FullResponse fullResponse = new FullResponse(metadata, filteredPrices);
-    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-    String json = mapper.writeValueAsString(fullResponse);
-    return json;
-  }
 }

@@ -10,6 +10,7 @@ public class StockMetadata {
 
   private String timeStamp;
   private String responseTime;
+  private String processTime;
   private String endpoint;
   private String host;
 
