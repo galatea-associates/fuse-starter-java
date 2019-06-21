@@ -1,5 +1,7 @@
 package org.galatea.starter.service;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -7,11 +9,14 @@ import java.util.Map.Entry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
+import org.galatea.starter.domain.internal.StockMetadata;
+import org.galatea.starter.domain.internal.StockMetadata.StockMetadataBuilder;
 import org.galatea.starter.domain.internal.StockPrices;
 import org.galatea.starter.domain.internal.StockPrices.StockPricesBuilder;
 import org.galatea.starter.domain.modelresponse.AlphaPrices;
 import org.galatea.starter.domain.modelresponse.ResponsePrices;
 import org.galatea.starter.service.feign.PricesClient;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +41,13 @@ public  class PriceService {
 
   @Autowired
   private PricesClient pricesclient;
-
+  public long processTime;
+  public long processStartTime;
+  public Collection<StockPrices> filteredPrices;
 
   public Collection<StockPrices> getPricesByStock(String stock, String daysToLookBack) {
 
-    long processStartTime = System.currentTimeMillis();
+    processStartTime = System.currentTimeMillis();
     String size;
 
     //Determine the response size from Alpha Vantage based on daysToLookBack
@@ -56,12 +63,14 @@ public  class PriceService {
     AlphaPrices objPrices = pricesclient.getPricesByStock(stock, size);
 
     //Convert to internal Price Objects
+
+    //sort response to grabe first 10 days
     ArrayList<StockPrices> convertedPrices = ConvertPrices(stock, objPrices);
 
     //Filter response size, starting with T=1
-    Collection<StockPrices> filteredPrices = convertedPrices.subList(1, days);
+    filteredPrices = convertedPrices.subList(1, days);
     long processEndTime = System.currentTimeMillis();
-    long processTime = processEndTime - processStartTime;
+    processTime = processEndTime - processStartTime;
     log.info("Response from Alpha Vantage for stock: {} and the response size: {}. Processing Time was {}, response object: {}.", stock, size, processTime, filteredPrices);
     return filteredPrices;
   }
@@ -94,5 +103,36 @@ public  class PriceService {
       converted.add(dataPoints);
     }
     return converted;
+  }
+
+  public JSONObject BuildMeta(String stock, String days)
+      throws UnknownHostException {
+
+    StockMetadata stockMetadata;
+    ArrayList<StockMetadata> metadata = new ArrayList<>();
+    Long process = processTime;
+    int processTime = process.intValue();
+    Long startTime = processStartTime;
+    int start = startTime.intValue();
+
+
+
+    StockMetadataBuilder builder = StockMetadata.builder();
+    builder.endpoint("price?stock=" + stock + "&days=" + days);
+    builder.host(InetAddress.getLocalHost().getHostName());
+    builder.responseTime(processTime);
+    builder.timeStamp(start);
+    stockMetadata = builder.build();
+
+    metadata.add(stockMetadata);
+    log.info ("Meta Data: {}", metadata);
+    System.out.println(metadata);
+
+    JSONObject fullResponse = new JSONObject();
+    fullResponse.put("MetaData", stockMetadata);
+    fullResponse.put("Stock Prices", filteredPrices);
+
+    System.out.println(fullResponse);
+    return fullResponse;
   }
 }

@@ -1,5 +1,7 @@
 package org.galatea.starter.domain.internal;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,9 +17,11 @@ import lombok.Data;
 @Entity
 public class StockPrices {
 
+  @JsonIgnore
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private   Date date;
   private  double open;
   private  double high;
