@@ -8,8 +8,8 @@ import lombok.Setter;
 @Builder
 public class StockMetadata {
 
-  private int timeStamp;
-  private int responseTime;
+  private String timeStamp;
+  private String responseTime;
   private String endpoint;
   private String host;
 

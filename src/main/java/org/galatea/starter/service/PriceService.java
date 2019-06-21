@@ -1,14 +1,21 @@
 package org.galatea.starter.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Map.Entry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
+import org.galatea.starter.domain.internal.FullResponse;
 import org.galatea.starter.domain.internal.StockMetadata;
 import org.galatea.starter.domain.internal.StockMetadata.StockMetadataBuilder;
 import org.galatea.starter.domain.internal.StockPrices;
@@ -16,11 +23,8 @@ import org.galatea.starter.domain.internal.StockPrices.StockPricesBuilder;
 import org.galatea.starter.domain.modelresponse.AlphaPrices;
 import org.galatea.starter.domain.modelresponse.ResponsePrices;
 import org.galatea.starter.service.feign.PricesClient;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-//import org.galatea.starter.domain.internal.InternalPrices;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -63,14 +67,12 @@ public  class PriceService {
     AlphaPrices objPrices = pricesclient.getPricesByStock(stock, size);
 
     //Convert to internal Price Objects
-
-    //sort response to grabe first 10 days
     ArrayList<StockPrices> convertedPrices = ConvertPrices(stock, objPrices);
 
     //Filter response size, starting with T=1
+    Collections.sort(convertedPrices, Comparator.comparing(StockPrices::getDate).reversed());
     filteredPrices = convertedPrices.subList(1, days);
-    long processEndTime = System.currentTimeMillis();
-    processTime = processEndTime - processStartTime;
+
     log.info("Response from Alpha Vantage for stock: {} and the response size: {}. Processing Time was {}, response object: {}.", stock, size, processTime, filteredPrices);
     return filteredPrices;
   }
@@ -79,10 +81,9 @@ public  class PriceService {
   public ArrayList<StockPrices> ConvertPrices(String stock, AlphaPrices objPrices) {
 
     StockPrices dataPoints;
-    ArrayList<StockPrices> converted = new ArrayList<StockPrices>();
+    ArrayList<StockPrices> converted = new ArrayList<>();
 
 
-    // Convert Alpha Vantage prices to InternalPrices object
     for (Entry<Date, ResponsePrices> entry : objPrices.getAvPrices()
         .entrySet()) {
 
@@ -105,34 +106,37 @@ public  class PriceService {
     return converted;
   }
 
-  public JSONObject BuildMeta(String stock, String days)
-      throws UnknownHostException {
+  public String BuildMeta(String stock, String days)
+      throws UnknownHostException, JsonProcessingException {
 
     StockMetadata stockMetadata;
     ArrayList<StockMetadata> metadata = new ArrayList<>();
+
+    Long processEndTime = System.currentTimeMillis();
+    processTime = processEndTime - processStartTime;
+
     Long process = processTime;
-    int processTime = process.intValue();
+    String processTime = process.toString();
+
     Long startTime = processStartTime;
-    int start = startTime.intValue();
+    String start = DateFormat.getInstance().format(startTime);
 
 
-
+    //Construct Meta Data object
     StockMetadataBuilder builder = StockMetadata.builder();
     builder.endpoint("price?stock=" + stock + "&days=" + days);
     builder.host(InetAddress.getLocalHost().getHostName());
-    builder.responseTime(processTime);
+    builder.responseTime(processTime + "(ms)");
     builder.timeStamp(start);
     stockMetadata = builder.build();
 
     metadata.add(stockMetadata);
-    log.info ("Meta Data: {}", metadata);
-    System.out.println(metadata);
 
-    JSONObject fullResponse = new JSONObject();
-    fullResponse.put("MetaData", stockMetadata);
-    fullResponse.put("Stock Prices", filteredPrices);
 
-    System.out.println(fullResponse);
-    return fullResponse;
+    // Create complete response object and pretty print JSON
+    FullResponse fullResponse = new FullResponse(metadata, filteredPrices);
+    ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    String json = mapper.writeValueAsString(fullResponse);
+    return json;
   }
 }
