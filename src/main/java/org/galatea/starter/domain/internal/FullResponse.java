@@ -1,6 +1,5 @@
 package org.galatea.starter.domain.internal;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +12,7 @@ import net.sf.aspect4log.Log;
 @Slf4j
 public class FullResponse {
 
-  private ArrayList<StockMetadata> metaData;
+  private StockMetadata metaData;
   private Collection<StockPrices> prices;
 
 }

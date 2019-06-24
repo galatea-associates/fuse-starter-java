@@ -36,14 +36,15 @@ public  class PriceService {
 
   @Autowired
   private PricesClient pricesclient;
-  public long responseTime;
-  public Collection<StockPrices> filteredPrices;
+
 
   public Collection<StockPrices> getPricesByStock(String stock, String daysToLookBack) {
 
 
     String size;
-    Long responseTimeStart = System.currentTimeMillis();
+    long responseTimeStart = System.currentTimeMillis();
+    long responseTime;
+    Collection<StockPrices> filteredPrices;
 
     //Determine the response size from Alpha Vantage based on daysToLookBack
     Integer days = Integer.parseInt(daysToLookBack);
@@ -64,7 +65,7 @@ public  class PriceService {
     Collections.sort(convertedPrices, Comparator.comparing(StockPrices::getDate).reversed());
     filteredPrices = convertedPrices.subList(1, days);
 
-    Long responseTimeEnd = System.currentTimeMillis();
+    long responseTimeEnd = System.currentTimeMillis();
     responseTime = responseTimeEnd - responseTimeStart;
     log.info("Response from Alpha Vantage for stock: {} and the response size: {}. Response Time was {}, response object: {}.", stock, size, responseTime, filteredPrices);
     return filteredPrices;
@@ -96,8 +97,8 @@ public  class PriceService {
 
       converted.add(dataPoints);
     }
+
+    //    Save the return list of prices to the data base
     return converted;
   }
-
-
 }

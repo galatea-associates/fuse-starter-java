@@ -2,6 +2,7 @@ package org.galatea.starter.domain.internal;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import lombok.Data;
 @AllArgsConstructor //Tells java to instantiate all fields listed
 @Builder
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StockPrices {
 
   @JsonIgnore
