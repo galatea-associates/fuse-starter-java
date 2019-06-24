@@ -9,6 +9,13 @@ This readme will contain an index to features and their location in code.
 ### Eclipse
 - Import as a maven project however you like. https://www.youtube.com/watch?v=BlkgrXb3L0c is one place to start if you're at a complete loss on this step.
 - Install lombok: https://projectlombok.org/setup/eclipse.  Note if you're doing this step last because you raced ahead and nothing compiles you'll have to do some cleans and re-compiles to get lombok involved in generating all the class files.
+- Set code style settings, which will allow auto-formatting of code to match the Google style guide
+  - Navigate to Window -> Preferences -> Java -> Code Style -> Formatter
+  - Click Import and select <project_directory>/style/eclipse-java-google-style.xml
+  - Navigate to Window -> Preferences -> Java -> Code Style -> Organize Imports
+  - Click Import and select <project_directory>/style/eclipse-java-google-style.importorder
+  - Navigate to Window -> Preferences -> Java -> Editor -> Save Actions
+  - Select the "Perform the selected actions on save", "Format source code", "Format edited lines", and "Organize imports" options
 - Run stuff:
   - src/main/java/org/galatea/starter/Application.java -> r-click -> run as Java Application.  This will start a jms listener and REST services.  Note, there is an eclipse .launch file provided which configures some VM and Program args.  
     - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
