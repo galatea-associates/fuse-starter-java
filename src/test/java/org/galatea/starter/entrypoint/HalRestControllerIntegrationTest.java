@@ -32,8 +32,9 @@ public class HalRestControllerIntegrationTest extends ASpringTest {
       fuseHostName = FuseHostName;
     }
 
-    FuseServer fuseServer = Feign.builder().decoder(new JacksonDecoder()).encoder(new JacksonEncoder())
-        .target(FuseServer.class, fuseHostName);
+    FuseServer fuseServer =
+        Feign.builder().decoder(new JacksonDecoder()).encoder(new JacksonEncoder())
+            .target(FuseServer.class, fuseHostName);
 
     String halResponse = fuseServer.halEndpoint("coin-flip");
     log.info("Coin flip response: {}", halResponse);
@@ -48,8 +49,9 @@ public class HalRestControllerIntegrationTest extends ASpringTest {
       fuseHostName = FuseHostName;
     }
 
-    FuseServer fuseServer = Feign.builder().decoder(new JacksonDecoder()).encoder(new JacksonEncoder())
-        .target(FuseServer.class, fuseHostName);
+    FuseServer fuseServer =
+        Feign.builder().decoder(new JacksonDecoder()).encoder(new JacksonEncoder())
+            .target(FuseServer.class, fuseHostName);
 
     String expResult = "derp!";
 

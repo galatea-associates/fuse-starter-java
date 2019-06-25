@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 public class SettlementServiceTest extends ASpringTest {
+
   @MockBean
   private ISettlementMissionRpsy mockSettlementMissionRpsy;
 
@@ -52,7 +53,6 @@ public class SettlementServiceTest extends ASpringTest {
   @Test
   public void testFindMissionNotFound() {
     Long id = 1L;
-
 
     SettlementMission testSettlementMission
         = TestDataGenerator.defaultSettlementMissionData().id(id).build();

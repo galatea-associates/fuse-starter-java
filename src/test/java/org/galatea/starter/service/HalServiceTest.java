@@ -6,7 +6,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 import org.galatea.starter.ASpringTest;
-import org.galatea.starter.service.HalService.COIN;
+import org.galatea.starter.service.HalService.Coin;
 import org.junit.Test;
 
 public class HalServiceTest extends ASpringTest {
@@ -19,7 +19,7 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService();
     HalService spyService = spy(service);
 
-    doReturn(COIN.HEADS).when(spyService).coinFlipRand();
+    doReturn(Coin.HEADS).when(spyService).coinFlipRand();
 
     String result = spyService.processText(text);
     assertEquals(expResult, result);
@@ -33,7 +33,7 @@ public class HalServiceTest extends ASpringTest {
     HalService service = new HalService();
     HalService spyService = spy(service);
 
-    doReturn(COIN.TAILS).when(spyService).coinFlipRand();
+    doReturn(Coin.TAILS).when(spyService).coinFlipRand();
 
     String result = spyService.processText(text);
     assertEquals(expResult, result);
@@ -43,8 +43,8 @@ public class HalServiceTest extends ASpringTest {
   public void testCoinFlipRand() {
     HalService service = new HalService();
 
-    COIN result = service.coinFlipRand();
-    assertThat(result).isIn(COIN.HEADS, COIN.TAILS);
+    Coin result = service.coinFlipRand();
+    assertThat(result).isIn(Coin.HEADS, Coin.TAILS);
   }
 
   @Test

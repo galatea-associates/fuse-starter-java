@@ -15,6 +15,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableCaching
 public class AppConfig {
 
+  /**
+   * Create a LogAspect for use with the SpringAOP @Log annotation.
+   */
   @Bean
   public LogAspect createLogAspect() {
     return new LogAspect();

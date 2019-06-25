@@ -174,7 +174,6 @@ public class SettlementRestControllerTest extends ASpringTest {
   }
 
 
-
   @Test
   public void testGetMissionFound_XML() throws Exception {
     SettlementMission mission = TestDataGenerator.defaultSettlementMissionData().build();
@@ -219,7 +218,7 @@ public class SettlementRestControllerTest extends ASpringTest {
     given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
 
-    ResultActions resultActions= this.mvc
+    ResultActions resultActions = this.mvc
         .perform(get("/settlementEngine/missions?ids=1,2&format=json&requestId=1234"))
         .andExpect(status().isOk())
         .andExpect(content().json(
@@ -238,7 +237,7 @@ public class SettlementRestControllerTest extends ASpringTest {
     given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
 
-    ResultActions resultActions= this.mvc
+    ResultActions resultActions = this.mvc
         .perform(get("/settlementEngine/missions?ids=1,2&format=xml&requestId=1234"))
         .andExpect(status().isOk())
         .andExpect(content().contentType("application/xml"))
@@ -272,7 +271,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
     String expectedCsv = readData("SettlementMissions.csv");
 
-    ResultActions resultActions= this.mvc
+    ResultActions resultActions = this.mvc
         .perform(get("/settlementEngine/missions?ids=1,2&format=csv&requestId=1234"))
         .andExpect(status().isOk())
         .andExpect(content().contentType("text/csv"))

@@ -13,13 +13,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 
 /**
- * Custom HttpMessageConverter implementation to automatically convert a SettlementMissionList
- * to an CSV document when returning the SettlementMissionList in an HTTP response.
+ * Custom HttpMessageConverter implementation to automatically convert a SettlementMissionList to an
+ * CSV document when returning the SettlementMissionList in an HTTP response.
  */
 @Slf4j
 public class SettlementMissionCsvConverter
     extends AbstractHttpMessageConverter<SettlementMissionList> {
 
+  /**
+   * Construct a SettlementMissionCsvConverter that supports a CSV MediaType.
+   */
   public SettlementMissionCsvConverter() {
     // The media type supported by this converter
     // Incoming media type for an HTTP request is described in the Content Type header

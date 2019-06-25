@@ -40,7 +40,7 @@ public class TradeAgreementTranslatorTest extends ASpringTest {
 
   @Test(expected = TranslationException.class)
   public void translateBadMessage() {
-    byte[] nullBuffer = new byte[]{1, 2, 3, 4, 5, 6};
+    byte[] nullBuffer = new byte[] {1, 2, 3, 4, 5, 6};
     translator.translate(nullBuffer);
   }
 }

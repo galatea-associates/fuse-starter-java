@@ -4,11 +4,17 @@ import java.util.Collection;
 
 public class EntityNotFoundException extends RuntimeException {
 
-  public EntityNotFoundException(Class<?> type, String identifier) {
+  /**
+   * Create an EntityNotFoundException for a single missing entity.
+   */
+  public EntityNotFoundException(final Class<?> type, final String identifier) {
     super("Entity " + identifier + " of type " + type.getSimpleName() + " was not found");
   }
 
-  public EntityNotFoundException(Class<?> type, Collection<?> identifier) {
+  /**
+   * Create an EntityNotFoundException for multiple missing entities.
+   */
+  public EntityNotFoundException(final Class<?> type, final Collection<?> identifier) {
     super("Entities " + identifier + " of type " + type.getSimpleName() + " were not found");
   }
 

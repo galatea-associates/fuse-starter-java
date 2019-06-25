@@ -9,6 +9,13 @@ This readme will contain an index to features and their location in code.
 ### Eclipse
 - Import as a maven project however you like. https://www.youtube.com/watch?v=BlkgrXb3L0c is one place to start if you're at a complete loss on this step.
 - Install lombok: https://projectlombok.org/setup/eclipse.  Note if you're doing this step last because you raced ahead and nothing compiles you'll have to do some cleans and re-compiles to get lombok involved in generating all the class files.
+- Set code style settings, which will allow auto-formatting of code to match the Google style guide
+  - Navigate to Window -> Preferences -> Java -> Code Style -> Formatter
+  - Click Import and select <project_directory>/style/eclipse-java-google-style.xml
+  - Navigate to Window -> Preferences -> Java -> Code Style -> Organize Imports
+  - Click Import and select <project_directory>/style/eclipse-java-google-style.importorder
+  - Navigate to Window -> Preferences -> Java -> Editor -> Save Actions
+  - Select the "Perform the selected actions on save", "Format source code", "Format edited lines", and "Organize imports" options
 - Run stuff:
   - src/main/java/org/galatea/starter/Application.java -> r-click -> run as Java Application.  This will start a jms listener and REST services.  Note, there is an eclipse .launch file provided which configures some VM and Program args.  
     - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
@@ -19,18 +26,17 @@ This readme will contain an index to features and their location in code.
 ### IntelliJ
 - Import as a maven project.  A simple way to do this is to Open File and select the pom.xml.
 - Install lombok: https://projectlombok.org/setup/intellij.
-- Download the [IntelliJ Google Java Style](https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml) file
-  - In IntelliJ Navigate to File -> Settings -> Editor -> Code Style -> Java
-  - Next to Scheme click the settings icon
-  - Import Scheme
-  - IntelliJ Idea Code Style as XML
-  - Choose the downloaded file and click OK
+- Set code style settings, which will allow auto-formatting of code to match the Google style guide
+  - In IntelliJ navigate to File -> Settings -> Editor -> Code Style -> Java
+  - Next to Scheme click the settings icon -> Import Scheme -> IntelliJ Idea code style XML
+  - Choose <project_directory>/style/intellij-java-google-style.xml, and hit OK a few times
 - Run stuff:
   - FUSE has some IntelliJ run configurations checked into the repository under .idea/runConfigurations. These run configs should be automatically imported by IntelliJ and listed in a drop-down in the top-right of the screen. Next to the drop-down are buttons to run the selected run configuration, to run in debug mode, or to run with coverage measurement. If the run configs are automatically found, they may need to be manually imported.
   - To run FUSE, use the "Application" run config.  This will start a jms listener and REST services.
     - Note, logs will be written to <project_directory>/logs and will not be written to stdout as is generally appropriate in a cloud-deployed setting. See Logging section for more info.
     - Note, the server port on which the application runs is set via program argument in the run configuration, --server.port=8080.  If you need to change which port to run on, change the argument in the run configuration.
   - To run unit tests, use the "Unit Tests" run config. See Testing section below for more info.
+  - To validate code style, use the "Checkstyle" run config.
 
 ### A note on spring profiles
 - The project comes with support for 3 spring profiles:

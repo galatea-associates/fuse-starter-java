@@ -1,4 +1,3 @@
-
 package org.galatea.starter;
 
 import com.google.common.collect.Sets;
@@ -61,13 +60,16 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     return filter;
   }
 
+  /**
+   * Repository for storing trace info.
+   */
   @Bean
   public FuseTraceRepository traceRepository() {
     return new FuseTraceRepository();
   }
 
   @Override
-  public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+  public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {
     configurer.favorParameter(true) // give precedence to url request parameters
         .ignoreAcceptHeader(false) // enable use of the Accept header for content negotiation
         .useJaf(false) // let's not fallback on the Java Activation Framework
@@ -85,7 +87,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
   }
 
   @Override
-  public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+  public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
     // The Protobuf converter MUST be added first, otherwise Jackson will try and handle our
     // protobuf to JSON conversion (and will of course, fail).
     converters.add(new ProtobufHttpMessageConverter()); // Protobuf, XML & JSON supported

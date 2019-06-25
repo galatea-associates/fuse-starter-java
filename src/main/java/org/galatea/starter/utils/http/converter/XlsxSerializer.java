@@ -141,7 +141,7 @@ public class XlsxSerializer {
   /*
    * Get a useful string representation of the given object.
    */
-  private static String stringify(Object obj) {
+  private static String stringify(final Object obj) {
     if (obj == null) {
       return "";
     } else if (obj.getClass().isArray()) {

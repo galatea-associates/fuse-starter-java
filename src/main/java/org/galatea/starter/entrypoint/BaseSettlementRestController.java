@@ -15,8 +15,8 @@ import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.service.SettlementService;
 
 /**
- * Implements a base class for settlement rest controllers to avoid duplicating
- * the logic of calling the settlement service.
+ * Implements a base class for settlement rest controllers to avoid duplicating the logic of calling
+ * the settlement service.
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Slf4j
@@ -29,7 +29,8 @@ public abstract class BaseSettlementRestController extends BaseRestController {
   /**
    * Invokes the settlement service to spawn missions for the specified trade agreements.
    */
-  protected Set<String> settleAgreementInternal(List<TradeAgreement> agreements, String getMissionPath) {
+  protected Set<String> settleAgreementInternal(final List<TradeAgreement> agreements,
+      final String getMissionPath) {
 
     Set<Long> missionIds = settlementService.spawnMissions(agreements);
     return missionIds.stream().map(id -> getMissionPath + id)

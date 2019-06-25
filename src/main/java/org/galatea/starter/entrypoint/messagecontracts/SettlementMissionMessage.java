@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE) // For spring and jackson
 @Builder
 @Data
-@XmlRootElement(name="settlementMission")
+@XmlRootElement(name = "settlementMission")
 public class SettlementMissionMessage {
+
   protected Long id;
   protected String instrument;
   protected String externalParty;
