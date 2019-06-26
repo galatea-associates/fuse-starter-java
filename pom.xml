@@ -22,8 +22,8 @@
 		</argLine>
 		<sonar.exclusions>**/ProtobufMessages.java</sonar.exclusions>
 		<sonar.coverage.exclusions>
-			src/main/org/galatea/starter/domain/**,
-			src/main/org/galatea/starter/entrypoint/messagecontracts/**,
+			src/main/java/org/galatea/starter/domain/**,
+			src/main/java/org/galatea/starter/entrypoint/messagecontracts/**,
 			**/*Config.java,
 			**/*Exception.java,
 			**/FuseWebRequestTraceFilter.java,

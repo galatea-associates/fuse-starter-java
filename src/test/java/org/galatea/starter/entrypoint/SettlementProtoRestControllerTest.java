@@ -106,4 +106,14 @@ public class SettlementProtoRestControllerTest extends ASpringTest {
         .parseFrom(result.getResponse().getContentAsByteArray());
     assertEquals(expectedMessage, message);
   }
+
+  @Test
+  public void testGetMissionNotFound() throws Exception {
+    given(this.mockSettlementService.findMission(MISSION_ID_1)).willReturn(Optional.empty());
+
+    this.mvc.perform(
+        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requesId=1234")
+            .accept(APPLICATION_X_PROTOBUF))
+        .andExpect(status().is4xxClientError());
+  }
 }
