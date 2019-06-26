@@ -229,6 +229,18 @@ def doShutdown() {
 def targetBranch=""
 def populateTargetBranch() {
 	echo "Populating target branch for branch: ${BRANCH_NAME}"
-	targetBranch=(BRANCH_NAME == "develop") ? "" : "develop"
+	targetBranch=(BRANCH_NAME == "develop") ? "" : fetchDevelop()
+}
+
+def fetchDevelop() {
+  // We need this fetch because otherwise Sonar doesn't properly track the changed lines in a branch
+  // scan - see https://community.sonarsource.com/t/sonarcloud-now-not-updating-github-pr-and-checks/6595/17
+  // Sneaking this into the ternary statement of populateTargetBranch() because if-statements aren't
+  // allowed in "steps" sections
+  echo "Fetching develop branch"
+  sh "git fetch --no-tags https://github.com/GalateaRaj/fuse-starter-java +refs/heads/develop:refs/remotes/origin/develop"
+
+  // And then return the string "develop" so the ternary statement works
+  return "develop"
 }
 
