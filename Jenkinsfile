@@ -189,7 +189,10 @@ def notifySlack(titlePrefix, channel, color, alertChannel) {
     ])
 
     withCredentials([string(credentialsId: 'gala-slack-url', variable: 'slackURL')]) {
-        sh "curl -X POST --data-urlencode \'payload=${payload@Q}\' ${slackURL}"
+        // Single quotes in the payload will break the curl command below, so just remove them
+        echo "Slack notification payload: ${payload}"
+        payload = payload.replaceAll("'", "")
+        sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
     }
 }
 
