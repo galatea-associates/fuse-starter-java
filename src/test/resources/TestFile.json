@@ -1,8 +1,15 @@
 {
+  "metaData": {
+    "timeStamp": "6/27/19 9:56 AM",
+    "responseTime": "0(ms)",
+    "processTime": "1(ms) ",
+    "endpoint": "price?stock=TSLA&days=6",
+    "host": "2019-Computer4"
+  },
   "prices": [
     {
-      "date": "2019-06-21",
-      "open": 0.0,
+      "date": "2019-06-27",
+      "open": 219.4500,
       "high": 222.18,
       "low": 215.5,
       "close": 221.86,
@@ -13,8 +20,8 @@
       "stock": "tsla"
     },
     {
-      "date": "2019-06-20",
-      "open": 0.0,
+      "date": "2019-06-26",
+      "open": 220.3100,
       "high": 226.9,
       "low": 216.35,
       "close": 219.62,
@@ -25,8 +32,8 @@
       "stock": "tsla"
     },
     {
-      "date": "2019-06-19",
-      "open": 0.0,
+      "date": "2019-06-25",
+      "open": 224.3900,
       "high": 227.77,
       "low": 221.06,
       "close": 226.43,
@@ -37,8 +44,8 @@
       "stock": "tsla"
     },
     {
-      "date": "2019-06-18",
-      "open": 0.0,
+      "date": "2019-06-24",
+      "open": 223.2400,
       "high": 234.74,
       "low": 222.56,
       "close": 224.74,

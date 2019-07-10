@@ -51,7 +51,7 @@ spring:
 ---
 # Mappings for Rest Controllers
 webservice:
-  halpath: /prices
+  pricepath: /prices
 
 ---
 feign:

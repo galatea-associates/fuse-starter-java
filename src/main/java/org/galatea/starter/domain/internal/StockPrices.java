@@ -24,7 +24,8 @@ public class StockPrices {
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  private   Date date;
+  private  Date date;
+
   private  double open;
   private  double high;
   private  double low;

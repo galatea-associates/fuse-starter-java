@@ -49,11 +49,11 @@ public class PriceRestController extends BaseRestController {
    */
 
 
-  @GetMapping(value = "${webservice.halpath}", produces = {MediaType.APPLICATION_JSON_VALUE})
+  @GetMapping(value = "${webservice.pricepath}", produces = {MediaType.APPLICATION_JSON_VALUE})
   public FullResponse priceEndpoint(
 
   @RequestParam(value = "stock") String stock,
-      @RequestParam(value = "days", defaultValue= "1", required = false) String daysToLookBack,
+      @RequestParam(value = "days", defaultValue= "2", required = false) String daysToLookBack,
       @RequestParam (value = "requestId", required = false) String requestId)
 
       throws IOException{
@@ -62,11 +62,11 @@ public class PriceRestController extends BaseRestController {
     long processStartTime = System.currentTimeMillis();
     start = DateFormat.getInstance().format(processStartTime);
     processRequestId (requestId);
+    stock = stock.toUpperCase();
 
     //Start time for calling Alpha Vantage
     long responseStartTime = System.currentTimeMillis();
     filtered = priceService.getPricesByStock(stock, daysToLookBack);
-
 
     long responseEndTime = System.currentTimeMillis();
     long timeToCallAlphaVantage = responseEndTime - responseStartTime;
@@ -75,7 +75,7 @@ public class PriceRestController extends BaseRestController {
     long processEndTime = System.currentTimeMillis();
     totalTime = processEndTime - processStartTime;
     return buildFullResponse(stock, daysToLookBack, timeToCallAlphaVantage);
-    }
+  }
 
   public FullResponse buildFullResponse(String stock, String days, Long responseTime)
       throws UnknownHostException{

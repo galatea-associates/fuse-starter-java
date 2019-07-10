@@ -37,9 +37,7 @@ public  class PriceService {
   @Autowired
   private PricesClient pricesclient;
 
-
   public Collection<StockPrices> getPricesByStock(String stock, String daysToLookBack) {
-
 
     String size;
     long responseTimeStart = System.currentTimeMillis();
@@ -85,6 +83,7 @@ public  class PriceService {
       ResponsePrices internalPrices = entry.getValue();
       StockPricesBuilder builder = StockPrices.builder();
       builder.date(dates);
+      builder.open(internalPrices.getOpen());
       builder.adjustedClose(internalPrices.getAdjustedClose());
       builder.close(internalPrices.getClose());
       builder.high(internalPrices.getHigh());
@@ -97,8 +96,6 @@ public  class PriceService {
 
       converted.add(dataPoints);
     }
-
-    //    Save the return list of prices to the data base
     return converted;
   }
 }
