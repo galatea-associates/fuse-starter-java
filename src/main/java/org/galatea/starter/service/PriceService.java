@@ -33,7 +33,6 @@ public  class PriceService {
    * @return the result of executing the command with the given parameters
    */
 
-
   @Autowired
   private PricesClient pricesclient;
 
@@ -74,7 +73,6 @@ public  class PriceService {
 
     StockPrices dataPoints;
     ArrayList<StockPrices> converted = new ArrayList<>();
-
 
     for (Entry<Date, ResponsePrices> entry : objPrices.getAvPrices()
         .entrySet()) {

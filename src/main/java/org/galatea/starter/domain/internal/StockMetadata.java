@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-@Data // Tells Lombok to generate getters/setters for all fields below
+@Data
 @Builder
 @AllArgsConstructor
-public class StockMetadata {
+public class StockMetadata{
 
   private String timeStamp;
   private String responseTime;
@@ -18,5 +18,4 @@ public class StockMetadata {
   private StockMetadata (){
 
   }
-
 }

@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-
 /**
  * REST Controller that listens to http endpoints and allows the caller to send text to be
  * processed
@@ -36,8 +35,8 @@ public class PriceRestController extends BaseRestController {
 
   @NonNull
   PriceService priceService;
-  long totalTime;
-  String start;
+  private long totalTime;
+  private String start;
 
   /**
    * Send the received text to the PriceService to be processed and send the result out
@@ -64,17 +63,15 @@ public class PriceRestController extends BaseRestController {
     //Start time for calling Alpha Vantage
     long responseStartTime = System.currentTimeMillis();
     Collection <StockPrices> filtered = priceService.getPricesByStock(stock, daysToLookBack);
-
     long responseEndTime = System.currentTimeMillis();
     long timeToCallAlphaVantage = responseEndTime - responseStartTime;
-
 
     long processEndTime = System.currentTimeMillis();
     totalTime = processEndTime - processStartTime;
     return buildFullResponse(stock, daysToLookBack, timeToCallAlphaVantage, filtered);
   }
 
-  public FullResponse buildFullResponse(String stock, String days, Long responseTime, Collection<StockPrices> filtered)
+  private FullResponse buildFullResponse(String stock, String days, Long responseTime, Collection<StockPrices> filtered)
       throws UnknownHostException{
 
     StockMetadata stockMetadata;

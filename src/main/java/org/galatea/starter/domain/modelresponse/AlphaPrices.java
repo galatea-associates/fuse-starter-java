@@ -7,7 +7,6 @@ import java.util.HashMap;
 import lombok.Data;
 
 @Data
-@SuppressWarnings("unused")
 public class AlphaPrices {
 
     @JsonProperty ("Time Series (Daily)")
