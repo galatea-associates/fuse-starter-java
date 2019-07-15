@@ -45,7 +45,7 @@ public  class PriceService {
     Collection<StockPrices> filteredPrices;
 
     //Determine the response size from Alpha Vantage based on daysToLookBack
-    Integer days = Integer.parseInt(daysToLookBack);
+    int days = Integer.parseInt(daysToLookBack);
     log.info("\n number of days to look back: " + daysToLookBack);
     if (days < 101) {
       size = "compact";
@@ -70,7 +70,7 @@ public  class PriceService {
   }
 
 
-  public ArrayList<StockPrices> convertPrices(String stock, AlphaPrices objPrices) {
+  private ArrayList<StockPrices> convertPrices(String stock, AlphaPrices objPrices) {
 
     StockPrices dataPoints;
     ArrayList<StockPrices> converted = new ArrayList<>();

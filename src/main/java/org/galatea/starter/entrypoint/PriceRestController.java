@@ -38,7 +38,6 @@ public class PriceRestController extends BaseRestController {
   PriceService priceService;
   long totalTime;
   String start;
-  Collection<StockPrices> filtered;
 
   /**
    * Send the received text to the PriceService to be processed and send the result out
@@ -48,14 +47,12 @@ public class PriceRestController extends BaseRestController {
    * @return
    */
 
-
   @GetMapping(value = "${webservice.pricepath}", produces = {MediaType.APPLICATION_JSON_VALUE})
   public FullResponse priceEndpoint(
 
   @RequestParam(value = "stock") String stock,
       @RequestParam(value = "days", defaultValue= "2", required = false) String daysToLookBack,
       @RequestParam (value = "requestId", required = false) String requestId)
-
       throws IOException{
 
     //Start total application process time
@@ -66,7 +63,7 @@ public class PriceRestController extends BaseRestController {
 
     //Start time for calling Alpha Vantage
     long responseStartTime = System.currentTimeMillis();
-    filtered = priceService.getPricesByStock(stock, daysToLookBack);
+    Collection <StockPrices> filtered = priceService.getPricesByStock(stock, daysToLookBack);
 
     long responseEndTime = System.currentTimeMillis();
     long timeToCallAlphaVantage = responseEndTime - responseStartTime;
@@ -74,10 +71,10 @@ public class PriceRestController extends BaseRestController {
 
     long processEndTime = System.currentTimeMillis();
     totalTime = processEndTime - processStartTime;
-    return buildFullResponse(stock, daysToLookBack, timeToCallAlphaVantage);
+    return buildFullResponse(stock, daysToLookBack, timeToCallAlphaVantage, filtered);
   }
 
-  public FullResponse buildFullResponse(String stock, String days, Long responseTime)
+  public FullResponse buildFullResponse(String stock, String days, Long responseTime, Collection<StockPrices> filtered)
       throws UnknownHostException{
 
     StockMetadata stockMetadata;
@@ -92,7 +89,6 @@ public class PriceRestController extends BaseRestController {
     stockMetadata = builder.build();
 
     // Create complete response object and pretty print JSON
-    FullResponse fullResponse = new FullResponse(stockMetadata, filtered);
-    return fullResponse;
+    return new FullResponse(stockMetadata, filtered);
   }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(value = "PricesClient",
-    url = "https://www.alphavantage.co/",
+    url = "${alpha.url}",
     configuration = ClientConfiguration.class)
 
 public interface PricesClient {

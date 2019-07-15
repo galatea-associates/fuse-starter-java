@@ -2,10 +2,9 @@ package org.galatea.starter.domain.internal;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter @Setter // Tells Lombok to generate getters/setters for all fields below
+@Data // Tells Lombok to generate getters/setters for all fields below
 @Builder
 @AllArgsConstructor
 public class StockMetadata {
