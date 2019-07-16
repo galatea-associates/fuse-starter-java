@@ -1,7 +1,7 @@
 # Global properties go here
 spring:
    profiles:
-      active: test
+      active: dev
    datasource:
       # this maps to an in-memory database that lives within a single VM.
       # in case you want to use H2 with a file persistence or as a service
@@ -9,6 +9,10 @@ spring:
       # http://www.h2database.com/html/tutorial.html#using_server
       url: jdbc:h2:mem:testtest
       driver-class-name: org.h2.Driver
+
+   h2:
+      console:
+         enabled: true
    jpa:
       hibernate:
          ddl-auto: update
@@ -28,6 +32,7 @@ spring:
    datasource:
       username: sa
       password:
+alpha.url: localhost:8090
 ---
 # Dev properties go here
 spring:
@@ -35,8 +40,9 @@ spring:
    datasource:
       username: sa
       password:
+alpha.url: https://www.alphavantage.co/
 # set debug to get spring to log the classpath (and other things) on startup     
-debug: true
+debug: false
 ---
 # UAT properties go here
 spring:
@@ -47,4 +53,18 @@ spring:
 ---
 # Mappings for Rest Controllers
 webservice:
-  halpath: /prices
+  pricepath: /prices
+
+---
+feign:
+   client:
+     config:
+       default:
+          connectTimeout: 5000
+          readTimeout: 5000
+          errorDecoder:
+   logging:
+      level:
+         project:
+            user:
+               UserClient: BASIC

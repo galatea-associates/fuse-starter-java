@@ -57,6 +57,15 @@
 			<version>1.4.4.RELEASE</version>
 		</dependency>
 
+<!--		&lt;!&ndash; Adding spring-cloud-dependencies for Feign build &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.cloud</groupId>-->
+<!--			<artifactId>spring-cloud-dependencies</artifactId>-->
+<!--			<version>1.4.4.RELEASE</version>-->
+<!--			<type>pom</type>-->
+<!--			<scope>import</scope>-->
+<!--		</dependency>-->
+
 		<!-- Required for log4j to process log4j2.yml -->
 		<!-- See: springframework.guru/log4j-2-configuration-using-yaml -->
 		<dependency>
@@ -230,6 +239,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock</artifactId>
+			<version>2.19.0</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- Useful for waiting for an async task to complete -->
 		<dependency>
 			<groupId>org.awaitility</groupId>
@@ -256,7 +272,12 @@
 			<version>2.3</version>
 			<scope>compile</scope>
 		</dependency>
-	</dependencies>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.0.12.Final</version>
+    </dependency>
+  </dependencies>
 	<build>
 		<plugins>
 			<plugin>

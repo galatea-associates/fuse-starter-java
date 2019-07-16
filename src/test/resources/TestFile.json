@@ -1,0 +1,63 @@
+{
+  "metaData": {
+    "timeStamp": "6/27/19 9:56 AM",
+    "responseTime": "0(ms)",
+    "processTime": "1(ms) ",
+    "endpoint": "price?stock=TSLA&days=5",
+    "host": "2019-Computer4"
+  },
+  "prices": [
+    {
+      "id": null,
+      "date": "2019-06-28",
+      "open": 219.4500,
+      "high": 222.18,
+      "low": 215.5,
+      "close": 221.86,
+      "adjustedClose": 221.86,
+      "volume": 8202078.0,
+      "dividendAmount": 0.0,
+      "splitCoefficient": 1.0,
+      "stock": "TSLA"
+    },
+    {
+      "id": null,
+      "date": "2019-06-27",
+      "open": 220.3100,
+      "high": 226.9,
+      "low": 216.35,
+      "close": 219.62,
+      "adjustedClose": 219.62,
+      "volume": 1.1863462E7,
+      "dividendAmount": 0.0,
+      "splitCoefficient": 1.0,
+      "stock": "TSLA"
+    },
+    {
+      "id": null,
+      "date": "2019-06-26",
+      "open": 224.3900,
+      "high": 227.77,
+      "low": 221.06,
+      "close": 226.43,
+      "adjustedClose": 226.43,
+      "volume": 6575135.0,
+      "dividendAmount": 0.0,
+      "splitCoefficient": 1.0,
+      "stock": "TSLA"
+    },
+    {
+      "id": null,
+      "date": "2019-06-25",
+      "open": 223.2400,
+      "high": 234.74,
+      "low": 222.56,
+      "close": 224.74,
+      "adjustedClose": 224.74,
+      "volume": 1.2715788E7,
+      "dividendAmount": 0.0,
+      "splitCoefficient": 1.0,
+      "stock": "TSLA"
+    }
+  ]
+}
