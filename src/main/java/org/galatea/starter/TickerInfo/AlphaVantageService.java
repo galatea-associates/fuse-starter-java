@@ -13,26 +13,18 @@ import java.text.SimpleDateFormat;
 
 public class AlphaVantageService {
 
-   private static String getURL(String ticker, int days){
+   private static String getURL(String ticker){
        String s = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=";
        s+= ticker;
        s += "&apikey=90TJ7SQ2CNV9EHMF";
        return s;
    }
-   public static Ticker getTicker(String ticker, int days){
+   public static Ticker getTicker(String ticker){
        RestTemplate restTemplate = new RestTemplate();
-       Ticker tickerdata = restTemplate.getForObject(AlphaVantageService.getURL(ticker,days), Ticker.class);
+       Ticker tickerdata = restTemplate.getForObject(AlphaVantageService.getURL(ticker), Ticker.class);
        return tickerdata;
    }
 
-   public static String getDate(int i){
 
-       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-       Calendar cal = Calendar.getInstance();
-       cal.add(Calendar.DAY_OF_YEAR,i*-1);
-       return dateFormat.format(cal.getTime());
-
-
-   }
 
 }
