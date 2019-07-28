@@ -13,6 +13,9 @@ spring:
       hibernate:
          ddl-auto: update
       database-platform: org.hibernate.dialect.MySQLDialect
+   rest:
+      iexBasePath: https://api.iextrading.com/1.0
+
 mvc:
    settleMissionPath: /settlementEngine
    getMissionPath: /settlementEngine/mission/
@@ -22,6 +25,10 @@ jms:
    listener-concurrency: 1-5
    agreement-queue-json: sandbox.agreement
    agreement-queue-proto: sandbox.agreement.proto
+
+# Set debug level logging for the IEX Client so that Feign requests and responses are logged out
+log.level.org.galatea.starter.service.IEXClient: DEBUG
+
 ---
 # Test properties go here
 spring:
@@ -36,7 +43,7 @@ spring:
    datasource:
       username: sa
       password:
-# set debug to get spring to log the classpath (and other things) on startup     
+# set debug to get spring to log the classpath (and other things) on startup
 debug: true
 ---
 # UAT properties go here
