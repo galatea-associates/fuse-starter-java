@@ -31,6 +31,7 @@ Configuration:
 
 # Create some appenders
   Appenders:
+  
     # Log to a specific file
     # For details of configuration options, see: https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender
     RollingFile:
@@ -60,7 +61,7 @@ Configuration:
         filename: ${log-dir}/${log-file-prefix}.warnings.log
         filePattern: ${log-archive-dir}/${log-file-prefix}.warnings.${zip-suffix}
         createOnDemand: true
-        PatternLayout: 
+        PatternLayout:
           Pattern: ${log-pattern}
         Policies:
           TimeBasedTriggeringPolicy:
@@ -100,7 +101,7 @@ Configuration:
         filename: ${log-dir}/${log-file-prefix}.rest.log
         filePattern: ${log-archive-dir}/${log-file-prefix}.rest.${zip-suffix}
         createOnDemand: true
-        PatternLayout: 
+        PatternLayout:
           Pattern: ${log-pattern}
         Policies:
           TimeBasedTriggeringPolicy:
@@ -112,7 +113,7 @@ Configuration:
         
     # Logging should be done asynchronously    
     # TODO: may want to investigate a bit, given this warning:
-    # http://logging.apache.org/log4j/2.x/manual/appenders.html#AsyncAppender:
+    # http://logging.apache.org/log4j/2.x/manual/appenders.html#AsyncAppender: 
     # Note that multi-threaded applications should exercise care when using this appender as such the blocking queue is susceptible to lock contention and our tests showed performance may become worse when more threads are logging concurrently.
     Async:
       - name: AsyncAppender
@@ -133,12 +134,15 @@ Configuration:
       level: info
       AppenderRef:
         - ref: AsyncAppender
-
+        
     Logger:
       # Let's send all messages from a specific logger somewhere else as well
       - name: org.galatea.starter.entrypoint.SettlementRestController
         level: debug
         AppenderRef:
           - ref: AsyncRestRequestAppender
-        
-    
+
+      # Turn off Spring auto-configuration debug-level logging because it adds a lot of noise to startup logs
+      # If Spring debug logging is off this isn't necessary
+      - name: org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLoggingInitializer
+        level: info

@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +14,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 
 public class RestExceptionHandlerTest {
 

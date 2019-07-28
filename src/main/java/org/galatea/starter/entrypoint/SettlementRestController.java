@@ -1,15 +1,19 @@
 package org.galatea.starter.entrypoint;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
+import org.galatea.starter.MvcConfig;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
+import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionList;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementResponseMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
@@ -52,9 +56,9 @@ public class SettlementRestController extends BaseSettlementRestController {
    * spring boot. This constructor was manually added because of the base class that has no default
    * constructor, necessitating a call to super() from here.
    */
-  public SettlementRestController(SettlementService settlementService,
-      ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator,
-      ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator) {
+  public SettlementRestController(final SettlementService settlementService,
+      final ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator,
+      final ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator) {
     super(settlementService);
     this.tradeAgreementTranslator = tradeAgreementTranslator;
     this.settlementMissionTranslator = settlementMissionTranslator;
@@ -70,7 +74,7 @@ public class SettlementRestController extends BaseSettlementRestController {
       MediaType.APPLICATION_XML_VALUE})
   public SettlementResponseMessage settleAgreement(
       @RequestBody final TradeAgreementMessages messages,
-      @RequestParam(value = "requestId", required = false) String requestId) {
+      @RequestParam(value = "requestId", required = false) final String requestId) {
 
     // if an external request id was provided, grab it
     processRequestId(requestId);
@@ -92,7 +96,7 @@ public class SettlementRestController extends BaseSettlementRestController {
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.APPLICATION_XML_VALUE})
   public SettlementMissionMessage getMission(@PathVariable final Long id,
-      @RequestParam(value = "requestId", required = false) String requestId) {
+      @RequestParam(value = "requestId", required = false) final String requestId) {
 
     // if an external request id was provided, grab it
     processRequestId(requestId);
@@ -104,6 +108,32 @@ public class SettlementRestController extends BaseSettlementRestController {
     }
 
     throw new EntityNotFoundException(SettlementMission.class, id.toString());
+  }
+
+  /**
+   * Retrieve multiple previously generated Missions.
+   */
+  // @GetMapping to link http GET requests to this method
+  @GetMapping(value = "${mvc.getMissionsPath}", produces = {
+      MediaType.APPLICATION_JSON_VALUE,
+      MediaType.APPLICATION_XML_VALUE,
+      MvcConfig.TEXT_CSV_VALUE,
+      MvcConfig.APPLICATION_EXCEL_VALUE})
+  public SettlementMissionList getMissions(
+      // @RequestParam to take a comma-separated list of ids from the url (ex: http://url?ids=1,2,3)
+      @RequestParam(value = "ids") final String ids,
+      // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
+      @RequestParam(value = "requestId", required = false) final String requestId) {
+
+    // if an external request id was provided, grab it
+    processRequestId(requestId);
+
+    List<Long> idLongs = Arrays.stream(ids.split(","))
+        .map(Long::parseLong)
+        .collect(Collectors.toList());
+    List<SettlementMission> missions = getMissionsInternal(idLongs);
+
+    return new SettlementMissionList(missions);
   }
 
 }

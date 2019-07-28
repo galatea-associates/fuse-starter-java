@@ -18,11 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @Data
 @Slf4j
-@XmlRootElement(name="tradeAgreements")
+@XmlRootElement(name = "tradeAgreements")
 @XmlAccessorType(XmlAccessType.FIELD) // required if using lombok to avoid duplicate properties
 public class TradeAgreementMessages {
 
   @Singular
-  @XmlElement(name="tradeAgreement")
+  @XmlElement(name = "tradeAgreement")
   protected List<TradeAgreementMessage> agreements;
 }

@@ -1,11 +1,11 @@
 package org.galatea.starter.entrypoint;
 
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.common.collect.Sets;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.ProtoMessageTranslationConfig;
-import org.galatea.starter.TestConfig;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage;
@@ -23,7 +22,7 @@ import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.Settleme
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages;
 import org.galatea.starter.service.SettlementService;
-import org.galatea.starter.utils.ObjectSupplier;
+import org.galatea.starter.testutils.TestDataGenerator;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,22 +42,13 @@ import org.springframework.test.web.servlet.MvcResult;
 // We don't load the entire spring application context for this test.
 @WebMvcTest(SettlementProtoRestController.class)
 // Import Beans from Configuration, enabling them to be Autowired
-@Import({ProtoMessageTranslationConfig.class, TestConfig.class, RestExceptionHandler.class})
+@Import({ProtoMessageTranslationConfig.class, RestExceptionHandler.class})
 // Use this runner since we want to parameterize certain tests.
 // See runner's javadoc for more usage.
 @RunWith(JUnitParamsRunner.class)
 public class SettlementProtoRestControllerTest extends ASpringTest {
 
   private static final String APPLICATION_X_PROTOBUF = "application/x-protobuf";
-
-  @Autowired
-  private ObjectSupplier<SettlementMission> settlementMissionSupplier;
-
-  @Autowired
-  private ObjectSupplier<TradeAgreement> tradeAgreementSupplier;
-
-  @Autowired
-  private ObjectSupplier<TradeAgreementProtoMessage> tradeAgreementProtoSupplier;
 
   @Autowired
   private ITranslator<SettlementMission, SettlementMissionProtoMessage> settlementMissionTranslator;
@@ -73,8 +63,9 @@ public class SettlementProtoRestControllerTest extends ASpringTest {
 
   @Test
   public void testSettleAgreement() throws Exception {
-    TradeAgreement agreement = tradeAgreementSupplier.get();
-    TradeAgreementProtoMessage message = tradeAgreementProtoSupplier.get();
+    TradeAgreement agreement = TestDataGenerator.defaultTradeAgreementData().build();
+    TradeAgreementProtoMessage message
+        = TestDataGenerator.defaultTradeAgreementProtoMessageData().build();
     Long expectedId = 1L;
 
     log.info("Agreement to post {}. Proto message {}. Expected id {}", agreement, message,
@@ -100,7 +91,7 @@ public class SettlementProtoRestControllerTest extends ASpringTest {
 
   @Test
   public void testGetMission() throws Exception {
-    SettlementMission mission = settlementMissionSupplier.get();
+    SettlementMission mission = TestDataGenerator.defaultSettlementMissionData().build();
     SettlementMissionProtoMessage expectedMessage = settlementMissionTranslator.translate(mission);
 
     log.info("Test mission: {}", mission);
@@ -114,5 +105,15 @@ public class SettlementProtoRestControllerTest extends ASpringTest {
     SettlementMissionProtoMessage message = SettlementMissionProtoMessage
         .parseFrom(result.getResponse().getContentAsByteArray());
     assertEquals(expectedMessage, message);
+  }
+
+  @Test
+  public void testGetMissionNotFound() throws Exception {
+    given(this.mockSettlementService.findMission(MISSION_ID_1)).willReturn(Optional.empty());
+
+    this.mvc.perform(
+        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requesId=1234")
+            .accept(APPLICATION_X_PROTOBUF))
+        .andExpect(status().is4xxClientError());
   }
 }
