@@ -32,7 +32,7 @@ Configuration:
 # Create some appenders
   Appenders:
   
-    # Log to a specific file
+    # Log to a specific file.
     # For details of configuration options, see: https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender
     RollingFile:
       - name: RollingFileAppender
