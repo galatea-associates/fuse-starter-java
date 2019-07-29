@@ -4,8 +4,7 @@ import java.util.List;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexStockSymbol;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -21,7 +20,7 @@ public interface IexClient {
    *
    * @return a list of all of the stock symbols supported by IEX.
    */
-  @RequestMapping(method = RequestMethod.GET, value = "/ref-data/symbols")
+  @GetMapping("/ref-data/symbols")
   List<IexStockSymbol> getStockSymbols();
 
   /**
@@ -30,7 +29,7 @@ public interface IexClient {
    * @param symbols stock symbols to get last traded price for.
    * @return a list of the last traded price for each of the symbols passed in.
    */
-  @RequestMapping(method = RequestMethod.GET, value = "/tops/last")
+  @GetMapping("/tops/last")
   List<IexLastTradedPrice> getLastTradedPriceForSymbols(@RequestParam("symbols") String[] symbols);
 
 }
