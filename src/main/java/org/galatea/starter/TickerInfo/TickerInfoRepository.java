@@ -9,8 +9,11 @@ import java.lang.Object;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.TreeMap;
 
+import java.util.SortedMap;
 import org.bson.Document;
 
 
@@ -33,15 +36,16 @@ public class TickerInfoRepository {
     }
 
     private void trimTicker(Ticker ticker, int days){
-        HashMap<String, Day> timeSeries = new HashMap<String,Day>();
+        SortedMap<String, Day> timeSeries = new TreeMap<String,Day>(Collections.reverseOrder());
         for(int i = 0; i<days; i++) {
-            if(ticker.timeSeries.get(getDate(i)) != null)
+            if(ticker.timeSeries.get(getDate(i)) != null) {
                 timeSeries.put(getDate(i), ticker.timeSeries.get(getDate(i)));
+            }
         }
         ticker.setTimeSeries(timeSeries);
     }
 
-    public static String getDate(int i){
+    private static String getDate(int i){
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();

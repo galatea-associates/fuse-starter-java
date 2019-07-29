@@ -14,10 +14,10 @@ import java.text.SimpleDateFormat;
 public class AlphaVantageService {
 
    private static String getURL(String ticker){
-       String s = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=";
-       s+= ticker;
-       s += "&apikey=90TJ7SQ2CNV9EHMF";
-       return s;
+       StringBuilder sb = new StringBuilder("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=");
+       sb.append(ticker);
+       sb.append("&apikey=90TJ7SQ2CNV9EHMF");
+       return sb.toString();
    }
    public static Ticker getTicker(String ticker){
        RestTemplate restTemplate = new RestTemplate();

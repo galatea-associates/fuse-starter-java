@@ -14,17 +14,17 @@ public class Ticker {
     public MetaData metaData;
 
     @JsonProperty("Time Series (Daily)")
-    public HashMap<String, Day> timeSeries;
+    public SortedMap<String, Day> timeSeries;
 
     public Ticker(){
 
     }
 
-    public HashMap<String, Day> getTimeSeries() {
+    public SortedMap<String, Day> getTimeSeries() {
         return timeSeries;
     }
 
-    public void setTimeSeries(HashMap<String, Day> timeSeries) {
+    public void setTimeSeries(SortedMap <String, Day> timeSeries) {
         this.timeSeries = timeSeries;
     }
 

@@ -19,9 +19,9 @@ public class InfoController {
     @GetMapping(value = "/info" + "/{ticker}" + "/{days}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Ticker getInfo(@PathVariable final String ticker, @PathVariable final int days) {
         TickerInfoRepository repo = new TickerInfoRepository();
-        Ticker info = repo.getTicker(ticker,days);
+        return repo.getTicker(ticker,days);
 
-        return info;
+
     }
 
 
