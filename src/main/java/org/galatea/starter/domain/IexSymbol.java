@@ -1,10 +1,12 @@
 package org.galatea.starter.domain;
 
 import java.util.Date;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class IexStockSymbol {
+@Builder
+public class IexSymbol {
 
   private String symbol;
   private String name;

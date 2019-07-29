@@ -20,6 +20,9 @@ mvc:
    settleMissionPath: /settlementEngine
    getMissionPath: /settlementEngine/mission/
    getMissionsPath: /settlementEngine/missions
+   iex:
+      getAllSymbolsPath: /iex/symbols
+      getLastTradedPricePath: /iex/lastTradedPrice
    max-size-trace-payload: 50000
 jms:
    listener-concurrency: 1-5

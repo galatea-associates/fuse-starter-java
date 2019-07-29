@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.domain.IexLastTradedPrice;
-import org.galatea.starter.domain.IexStockSymbol;
+import org.galatea.starter.domain.IexSymbol;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class IexClientTest extends ASpringTest {
 
   @Test
   public void testGetStockSymbols() {
-    List<IexStockSymbol> stockSymbols = iexClient.getStockSymbols();
+    List<IexSymbol> stockSymbols = iexClient.getAllSymbols();
 
     log.info("Result: {}", stockSymbols);
     Assert.assertNotNull(stockSymbols);
