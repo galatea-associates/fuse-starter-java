@@ -5,12 +5,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import junitparams.JUnitParamsRunner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
+import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
 import org.galatea.starter.service.IexService;
 import org.junit.Test;
@@ -54,6 +57,28 @@ public class IexRestControllerTest extends ASpringTest {
 
     this.mvc.perform(
         get("/iex/symbols").accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testGetLastTradedPrice() throws Exception {
+
+    List<IexLastTradedPrice> mockResponse = new ArrayList<>();
+
+    mockResponse.add(IexLastTradedPrice.builder()
+        .symbol("SNAP")
+        .price(123L)
+        .size(1)
+        .time(12908371L)
+        .build());
+
+    given(this.mockIexService.getLastTradedPriceForSymbols(Collections.singletonList("SNAP")))
+        .willReturn(mockResponse);
+
+    this.mvc.perform(
+        get("/iex/symbols")
+            .param("symbols", "SNAP")
+            .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk());
   }
 }
