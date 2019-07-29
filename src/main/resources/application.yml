@@ -49,3 +49,4 @@ spring:
 # Mappings for Rest Controllers
 webservice:
   halpath: /hal
+  stockPricePath: /stockPrice
