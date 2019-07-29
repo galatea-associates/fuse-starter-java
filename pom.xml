@@ -230,6 +230,7 @@
 			<artifactId>ehcache</artifactId>
 		</dependency>
 
+		<!-- Declarative REST client -->
     <dependency>
       <groupId>io.github.openfeign</groupId>
       <artifactId>feign-core</artifactId>
