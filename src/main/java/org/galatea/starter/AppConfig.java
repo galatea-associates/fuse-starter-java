@@ -40,7 +40,7 @@ public class AppConfig {
   }
 
   /**
-   * Set the Feign log level for interfaces annotated with @FeignClient
+   * Set the Feign log level for interfaces annotated with @FeignClient.
    *
    * @return the Feign log level.
    */
