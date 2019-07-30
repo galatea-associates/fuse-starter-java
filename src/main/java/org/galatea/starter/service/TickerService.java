@@ -12,15 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
-
+/**
+ * Communicates with the TickerRepository and returns
+ * correct ticker with desired number of days
+ */
 @Component
 public class TickerService {
-
 
   @Autowired
   TickerRepository repository;
 
-
+  /**
+   * @param symbol
+   * @param days
+   * @return Ticker with correct symbol and number of days
+   */
   public Ticker getTicker(String symbol, int days){
     Ticker ticker = findBySymbol(symbol);
     if(ticker == null){
@@ -31,7 +37,10 @@ public class TickerService {
     return ticker;
   }
 
-
+  /**
+   * @param symbol
+   * @return Ticker with given symbol, NULL if not found
+   */
   private Ticker findBySymbol(String symbol){
     for(Ticker ticker:repository.findAll()){
       if(ticker.getMetaData().getSymbol().equals(symbol)){
@@ -41,6 +50,11 @@ public class TickerService {
     return null;
   }
 
+  /**
+   * Edits ticker to contain correct number of days
+   * @param ticker
+   * @param days
+   */
   private void trimTicker(Ticker ticker, int days) {
     SortedMap<String, Day> timeSeries = new TreeMap<String, Day>(Collections.reverseOrder());
     List<String> set = new ArrayList<String>(ticker.getTimeSeries().keySet());
