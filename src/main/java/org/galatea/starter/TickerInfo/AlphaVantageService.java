@@ -19,9 +19,9 @@ public class AlphaVantageService {
        sb.append("&apikey=90TJ7SQ2CNV9EHMF");
        return sb.toString();
    }
-   public static Ticker getTicker(String ticker){
+   public static Ticker getTicker(String symbol){
        RestTemplate restTemplate = new RestTemplate();
-       Ticker tickerdata = restTemplate.getForObject(AlphaVantageService.getURL(ticker), Ticker.class);
+       Ticker tickerdata = restTemplate.getForObject(AlphaVantageService.getURL(symbol), Ticker.class);
        return tickerdata;
    }
 

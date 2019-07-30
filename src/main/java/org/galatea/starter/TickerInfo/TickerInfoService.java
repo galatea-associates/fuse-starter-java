@@ -35,17 +35,16 @@ public class TickerInfoService {
   TickerInfoRepository repository;
 
 
-  public Ticker getTicker(String ticker, int days){
+  public Ticker getTicker(String symbol, int days){
 
-    Ticker info = findBySymbol(ticker);
-    System.out.println("Searching for Ticker");
-    if(info == null){
-      System.out.println("Ticker Not Found in Repo, Pulling from AlphaVantage");
-      info = AlphaVantageService.getTicker(ticker);
-      repository.save(info);
-    }else{System.out.println("Ticker Found");}
-    trimTicker(info,days);
-    return info;
+    Ticker ticker = findBySymbol(symbol);
+
+    if(ticker == null){
+      ticker = AlphaVantageService.getTicker(symbol);
+      repository.save(ticker);
+    }
+    trimTicker(ticker,days);
+    return ticker;
   }
 
 

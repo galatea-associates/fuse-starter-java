@@ -25,16 +25,9 @@ public class InfoController {
     @Autowired
     TickerInfoService service;
 
-
-
-
-    @GetMapping(value = "/info" + "/{ticker}" + "/{days}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Ticker getInfo(@PathVariable final String ticker, @PathVariable final int days) {
-
-       Ticker info = service.getTicker(ticker,days);
-       return info;
-
-
+    @GetMapping(value = "/info" + "/{symbol}" + "/{days}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Ticker getInfo(@PathVariable final String symbol, @PathVariable final int days) {
+       return service.getTicker(symbol,days);
     }
 
 
