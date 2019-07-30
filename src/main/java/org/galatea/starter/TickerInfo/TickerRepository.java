@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface TickerInfoRepository extends MongoRepository<Ticker,String> {
-
+public interface TickerRepository extends MongoRepository<Ticker,String> {
 
 }

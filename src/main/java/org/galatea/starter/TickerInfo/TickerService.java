@@ -28,11 +28,11 @@ import org.springframework.web.client.RestTemplate;
 
 
 @Component
-public class TickerInfoService {
+public class TickerService {
 
 
   @Autowired
-  TickerInfoRepository repository;
+  TickerRepository repository;
 
 
   public Ticker getTicker(String symbol, int days){

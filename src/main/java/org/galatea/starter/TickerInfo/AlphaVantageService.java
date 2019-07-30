@@ -21,8 +21,7 @@ public class AlphaVantageService {
    }
    public static Ticker getTicker(String symbol){
        RestTemplate restTemplate = new RestTemplate();
-       Ticker tickerdata = restTemplate.getForObject(AlphaVantageService.getURL(symbol), Ticker.class);
-       return tickerdata;
+       return restTemplate.getForObject(AlphaVantageService.getURL(symbol), Ticker.class);
    }
 
 

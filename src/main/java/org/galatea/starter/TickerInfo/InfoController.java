@@ -23,15 +23,10 @@ import java.util.SortedMap;
 public class InfoController {
 
     @Autowired
-    TickerInfoService service;
+    TickerService service;
 
     @GetMapping(value = "/info" + "/{symbol}" + "/{days}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Ticker getInfo(@PathVariable final String symbol, @PathVariable final int days) {
        return service.getTicker(symbol,days);
     }
-
-
-
-
-
 }
