@@ -1,12 +1,9 @@
-package org.galatea.starter.TickerInfo;
+package org.galatea.starter.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.SortedMap;
-import javax.persistence.Entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

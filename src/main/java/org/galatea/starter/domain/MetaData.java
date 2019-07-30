@@ -1,4 +1,4 @@
-package org.galatea.starter.TickerInfo;
+package org.galatea.starter.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

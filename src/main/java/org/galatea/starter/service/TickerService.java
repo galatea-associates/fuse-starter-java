@@ -1,10 +1,13 @@
-package org.galatea.starter.TickerInfo;
+package org.galatea.starter.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.SortedMap;
+import org.galatea.starter.domain.Day;
+import org.galatea.starter.domain.Ticker;
+import org.galatea.starter.domain.rpsy.TickerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

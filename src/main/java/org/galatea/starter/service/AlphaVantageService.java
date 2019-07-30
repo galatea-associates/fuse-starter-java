@@ -1,14 +1,7 @@
-package org.galatea.starter.TickerInfo;
+package org.galatea.starter.service;
 
+import org.galatea.starter.domain.Ticker;
 import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 
 
 public class AlphaVantageService {
