@@ -26,29 +26,36 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+
 @Component
 public class TickerInfoService {
 
 
+  @Autowired
+  TickerInfoRepository repository;
 
 
   public Ticker getTicker(String ticker, int days){
-    Ticker info;
 
-    //Check if Available in Database
-    if(false){
-      //Fill in mongo Access code here
-    }
-    else{
+    Ticker info = findBySymbol(ticker);
+    System.out.println("Searching for Ticker");
+    if(info == null){
+      System.out.println("Ticker Not Found in Repo, Pulling from AlphaVantage");
       info = AlphaVantageService.getTicker(ticker);
-
-
-
-
-
-    }
+      repository.save(info);
+    }else{System.out.println("Ticker Found");}
     trimTicker(info,days);
     return info;
+  }
+
+
+  public Ticker findBySymbol(String symbol){
+    for(Ticker ticker:repository.findAll()){
+      if(ticker.getMetaData().getSymbol().equals(symbol)){
+        return ticker;
+      }
+    }
+    return null;
   }
 
   private void trimTicker(Ticker ticker, int days){

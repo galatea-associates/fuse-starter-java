@@ -7,12 +7,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.SortedMap;
 import javax.persistence.Entity;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Document(collection = "Tickers")
 public class Ticker {
+
+    @Id
+    String id;
+
     @JsonProperty("Meta Data")
     public MetaData metaData;
 
@@ -20,7 +25,6 @@ public class Ticker {
     public SortedMap<String, Day> timeSeries;
 
     public Ticker(){
-
     }
 
     public SortedMap<String, Day> getTimeSeries() {

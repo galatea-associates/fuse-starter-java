@@ -25,17 +25,13 @@ public class InfoController {
     @Autowired
     TickerInfoService service;
 
-    @Autowired
-    TickerInfoRepository repository;
+
 
 
     @GetMapping(value = "/info" + "/{ticker}" + "/{days}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Ticker getInfo(@PathVariable final String ticker, @PathVariable final int days) {
 
        Ticker info = service.getTicker(ticker,days);
-
-       repository.save(info);
-       System.out.println(repository.findAll());
        return info;
 
 
