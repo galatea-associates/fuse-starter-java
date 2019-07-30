@@ -6,9 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.SortedMap;
+import javax.persistence.Entity;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Document(collection = "Tickers")
 public class Ticker {
     @JsonProperty("Meta Data")
     public MetaData metaData;

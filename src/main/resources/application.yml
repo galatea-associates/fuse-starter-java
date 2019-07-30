@@ -9,6 +9,9 @@ spring:
       # http://www.h2database.com/html/tutorial.html#using_server
       url: jdbc:h2:mem:testtest
       driver-class-name: org.h2.Driver
+   data.mongodb:
+      uri: mongodb+srv://ReneBorr:GalaPassword@tickerinfo-glh7c.mongodb.net/test?retryWrites=true&w=majority
+      database: AlphaVantage
    jpa:
       hibernate:
          ddl-auto: update
@@ -29,6 +32,8 @@ spring:
    datasource:
       username: sa
       password:
+
+
 ---
 # Dev properties go here
 spring:
