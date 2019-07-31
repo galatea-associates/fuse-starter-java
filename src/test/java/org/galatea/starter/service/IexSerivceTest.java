@@ -1,6 +1,8 @@
 package org.galatea.starter.service;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +15,7 @@ import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -92,6 +95,25 @@ public class IexSerivceTest extends ASpringTest {
 
     log.info("Result: {}", lastTradedPriceForSymbols);
     Assert.assertEquals(3, lastTradedPriceForSymbols.size());
+  }
+
+  @Test
+  public void testGetLastTradedPriceForSymbolsNoStocks() {
+    final List<String> symbolsToGetLastTradedPriceFor = new ArrayList<>();
+
+    List<IexLastTradedPrice> mockResponse = new ArrayList<>();
+
+    given(this.mockIexClient.getLastTradedPriceForSymbols(new String[0]))
+        .willReturn(mockResponse);
+
+    List<IexLastTradedPrice> lastTradedPriceForSymbols = iexService
+        .getLastTradedPriceForSymbols(symbolsToGetLastTradedPriceFor);
+
+    log.info("Result: {}", lastTradedPriceForSymbols);
+    Assert.assertEquals(0, lastTradedPriceForSymbols.size());
+
+    // The Client should never have been called since we passed an empty list
+    Mockito.verify(mockIexClient, never()).getLastTradedPriceForSymbols(any());
   }
 
 }

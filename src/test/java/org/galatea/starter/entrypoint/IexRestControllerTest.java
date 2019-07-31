@@ -4,8 +4,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 
 @RequiredArgsConstructor
@@ -55,9 +56,12 @@ public class IexRestControllerTest extends ASpringTest {
 
     given(this.mockIexService.getAllSymbols()).willReturn(mockResponse);
 
-    this.mvc.perform(
+    MvcResult result = this.mvc.perform(
         get("/iex/symbols").accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andReturn();
+
+    final String jsonResponse = result.getResponse().getContentAsString();
   }
 
   @Test
@@ -75,10 +79,14 @@ public class IexRestControllerTest extends ASpringTest {
     given(this.mockIexService.getLastTradedPriceForSymbols(Collections.singletonList("SNAP")))
         .willReturn(mockResponse);
 
-    this.mvc.perform(
-        get("/iex/symbols")
+    MvcResult result = this.mvc.perform(
+        get("/iex/lastTradedPrice")
             .param("symbols", "SNAP")
             .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andReturn();
+
+    final String jsonResponse = result.getResponse().getContentAsString();
+
   }
 }
