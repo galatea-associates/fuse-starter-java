@@ -28,6 +28,11 @@ public class StringEnumerationValidatorTest {
   }
 
   @Test
+  public void nullIsValid() {
+    assertTrue(validator.isValid(null, null));
+  }
+
+  @Test
   public void invalidEnumMember() {
     assertFalse(validator.isValid("invalidVal", null));
   }

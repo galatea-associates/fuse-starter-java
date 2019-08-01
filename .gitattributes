@@ -1,0 +1,16 @@
+# https://github.com/gitster/git/blob/master/Documentation/gitattributes.txt
+
+# Depending on local machine git config settings, git may convert line endings between
+# LF and CRLF on commit and checkout. This shouldn't cause any problems for certain file types where
+# the line ending style doesn't matter, but it may break files where it does matter.
+# The kinds of files where line ending does matter are files with binary data and text files meant
+# to be used on a specific OS, such as bash or batch scripts.
+
+# CSV is a text file type, but our tests compare the actual output with the literal string contents
+# of an expected file. Since the string comparison does care about line endings, we want to ensure
+# our expected CSV file has consistent line endings on all machines to avoid test failures.
+*.csv eol=lf
+
+# XLSX is a binary file type. Changing line endings may break things in the file, so turn off line
+# ending normalization completely.
+*.xlsx -text

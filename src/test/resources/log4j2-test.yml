@@ -14,7 +14,7 @@ Configuration:
       name: Console
       target: SYSTEM_OUT
       PatternLayout:
-        Pattern: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level %logger{1.} - %X{internal-request-id}%X{external-request-id}%msg%n%xThrowable{separator(|)}"
+        Pattern: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level %logger{1.} - %X{internal-request-id}%X{external-request-id}%msg%n"
 
   Loggers:
 
@@ -22,7 +22,7 @@ Configuration:
     Root:
       level: info 
       AppenderRef:
-        - ref: Console  
+        - ref: Console
   
       # Enable debug logging for all org.galatea.starter classes/loggers     
     Logger:
@@ -32,4 +32,8 @@ Configuration:
       # Can change log levels for individual loggers as below
 #      - name: org.galatea.starter.utils.Tracer
 #        level: debug
-        
+
+      # Turn off Spring auto-configuration debug-level logging because it adds a lot of noise to test logs
+      # If Spring debug logging is off this isn't necessary
+      - name: org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLoggingInitializer
+        level: info

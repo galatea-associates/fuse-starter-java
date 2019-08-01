@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 /**
- * Config for method-level validation (such as validating method input params)
+ * Config for method-level validation (such as validating method input params).
  */
 @Configuration
 @ComponentScan("org.galatea.starter")

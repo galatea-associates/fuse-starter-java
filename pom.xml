@@ -13,15 +13,23 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<!-- VM and application args used during maven steps, e.g. mvn test -->
+		<!-- Use log config that writes to stdout so that application logs during tests show up in Jenkins build logs -->
 		<argLine>
 			-Dapplication.name=${project.artifactId}
-			-Dapplication.log-dir=target/logs
-			-Dapplication.log-archive-root-dir=target/logs/archive
-			-Dlog4j.configurationFile=log4j2.yml,log4j2-debug.yml
+			-Dlog4j.configurationFile=log4j2-test.yml
 			-Dserver.port=8080
 		</argLine>
 		<sonar.exclusions>**/ProtobufMessages.java</sonar.exclusions>
-		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>
+			src/main/java/org/galatea/starter/domain/**,
+			src/main/java/org/galatea/starter/entrypoint/messagecontracts/**,
+			**/*Config.java,
+			**/*Exception.java,
+			**/FuseWebRequestTraceFilter.java,
+			**/Tracer.java,
+			**/Application.java
+		</sonar.coverage.exclusions>
 		<!-- Allow us to skip Unit Tests only, if need be, with -Dskip.surefire.tests, but retain the skip all tests functionality of -DskipTests -->
 		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
 	</properties>
@@ -135,6 +143,13 @@
 			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
 
+		<!-- Converting between POJOs and CSV -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-csv</artifactId>
+			<version>2.8.8</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
@@ -197,6 +212,18 @@
 			<version>2.0.1.Final</version>
 		</dependency>
 
+		<!-- Excel spreadsheet reading and writing -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+
 		<!-- Ehcache for caching. Having ehcache.xml in src/main/resources tells SpringBoot to use EhCache as the caching implementation for @Cacheable -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -250,12 +277,23 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.17</version>
+				<version>3.1.0</version>
 				<configuration>
-					<configLocation>google_checks.xml</configLocation>
+					<configLocation>style/google_checks_modified.xml</configLocation>
 					<violationSeverity>warning</violationSeverity>
-					<consoleOutput>true</consoleOutput>
+					<excludes>**/ProtobufMessages.java</excludes>
 				</configuration>
+				<executions>
+					<execution>
+						<!-- Run checkstyle as part of the validate phase -->
+						<phase>validate</phase>
+						<!-- See https://maven.apache.org/plugins/maven-checkstyle-plugin/plugin-info.html
+						     for the different checkstyle goals-->
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

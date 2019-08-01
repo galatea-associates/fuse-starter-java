@@ -17,6 +17,7 @@ mvc:
    settleMissionPath: /settlementEngine
    updateMissionPath: /settlementEngine/mission/
    getMissionPath: /settlementEngine/mission/
+   getMissionsPath: /settlementEngine/missions
    deleteMissionPath: /settlementEngine/mission/
    max-size-trace-payload: 50000
 jms:

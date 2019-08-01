@@ -1,4 +1,3 @@
-
 package org.galatea.starter.entrypoint;
 
 import static org.junit.Assert.assertEquals;
@@ -8,12 +7,15 @@ import feign.Feign;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementResponseProtoMessage;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages;
+import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionList;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementResponseMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
@@ -47,6 +49,9 @@ public class SettlementRestControllerIntegrationTest {
     @RequestLine("GET /settlementEngine/mission/{id}")
     SettlementMissionMessage getSettlementMissionJson(@Param("id") Long id);
 
+    @RequestLine("GET /settlementEngine/missions?ids={ids}")
+    SettlementMissionList getSettlementMissionsJson(@Param("ids") String ids);
+
     @RequestLine("POST /settlementEngine")
     @Headers({"Content-Type: application/x-protobuf", "Accept: application/x-protobuf"})
     SettlementResponseProtoMessage sendTradeAgreementProto(
@@ -73,25 +78,31 @@ public class SettlementRestControllerIntegrationTest {
         .encoder(new SpringEncoder(messageConverters))
         .target(FuseServer.class, fuseHostName);
 
+    String instrument = "IBM";
+    String external1 = "ecp-1";
+    String external2 = "ecp-2";
+    double quantity1 = 4500d;
+    double quantity2 = 4600d;
+
     TradeAgreementProtoMessages messages = TradeAgreementProtoMessages.newBuilder().addMessage(
-        TradeAgreementProtoMessage.newBuilder().setId(4000L).setInstrument("IBM")
+        TradeAgreementProtoMessage.newBuilder().setId(4000L).setInstrument(instrument)
             .setInternalParty("icp-1")
-            .setExternalParty("ecp-1").setBuySell("B").setQty(4500d).build()).addMessage(
-        TradeAgreementProtoMessage.newBuilder().setId(40001L).setInstrument("IBM")
+            .setExternalParty(external1).setBuySell("B").setQty(quantity1).build()).addMessage(
+        TradeAgreementProtoMessage.newBuilder().setId(40001L).setInstrument(instrument)
             .setInternalParty("icp-2")
-            .setExternalParty("ecp-2").setBuySell("B").setQty(4600d).build()).build();
+            .setExternalParty(external2).setBuySell("B").setQty(quantity2).build()).build();
 
     SettlementResponseProtoMessage missionPaths = fuseServer.sendTradeAgreementProto(messages);
 
     log.info("created missions: {}", missionPaths);
 
     SettlementMissionProtoMessage.Builder b1 = SettlementMissionProtoMessage.newBuilder()
-        .setDepot("DTC").setInstrument("IBM").setExternalParty("ecp-1").setDirection("REC")
-        .setQty(4500d);
+        .setDepot("DTC").setInstrument(instrument).setExternalParty(external1).setDirection("REC")
+        .setQty(quantity1);
 
     SettlementMissionProtoMessage.Builder b2 = SettlementMissionProtoMessage.newBuilder()
-        .setDepot("DTC").setInstrument("IBM").setExternalParty("ecp-2").setDirection("REC")
-        .setQty(4600d);
+        .setDepot("DTC").setInstrument(instrument).setExternalParty(external2).setDirection("REC")
+        .setQty(quantity2);
 
     assertEquals(2, missionPaths.getSpawnedMissionPathsList().size());
 
@@ -121,31 +132,52 @@ public class SettlementRestControllerIntegrationTest {
         .encoder(new SpringEncoder(messageConverters))
         .target(FuseServer.class, fuseHostName);
 
+    String instrument = "IBM";
+    String external1 = "ecp-1";
+    String external2 = "ecp-2";
+    double quantity1 = 4500d;
+    double quantity2 = 4600d;
+
     TradeAgreementMessages messages = TradeAgreementMessages.builder().agreement(
-        TradeAgreementMessage.builder().id(4000L).instrument("IBM").internalParty("icp-1")
-            .externalParty("ecp-1").buySell("B").qty(4500d).build()).agreement(
-        TradeAgreementMessage.builder().id(40001L).instrument("IBM").internalParty("icp-2")
-            .externalParty("ecp-2").buySell("B").qty(4600d).build()).build();
+        TradeAgreementMessage.builder().id(4000L).instrument(instrument).internalParty("icp-1")
+            .externalParty(external1).buySell("B").qty(quantity1).build()).agreement(
+        TradeAgreementMessage.builder().id(40001L).instrument(instrument).internalParty("icp-2")
+            .externalParty(external2).buySell("B").qty(quantity2).build()).build();
 
     SettlementResponseMessage missionPaths = fuseServer.sendTradeAgreementJson(messages);
 
     log.info("created missions: {}", missionPaths);
 
     SettlementMissionMessage.SettlementMissionMessageBuilder b1 = SettlementMissionMessage.builder()
-        .depot("DTC").instrument("IBM").externalParty("ecp-1").direction("REC").qty(4500d);
+        .depot("DTC").instrument(instrument).externalParty(external1).direction("REC")
+        .qty(quantity1);
 
     SettlementMissionMessage.SettlementMissionMessageBuilder b2 = SettlementMissionMessage.builder()
-        .depot("DTC").instrument("IBM").externalParty("ecp-2").direction("REC").qty(4600d);
+        .depot("DTC").instrument(instrument).externalParty(external2).direction("REC")
+        .qty(quantity2);
 
     assertEquals(2, missionPaths.getSpawnedMissions().size());
 
+    // Fetch individual missions
+    List<String> missionIds = new ArrayList<>();
     for (String missionPath : missionPaths.getSpawnedMissions()) {
       Long missionId = Long.parseLong(missionPath.split("/")[3]); // brittle assumption...
+      // Convert to Strings here to avoid needing to convert a bunch of Longs to Strings later
+      missionIds.add(missionId.toString());
       SettlementMissionMessage settlementMission = fuseServer.getSettlementMissionJson(missionId);
       log.info("fetched mission: {}", settlementMission);
 
       assertTrue(b1.id(missionId).build().equals(settlementMission)
           || b2.id(missionId).build().equals(settlementMission));
     }
+
+    // Fetch multiple missions
+    SettlementMissionList settlementMissions = fuseServer.getSettlementMissionsJson(
+        String.join(",", missionIds));
+    assertEquals(2, settlementMissions.getSettlementMissions().size());
+    assertEquals(missionIds.get(0),
+        settlementMissions.getSettlementMissions().get(0).getId().toString());
+    assertEquals(missionIds.get(1),
+        settlementMissions.getSettlementMissions().get(1).getId().toString());
   }
 }

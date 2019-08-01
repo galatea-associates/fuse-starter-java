@@ -15,13 +15,15 @@ public class HalService {
   /* We need to have this constant so sonar qube doesn't complain */
   private static final String DERP = "derp!";
 
+  private Random randomNum = new Random();
+
   /**
-   * Process the text from GET command into the appropriate command
+   * Process the text from GET command into the appropriate command.
    *
    * @param text the full text from the GET command. Wit.ai will break this down
    * @return the result of executing the command with the given parameters
    */
-  public String processText(String text) {
+  public String processText(final String text) {
     switch (text) {
       case "coin-flip":
         return coinFlip();
@@ -33,12 +35,12 @@ public class HalService {
   }
 
   /**
-   * Flip a coin
+   * Flip a coin.
    *
    * @return "Heads" or "Tails"
    */
   public String coinFlip() {
-    if (coinFlipRand() == COIN.TAILS) {
+    if (coinFlipRand() == Coin.TAILS) {
       return "Tails";
     } else {
       return "Heads";
@@ -46,7 +48,7 @@ public class HalService {
   }
 
   /**
-   * Get derp
+   * Get derp.
    *
    * @return "derp"
    */
@@ -55,22 +57,21 @@ public class HalService {
   }
 
   /**
-   * Helper method used so we can test the coinFlip() without mocking the Random class
+   * Helper method used so we can test the coinFlip() without mocking the Random class.
    *
-   * @return COIN.HEADS or COIN.TAILS
+   * @return Coin.HEADS or Coin.TAILS
    */
-  protected COIN coinFlipRand() {
-    Random randomNum = new Random();
+  protected Coin coinFlipRand() {
     int flip = randomNum.nextInt(2);
 
     if (flip == 0) {
-      return COIN.TAILS;
+      return Coin.TAILS;
     } else {
-      return COIN.HEADS;
+      return Coin.HEADS;
     }
   }
 
-  protected enum COIN {
+  protected enum Coin {
     TAILS,
     HEADS
   }
