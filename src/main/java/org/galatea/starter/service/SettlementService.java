@@ -105,6 +105,8 @@ public class SettlementService {
   }
 
   /**
+   * Return true if a mission with the given ID exists.
+   *
    * @param id identifier of the mission
    * @return does a mission with the id exist?
    */

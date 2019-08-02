@@ -87,8 +87,6 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   private JacksonTester<List<Long>> missionIdJsonTester;
 
-  private ObjectMapper objectMapper;
-
 
   private static final Long MISSION_ID_1 = 1091L;
 
@@ -343,7 +341,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testUpdateMission() throws Exception {
     TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
         .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).build();
-    SettlementMission settlementMission = settlementMissionSupplier.get();
+    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
         .thenReturn(true);

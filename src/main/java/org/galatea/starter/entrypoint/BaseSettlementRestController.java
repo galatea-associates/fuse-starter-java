@@ -56,7 +56,8 @@ public abstract class BaseSettlementRestController extends BaseRestController {
   /**
    * Updates settlement mission, if it exists, using the given agreement.
    */
-  protected Optional<SettlementMission> updateMissionInternal(final Long id, final TradeAgreement agreement) {
+  protected Optional<SettlementMission> updateMissionInternal(final Long id,
+      final TradeAgreement agreement) {
     if (settlementService.missionExists(id)) {
       return settlementService.updateMission(id, agreement);
     } else {

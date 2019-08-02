@@ -1,5 +1,6 @@
 package org.galatea.starter.entrypoint;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -151,7 +152,7 @@ public class SettlementRestController extends BaseSettlementRestController {
       produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
   public void updateMission(@PathVariable final Long id,
       @RequestBody final TradeAgreementMessage tradeAgreementMessage,
-      @RequestParam(value = "requestId", required = false) String requestId) {
+      @RequestParam(value = "requestId", required = false) final String requestId) {
 
     // if an external request id was provided, grab it
     processRequestId(requestId);
@@ -188,7 +189,7 @@ public class SettlementRestController extends BaseSettlementRestController {
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.APPLICATION_XML_VALUE})
   public void deleteMission(@PathVariable final Long id,
-      @RequestParam(value = "requestId", required = false) String requestId) {
+      @RequestParam(value = "requestId", required = false) final String requestId) {
 
     // if an external request id was provided, grab it
     processRequestId(requestId);
