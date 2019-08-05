@@ -247,6 +247,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- WireMock import for stubbing external REST services, see IexRestControllerTest.java -->
+		<!-- following documentation here: https://cloud.spring.io/spring-cloud-contract/2.1.x/multi/multi__spring_cloud_contract_wiremock.html -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+			<version>2.1.2.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- Useful for waiting for an async task to complete -->
 		<dependency>
 			<groupId>org.awaitility</groupId>

@@ -14,7 +14,9 @@ spring:
          ddl-auto: update
       database-platform: org.hibernate.dialect.MySQLDialect
    rest:
-      iexBasePath: https://api.iextrading.com/1.0
+      # iexBasePath: https://api.iextrading.com/1.0
+      # this points at the local WireMock server in the test environment.
+      iexBasePath: http://localhost:9938/
 
 mvc:
    settleMissionPath: /settlementEngine

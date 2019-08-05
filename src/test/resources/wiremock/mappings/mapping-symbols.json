@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/ref-data/symbols"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json;charset=utf-8"
+    },
+    "jsonBody": [
+      {
+        "symbol": "A",
+        "name": "Agilent Technologies Inc.",
+        "date": "2019-08-02",
+        "isEnabled": true,
+        "type": "cs",
+        "iexId": "2"
+      },
+      {
+        "symbol": "AA",
+        "name": "Alcoa Corporation",
+        "date": "2019-08-02",
+        "isEnabled": true,
+        "type": "cs",
+        "iexId": "12042"
+      },
+      {
+        "symbol": "AAAU",
+        "name": "Perth Mint Physical Gold ETF",
+        "date": "2019-08-02",
+        "isEnabled": true,
+        "type": "N/A",
+        "iexId": "14924"
+      }
+    ]
+  }
+}
+
+
