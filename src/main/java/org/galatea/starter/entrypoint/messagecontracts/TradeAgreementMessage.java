@@ -22,4 +22,5 @@ public class TradeAgreementMessage {
   protected String externalParty;
   protected String buySell;
   protected Double qty;
+  protected Long version;
 }

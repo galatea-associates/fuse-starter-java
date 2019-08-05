@@ -14,6 +14,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 public class RestExceptionHandlerTest {
 
@@ -59,5 +60,12 @@ public class RestExceptionHandlerTest {
     JsonProcessingException exception = new JsonProcessingException("msg") {};
     ResponseEntity<Object> response = handler.handleJsonProcessingException(exception);
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+  }
+
+  @Test
+  public void handleOptimisticLockException() {
+    ObjectOptimisticLockingFailureException exception = new ObjectOptimisticLockingFailureException(Object.class, "id") {};
+    ResponseEntity<Object> response = handler.handleOptimisticLockException(exception);
+    assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response.getStatusCode());
   }
 }

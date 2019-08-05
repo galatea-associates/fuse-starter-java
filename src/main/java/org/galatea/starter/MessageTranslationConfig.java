@@ -25,7 +25,8 @@ public class MessageTranslationConfig {
         .externalParty(mission.getExternalParty())
         .direction(mission.getDirection())
         .depot(mission.getDepot())
-        .qty(mission.getQty()).build();
+        .qty(mission.getQty())
+        .version(mission.getVersion()).build();
   }
 
   /**
@@ -39,7 +40,8 @@ public class MessageTranslationConfig {
         .externalParty(message.getExternalParty())
         .instrument(message.getInstrument())
         .internalParty(message.getInternalParty())
-        .qty(message.getQty()).build();
+        .qty(message.getQty())
+        .version(message.getVersion()).build();
   }
 
   /**

@@ -43,4 +43,6 @@ public class TradeAgreement {
   @NonNull
   protected Double qty;
 
+  @NonNull
+  protected Long version;
 }

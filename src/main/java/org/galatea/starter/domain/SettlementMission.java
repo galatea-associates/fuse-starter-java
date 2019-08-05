@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Version;
 import javax.validation.constraints.DecimalMin;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.AccessLevel;
@@ -44,4 +45,6 @@ public class SettlementMission {
   @NonNull
   protected Double qty;
 
+  @Version
+  protected Long version;
 }
