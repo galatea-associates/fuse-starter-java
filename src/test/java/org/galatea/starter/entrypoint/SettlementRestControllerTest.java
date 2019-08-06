@@ -387,7 +387,7 @@ public class SettlementRestControllerTest extends ASpringTest {
         .content(objectMapper.convertValue(expectedAgreement, JsonNode.class).toString())
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isMethodNotAllowed());
+        .andExpect(status().isPreconditionFailed());
   }
 
   @Test
