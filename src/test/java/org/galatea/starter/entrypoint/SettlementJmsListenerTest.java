@@ -60,7 +60,7 @@ public class SettlementJmsListenerTest extends ASpringTest {
         .replace("[", "").replace("]", "");
 
     TradeAgreement agreement = TradeAgreement.builder().instrument("IBM").internalParty("INT-1")
-        .externalParty("EXT-1").buySell("B").qty(100d).build();
+        .externalParty("EXT-1").buySell("B").qty(100d).version(0L).build();
     List<TradeAgreement> expectedAgreements = Collections.singletonList(agreement);
 
     log.info("Agreement JSON to put int he queue: {}", message);

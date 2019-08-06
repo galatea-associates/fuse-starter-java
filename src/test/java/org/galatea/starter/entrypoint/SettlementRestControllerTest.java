@@ -58,6 +58,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -102,7 +103,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testSettleAgreement_JSON(final String agreementJson,
       final String expectedMissionIdJson) throws Exception {
     TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
-        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).build();
+        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).version(0L).build();
 
     log.info("Agreement json to post {}", agreementJson);
 
@@ -134,7 +135,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
     TradeAgreementMessages messages = TradeAgreementMessages.builder().agreement(
         TradeAgreementMessage.builder().instrument("IBM").internalParty("INT-1")
-            .externalParty("EXT-1").buySell("B").qty(100d).build())
+            .externalParty("EXT-1").buySell("B").qty(100d).version(0L).build())
         .build();
 
     JAXBContext context = JAXBContext.newInstance(TradeAgreementMessages.class);
@@ -267,10 +268,10 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testGetMissionsFound_CSV() throws Exception {
     SettlementMission mission1 = SettlementMission.builder()
         .id(1L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
-        .qty(100.0).build();
+        .qty(100.0).version(0L).build();
     SettlementMission mission2 = SettlementMission.builder()
         .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
-        .qty(100.0).build();
+        .qty(100.0).version(0L).build();
 
     given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
@@ -290,10 +291,10 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testGetMissionsFound_XLSX() throws Exception {
     SettlementMission mission1 = SettlementMission.builder()
         .id(1L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
-        .qty(100.0).build();
+        .qty(100.0).version(0L).build();
     SettlementMission mission2 = SettlementMission.builder()
         .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
-        .qty(100.0).build();
+        .qty(100.0).version(0L).build();
 
     given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
@@ -340,7 +341,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   @Test
   public void testUpdateMission() throws Exception {
     TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
-        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).build();
+        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).version(0L).build();
     SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
@@ -358,7 +359,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   @Test
   public void testUpdateNonExistentMission() throws Exception {
     TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
-        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).build();
+        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).version(0L).build();
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
         .thenReturn(false);
@@ -368,6 +369,25 @@ public class SettlementRestControllerTest extends ASpringTest {
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void testUpdateMissionWithWrongVersion() throws Exception {
+    TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
+        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).version(0L).build();
+    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+
+    when(mockSettlementService.missionExists(MISSION_ID_1))
+        .thenReturn(true);
+
+    when(mockSettlementService.updateMission(MISSION_ID_1, expectedAgreement)).thenThrow(
+        ObjectOptimisticLockingFailureException.class);
+
+    this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .content(objectMapper.convertValue(expectedAgreement, JsonNode.class).toString())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isMethodNotAllowed());
   }
 
   @Test

@@ -1,2 +1,2 @@
-{"agreements" : [ {"id" : null, "instrument" : "IBM", "internalParty" : "INT-1", "externalParty" : "EXT-1", "buySell" : "B", "qty" : 100.0} ]}|[1091]
+{"agreements" : [ {"id" : null, "instrument" : "IBM", "internalParty" : "INT-1", "externalParty" : "EXT-1", "buySell" : "B", "qty" : 100.0, "version" : 0} ]}|[1091]
 

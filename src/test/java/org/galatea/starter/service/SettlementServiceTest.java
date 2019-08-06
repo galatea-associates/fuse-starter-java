@@ -103,10 +103,10 @@ public class SettlementServiceTest extends ASpringTest {
   public void testSpawnMissions() {
 
     SettlementMission testSettlementMission = SettlementMission.builder().id(35L).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).build();
+        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).version(0L).build();
 
     TradeAgreement testTradeAgreement = TradeAgreement.builder().id(45L).instrument("instr-1")
-        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).build();
+        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).version(0L).build();
 
     given(this.mockSettlementMissionRpsy.save(Mockito.anyList()))
         .willReturn(Collections.singletonList(testSettlementMission));
@@ -119,10 +119,10 @@ public class SettlementServiceTest extends ASpringTest {
   public void testUpdateMission() {
 
     SettlementMission testSettlementMission = SettlementMission.builder().id(35L).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).build();
+        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).version(0L).build();
 
     TradeAgreement testTradeAgreement = TradeAgreement.builder().id(45L).instrument("instr-1")
-        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).build();
+        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).version(0L).build();
 
     given(mockAgreementTransformer.transform(any()))
         .willReturn(testSettlementMission);

@@ -25,6 +25,7 @@ message TradeAgreementProtoMessage {
   string external_party = 4;
   string buy_sell = 5;
   double qty = 6;
+  int64 version = 7;
 }
 
 message SettlementMissionProtoMessages {
@@ -39,6 +40,7 @@ message SettlementMissionProtoMessage {
   string depot = 4;
   string direction = 5;
   double qty = 6;
+  int64 version = 7;
 }
 
 message SettlementResponseProtoMessage {

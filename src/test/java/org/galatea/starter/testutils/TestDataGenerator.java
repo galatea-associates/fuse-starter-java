@@ -30,7 +30,8 @@ public class TestDataGenerator {
         .internalParty("INT-1")
         .externalParty("EXT-1")
         .buySell("B")
-        .qty(100d);
+        .qty(100d)
+        .version(0L);
   }
 
   /**
@@ -43,7 +44,8 @@ public class TestDataGenerator {
         .setInternalParty("INT-1")
         .setExternalParty("EXT-1")
         .setBuySell("B")
-        .setQty(100);
+        .setQty(100)
+        .setVersion(0L);
   }
 
   /**
@@ -56,6 +58,7 @@ public class TestDataGenerator {
         .externalParty("EXT-1")
         .instrument("IBM")
         .direction("REC")
-        .qty(100d);
+        .qty(100d)
+        .version(0L);
   }
 }
