@@ -186,7 +186,6 @@ public class Tracer {
         throws Exception {
       try {
         T result = func.call();
-        addTraceInfo(clz, traceKeyPrefix + "-success", "true");
         return result;
       } catch (Exception err) {
         addTraceInfo(clz, traceKeyPrefix + "-success", "false");

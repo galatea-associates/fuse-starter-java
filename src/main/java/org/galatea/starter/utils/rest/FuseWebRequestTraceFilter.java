@@ -114,10 +114,16 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
       Map<String, Object> springTraceInfo = super.getTrace(request);
 
       MutableInt status = new MutableInt(HttpStatus.INTERNAL_SERVER_ERROR.value());
+      final String traceKeyPrefix = "request";
       try {
-        t.runAndTraceSuccess("request", () -> {
+        t.runAndTraceSuccess(traceKeyPrefix, () -> {
           filterChain.doFilter(request, response);
           status.setValue(response.getStatus());
+          if(response.getStatus() < 400) {
+            addTraceInfo(this.getClass(), traceKeyPrefix + "-success", "true");
+          } else {
+            addTraceInfo(this.getClass(), traceKeyPrefix + "-success", "false");
+          }
           return Void.TYPE;
         });
       } finally {
