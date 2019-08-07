@@ -33,7 +33,7 @@ public class MessageTranslationConfig {
    * Returns a translator to convert SettlementMissionMessages to SettlementMissions.
    */
   @Bean
-  public ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMessageTranslator() {
+  public ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMsgTranslator() {
     return message -> SettlementMission.builder()
         .id(message.getId())
         .instrument(message.getInstrument())

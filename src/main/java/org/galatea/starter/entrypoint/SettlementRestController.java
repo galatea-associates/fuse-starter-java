@@ -46,7 +46,7 @@ public class SettlementRestController extends BaseSettlementRestController {
   ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator;
 
   @NonNull
-  ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMessageTranslator;
+  ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMsgTranslator;
 
   @NonNull
   ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
@@ -65,11 +65,12 @@ public class SettlementRestController extends BaseSettlementRestController {
   public SettlementRestController(final SettlementService settlementService,
       final ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator,
       final ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator,
-      final ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMessageTranslator) {
+      final ITranslator<SettlementMissionMessage, SettlementMission>
+          settlementMissionMsgTranslator) {
     super(settlementService);
     this.tradeAgreementTranslator = tradeAgreementTranslator;
     this.settlementMissionTranslator = settlementMissionTranslator;
-    this.settlementMissionMessageTranslator = settlementMissionMessageTranslator;
+    this.settlementMissionMsgTranslator = settlementMissionMsgTranslator;
   }
 
   /**
@@ -161,7 +162,8 @@ public class SettlementRestController extends BaseSettlementRestController {
     processRequestId(requestId);
 
     // Translate the message and get it back from the list
-    SettlementMission settlementMission = settlementMissionMessageTranslator.translate(settlementMissionMessage);
+    SettlementMission settlementMission =
+        settlementMissionMessageTranslator.translate(settlementMissionMessage);
 
     Optional<SettlementMission> msn = updateMissionInternal(id, settlementMission);
 
