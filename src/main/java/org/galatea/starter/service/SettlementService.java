@@ -90,16 +90,15 @@ public class SettlementService {
   }
 
   /**
-   * Update the mission with the ID using the given TradeAgreement.
+   * Update the mission with the given ID.
    *
    * @param id identifier of the mission
-   * @param agreement the agreement used to update the mission to
+   * @param mission the mission to update
    * @return optional containing the saved mission
    */
-  public Optional<SettlementMission> updateMission(final Long id, final TradeAgreement agreement) {
-    SettlementMission settlementMission = agreementTransformer.transform(agreement);
-    settlementMission.setId(id);
-    SettlementMission savedMission = missionrpsy.save(settlementMission);
+  public Optional<SettlementMission> updateMission(final Long id, final SettlementMission mission) {
+    mission.setId(id);
+    SettlementMission savedMission = missionrpsy.save(mission);
     log.info("The following mission was updated: {}", savedMission);
     return Optional.ofNullable(savedMission);
   }

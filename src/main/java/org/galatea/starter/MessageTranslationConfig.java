@@ -30,18 +30,31 @@ public class MessageTranslationConfig {
   }
 
   /**
+   * Returns a translator to convert SettlementMissionMessages to SettlementMissions.
+   */
+  @Bean
+  public ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMessageTranslator() {
+    return message -> SettlementMission.builder()
+        .id(message.getId())
+        .instrument(message.getInstrument())
+        .externalParty(message.getExternalParty())
+        .direction(message.getDirection())
+        .depot(message.getDepot())
+        .qty(message.getQty())
+        .version(message.getVersion()).build();
+  }
+
+  /**
    * Returns a translator to convert protobuf messages to TradeAgreements.
    */
   @Bean
   public ITranslator<TradeAgreementMessage, TradeAgreement> tradeAgreementMessageTranslator() {
     return message -> TradeAgreement.builder()
-        .id(message.getId())
         .buySell(message.getBuySell())
         .externalParty(message.getExternalParty())
         .instrument(message.getInstrument())
         .internalParty(message.getInternalParty())
-        .qty(message.getQty())
-        .version(message.getVersion()).build();
+        .qty(message.getQty()).build();
   }
 
   /**

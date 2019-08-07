@@ -2,7 +2,6 @@ package org.galatea.starter.entrypoint;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,7 +16,6 @@ import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionList;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementResponseMessage;
-import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.translation.ITranslator;
@@ -48,6 +46,9 @@ public class SettlementRestController extends BaseSettlementRestController {
   ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator;
 
   @NonNull
+  ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMessageTranslator;
+
+  @NonNull
   ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
 
   @Value("${mvc.settleMissionPath}")
@@ -63,10 +64,12 @@ public class SettlementRestController extends BaseSettlementRestController {
    */
   public SettlementRestController(final SettlementService settlementService,
       final ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator,
-      final ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator) {
+      final ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator,
+      final ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMessageTranslator) {
     super(settlementService);
     this.tradeAgreementTranslator = tradeAgreementTranslator;
     this.settlementMissionTranslator = settlementMissionTranslator;
+    this.settlementMissionMessageTranslator = settlementMissionMessageTranslator;
   }
 
   /**
@@ -142,7 +145,7 @@ public class SettlementRestController extends BaseSettlementRestController {
   }
 
   /**
-   * Update an existing mission given an ID using a TradeAgreement.
+   * Update an existing mission given an ID.
    */
   // @PutMapping to link http PUT requests to this method
   // @PathVariable to take the id from the path and make it available as a method argument
@@ -151,27 +154,16 @@ public class SettlementRestController extends BaseSettlementRestController {
       consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
       produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
   public void updateMission(@PathVariable final Long id,
-      @RequestBody final TradeAgreementMessage tradeAgreementMessage,
+      @RequestBody final SettlementMissionMessage settlementMissionMessage,
       @RequestParam(value = "requestId", required = false) final String requestId) {
 
     // if an external request id was provided, grab it
     processRequestId(requestId);
 
-    // The trade agreement translator only takes in a TradeAgreementMessages so the
-    // TradeAgreementMessage must be placed into one
-    TradeAgreementMessages messages = TradeAgreementMessages.builder()
-        .agreement(tradeAgreementMessage)
-        .build();
-
     // Translate the message and get it back from the list
-    List<TradeAgreement> agreements = tradeAgreementTranslator.translate(messages);
-    Optional<TradeAgreement> tradeAgreement = agreements.stream().findFirst();
-    if (!tradeAgreement.isPresent()) {
-      // This exception should never occur since we always provide one TradeAgreementMessage
-      throw new NoSuchElementException("Trade agreement was not found");
-    }
+    SettlementMission settlementMission = settlementMissionMessageTranslator.translate(settlementMissionMessage);
 
-    Optional<SettlementMission> msn = updateMissionInternal(id, tradeAgreement.get());
+    Optional<SettlementMission> msn = updateMissionInternal(id, settlementMission);
 
     if (!msn.isPresent()) {
       // The mission was not found and could not be updated

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 
 import java.util.Arrays;
@@ -86,7 +85,7 @@ public class SettlementServiceTest extends ASpringTest {
     List<Long> ids = Arrays.asList(1L, 2L);
     SettlementMission settlementMission1 = SettlementMission.builder()
         .id(1L).depot("DTC").externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d)
-        .build();
+        .version(0L).build();
     List<SettlementMission> settlementMissions = Collections.singletonList(settlementMission1);
 
     given(this.mockSettlementMissionRpsy.findAll(ids)).willReturn(settlementMissions);
@@ -105,8 +104,8 @@ public class SettlementServiceTest extends ASpringTest {
     SettlementMission testSettlementMission = SettlementMission.builder().id(35L).depot("DTC")
         .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).version(0L).build();
 
-    TradeAgreement testTradeAgreement = TradeAgreement.builder().id(45L).instrument("instr-1")
-        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).version(0L).build();
+    TradeAgreement testTradeAgreement = TradeAgreement.builder().instrument("instr-1")
+        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).build();
 
     given(this.mockSettlementMissionRpsy.save(Mockito.anyList()))
         .willReturn(Collections.singletonList(testSettlementMission));
@@ -118,21 +117,16 @@ public class SettlementServiceTest extends ASpringTest {
   @Test
   public void testUpdateMission() {
 
-    SettlementMission testSettlementMission = SettlementMission.builder().id(35L).depot("DTC")
+    SettlementMission testSettlementMission = SettlementMission.builder().depot("DTC")
         .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).version(0L).build();
 
-    TradeAgreement testTradeAgreement = TradeAgreement.builder().id(45L).instrument("instr-1")
-        .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).version(0L).build();
-
-    given(mockAgreementTransformer.transform(any()))
-        .willReturn(testSettlementMission);
     given(this.mockSettlementMissionRpsy.save(testSettlementMission))
         .willReturn(testSettlementMission);
 
     SettlementService service =
         new SettlementService(this.mockSettlementMissionRpsy, this.mockAgreementTransformer);
 
-    Optional<SettlementMission> settlementMissionOptional = service.updateMission(35L, testTradeAgreement);
+    Optional<SettlementMission> settlementMissionOptional = service.updateMission(35L, testSettlementMission);
     assertEquals((Long) 35L, settlementMissionOptional.get().getId());
   }
 

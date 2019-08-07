@@ -16,11 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @XmlRootElement(name = "tradeAgreement")
 public class TradeAgreementMessage {
 
-  protected Long id;
   protected String instrument;
   protected String internalParty;
   protected String externalParty;
   protected String buySell;
   protected Double qty;
-  protected Long version;
 }

@@ -66,6 +66,6 @@ public class RestExceptionHandlerTest {
   public void handleOptimisticLockException() {
     ObjectOptimisticLockingFailureException exception = new ObjectOptimisticLockingFailureException(Object.class, "id") {};
     ResponseEntity<Object> response = handler.handleOptimisticLockException(exception);
-    assertEquals(HttpStatus.PRECONDITION_FAILED, response.getStatusCode());
+    assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
   }
 }

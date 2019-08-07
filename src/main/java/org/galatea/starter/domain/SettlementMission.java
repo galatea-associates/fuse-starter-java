@@ -46,5 +46,6 @@ public class SettlementMission {
   protected Double qty;
 
   @Version
+  @NonNull
   protected Long version;
 }

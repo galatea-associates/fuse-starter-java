@@ -47,9 +47,9 @@ public class ProtoMessageTranslationConfig {
    */
   @Bean
   public ITranslator<TradeAgreementProtoMessage, TradeAgreement> tradeAgreementProtoTranslator() {
-    return msg -> TradeAgreement.builder().id(msg.getId()).buySell(msg.getBuySell())
+    return msg -> TradeAgreement.builder().buySell(msg.getBuySell())
         .externalParty(msg.getExternalParty()).internalParty(msg.getInternalParty())
-        .instrument(msg.getInstrument()).qty(msg.getQty()).version(msg.getVersion()).build();
+        .instrument(msg.getInstrument()).qty(msg.getQty()).build();
   }
 
   /**

@@ -21,8 +21,8 @@ public final class ProtobufMessages {
     /**
      * <code>repeated .fuse_java_starter.TradeAgreementProtoMessage message = 1;</code>
      */
-    java.util.List<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage>
-    getMessageList();
+    java.util.List<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage> 
+        getMessageList();
     /**
      * <code>repeated .fuse_java_starter.TradeAgreementProtoMessage message = 1;</code>
      */
@@ -34,8 +34,8 @@ public final class ProtobufMessages {
     /**
      * <code>repeated .fuse_java_starter.TradeAgreementProtoMessage message = 1;</code>
      */
-    java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessageOrBuilder>
-    getMessageOrBuilderList();
+    java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessageOrBuilder> 
+        getMessageOrBuilderList();
     /**
      * <code>repeated .fuse_java_starter.TradeAgreementProtoMessage message = 1;</code>
      */
@@ -53,7 +53,7 @@ public final class ProtobufMessages {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:fuse_java_starter.TradeAgreementProtoMessages)
       TradeAgreementProtoMessagesOrBuilder {
-    private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
     // Use TradeAgreementProtoMessages.newBuilder() to construct.
     private TradeAgreementProtoMessages(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -118,12 +118,12 @@ public final class ProtobufMessages {
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessages_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessages_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages.Builder.class);
@@ -140,8 +140,8 @@ public final class ProtobufMessages {
     /**
      * <code>repeated .fuse_java_starter.TradeAgreementProtoMessage message = 1;</code>
      */
-    public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessageOrBuilder>
-    getMessageOrBuilderList() {
+    public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessageOrBuilder> 
+        getMessageOrBuilderList() {
       return message_;
     }
     /**
@@ -175,7 +175,7 @@ public final class ProtobufMessages {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-        throws java.io.IOException {
+                        throws java.io.IOException {
       for (int i = 0; i < message_.size(); i++) {
         output.writeMessage(1, message_.get(i));
       }
@@ -189,7 +189,7 @@ public final class ProtobufMessages {
       size = 0;
       for (int i = 0; i < message_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(1, message_.get(i));
+          .computeMessageSize(1, message_.get(i));
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -199,7 +199,7 @@ public final class ProtobufMessages {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages)) {
         return super.equals(obj);
@@ -319,7 +319,7 @@ public final class ProtobufMessages {
     }
     /**
      * <pre>
-     * enables us to handle multiple TradeAgreementMessages
+     * enables us to handle multiple TradeAgreementMessages 
      * </pre>
      *
      * Protobuf type {@code fuse_java_starter.TradeAgreementProtoMessages}
@@ -329,12 +329,12 @@ public final class ProtobufMessages {
         // @@protoc_insertion_point(builder_implements:fuse_java_starter.TradeAgreementProtoMessages)
         org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessagesOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessages_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessages_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages.Builder.class);
@@ -352,7 +352,7 @@ public final class ProtobufMessages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
-            .alwaysUseFieldBuilders) {
+                .alwaysUseFieldBuilders) {
           getMessageFieldBuilder();
         }
       }
@@ -368,7 +368,7 @@ public final class ProtobufMessages {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessages_descriptor;
       }
 
@@ -455,9 +455,9 @@ public final class ProtobufMessages {
               messageBuilder_ = null;
               message_ = other.message_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              messageBuilder_ =
-                  com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                      getMessageFieldBuilder() : null;
+              messageBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getMessageFieldBuilder() : null;
             } else {
               messageBuilder_.addAllMessages(other.message_);
             }
@@ -492,12 +492,12 @@ public final class ProtobufMessages {
       private int bitField0_;
 
       private java.util.List<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage> message_ =
-          java.util.Collections.emptyList();
+        java.util.Collections.emptyList();
       private void ensureMessageIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
           message_ = new java.util.ArrayList<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage>(message_);
           bitField0_ |= 0x00000001;
-        }
+         }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
@@ -686,8 +686,8 @@ public final class ProtobufMessages {
       /**
        * <code>repeated .fuse_java_starter.TradeAgreementProtoMessage message = 1;</code>
        */
-      public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessageOrBuilder>
-      getMessageOrBuilderList() {
+      public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessageOrBuilder> 
+           getMessageOrBuilderList() {
         if (messageBuilder_ != null) {
           return messageBuilder_.getMessageOrBuilderList();
         } else {
@@ -712,20 +712,20 @@ public final class ProtobufMessages {
       /**
        * <code>repeated .fuse_java_starter.TradeAgreementProtoMessage message = 1;</code>
        */
-      public java.util.List<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.Builder>
-      getMessageBuilderList() {
+      public java.util.List<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.Builder> 
+           getMessageBuilderList() {
         return getMessageFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessageOrBuilder>
-      getMessageFieldBuilder() {
+          org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessageOrBuilder> 
+          getMessageFieldBuilder() {
         if (messageBuilder_ == null) {
           messageBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessageOrBuilder>(
-              message_,
-              ((bitField0_ & 0x00000001) == 0x00000001),
-              getParentForChildren(),
-              isClean());
+                  message_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
           message_ = null;
         }
         return messageBuilder_;
@@ -784,11 +784,6 @@ public final class ProtobufMessages {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int64 id = 1;</code>
-     */
-    long getId();
-
-    /**
      * <code>string instrument = 2;</code>
      */
     java.lang.String getInstrument();
@@ -796,7 +791,7 @@ public final class ProtobufMessages {
      * <code>string instrument = 2;</code>
      */
     com.google.protobuf.ByteString
-    getInstrumentBytes();
+        getInstrumentBytes();
 
     /**
      * <code>string internal_party = 3;</code>
@@ -806,7 +801,7 @@ public final class ProtobufMessages {
      * <code>string internal_party = 3;</code>
      */
     com.google.protobuf.ByteString
-    getInternalPartyBytes();
+        getInternalPartyBytes();
 
     /**
      * <code>string external_party = 4;</code>
@@ -816,7 +811,7 @@ public final class ProtobufMessages {
      * <code>string external_party = 4;</code>
      */
     com.google.protobuf.ByteString
-    getExternalPartyBytes();
+        getExternalPartyBytes();
 
     /**
      * <code>string buy_sell = 5;</code>
@@ -826,21 +821,16 @@ public final class ProtobufMessages {
      * <code>string buy_sell = 5;</code>
      */
     com.google.protobuf.ByteString
-    getBuySellBytes();
+        getBuySellBytes();
 
     /**
      * <code>double qty = 6;</code>
      */
     double getQty();
-
-    /**
-     * <code>int64 version = 7;</code>
-     */
-    long getVersion();
   }
   /**
    * <pre>
-   * defines the message format for trade agreements
+   * defines the message format for trade agreements 
    * </pre>
    *
    * Protobuf type {@code fuse_java_starter.TradeAgreementProtoMessage}
@@ -849,19 +839,17 @@ public final class ProtobufMessages {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:fuse_java_starter.TradeAgreementProtoMessage)
       TradeAgreementProtoMessageOrBuilder {
-    private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
     // Use TradeAgreementProtoMessage.newBuilder() to construct.
     private TradeAgreementProtoMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private TradeAgreementProtoMessage() {
-      id_ = 0L;
       instrument_ = "";
       internalParty_ = "";
       externalParty_ = "";
       buySell_ = "";
       qty_ = 0D;
-      version_ = 0L;
     }
 
     @java.lang.Override
@@ -895,11 +883,6 @@ public final class ProtobufMessages {
               }
               break;
             }
-            case 8: {
-
-              id_ = input.readInt64();
-              break;
-            }
             case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
@@ -929,11 +912,6 @@ public final class ProtobufMessages {
               qty_ = input.readDouble();
               break;
             }
-            case 56: {
-
-              version_ = input.readInt64();
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -947,24 +925,15 @@ public final class ProtobufMessages {
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessage_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.Builder.class);
-    }
-
-    public static final int ID_FIELD_NUMBER = 1;
-    private long id_;
-    /**
-     * <code>int64 id = 1;</code>
-     */
-    public long getId() {
-      return id_;
     }
 
     public static final int INSTRUMENT_FIELD_NUMBER = 2;
@@ -977,7 +946,7 @@ public final class ProtobufMessages {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         instrument_ = s;
@@ -988,10 +957,10 @@ public final class ProtobufMessages {
      * <code>string instrument = 2;</code>
      */
     public com.google.protobuf.ByteString
-    getInstrumentBytes() {
+        getInstrumentBytes() {
       java.lang.Object ref = instrument_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         instrument_ = b;
@@ -1011,7 +980,7 @@ public final class ProtobufMessages {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         internalParty_ = s;
@@ -1022,10 +991,10 @@ public final class ProtobufMessages {
      * <code>string internal_party = 3;</code>
      */
     public com.google.protobuf.ByteString
-    getInternalPartyBytes() {
+        getInternalPartyBytes() {
       java.lang.Object ref = internalParty_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         internalParty_ = b;
@@ -1045,7 +1014,7 @@ public final class ProtobufMessages {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         externalParty_ = s;
@@ -1056,10 +1025,10 @@ public final class ProtobufMessages {
      * <code>string external_party = 4;</code>
      */
     public com.google.protobuf.ByteString
-    getExternalPartyBytes() {
+        getExternalPartyBytes() {
       java.lang.Object ref = externalParty_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         externalParty_ = b;
@@ -1079,7 +1048,7 @@ public final class ProtobufMessages {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         buySell_ = s;
@@ -1090,10 +1059,10 @@ public final class ProtobufMessages {
      * <code>string buy_sell = 5;</code>
      */
     public com.google.protobuf.ByteString
-    getBuySellBytes() {
+        getBuySellBytes() {
       java.lang.Object ref = buySell_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         buySell_ = b;
@@ -1112,15 +1081,6 @@ public final class ProtobufMessages {
       return qty_;
     }
 
-    public static final int VERSION_FIELD_NUMBER = 7;
-    private long version_;
-    /**
-     * <code>int64 version = 7;</code>
-     */
-    public long getVersion() {
-      return version_;
-    }
-
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1132,10 +1092,7 @@ public final class ProtobufMessages {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-        throws java.io.IOException {
-      if (id_ != 0L) {
-        output.writeInt64(1, id_);
-      }
+                        throws java.io.IOException {
       if (!getInstrumentBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, instrument_);
       }
@@ -1151,9 +1108,6 @@ public final class ProtobufMessages {
       if (qty_ != 0D) {
         output.writeDouble(6, qty_);
       }
-      if (version_ != 0L) {
-        output.writeInt64(7, version_);
-      }
       unknownFields.writeTo(output);
     }
 
@@ -1162,10 +1116,6 @@ public final class ProtobufMessages {
       if (size != -1) return size;
 
       size = 0;
-      if (id_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-            .computeInt64Size(1, id_);
-      }
       if (!getInstrumentBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, instrument_);
       }
@@ -1180,11 +1130,7 @@ public final class ProtobufMessages {
       }
       if (qty_ != 0D) {
         size += com.google.protobuf.CodedOutputStream
-            .computeDoubleSize(6, qty_);
-      }
-      if (version_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-            .computeInt64Size(7, version_);
+          .computeDoubleSize(6, qty_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1194,7 +1140,7 @@ public final class ProtobufMessages {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage)) {
         return super.equals(obj);
@@ -1202,8 +1148,6 @@ public final class ProtobufMessages {
       org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage other = (org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage) obj;
 
       boolean result = true;
-      result = result && (getId()
-          == other.getId());
       result = result && getInstrument()
           .equals(other.getInstrument());
       result = result && getInternalParty()
@@ -1214,10 +1158,8 @@ public final class ProtobufMessages {
           .equals(other.getBuySell());
       result = result && (
           java.lang.Double.doubleToLongBits(getQty())
-              == java.lang.Double.doubleToLongBits(
+          == java.lang.Double.doubleToLongBits(
               other.getQty()));
-      result = result && (getVersion()
-          == other.getVersion());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1229,9 +1171,6 @@ public final class ProtobufMessages {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + ID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getId());
       hash = (37 * hash) + INSTRUMENT_FIELD_NUMBER;
       hash = (53 * hash) + getInstrument().hashCode();
       hash = (37 * hash) + INTERNAL_PARTY_FIELD_NUMBER;
@@ -1243,9 +1182,6 @@ public final class ProtobufMessages {
       hash = (37 * hash) + QTY_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           java.lang.Double.doubleToLongBits(getQty()));
-      hash = (37 * hash) + VERSION_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getVersion());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1341,7 +1277,7 @@ public final class ProtobufMessages {
     }
     /**
      * <pre>
-     * defines the message format for trade agreements
+     * defines the message format for trade agreements 
      * </pre>
      *
      * Protobuf type {@code fuse_java_starter.TradeAgreementProtoMessage}
@@ -1351,12 +1287,12 @@ public final class ProtobufMessages {
         // @@protoc_insertion_point(builder_implements:fuse_java_starter.TradeAgreementProtoMessage)
         org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessage_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.Builder.class);
@@ -1374,13 +1310,11 @@ public final class ProtobufMessages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
-            .alwaysUseFieldBuilders) {
+                .alwaysUseFieldBuilders) {
         }
       }
       public Builder clear() {
         super.clear();
-        id_ = 0L;
-
         instrument_ = "";
 
         internalParty_ = "";
@@ -1391,13 +1325,11 @@ public final class ProtobufMessages {
 
         qty_ = 0D;
 
-        version_ = 0L;
-
         return this;
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessage_descriptor;
       }
 
@@ -1415,13 +1347,11 @@ public final class ProtobufMessages {
 
       public org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage buildPartial() {
         org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage result = new org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage(this);
-        result.id_ = id_;
         result.instrument_ = instrument_;
         result.internalParty_ = internalParty_;
         result.externalParty_ = externalParty_;
         result.buySell_ = buySell_;
         result.qty_ = qty_;
-        result.version_ = version_;
         onBuilt();
         return result;
       }
@@ -1463,9 +1393,6 @@ public final class ProtobufMessages {
 
       public Builder mergeFrom(org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage other) {
         if (other == org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.getDefaultInstance()) return this;
-        if (other.getId() != 0L) {
-          setId(other.getId());
-        }
         if (!other.getInstrument().isEmpty()) {
           instrument_ = other.instrument_;
           onChanged();
@@ -1484,9 +1411,6 @@ public final class ProtobufMessages {
         }
         if (other.getQty() != 0D) {
           setQty(other.getQty());
-        }
-        if (other.getVersion() != 0L) {
-          setVersion(other.getVersion());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1515,32 +1439,6 @@ public final class ProtobufMessages {
         return this;
       }
 
-      private long id_ ;
-      /**
-       * <code>int64 id = 1;</code>
-       */
-      public long getId() {
-        return id_;
-      }
-      /**
-       * <code>int64 id = 1;</code>
-       */
-      public Builder setId(long value) {
-
-        id_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int64 id = 1;</code>
-       */
-      public Builder clearId() {
-
-        id_ = 0L;
-        onChanged();
-        return this;
-      }
-
       private java.lang.Object instrument_ = "";
       /**
        * <code>string instrument = 2;</code>
@@ -1561,10 +1459,10 @@ public final class ProtobufMessages {
        * <code>string instrument = 2;</code>
        */
       public com.google.protobuf.ByteString
-      getInstrumentBytes() {
+          getInstrumentBytes() {
         java.lang.Object ref = instrument_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           instrument_ = b;
@@ -1579,9 +1477,9 @@ public final class ProtobufMessages {
       public Builder setInstrument(
           java.lang.String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-
+    throw new NullPointerException();
+  }
+  
         instrument_ = value;
         onChanged();
         return this;
@@ -1590,7 +1488,7 @@ public final class ProtobufMessages {
        * <code>string instrument = 2;</code>
        */
       public Builder clearInstrument() {
-
+        
         instrument_ = getDefaultInstance().getInstrument();
         onChanged();
         return this;
@@ -1601,10 +1499,10 @@ public final class ProtobufMessages {
       public Builder setInstrumentBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         instrument_ = value;
         onChanged();
         return this;
@@ -1630,10 +1528,10 @@ public final class ProtobufMessages {
        * <code>string internal_party = 3;</code>
        */
       public com.google.protobuf.ByteString
-      getInternalPartyBytes() {
+          getInternalPartyBytes() {
         java.lang.Object ref = internalParty_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           internalParty_ = b;
@@ -1648,9 +1546,9 @@ public final class ProtobufMessages {
       public Builder setInternalParty(
           java.lang.String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-
+    throw new NullPointerException();
+  }
+  
         internalParty_ = value;
         onChanged();
         return this;
@@ -1659,7 +1557,7 @@ public final class ProtobufMessages {
        * <code>string internal_party = 3;</code>
        */
       public Builder clearInternalParty() {
-
+        
         internalParty_ = getDefaultInstance().getInternalParty();
         onChanged();
         return this;
@@ -1670,10 +1568,10 @@ public final class ProtobufMessages {
       public Builder setInternalPartyBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         internalParty_ = value;
         onChanged();
         return this;
@@ -1699,10 +1597,10 @@ public final class ProtobufMessages {
        * <code>string external_party = 4;</code>
        */
       public com.google.protobuf.ByteString
-      getExternalPartyBytes() {
+          getExternalPartyBytes() {
         java.lang.Object ref = externalParty_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           externalParty_ = b;
@@ -1717,9 +1615,9 @@ public final class ProtobufMessages {
       public Builder setExternalParty(
           java.lang.String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-
+    throw new NullPointerException();
+  }
+  
         externalParty_ = value;
         onChanged();
         return this;
@@ -1728,7 +1626,7 @@ public final class ProtobufMessages {
        * <code>string external_party = 4;</code>
        */
       public Builder clearExternalParty() {
-
+        
         externalParty_ = getDefaultInstance().getExternalParty();
         onChanged();
         return this;
@@ -1739,10 +1637,10 @@ public final class ProtobufMessages {
       public Builder setExternalPartyBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         externalParty_ = value;
         onChanged();
         return this;
@@ -1768,10 +1666,10 @@ public final class ProtobufMessages {
        * <code>string buy_sell = 5;</code>
        */
       public com.google.protobuf.ByteString
-      getBuySellBytes() {
+          getBuySellBytes() {
         java.lang.Object ref = buySell_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           buySell_ = b;
@@ -1786,9 +1684,9 @@ public final class ProtobufMessages {
       public Builder setBuySell(
           java.lang.String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-
+    throw new NullPointerException();
+  }
+  
         buySell_ = value;
         onChanged();
         return this;
@@ -1797,7 +1695,7 @@ public final class ProtobufMessages {
        * <code>string buy_sell = 5;</code>
        */
       public Builder clearBuySell() {
-
+        
         buySell_ = getDefaultInstance().getBuySell();
         onChanged();
         return this;
@@ -1808,10 +1706,10 @@ public final class ProtobufMessages {
       public Builder setBuySellBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         buySell_ = value;
         onChanged();
         return this;
@@ -1828,7 +1726,7 @@ public final class ProtobufMessages {
        * <code>double qty = 6;</code>
        */
       public Builder setQty(double value) {
-
+        
         qty_ = value;
         onChanged();
         return this;
@@ -1837,34 +1735,8 @@ public final class ProtobufMessages {
        * <code>double qty = 6;</code>
        */
       public Builder clearQty() {
-
+        
         qty_ = 0D;
-        onChanged();
-        return this;
-      }
-
-      private long version_ ;
-      /**
-       * <code>int64 version = 7;</code>
-       */
-      public long getVersion() {
-        return version_;
-      }
-      /**
-       * <code>int64 version = 7;</code>
-       */
-      public Builder setVersion(long value) {
-
-        version_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int64 version = 7;</code>
-       */
-      public Builder clearVersion() {
-
-        version_ = 0L;
         onChanged();
         return this;
       }
@@ -1924,8 +1796,8 @@ public final class ProtobufMessages {
     /**
      * <code>repeated .fuse_java_starter.SettlementMissionProtoMessage message = 1;</code>
      */
-    java.util.List<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage>
-    getMessageList();
+    java.util.List<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage> 
+        getMessageList();
     /**
      * <code>repeated .fuse_java_starter.SettlementMissionProtoMessage message = 1;</code>
      */
@@ -1937,8 +1809,8 @@ public final class ProtobufMessages {
     /**
      * <code>repeated .fuse_java_starter.SettlementMissionProtoMessage message = 1;</code>
      */
-    java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessageOrBuilder>
-    getMessageOrBuilderList();
+    java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessageOrBuilder> 
+        getMessageOrBuilderList();
     /**
      * <code>repeated .fuse_java_starter.SettlementMissionProtoMessage message = 1;</code>
      */
@@ -1952,7 +1824,7 @@ public final class ProtobufMessages {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:fuse_java_starter.SettlementMissionProtoMessages)
       SettlementMissionProtoMessagesOrBuilder {
-    private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
     // Use SettlementMissionProtoMessages.newBuilder() to construct.
     private SettlementMissionProtoMessages(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -2017,12 +1889,12 @@ public final class ProtobufMessages {
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementMissionProtoMessages_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementMissionProtoMessages_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessages.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessages.Builder.class);
@@ -2039,8 +1911,8 @@ public final class ProtobufMessages {
     /**
      * <code>repeated .fuse_java_starter.SettlementMissionProtoMessage message = 1;</code>
      */
-    public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessageOrBuilder>
-    getMessageOrBuilderList() {
+    public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessageOrBuilder> 
+        getMessageOrBuilderList() {
       return message_;
     }
     /**
@@ -2074,7 +1946,7 @@ public final class ProtobufMessages {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-        throws java.io.IOException {
+                        throws java.io.IOException {
       for (int i = 0; i < message_.size(); i++) {
         output.writeMessage(1, message_.get(i));
       }
@@ -2088,7 +1960,7 @@ public final class ProtobufMessages {
       size = 0;
       for (int i = 0; i < message_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(1, message_.get(i));
+          .computeMessageSize(1, message_.get(i));
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2098,7 +1970,7 @@ public final class ProtobufMessages {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessages)) {
         return super.equals(obj);
@@ -2224,12 +2096,12 @@ public final class ProtobufMessages {
         // @@protoc_insertion_point(builder_implements:fuse_java_starter.SettlementMissionProtoMessages)
         org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessagesOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementMissionProtoMessages_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementMissionProtoMessages_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessages.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessages.Builder.class);
@@ -2247,7 +2119,7 @@ public final class ProtobufMessages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
-            .alwaysUseFieldBuilders) {
+                .alwaysUseFieldBuilders) {
           getMessageFieldBuilder();
         }
       }
@@ -2263,7 +2135,7 @@ public final class ProtobufMessages {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementMissionProtoMessages_descriptor;
       }
 
@@ -2350,9 +2222,9 @@ public final class ProtobufMessages {
               messageBuilder_ = null;
               message_ = other.message_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              messageBuilder_ =
-                  com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                      getMessageFieldBuilder() : null;
+              messageBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getMessageFieldBuilder() : null;
             } else {
               messageBuilder_.addAllMessages(other.message_);
             }
@@ -2387,12 +2259,12 @@ public final class ProtobufMessages {
       private int bitField0_;
 
       private java.util.List<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage> message_ =
-          java.util.Collections.emptyList();
+        java.util.Collections.emptyList();
       private void ensureMessageIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
           message_ = new java.util.ArrayList<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage>(message_);
           bitField0_ |= 0x00000001;
-        }
+         }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
@@ -2581,8 +2453,8 @@ public final class ProtobufMessages {
       /**
        * <code>repeated .fuse_java_starter.SettlementMissionProtoMessage message = 1;</code>
        */
-      public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessageOrBuilder>
-      getMessageOrBuilderList() {
+      public java.util.List<? extends org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessageOrBuilder> 
+           getMessageOrBuilderList() {
         if (messageBuilder_ != null) {
           return messageBuilder_.getMessageOrBuilderList();
         } else {
@@ -2607,20 +2479,20 @@ public final class ProtobufMessages {
       /**
        * <code>repeated .fuse_java_starter.SettlementMissionProtoMessage message = 1;</code>
        */
-      public java.util.List<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage.Builder>
-      getMessageBuilderList() {
+      public java.util.List<org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage.Builder> 
+           getMessageBuilderList() {
         return getMessageFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessageOrBuilder>
-      getMessageFieldBuilder() {
+          org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessageOrBuilder> 
+          getMessageFieldBuilder() {
         if (messageBuilder_ == null) {
           messageBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage.Builder, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessageOrBuilder>(
-              message_,
-              ((bitField0_ & 0x00000001) == 0x00000001),
-              getParentForChildren(),
-              isClean());
+                  message_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
           message_ = null;
         }
         return messageBuilder_;
@@ -2691,7 +2563,7 @@ public final class ProtobufMessages {
      * <code>string instrument = 2;</code>
      */
     com.google.protobuf.ByteString
-    getInstrumentBytes();
+        getInstrumentBytes();
 
     /**
      * <code>string external_party = 3;</code>
@@ -2701,7 +2573,7 @@ public final class ProtobufMessages {
      * <code>string external_party = 3;</code>
      */
     com.google.protobuf.ByteString
-    getExternalPartyBytes();
+        getExternalPartyBytes();
 
     /**
      * <code>string depot = 4;</code>
@@ -2711,7 +2583,7 @@ public final class ProtobufMessages {
      * <code>string depot = 4;</code>
      */
     com.google.protobuf.ByteString
-    getDepotBytes();
+        getDepotBytes();
 
     /**
      * <code>string direction = 5;</code>
@@ -2721,7 +2593,7 @@ public final class ProtobufMessages {
      * <code>string direction = 5;</code>
      */
     com.google.protobuf.ByteString
-    getDirectionBytes();
+        getDirectionBytes();
 
     /**
      * <code>double qty = 6;</code>
@@ -2735,7 +2607,7 @@ public final class ProtobufMessages {
   }
   /**
    * <pre>
-   * defines the message format for settlement missions
+   * defines the message format for settlement missions 
    * </pre>
    *
    * Protobuf type {@code fuse_java_starter.SettlementMissionProtoMessage}
@@ -2744,7 +2616,7 @@ public final class ProtobufMessages {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:fuse_java_starter.SettlementMissionProtoMessage)
       SettlementMissionProtoMessageOrBuilder {
-    private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
     // Use SettlementMissionProtoMessage.newBuilder() to construct.
     private SettlementMissionProtoMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -2842,12 +2714,12 @@ public final class ProtobufMessages {
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementMissionProtoMessage_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementMissionProtoMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage.Builder.class);
@@ -2872,7 +2744,7 @@ public final class ProtobufMessages {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         instrument_ = s;
@@ -2883,10 +2755,10 @@ public final class ProtobufMessages {
      * <code>string instrument = 2;</code>
      */
     public com.google.protobuf.ByteString
-    getInstrumentBytes() {
+        getInstrumentBytes() {
       java.lang.Object ref = instrument_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         instrument_ = b;
@@ -2906,7 +2778,7 @@ public final class ProtobufMessages {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         externalParty_ = s;
@@ -2917,10 +2789,10 @@ public final class ProtobufMessages {
      * <code>string external_party = 3;</code>
      */
     public com.google.protobuf.ByteString
-    getExternalPartyBytes() {
+        getExternalPartyBytes() {
       java.lang.Object ref = externalParty_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         externalParty_ = b;
@@ -2940,7 +2812,7 @@ public final class ProtobufMessages {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         depot_ = s;
@@ -2951,10 +2823,10 @@ public final class ProtobufMessages {
      * <code>string depot = 4;</code>
      */
     public com.google.protobuf.ByteString
-    getDepotBytes() {
+        getDepotBytes() {
       java.lang.Object ref = depot_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         depot_ = b;
@@ -2974,7 +2846,7 @@ public final class ProtobufMessages {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs =
+        com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         direction_ = s;
@@ -2985,10 +2857,10 @@ public final class ProtobufMessages {
      * <code>string direction = 5;</code>
      */
     public com.google.protobuf.ByteString
-    getDirectionBytes() {
+        getDirectionBytes() {
       java.lang.Object ref = direction_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b =
+        com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         direction_ = b;
@@ -3027,7 +2899,7 @@ public final class ProtobufMessages {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-        throws java.io.IOException {
+                        throws java.io.IOException {
       if (id_ != 0L) {
         output.writeInt64(1, id_);
       }
@@ -3059,7 +2931,7 @@ public final class ProtobufMessages {
       size = 0;
       if (id_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-            .computeInt64Size(1, id_);
+          .computeInt64Size(1, id_);
       }
       if (!getInstrumentBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, instrument_);
@@ -3075,11 +2947,11 @@ public final class ProtobufMessages {
       }
       if (qty_ != 0D) {
         size += com.google.protobuf.CodedOutputStream
-            .computeDoubleSize(6, qty_);
+          .computeDoubleSize(6, qty_);
       }
       if (version_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-            .computeInt64Size(7, version_);
+          .computeInt64Size(7, version_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -3089,7 +2961,7 @@ public final class ProtobufMessages {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage)) {
         return super.equals(obj);
@@ -3109,7 +2981,7 @@ public final class ProtobufMessages {
           .equals(other.getDirection());
       result = result && (
           java.lang.Double.doubleToLongBits(getQty())
-              == java.lang.Double.doubleToLongBits(
+          == java.lang.Double.doubleToLongBits(
               other.getQty()));
       result = result && (getVersion()
           == other.getVersion());
@@ -3236,7 +3108,7 @@ public final class ProtobufMessages {
     }
     /**
      * <pre>
-     * defines the message format for settlement missions
+     * defines the message format for settlement missions 
      * </pre>
      *
      * Protobuf type {@code fuse_java_starter.SettlementMissionProtoMessage}
@@ -3246,12 +3118,12 @@ public final class ProtobufMessages {
         // @@protoc_insertion_point(builder_implements:fuse_java_starter.SettlementMissionProtoMessage)
         org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementMissionProtoMessage_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementMissionProtoMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementMissionProtoMessage.Builder.class);
@@ -3269,7 +3141,7 @@ public final class ProtobufMessages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
-            .alwaysUseFieldBuilders) {
+                .alwaysUseFieldBuilders) {
         }
       }
       public Builder clear() {
@@ -3292,7 +3164,7 @@ public final class ProtobufMessages {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementMissionProtoMessage_descriptor;
       }
 
@@ -3421,7 +3293,7 @@ public final class ProtobufMessages {
        * <code>int64 id = 1;</code>
        */
       public Builder setId(long value) {
-
+        
         id_ = value;
         onChanged();
         return this;
@@ -3430,7 +3302,7 @@ public final class ProtobufMessages {
        * <code>int64 id = 1;</code>
        */
       public Builder clearId() {
-
+        
         id_ = 0L;
         onChanged();
         return this;
@@ -3456,10 +3328,10 @@ public final class ProtobufMessages {
        * <code>string instrument = 2;</code>
        */
       public com.google.protobuf.ByteString
-      getInstrumentBytes() {
+          getInstrumentBytes() {
         java.lang.Object ref = instrument_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           instrument_ = b;
@@ -3474,9 +3346,9 @@ public final class ProtobufMessages {
       public Builder setInstrument(
           java.lang.String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-
+    throw new NullPointerException();
+  }
+  
         instrument_ = value;
         onChanged();
         return this;
@@ -3485,7 +3357,7 @@ public final class ProtobufMessages {
        * <code>string instrument = 2;</code>
        */
       public Builder clearInstrument() {
-
+        
         instrument_ = getDefaultInstance().getInstrument();
         onChanged();
         return this;
@@ -3496,10 +3368,10 @@ public final class ProtobufMessages {
       public Builder setInstrumentBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         instrument_ = value;
         onChanged();
         return this;
@@ -3525,10 +3397,10 @@ public final class ProtobufMessages {
        * <code>string external_party = 3;</code>
        */
       public com.google.protobuf.ByteString
-      getExternalPartyBytes() {
+          getExternalPartyBytes() {
         java.lang.Object ref = externalParty_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           externalParty_ = b;
@@ -3543,9 +3415,9 @@ public final class ProtobufMessages {
       public Builder setExternalParty(
           java.lang.String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-
+    throw new NullPointerException();
+  }
+  
         externalParty_ = value;
         onChanged();
         return this;
@@ -3554,7 +3426,7 @@ public final class ProtobufMessages {
        * <code>string external_party = 3;</code>
        */
       public Builder clearExternalParty() {
-
+        
         externalParty_ = getDefaultInstance().getExternalParty();
         onChanged();
         return this;
@@ -3565,10 +3437,10 @@ public final class ProtobufMessages {
       public Builder setExternalPartyBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         externalParty_ = value;
         onChanged();
         return this;
@@ -3594,10 +3466,10 @@ public final class ProtobufMessages {
        * <code>string depot = 4;</code>
        */
       public com.google.protobuf.ByteString
-      getDepotBytes() {
+          getDepotBytes() {
         java.lang.Object ref = depot_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           depot_ = b;
@@ -3612,9 +3484,9 @@ public final class ProtobufMessages {
       public Builder setDepot(
           java.lang.String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-
+    throw new NullPointerException();
+  }
+  
         depot_ = value;
         onChanged();
         return this;
@@ -3623,7 +3495,7 @@ public final class ProtobufMessages {
        * <code>string depot = 4;</code>
        */
       public Builder clearDepot() {
-
+        
         depot_ = getDefaultInstance().getDepot();
         onChanged();
         return this;
@@ -3634,10 +3506,10 @@ public final class ProtobufMessages {
       public Builder setDepotBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         depot_ = value;
         onChanged();
         return this;
@@ -3663,10 +3535,10 @@ public final class ProtobufMessages {
        * <code>string direction = 5;</code>
        */
       public com.google.protobuf.ByteString
-      getDirectionBytes() {
+          getDirectionBytes() {
         java.lang.Object ref = direction_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           direction_ = b;
@@ -3681,9 +3553,9 @@ public final class ProtobufMessages {
       public Builder setDirection(
           java.lang.String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-
+    throw new NullPointerException();
+  }
+  
         direction_ = value;
         onChanged();
         return this;
@@ -3692,7 +3564,7 @@ public final class ProtobufMessages {
        * <code>string direction = 5;</code>
        */
       public Builder clearDirection() {
-
+        
         direction_ = getDefaultInstance().getDirection();
         onChanged();
         return this;
@@ -3703,10 +3575,10 @@ public final class ProtobufMessages {
       public Builder setDirectionBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         direction_ = value;
         onChanged();
         return this;
@@ -3723,7 +3595,7 @@ public final class ProtobufMessages {
        * <code>double qty = 6;</code>
        */
       public Builder setQty(double value) {
-
+        
         qty_ = value;
         onChanged();
         return this;
@@ -3732,7 +3604,7 @@ public final class ProtobufMessages {
        * <code>double qty = 6;</code>
        */
       public Builder clearQty() {
-
+        
         qty_ = 0D;
         onChanged();
         return this;
@@ -3749,7 +3621,7 @@ public final class ProtobufMessages {
        * <code>int64 version = 7;</code>
        */
       public Builder setVersion(long value) {
-
+        
         version_ = value;
         onChanged();
         return this;
@@ -3758,7 +3630,7 @@ public final class ProtobufMessages {
        * <code>int64 version = 7;</code>
        */
       public Builder clearVersion() {
-
+        
         version_ = 0L;
         onChanged();
         return this;
@@ -3820,7 +3692,7 @@ public final class ProtobufMessages {
      * <code>repeated string spawnedMissionPaths = 1;</code>
      */
     java.util.List<java.lang.String>
-    getSpawnedMissionPathsList();
+        getSpawnedMissionPathsList();
     /**
      * <code>repeated string spawnedMissionPaths = 1;</code>
      */
@@ -3833,7 +3705,7 @@ public final class ProtobufMessages {
      * <code>repeated string spawnedMissionPaths = 1;</code>
      */
     com.google.protobuf.ByteString
-    getSpawnedMissionPathsBytes(int index);
+        getSpawnedMissionPathsBytes(int index);
   }
   /**
    * Protobuf type {@code fuse_java_starter.SettlementResponseProtoMessage}
@@ -3842,7 +3714,7 @@ public final class ProtobufMessages {
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:fuse_java_starter.SettlementResponseProtoMessage)
       SettlementResponseProtoMessageOrBuilder {
-    private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
     // Use SettlementResponseProtoMessage.newBuilder() to construct.
     private SettlementResponseProtoMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -3907,12 +3779,12 @@ public final class ProtobufMessages {
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementResponseProtoMessage_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementResponseProtoMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementResponseProtoMessage.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementResponseProtoMessage.Builder.class);
@@ -3924,7 +3796,7 @@ public final class ProtobufMessages {
      * <code>repeated string spawnedMissionPaths = 1;</code>
      */
     public com.google.protobuf.ProtocolStringList
-    getSpawnedMissionPathsList() {
+        getSpawnedMissionPathsList() {
       return spawnedMissionPaths_;
     }
     /**
@@ -3943,7 +3815,7 @@ public final class ProtobufMessages {
      * <code>repeated string spawnedMissionPaths = 1;</code>
      */
     public com.google.protobuf.ByteString
-    getSpawnedMissionPathsBytes(int index) {
+        getSpawnedMissionPathsBytes(int index) {
       return spawnedMissionPaths_.getByteString(index);
     }
 
@@ -3958,7 +3830,7 @@ public final class ProtobufMessages {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-        throws java.io.IOException {
+                        throws java.io.IOException {
       for (int i = 0; i < spawnedMissionPaths_.size(); i++) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, spawnedMissionPaths_.getRaw(i));
       }
@@ -3986,7 +3858,7 @@ public final class ProtobufMessages {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementResponseProtoMessage)) {
         return super.equals(obj);
@@ -4112,12 +3984,12 @@ public final class ProtobufMessages {
         // @@protoc_insertion_point(builder_implements:fuse_java_starter.SettlementResponseProtoMessage)
         org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementResponseProtoMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementResponseProtoMessage_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementResponseProtoMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementResponseProtoMessage.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementResponseProtoMessage.Builder.class);
@@ -4135,7 +4007,7 @@ public final class ProtobufMessages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
-            .alwaysUseFieldBuilders) {
+                .alwaysUseFieldBuilders) {
         }
       }
       public Builder clear() {
@@ -4146,7 +4018,7 @@ public final class ProtobufMessages {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_SettlementResponseProtoMessage_descriptor;
       }
 
@@ -4254,13 +4126,13 @@ public final class ProtobufMessages {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
           spawnedMissionPaths_ = new com.google.protobuf.LazyStringArrayList(spawnedMissionPaths_);
           bitField0_ |= 0x00000001;
-        }
+         }
       }
       /**
        * <code>repeated string spawnedMissionPaths = 1;</code>
        */
       public com.google.protobuf.ProtocolStringList
-      getSpawnedMissionPathsList() {
+          getSpawnedMissionPathsList() {
         return spawnedMissionPaths_.getUnmodifiableView();
       }
       /**
@@ -4279,7 +4151,7 @@ public final class ProtobufMessages {
        * <code>repeated string spawnedMissionPaths = 1;</code>
        */
       public com.google.protobuf.ByteString
-      getSpawnedMissionPathsBytes(int index) {
+          getSpawnedMissionPathsBytes(int index) {
         return spawnedMissionPaths_.getByteString(index);
       }
       /**
@@ -4288,9 +4160,9 @@ public final class ProtobufMessages {
       public Builder setSpawnedMissionPaths(
           int index, java.lang.String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureSpawnedMissionPathsIsMutable();
+    throw new NullPointerException();
+  }
+  ensureSpawnedMissionPathsIsMutable();
         spawnedMissionPaths_.set(index, value);
         onChanged();
         return this;
@@ -4301,9 +4173,9 @@ public final class ProtobufMessages {
       public Builder addSpawnedMissionPaths(
           java.lang.String value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureSpawnedMissionPathsIsMutable();
+    throw new NullPointerException();
+  }
+  ensureSpawnedMissionPathsIsMutable();
         spawnedMissionPaths_.add(value);
         onChanged();
         return this;
@@ -4334,9 +4206,9 @@ public final class ProtobufMessages {
       public Builder addSpawnedMissionPathsBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
         ensureSpawnedMissionPathsIsMutable();
         spawnedMissionPaths_.add(value);
         onChanged();
@@ -4392,57 +4264,56 @@ public final class ProtobufMessages {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-      internal_static_fuse_java_starter_TradeAgreementProtoMessages_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    internal_static_fuse_java_starter_TradeAgreementProtoMessages_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fuse_java_starter_TradeAgreementProtoMessages_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-      internal_static_fuse_java_starter_TradeAgreementProtoMessage_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    internal_static_fuse_java_starter_TradeAgreementProtoMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fuse_java_starter_TradeAgreementProtoMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-      internal_static_fuse_java_starter_SettlementMissionProtoMessages_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    internal_static_fuse_java_starter_SettlementMissionProtoMessages_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fuse_java_starter_SettlementMissionProtoMessages_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-      internal_static_fuse_java_starter_SettlementMissionProtoMessage_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    internal_static_fuse_java_starter_SettlementMissionProtoMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fuse_java_starter_SettlementMissionProtoMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-      internal_static_fuse_java_starter_SettlementResponseProtoMessage_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    internal_static_fuse_java_starter_SettlementResponseProtoMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fuse_java_starter_SettlementResponseProtoMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
-  getDescriptor() {
+      getDescriptor() {
     return descriptor;
   }
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-        "\n\026ProtobufMessages.proto\022\021fuse_java_star" +
-            "ter\"]\n\033TradeAgreementProtoMessages\022>\n\007me" +
-            "ssage\030\001 \003(\0132-.fuse_java_starter.TradeAgr" +
-            "eementProtoMessage\"\234\001\n\032TradeAgreementPro" +
-            "toMessage\022\n\n\002id\030\001 \001(\003\022\022\n\ninstrument\030\002 \001(" +
-            "\t\022\026\n\016internal_party\030\003 \001(\t\022\026\n\016external_pa" +
-            "rty\030\004 \001(\t\022\020\n\010buy_sell\030\005 \001(\t\022\013\n\003qty\030\006 \001(\001" +
-            "\022\017\n\007version\030\007 \001(\003\"c\n\036SettlementMissionPr" +
-            "otoMessages\022A\n\007message\030\001 \003(\01320.fuse_java" +
-            "_starter.SettlementMissionProtoMessage\"\227" +
-            "\001\n\035SettlementMissionProtoMessage\022\n\n\002id\030\001" +
-            " \001(\003\022\022\n\ninstrument\030\002 \001(\t\022\026\n\016external_par" +
-            "ty\030\003 \001(\t\022\r\n\005depot\030\004 \001(\t\022\021\n\tdirection\030\005 \001" +
-            "(\t\022\013\n\003qty\030\006 \001(\001\022\017\n\007version\030\007 \001(\003\"=\n\036Sett" +
-            "lementResponseProtoMessage\022\033\n\023spawnedMis" +
-            "sionPaths\030\001 \003(\tBC\n/org.galatea.starter.e" +
-            "ntrypoint.messagecontractsB\020ProtobufMess" +
-            "agesb\006proto3"
+      "\n\026ProtobufMessages.proto\022\021fuse_java_star" +
+      "ter\"]\n\033TradeAgreementProtoMessages\022>\n\007me" +
+      "ssage\030\001 \003(\0132-.fuse_java_starter.TradeAgr" +
+      "eementProtoMessage\"\177\n\032TradeAgreementProt" +
+      "oMessage\022\022\n\ninstrument\030\002 \001(\t\022\026\n\016internal" +
+      "_party\030\003 \001(\t\022\026\n\016external_party\030\004 \001(\t\022\020\n\010" +
+      "buy_sell\030\005 \001(\t\022\013\n\003qty\030\006 \001(\001\"c\n\036Settlemen" +
+      "tMissionProtoMessages\022A\n\007message\030\001 \003(\01320" +
+      ".fuse_java_starter.SettlementMissionProt" +
+      "oMessage\"\227\001\n\035SettlementMissionProtoMessa" +
+      "ge\022\n\n\002id\030\001 \001(\003\022\022\n\ninstrument\030\002 \001(\t\022\026\n\016ex" +
+      "ternal_party\030\003 \001(\t\022\r\n\005depot\030\004 \001(\t\022\021\n\tdir" +
+      "ection\030\005 \001(\t\022\013\n\003qty\030\006 \001(\001\022\017\n\007version\030\007 \001" +
+      "(\003\"=\n\036SettlementResponseProtoMessage\022\033\n\023" +
+      "spawnedMissionPaths\030\001 \003(\tBC\n/org.galatea" +
+      ".starter.entrypoint.messagecontractsB\020Pr" +
+      "otobufMessagesb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4453,37 +4324,37 @@ public final class ProtobufMessages {
           }
         };
     com.google.protobuf.Descriptors.FileDescriptor
-        .internalBuildGeneratedFileFrom(descriptorData,
-            new com.google.protobuf.Descriptors.FileDescriptor[] {
-            }, assigner);
+      .internalBuildGeneratedFileFrom(descriptorData,
+        new com.google.protobuf.Descriptors.FileDescriptor[] {
+        }, assigner);
     internal_static_fuse_java_starter_TradeAgreementProtoMessages_descriptor =
-        getDescriptor().getMessageTypes().get(0);
+      getDescriptor().getMessageTypes().get(0);
     internal_static_fuse_java_starter_TradeAgreementProtoMessages_fieldAccessorTable = new
-        com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fuse_java_starter_TradeAgreementProtoMessages_descriptor,
         new java.lang.String[] { "Message", });
     internal_static_fuse_java_starter_TradeAgreementProtoMessage_descriptor =
-        getDescriptor().getMessageTypes().get(1);
+      getDescriptor().getMessageTypes().get(1);
     internal_static_fuse_java_starter_TradeAgreementProtoMessage_fieldAccessorTable = new
-        com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fuse_java_starter_TradeAgreementProtoMessage_descriptor,
-        new java.lang.String[] { "Id", "Instrument", "InternalParty", "ExternalParty", "BuySell", "Qty", "Version", });
+        new java.lang.String[] { "Instrument", "InternalParty", "ExternalParty", "BuySell", "Qty", });
     internal_static_fuse_java_starter_SettlementMissionProtoMessages_descriptor =
-        getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(2);
     internal_static_fuse_java_starter_SettlementMissionProtoMessages_fieldAccessorTable = new
-        com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fuse_java_starter_SettlementMissionProtoMessages_descriptor,
         new java.lang.String[] { "Message", });
     internal_static_fuse_java_starter_SettlementMissionProtoMessage_descriptor =
-        getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_fuse_java_starter_SettlementMissionProtoMessage_fieldAccessorTable = new
-        com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fuse_java_starter_SettlementMissionProtoMessage_descriptor,
         new java.lang.String[] { "Id", "Instrument", "ExternalParty", "Depot", "Direction", "Qty", "Version", });
     internal_static_fuse_java_starter_SettlementResponseProtoMessage_descriptor =
-        getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_fuse_java_starter_SettlementResponseProtoMessage_fieldAccessorTable = new
-        com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fuse_java_starter_SettlementResponseProtoMessage_descriptor,
         new java.lang.String[] { "SpawnedMissionPaths", });
   }

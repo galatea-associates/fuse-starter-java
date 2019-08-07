@@ -103,7 +103,7 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testSettleAgreement_JSON(final String agreementJson,
       final String expectedMissionIdJson) throws Exception {
     TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
-        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).version(0L).build();
+        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).build();
 
     log.info("Agreement json to post {}", agreementJson);
 
@@ -135,7 +135,7 @@ public class SettlementRestControllerTest extends ASpringTest {
 
     TradeAgreementMessages messages = TradeAgreementMessages.builder().agreement(
         TradeAgreementMessage.builder().instrument("IBM").internalParty("INT-1")
-            .externalParty("EXT-1").buySell("B").qty(100d).version(0L).build())
+            .externalParty("EXT-1").buySell("B").qty(100d).build())
         .build();
 
     JAXBContext context = JAXBContext.newInstance(TradeAgreementMessages.class);
@@ -340,17 +340,16 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testUpdateMission() throws Exception {
-    TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
-        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).version(0L).build();
     SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+    settlementMission.setId(MISSION_ID_1);
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
         .thenReturn(true);
-    when(mockSettlementService.updateMission(MISSION_ID_1, expectedAgreement))
+    when(mockSettlementService.updateMission(MISSION_ID_1, settlementMission))
         .thenReturn(Optional.of(settlementMission));
 
     this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-        .content(objectMapper.convertValue(expectedAgreement, JsonNode.class).toString())
+        .content(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk());
@@ -358,14 +357,13 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testUpdateNonExistentMission() throws Exception {
-    TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
-        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).version(0L).build();
+    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
         .thenReturn(false);
 
     this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-        .content(objectMapper.convertValue(expectedAgreement, JsonNode.class).toString())
+        .content(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound());
@@ -373,21 +371,20 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   @Test
   public void testUpdateMissionWithWrongVersion() throws Exception {
-    TradeAgreement expectedAgreement = TradeAgreement.builder().instrument("IBM")
-        .internalParty("INT-1").externalParty("EXT-1").buySell("B").qty(100d).version(0L).build();
     SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+    settlementMission.setId(MISSION_ID_1);
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
         .thenReturn(true);
 
-    when(mockSettlementService.updateMission(MISSION_ID_1, expectedAgreement)).thenThrow(
+    when(mockSettlementService.updateMission(MISSION_ID_1, settlementMission)).thenThrow(
         ObjectOptimisticLockingFailureException.class);
 
     this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-        .content(objectMapper.convertValue(expectedAgreement, JsonNode.class).toString())
+        .content(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isPreconditionFailed());
+        .andExpect(status().isConflict());
   }
 
   @Test

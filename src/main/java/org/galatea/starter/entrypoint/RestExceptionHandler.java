@@ -69,7 +69,7 @@ public class RestExceptionHandler {
       final ObjectOptimisticLockingFailureException exception) {
     log.debug("Outdated input data sent", exception);
 
-    ApiError error = new ApiError(HttpStatus.PRECONDITION_FAILED, exception.toString());
+    ApiError error = new ApiError(HttpStatus.CONFLICT, exception.toString());
     return buildResponseEntity(error);
   }
 

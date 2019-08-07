@@ -25,13 +25,11 @@ public class TestDataGenerator {
    */
   public static TradeAgreement.TradeAgreementBuilder defaultTradeAgreementData() {
     return TradeAgreement.builder()
-        .id(0L)
         .instrument("IBM")
         .internalParty("INT-1")
         .externalParty("EXT-1")
         .buySell("B")
-        .qty(100d)
-        .version(0L);
+        .qty(100d);
   }
 
   /**
@@ -44,8 +42,7 @@ public class TestDataGenerator {
         .setInternalParty("INT-1")
         .setExternalParty("EXT-1")
         .setBuySell("B")
-        .setQty(100)
-        .setVersion(0L);
+        .setQty(100);
   }
 
   /**
