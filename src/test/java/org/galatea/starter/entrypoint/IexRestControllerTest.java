@@ -1,5 +1,6 @@
 package org.galatea.starter.entrypoint;
 
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -16,7 +17,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.contract.wiremock.WireMockSpring;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -37,7 +37,7 @@ public class IexRestControllerTest extends ASpringTest {
     @ClassRule
     // there are other ways to enable WireMock, including the spring boot @EnableWireMock annotation, but the ClassRule is pretty simple,
     // and follows the pattern we use in ASpringTest.
-    public static WireMockClassRule wiremock = new WireMockClassRule(WireMockSpring.options()
+    public static WireMockClassRule wiremock = new WireMockClassRule(options()
             // this port needs to match the spring.rest.iexBasePath url in application.yml for the test profile.
             // you can configure WireMock to use a random port, and bind that port to a system variable as an alternative.
             .port(9938)

@@ -255,8 +255,8 @@
 		</dependency>
 		<!-- WireMock import for stubbing external REST services, see IexRestControllerTest.java -->
 		<dependency>
-			<groupId>org.github.tomakehurst</groupId>
-			<artifactId>wiremock</artifactId>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-jre8</artifactId>
 			<version>2.24.1</version>
 			<scope>test</scope>
 		</dependency>
