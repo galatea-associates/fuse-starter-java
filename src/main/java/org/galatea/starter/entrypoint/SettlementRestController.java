@@ -192,7 +192,7 @@ public class SettlementRestController extends BaseSettlementRestController {
       deleteMissionInternal(id);
     } catch (EmptyResultDataAccessException e) {
       // The entity could not be deleted because it does not exist
-      throw new EntityNotFoundException(SettlementMission.class, id.toString());
+      throw new EntityNotFoundException(SettlementMission.class, id.toString(), e);
     }
   }
 

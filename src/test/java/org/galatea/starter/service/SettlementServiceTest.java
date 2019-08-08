@@ -152,5 +152,7 @@ public class SettlementServiceTest extends ASpringTest {
         new SettlementService(this.mockSettlementMissionRpsy, this.mockAgreementTransformer);
 
     service.deleteMission(35L);
+    boolean missionExists = service.missionExists(35L);
+    assertFalse(missionExists);
   }
 }
