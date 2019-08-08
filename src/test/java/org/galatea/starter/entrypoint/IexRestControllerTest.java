@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import java.math.BigDecimal;
+import java.util.Collections;
 import junitparams.JUnitParamsRunner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,11 +68,22 @@ public class IexRestControllerTest extends ASpringTest {
     public void testGetLastTradedPrice() throws Exception {
 
         MvcResult result = this.mvc.perform(
-                org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/iex/lastTradedPrice?symbols=FB")
-                        .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].symbol", is("FB")))
-                .andExpect(jsonPath("$[0].price").value(new BigDecimal("186.34")))
-                .andReturn();
+            org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/iex/lastTradedPrice?symbols=FB")
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].symbol", is("FB")))
+            .andExpect(jsonPath("$[0].price").value(new BigDecimal("186.34")))
+            .andReturn();
+    }
+
+    @Test
+    public void testGetLastTradedPriceEmpty() throws Exception {
+
+        MvcResult result = this.mvc.perform(
+            org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/iex/lastTradedPrice?symbols=")
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", is(Collections.emptyList())))
+            .andReturn();
     }
 }
