@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
+import java.math.BigDecimal;
 import junitparams.JUnitParamsRunner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +20,6 @@ import org.springframework.cloud.contract.wiremock.WireMockSpring;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import java.math.BigDecimal;
 
 
 @RequiredArgsConstructor
@@ -72,7 +71,7 @@ public class IexRestControllerTest extends ASpringTest {
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].symbol", is("FB")))
-                .andExpect(jsonPath("$[0].price").value(new BigDecimal("182.305")))
+                .andExpect(jsonPath("$[0].price").value(new BigDecimal("186.34")))
                 .andReturn();
     }
 }
