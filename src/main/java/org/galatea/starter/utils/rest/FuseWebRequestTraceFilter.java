@@ -119,7 +119,7 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
         t.runAndTraceSuccess(traceKeyPrefix, () -> {
           filterChain.doFilter(request, response);
           status.setValue(response.getStatus());
-          if(response.getStatus() < 400) {
+          if (response.getStatus() < 400) {
             addTraceInfo(this.getClass(), traceKeyPrefix + "-success", "true");
           } else {
             addTraceInfo(this.getClass(), traceKeyPrefix + "-success", "false");
