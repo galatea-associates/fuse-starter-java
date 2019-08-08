@@ -87,6 +87,50 @@
 			"response": []
 		},
 		{
+			"name": "IEX - Get all symbols",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/iex/symbols",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"iex",
+						"symbols"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IEX - Get last traded price",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/iex/lastTradedPrice?symbols=IBM",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"iex",
+						"lastTradedPrice"
+					],
+					"query": [
+						{
+							"key": "symbols",
+							"value": "IBM"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Run Trace",
 			"request": {
 				"method": "GET",
