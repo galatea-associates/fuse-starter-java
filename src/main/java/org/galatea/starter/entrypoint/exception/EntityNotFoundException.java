@@ -14,7 +14,8 @@ public class EntityNotFoundException extends RuntimeException {
   /**
    * Create an EntityNotFoundException for a single missing entity, including it's cause.
    */
-  public EntityNotFoundException(final Class<?> type, final String identifier, final Throwable cause) {
+  public EntityNotFoundException(final Class<?> type, final String identifier,
+      final Throwable cause) {
     super("Entity " + identifier + " of type " + type.getSimpleName() + " was not found", cause);
   }
 
