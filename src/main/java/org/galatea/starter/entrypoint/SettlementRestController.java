@@ -163,7 +163,7 @@ public class SettlementRestController extends BaseSettlementRestController {
 
     // Translate the message and get it back from the list
     SettlementMission settlementMission =
-        settlementMissionMessageTranslator.translate(settlementMissionMessage);
+        settlementMissionMsgTranslator.translate(settlementMissionMessage);
 
     Optional<SettlementMission> msn = updateMissionInternal(id, settlementMission);
 
