@@ -39,7 +39,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.9.RELEASE</version>
 	</parent>
-	
+
 	<dependencies>
 		<!-- Spring boot starter -->
 		<dependency>
@@ -251,6 +251,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- WireMock import for stubbing external REST services, see IexRestControllerTest.java -->
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-jre8</artifactId>
+			<version>2.24.1</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Useful for waiting for an async task to complete -->
