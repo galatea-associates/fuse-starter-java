@@ -185,9 +185,7 @@ public class Tracer {
     public <T> T runAndTraceSuccess(final String traceKeyPrefix, final Callable<T> func)
         throws Exception {
       try {
-        T result = func.call();
-        addTraceInfo(clz, traceKeyPrefix + "-success", "true");
-        return result;
+        return func.call();
       } catch (Exception err) {
         addTraceInfo(clz, traceKeyPrefix + "-success", "false");
         addTraceInfo(clz, traceKeyPrefix + "-error", err.getMessage());
