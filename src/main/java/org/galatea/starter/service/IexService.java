@@ -1,6 +1,6 @@
 package org.galatea.starter.service;
 
-import com.google.common.collect.Lists;
+import java.util.Collections;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class IexService {
    */
   public List<IexLastTradedPrice> getLastTradedPriceForSymbols(final List<String> symbols) {
     if (CollectionUtils.isEmpty(symbols)) {
-      return Lists.newArrayList();
+      return Collections.emptyList();
     } else {
       return iexClient.getLastTradedPriceForSymbols(symbols.toArray(new String[0]));
     }
