@@ -1,7 +1,7 @@
 {
 	"info": {
+		"_postman_id": "f3baf414-e6f2-46bd-97b2-b3f61babb722",
 		"name": "Fuse-Starter-Java",
-		"_postman_id": "488c4049-a1c6-f053-1047-15fbf34064c4",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -21,7 +21,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \"agreements\" : \n    [\n    \t{\n\t    \t\"id\": 1,\n\t\t\t\"instrument\": \"IBM\",\n\t\t\t\"internalParty\": \"INT-1\",\n\t\t\t\"externalParty\": \"EXT-1\",\n\t\t\t\"buySell\": \"B\",\n\t\t\t\"qty\": 100,\n\t\t\t\"version\": 0\n\t\t},\n    \t{\n\t    \t\"id\": 2,\n\t\t\t\"instrument\": \"IBM\",\n\t\t\t\"internalParty\": \"INT-1\",\n\t\t\t\"externalParty\": \"EXT-1\",\n\t\t\t\"buySell\": \"B\",\n\t\t\t\"qty\": 100,\n\t\t\t\"version\": 0\n\t\t}\n\t]\n}"
+					"raw": "{ \"agreements\" : \n    [\n    \t{\n\t\t\t\"instrument\": \"IBM\",\n\t\t\t\"internalParty\": \"INT-1\",\n\t\t\t\"externalParty\": \"EXT-1\",\n\t\t\t\"buySell\": \"B\",\n\t\t\t\"qty\": 100\n\t\t},\n    \t{\n\t\t\t\"instrument\": \"IBM\",\n\t\t\t\"internalParty\": \"INT-1\",\n\t\t\t\"externalParty\": \"EXT-1\",\n\t\t\t\"buySell\": \"B\",\n\t\t\t\"qty\": 100\n\t\t}\n\t]\n}"
 				},
 				"url": {
 					"raw": "http://{{host}}/settlementEngine",
@@ -41,7 +41,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {},
 				"url": {
 					"raw": "http://{{host}}/settlementEngine/mission/1",
 					"protocol": "http",
@@ -165,7 +164,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {},
 				"url": {
 					"raw": "http://{{host}}/trace",
 					"protocol": "http",
