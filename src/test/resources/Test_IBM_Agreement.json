@@ -1,6 +1,5 @@
 [
 	{
-		"id" : null,
     "instrument" : "IBM",
     "internalParty" : "INT-1",
     "externalParty" : "EXT-1",

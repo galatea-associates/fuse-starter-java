@@ -47,7 +47,7 @@ public class ProtoMessageTranslationConfig {
    */
   @Bean
   public ITranslator<TradeAgreementProtoMessage, TradeAgreement> tradeAgreementProtoTranslator() {
-    return msg -> TradeAgreement.builder().id(msg.getId()).buySell(msg.getBuySell())
+    return msg -> TradeAgreement.builder().buySell(msg.getBuySell())
         .externalParty(msg.getExternalParty()).internalParty(msg.getInternalParty())
         .instrument(msg.getInstrument()).qty(msg.getQty()).build();
   }
@@ -62,7 +62,7 @@ public class ProtoMessageTranslationConfig {
     return msg -> SettlementMissionProtoMessage.newBuilder().setId(msg.getId())
         .setDepot(msg.getDepot()).setDirection(msg.getDirection())
         .setExternalParty(msg.getExternalParty()).setInstrument(msg.getInstrument())
-        .setQty(msg.getQty()).build();
+        .setQty(msg.getQty()).setVersion(msg.getVersion()).build();
   }
 
   /**

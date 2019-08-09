@@ -20,11 +20,14 @@ import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +46,9 @@ public class SettlementRestController extends BaseSettlementRestController {
   ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator;
 
   @NonNull
+  ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMsgTranslator;
+
+  @NonNull
   ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
 
   @Value("${mvc.settleMissionPath}")
@@ -58,10 +64,13 @@ public class SettlementRestController extends BaseSettlementRestController {
    */
   public SettlementRestController(final SettlementService settlementService,
       final ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator,
-      final ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator) {
+      final ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator,
+      final ITranslator<SettlementMissionMessage, SettlementMission>
+          settlementMissionMsgTranslator) {
     super(settlementService);
     this.tradeAgreementTranslator = tradeAgreementTranslator;
     this.settlementMissionTranslator = settlementMissionTranslator;
+    this.settlementMissionMsgTranslator = settlementMissionMsgTranslator;
   }
 
   /**
@@ -134,6 +143,57 @@ public class SettlementRestController extends BaseSettlementRestController {
     List<SettlementMission> missions = getMissionsInternal(idLongs);
 
     return new SettlementMissionList(missions);
+  }
+
+  /**
+   * Update an existing mission given an ID.
+   */
+  // @PutMapping to link http PUT requests to this method
+  // @PathVariable to take the id from the path and make it available as a method argument
+  // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
+  @PutMapping(value = "${mvc.updateMissionPath}" + "{id}",
+      consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+      produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+  public void updateMission(@PathVariable final Long id,
+      @RequestBody final SettlementMissionMessage settlementMissionMessage,
+      @RequestParam(value = "requestId", required = false) final String requestId) {
+
+    // if an external request id was provided, grab it
+    processRequestId(requestId);
+
+    // Translate the message and get it back from the list
+    SettlementMission settlementMission =
+        settlementMissionMsgTranslator.translate(settlementMissionMessage);
+
+    Optional<SettlementMission> msn = updateMissionInternal(id, settlementMission);
+
+    if (!msn.isPresent()) {
+      // The mission was not found and could not be updated
+      throw new EntityNotFoundException(SettlementMission.class, id.toString());
+    }
+  }
+
+  /**
+   * Delete a previously created mission.
+   */
+  // @DeleteMapping to link http DELETE requests to this method
+  // @PathVariable to take the id from the path and make it available as a method argument
+  // @RequestParam to take a parameter from the url (ex: http://url?requestId=3123)
+  @DeleteMapping(value = "${mvc.deleteMissionPath}" + "{id}", produces = {
+      MediaType.APPLICATION_JSON_VALUE,
+      MediaType.APPLICATION_XML_VALUE})
+  public void deleteMission(@PathVariable final Long id,
+      @RequestParam(value = "requestId", required = false) final String requestId) {
+
+    // if an external request id was provided, grab it
+    processRequestId(requestId);
+
+    try {
+      deleteMissionInternal(id);
+    } catch (EmptyResultDataAccessException e) {
+      // The entity could not be deleted because it does not exist
+      throw new EntityNotFoundException(SettlementMission.class, id.toString(), e);
+    }
   }
 
 }

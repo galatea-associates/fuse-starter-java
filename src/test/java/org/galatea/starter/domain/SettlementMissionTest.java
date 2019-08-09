@@ -27,7 +27,8 @@ public class SettlementMissionTest {
         .externalParty("ECP")
         .direction("DEL")
         .depot("DTC")
-        .qty(10D).build();
+        .qty(10D)
+        .version(0L).build();
 
     Set<ConstraintViolation<SettlementMission>> constraintViolations = validator.validate(mission);
 
@@ -43,7 +44,8 @@ public class SettlementMissionTest {
         .externalParty("ECP")
         .direction("DEL")
         .depot("DTC")
-        .qty(invalidQty).build();
+        .qty(invalidQty)
+        .version(0L).build();
 
     Set<ConstraintViolation<SettlementMission>> constraintViolations = validator
         .validate(mission);
@@ -62,7 +64,8 @@ public class SettlementMissionTest {
         .externalParty("ECP")
         .direction(invalidDirection)
         .depot("DTC")
-        .qty(1d).build();
+        .qty(1d)
+        .version(0L).build();
 
     Set<ConstraintViolation<SettlementMission>> constraintViolations = validator
         .validate(mission);

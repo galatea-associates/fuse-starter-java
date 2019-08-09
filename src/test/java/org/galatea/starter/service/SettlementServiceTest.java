@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -84,7 +85,7 @@ public class SettlementServiceTest extends ASpringTest {
     List<Long> ids = Arrays.asList(1L, 2L);
     SettlementMission settlementMission1 = SettlementMission.builder()
         .id(1L).depot("DTC").externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d)
-        .build();
+        .version(0L).build();
     List<SettlementMission> settlementMissions = Collections.singletonList(settlementMission1);
 
     given(this.mockSettlementMissionRpsy.findAll(ids)).willReturn(settlementMissions);
@@ -101,9 +102,9 @@ public class SettlementServiceTest extends ASpringTest {
   public void testSpawnMissions() {
 
     SettlementMission testSettlementMission = SettlementMission.builder().id(35L).depot("DTC")
-        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).build();
+        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).version(0L).build();
 
-    TradeAgreement testTradeAgreement = TradeAgreement.builder().id(45L).instrument("instr-1")
+    TradeAgreement testTradeAgreement = TradeAgreement.builder().instrument("instr-1")
         .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).build();
 
     given(this.mockSettlementMissionRpsy.save(Mockito.anyList()))
@@ -111,5 +112,47 @@ public class SettlementServiceTest extends ASpringTest {
 
     Set<Long> missionIds = service.spawnMissions(Collections.singletonList(testTradeAgreement));
     assertEquals(1, missionIds.size());
+  }
+
+  @Test
+  public void testUpdateMission() {
+
+    SettlementMission testSettlementMission = SettlementMission.builder().depot("DTC")
+        .externalParty("EXT-1").instrument("IBM").direction("REC").qty(100d).version(0L).build();
+
+    given(this.mockSettlementMissionRpsy.save(testSettlementMission))
+        .willReturn(testSettlementMission);
+
+    SettlementService service =
+        new SettlementService(this.mockSettlementMissionRpsy, this.mockAgreementTransformer);
+
+    Optional<SettlementMission> settlementMissionOptional = service.updateMission(35L, testSettlementMission);
+    assertEquals((Long) 35L, settlementMissionOptional.get().getId());
+  }
+
+  @Test
+  public void testMissionExists() {
+
+    given(this.mockSettlementMissionRpsy.exists(35L))
+        .willReturn(true);
+
+    SettlementService service =
+        new SettlementService(this.mockSettlementMissionRpsy, this.mockAgreementTransformer);
+
+    boolean missionExists = service.missionExists(35L);
+    assertTrue(missionExists);
+  }
+
+  @Test
+  public void testDeleteMission() {
+
+    doNothing().when(this.mockSettlementMissionRpsy).delete(35L);
+
+    SettlementService service =
+        new SettlementService(this.mockSettlementMissionRpsy, this.mockAgreementTransformer);
+
+    service.deleteMission(35L);
+    boolean missionExists = service.missionExists(35L);
+    assertFalse(missionExists);
   }
 }

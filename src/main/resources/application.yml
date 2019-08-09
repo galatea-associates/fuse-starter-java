@@ -16,8 +16,10 @@ spring:
 
 mvc:
    settleMissionPath: /settlementEngine
+   updateMissionPath: /settlementEngine/mission/
    getMissionPath: /settlementEngine/mission/
    getMissionsPath: /settlementEngine/missions
+   deleteMissionPath: /settlementEngine/mission/
    iex:
       getAllSymbolsPath: /iex/symbols
       getLastTradedPricePath: /iex/lastTradedPrice

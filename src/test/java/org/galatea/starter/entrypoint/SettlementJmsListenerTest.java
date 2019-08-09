@@ -63,7 +63,7 @@ public class SettlementJmsListenerTest extends ASpringTest {
         .externalParty("EXT-1").buySell("B").qty(100d).build();
     List<TradeAgreement> expectedAgreements = Collections.singletonList(agreement);
 
-    log.info("Agreement JSON to put int he queue: {}", message);
+    log.info("Agreement JSON to put in the queue: {}", message);
     log.info("Agreement objects the service will expect {}", expectedAgreements);
 
     jmsTemplate.send(jsonQueueName, s -> {
