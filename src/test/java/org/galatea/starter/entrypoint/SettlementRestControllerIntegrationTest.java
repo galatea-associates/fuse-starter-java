@@ -98,11 +98,11 @@ public class SettlementRestControllerIntegrationTest {
 
     SettlementMissionProtoMessage.Builder b1 = SettlementMissionProtoMessage.newBuilder()
         .setDepot("DTC").setInstrument(instrument).setExternalParty(external1).setDirection("REC")
-        .setQty(quantity1);
+        .setQty(quantity1).setVersion(0L);
 
     SettlementMissionProtoMessage.Builder b2 = SettlementMissionProtoMessage.newBuilder()
         .setDepot("DTC").setInstrument(instrument).setExternalParty(external2).setDirection("REC")
-        .setQty(quantity2);
+        .setQty(quantity2).setVersion(0L);
 
     assertEquals(2, missionPaths.getSpawnedMissionPathsList().size());
 
@@ -150,11 +150,11 @@ public class SettlementRestControllerIntegrationTest {
 
     SettlementMissionMessage.SettlementMissionMessageBuilder b1 = SettlementMissionMessage.builder()
         .depot("DTC").instrument(instrument).externalParty(external1).direction("REC")
-        .qty(quantity1);
+        .qty(quantity1).version(0L);
 
     SettlementMissionMessage.SettlementMissionMessageBuilder b2 = SettlementMissionMessage.builder()
         .depot("DTC").instrument(instrument).externalParty(external2).direction("REC")
-        .qty(quantity2);
+        .qty(quantity2).version(0L);
 
     assertEquals(2, missionPaths.getSpawnedMissions().size());
 
