@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "38824480-f6ea-4fea-a03f-ff6c5c879de2",
 		"name": "Fuse-Starter-Java",
+		"_postman_id": "488c4049-a1c6-f053-1047-15fbf34064c4",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -41,6 +41,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {},
 				"url": {
 					"raw": "http://{{host}}/settlementEngine/mission/1",
 					"protocol": "http",
@@ -116,10 +117,55 @@
 			"response": []
 		},
 		{
+			"name": "IEX - Get all symbols",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/iex/symbols",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"iex",
+						"symbols"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IEX - Get last traded price",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/iex/lastTradedPrice?symbols=IBM",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"iex",
+						"lastTradedPrice"
+					],
+					"query": [
+						{
+							"key": "symbols",
+							"value": "IBM"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Run Trace",
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {},
 				"url": {
 					"raw": "http://{{host}}/trace",
 					"protocol": "http",
