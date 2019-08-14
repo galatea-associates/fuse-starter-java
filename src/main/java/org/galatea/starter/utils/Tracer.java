@@ -19,8 +19,7 @@ public class Tracer {
   private Tracer() {}
 
   /**
-   * Sets the externally provided request id in the trace info and in MDC for inclusion in log
-   * messages.
+   * Sets the externally provided request id in in MDC for inclusion in log messages and headers.
    *
    * @param externalRequestId The externally provided request id
    */
@@ -32,6 +31,9 @@ public class Tracer {
     MDC.put(EXTERNAL_REQUEST_ID, externalRequestId + " - ");
   }
 
+  /**
+   * Sets the internal request id in MDC for inclusion in log messages and headers.
+   */
   public static void setInternalRequestId() {
     // generate the internal request Id
     // we want positive numbers only, so use nextInt(upperBound)

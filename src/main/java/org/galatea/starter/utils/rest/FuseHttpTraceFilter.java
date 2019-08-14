@@ -24,22 +24,28 @@ import org.springframework.web.util.WebUtils;
 
 /**
  * Builds upon spring actuator's web request tracer to capture interesting audit information. We
- * capture some additional timing data as well The filter also adds these audit fields as headers
- * to the response.
+ * capture some additional timing data as well The filter also adds these audit fields as headers to
+ * the response.
  *
  * @author rbasu
  */
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
-// TODO what is this class meant to do? Why's it exist? How's it work its mojo?
 public class FuseHttpTraceFilter extends HttpTraceFilter {
 
   @NonNull
   protected final Predicate<String> pathsToSkip;
 
-  public FuseHttpTraceFilter(HttpTraceRepository repository, HttpExchangeTracer tracer,
-      Predicate<String> pathsToSkip) {
+  /**
+   * Sadly we have to write our own constructor since lombok can't call super with args.
+   *
+   * @param repository the repository where we store our trace
+   * @param pathsToSkip a predicate that will return try if we want to a skip a certain url
+   *     path
+   */
+  public FuseHttpTraceFilter(final HttpTraceRepository repository, final HttpExchangeTracer tracer,
+      final Predicate<String> pathsToSkip) {
     super(repository, tracer);
     this.pathsToSkip = pathsToSkip;
   }
@@ -50,7 +56,6 @@ public class FuseHttpTraceFilter extends HttpTraceFilter {
       throws ServletException, IOException {
 
     Tracer.setInternalRequestId();
-    Instant requestReceivedTime = Instant.now();
 
     // Skip paths that are not interesting to trace
     if (pathsToSkip.test(request.getRequestURI())) {
@@ -71,14 +76,14 @@ public class FuseHttpTraceFilter extends HttpTraceFilter {
       responseToUse = new ContentCachingResponseWrapper(response);
     }
 
-    doFilterInternalHelper(requestToUse, responseToUse, filterChain, requestReceivedTime);
+    doFilterInternalHelper(requestToUse, responseToUse, filterChain, Instant.now());
   }
 
   @SneakyThrows
   // what's this method responsible for?
   protected void doFilterInternalHelper(final HttpServletRequest request,
       final HttpServletResponse response, final FilterChain filterChain,
-      Instant requestReceivedTime) {
+      final Instant requestReceivedTime) {
 
     try {
       super.doFilterInternal(request, response, filterChain);

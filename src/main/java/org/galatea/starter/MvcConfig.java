@@ -44,11 +44,19 @@ public class MvcConfig implements WebMvcConfigurer {
         path -> path.startsWith("/trace"));
   }
 
+  /**
+   * Repository for storing trace info.
+   */
   @Bean
   public FuseHttpTraceRepository fuseHttpTraceRepository() {
     return new FuseHttpTraceRepository(new ObjectMapper());
   }
 
+  /**
+   * Object that performs the actual tracing of an HTTP exchange.
+   *
+   * @return the exchange tracer
+   */
   @Bean
   public HttpExchangeTracer httpExchangeTracer() {
     // Trace everything!

@@ -18,7 +18,7 @@ public class FuseHttpTraceRepository extends InMemoryHttpTraceRepository {
   private final ObjectMapper objectMapper;
 
   @Override
-  public void add(HttpTrace trace) {
+  public void add(final HttpTrace trace) {
     // HttpTrace has no toString, nor do its inner classes...
     try {
       log.info("Adding trace info: {}", objectMapper.writeValueAsString(trace));
