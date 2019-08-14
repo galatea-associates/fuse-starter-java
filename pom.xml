@@ -27,6 +27,7 @@
 			**/*Config.java,
 			**/*Exception.java,
 			**/FuseHttpTraceFilter.java,
+			**/FuseMessageListenerContainer.java,
 			**/Tracer.java,
 			**/Application.java
 		</sonar.coverage.exclusions>
