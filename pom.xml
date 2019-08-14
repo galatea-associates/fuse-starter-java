@@ -26,7 +26,7 @@
 			src/main/java/org/galatea/starter/entrypoint/messagecontracts/**,
 			**/*Config.java,
 			**/*Exception.java,
-			**/FuseWebRequestTraceFilter.java,
+			**/FuseHttpTraceFilter.java,
 			**/Tracer.java,
 			**/Application.java
 		</sonar.coverage.exclusions>

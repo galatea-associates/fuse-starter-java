@@ -1,6 +1,7 @@
 package org.galatea.starter.utils.jms;
 
 import java.util.function.BiConsumer;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import lombok.EqualsAndHashCode;
@@ -32,7 +33,7 @@ public class FuseMessageListenerContainer extends DefaultMessageListenerContaine
     // this is not encouraged, there may be certain circumstances where that is necessary.
     try {
       super.invokeListener(session, message);
-    } catch (Exception e) {
+    } catch (JMSException e) {
       failedMessageConsumer.accept(message, e);
     }
   }
