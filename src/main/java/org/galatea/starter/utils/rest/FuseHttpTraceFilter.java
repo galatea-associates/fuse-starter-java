@@ -33,12 +33,12 @@ import org.springframework.web.util.WebUtils;
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
 // TODO what is this class meant to do? Why's it exist? How's it work its mojo?
-public class FuseWebRequestTraceFilter extends HttpTraceFilter {
+public class FuseHttpTraceFilter extends HttpTraceFilter {
 
   @NonNull
   protected final Predicate<String> pathsToSkip;
 
-  public FuseWebRequestTraceFilter(HttpTraceRepository repository, HttpExchangeTracer tracer,
+  public FuseHttpTraceFilter(HttpTraceRepository repository, HttpExchangeTracer tracer,
       Predicate<String> pathsToSkip) {
     super(repository, tracer);
     this.pathsToSkip = pathsToSkip;

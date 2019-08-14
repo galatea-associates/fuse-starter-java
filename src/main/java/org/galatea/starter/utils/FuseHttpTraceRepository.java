@@ -13,7 +13,7 @@ import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
-public class FuseTraceRepository extends InMemoryHttpTraceRepository {
+public class FuseHttpTraceRepository extends InMemoryHttpTraceRepository {
 
   private final ObjectMapper objectMapper;
 

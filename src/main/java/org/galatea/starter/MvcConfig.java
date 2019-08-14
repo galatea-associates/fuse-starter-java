@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.galatea.starter.utils.FuseTraceRepository;
+import org.galatea.starter.utils.FuseHttpTraceRepository;
 import org.galatea.starter.utils.http.converter.SettlementMissionCsvConverter;
 import org.galatea.starter.utils.http.converter.SettlementMissionXlsxConverter;
-import org.galatea.starter.utils.rest.FuseWebRequestTraceFilter;
+import org.galatea.starter.utils.rest.FuseHttpTraceFilter;
 import org.springframework.boot.actuate.trace.http.HttpExchangeTracer;
 import org.springframework.boot.actuate.trace.http.Include;
 import org.springframework.boot.actuate.web.trace.servlet.HttpTraceFilter;
@@ -20,12 +20,12 @@ import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Slf4j
 @Configuration
 @EnableWebMvc
-public class MvcConfig extends WebMvcConfigurerAdapter {
+public class MvcConfig implements WebMvcConfigurer {
 
   public static final MediaType TEXT_CSV = new MediaType("text", "csv");
   public static final String TEXT_CSV_VALUE = "text/csv";
@@ -40,13 +40,13 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
    */
   @Bean
   public HttpTraceFilter httpTraceFilter() {
-    return new FuseWebRequestTraceFilter(fuseHttpTraceRepository(), httpExchangeTracer(),
+    return new FuseHttpTraceFilter(fuseHttpTraceRepository(), httpExchangeTracer(),
         path -> path.startsWith("/trace"));
   }
 
   @Bean
-  public FuseTraceRepository fuseHttpTraceRepository() {
-    return new FuseTraceRepository(new ObjectMapper());
+  public FuseHttpTraceRepository fuseHttpTraceRepository() {
+    return new FuseHttpTraceRepository(new ObjectMapper());
   }
 
   @Bean
@@ -59,7 +59,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
   public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {
     configurer.favorParameter(true) // give precedence to url request parameters
         .ignoreAcceptHeader(false) // enable use of the Accept header for content negotiation
-        .useJaf(false) // let's not fallback on the Java Activation Framework
+        .useRegisteredExtensionsOnly(true) // let's not fallback on the Java Activation Framework
         .defaultContentType(MediaType.APPLICATION_JSON);
     // Allow the request to have a "?format=*" query parameter as an alternative to setting the
     // Accept header
@@ -82,7 +82,6 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     converters.add(new Jaxb2RootElementHttpMessageConverter()); // XML
     converters.add(new SettlementMissionCsvConverter());
     converters.add(new SettlementMissionXlsxConverter());
-    super.configureMessageConverters(converters);
   }
 
 }
