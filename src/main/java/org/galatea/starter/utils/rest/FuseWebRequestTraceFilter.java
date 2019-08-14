@@ -1,38 +1,31 @@
 package org.galatea.starter.utils.rest;
 
-import static org.galatea.starter.utils.Tracer.addTraceInfo;
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
 import java.util.function.Predicate;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.mutable.MutableInt;
-import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.Tracer;
-import org.galatea.starter.utils.Tracer.AutoClosedTrace;
-import org.springframework.boot.actuate.trace.TraceProperties;
-import org.springframework.boot.actuate.trace.WebRequestTraceFilter;
-import org.springframework.http.HttpStatus;
+import org.slf4j.MDC;
+import org.springframework.boot.actuate.trace.http.HttpExchangeTracer;
+import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
+import org.springframework.boot.actuate.web.trace.servlet.HttpTraceFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 
 /**
  * Builds upon spring actuator's web request tracer to capture interesting audit information. We
- * capture some additional timing data as well as the request/response payload (which is missing
- * from spring's default implementation).
+ * capture some additional timing data as well The filter also adds these audit fields as headers
+ * to the response.
  *
  * @author rbasu
  */
@@ -40,44 +33,24 @@ import org.springframework.web.util.WebUtils;
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
 // TODO what is this class meant to do? Why's it exist? How's it work its mojo?
-public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
-
-  @NonNull
-  protected final Integer maxPayloadLength;
-
-  @NonNull
-  protected final FuseTraceRepository repository;
+public class FuseWebRequestTraceFilter extends HttpTraceFilter {
 
   @NonNull
   protected final Predicate<String> pathsToSkip;
 
-  public static final String REQUEST_PAYLOAD = "request-payload";
-  public static final String RESPONSE_PAYLOAD = "response-payload";
-  public static final String SPRING_TRACE_INFO = "spring-trace";
-
-  /**
-   * Sadly we have to write our own constructor since lombok can't call super with args.
-   *
-   * @param repository the respository where we store our trace
-   * @param properties any trace properties
-   * @param pathsToSkip a predicate that will return try if we want to a skip a certain url
-   *     path
-   * @param maxPayloadLength the max number of bytes of payload information that we want to
-   *     capture in the trace
-   */
-  public FuseWebRequestTraceFilter(final FuseTraceRepository repository,
-      final TraceProperties properties, final Predicate<String> pathsToSkip,
-      final Integer maxPayloadLength) {
-    super(repository, properties);
-    this.repository = repository;
+  public FuseWebRequestTraceFilter(HttpTraceRepository repository, HttpExchangeTracer tracer,
+      Predicate<String> pathsToSkip) {
+    super(repository, tracer);
     this.pathsToSkip = pathsToSkip;
-    this.maxPayloadLength = maxPayloadLength;
   }
 
   @Override
   protected void doFilterInternal(final HttpServletRequest request,
       final HttpServletResponse response, final FilterChain filterChain)
       throws ServletException, IOException {
+
+    Tracer.setInternalRequestId();
+    Instant requestReceivedTime = Instant.now();
 
     // Skip paths that are not interesting to trace
     if (pathsToSkip.test(request.getRequestURI())) {
@@ -98,55 +71,38 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
       responseToUse = new ContentCachingResponseWrapper(response);
     }
 
-    this.doFilterInternalHelper(requestToUse, responseToUse, filterChain);
-
+    doFilterInternalHelper(requestToUse, responseToUse, filterChain, requestReceivedTime);
   }
 
   @SneakyThrows
   // what's this method responsible for?
   protected void doFilterInternalHelper(final HttpServletRequest request,
-      final HttpServletResponse response, final FilterChain filterChain) {
+      final HttpServletResponse response, final FilterChain filterChain,
+      Instant requestReceivedTime) {
 
-    // Start our trace
-    try (AutoClosedTrace t = new AutoClosedTrace(repository, this.getClass())) {
-
-      // This is the default trace info that we get from spring
-      Map<String, Object> springTraceInfo = super.getTrace(request);
-
-      MutableInt status = new MutableInt(HttpStatus.INTERNAL_SERVER_ERROR.value());
-      final String traceKeyPrefix = "request";
-      try {
-        t.runAndTraceSuccess(traceKeyPrefix, () -> {
-          filterChain.doFilter(request, response);
-          status.setValue(response.getStatus());
-          if (response.getStatus() < 400) {
-            addTraceInfo(this.getClass(), traceKeyPrefix + "-success", "true");
-          } else {
-            addTraceInfo(this.getClass(), traceKeyPrefix + "-success", "false");
-          }
-          return Void.TYPE;
-        });
-      } finally {
-        enhanceTrace(springTraceInfo, request, status.intValue() == response.getStatus() ? response
-            : new CustomStatusResponseWrapper(response, status.intValue()));
-        addAuditHeaders(response);
-        updateResponse(response);
-      }
-
+    try {
+      super.doFilterInternal(request, response, filterChain);
+    } finally {
+      addAuditHeaders(requestReceivedTime.toString(), response);
+      updateResponse(response);
+      MDC.clear();
     }
   }
 
-  /**
-   * Adds audit information about the request/response to the response headers.
-   */
-  private void addAuditHeaders(final HttpServletResponse response) {
+  private void addAuditHeaders(final String requestReceivedTime,
+      final HttpServletResponse response) {
     log.info("Attempting to add audit headers");
-    logAndAddAuditHeader(response, "internalQueryId",
-        (String) Tracer.get(Tracer.class, Tracer.INTERNAL_REQUEST_ID));
-    logAndAddAuditHeader(response, "externalQueryId",
-        (String) Tracer.get(Tracer.class, Tracer.EXTERNAL_REQUEST_ID));
+    String internalQueryId = MDC.get(Tracer.INTERNAL_REQUEST_ID);
+    if (internalQueryId != null) {
+      logAndAddAuditHeader(response, "internalQueryId",
+          internalQueryId.replace(" - ", "")); // internalQueryId has a ' - ' in MDC
+    }
+    String externalQueryId = MDC.get(Tracer.EXTERNAL_REQUEST_ID);
+    if (externalQueryId != null) {
+      logAndAddAuditHeader(response, "externalQueryId",
+          externalQueryId.replace(" - ", "")); // externalQueryId has a ' - ' in MDC
+    }
 
-    String requestReceivedTime = (String) Tracer.get(Tracer.class, Tracer.TRACE_START_TIME_UTC);
     logAndAddAuditHeader(response, "requestReceivedTime", requestReceivedTime);
 
     String requestElapsedTimeMillis =
@@ -167,88 +123,14 @@ public class FuseWebRequestTraceFilter extends WebRequestTraceFilter {
     }
   }
 
-  // TODO: What's this update about the response?
+  /**
+   * Updates the response because we add headers *after* the filter has been applied. This way we
+   * ensure that any fields that were created during request handling (e.g. externalQueryId) will
+   * make it onto the response.
+   */
   private void updateResponse(final HttpServletResponse response) throws IOException {
     ContentCachingResponseWrapper responseWrapper =
         WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
     responseWrapper.copyBodyToResponse();
   }
-
-  protected void enhanceTrace(final Map<String, Object> springTraceInfo,
-      final HttpServletRequest request, final HttpServletResponse response) {
-
-    // Add additional spring info to the trace
-    super.enhanceTrace(springTraceInfo, response);
-
-    // Now we copy the spring trace info to the fuse trace
-    addTraceInfo(this.getClass(), SPRING_TRACE_INFO, springTraceInfo);
-
-    // Get the request and response payload and add to our trace. Note that the request payload is
-    // only extracted AFTER the REST method handler has completed. This is intentional and
-    // necessary.
-    // TODO: why is it necessary?
-    ContentCachingRequestWrapper requestWapper =
-        WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
-    ContentCachingResponseWrapper responseWrapper =
-        WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
-    addTraceInfo(this.getClass(), REQUEST_PAYLOAD, getPayload(requestWapper));
-    addTraceInfo(this.getClass(), RESPONSE_PAYLOAD, getPayload(responseWrapper));
-  }
-
-  protected String getPayload(final ContentCachingRequestWrapper wrapper) {
-    return wrapper == null ? "null"
-        : getPayload(wrapper.getContentAsByteArray(), wrapper.getCharacterEncoding());
-  }
-
-  protected String getPayload(final ContentCachingResponseWrapper wrapper) {
-    return wrapper == null ? "null"
-        : getPayload(wrapper.getContentAsByteArray(), wrapper.getCharacterEncoding());
-  }
-
-  protected String getPayload(final byte[] buf, final String encoding) {
-    if (buf.length == 0) {
-      return "";
-    }
-
-    int length = Math.min(buf.length, getMaxPayloadLength());
-    String payload;
-    try {
-      payload = new String(buf, 0, length, encoding);
-    } catch (UnsupportedEncodingException ex) {
-      payload = "[unknown]";
-      log.warn("Couldn't determine payload due to error", ex);
-    }
-    return payload;
-  }
-
-  /**
-   * Returns maxPayloadLength, the configured max number of bytes of payload information to capture
-   * in the trace.
-   */
-  public int getMaxPayloadLength() {
-    return maxPayloadLength;
-  }
-
-  /**
-   * Copied this one from the super class. I would have reused the super class's version but alas it
-   * was private.
-   *
-   * @author rbasu
-   */
-  private static final class CustomStatusResponseWrapper extends HttpServletResponseWrapper {
-
-    private final int status;
-
-    public CustomStatusResponseWrapper(final HttpServletResponse response, final int status) {
-      super(response);
-      this.status = status;
-    }
-
-    @Override
-    public int getStatus() {
-      return this.status;
-    }
-
-  }
-
 }

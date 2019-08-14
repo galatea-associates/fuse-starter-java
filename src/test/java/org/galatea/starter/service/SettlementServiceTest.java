@@ -44,7 +44,7 @@ public class SettlementServiceTest extends ASpringTest {
     SettlementMission testSettlementMission
         = TestDataGenerator.defaultSettlementMissionData().build();
 
-    given(this.mockSettlementMissionRpsy.findOne(id)).willReturn(testSettlementMission);
+    given(this.mockSettlementMissionRpsy.findById(id)).willReturn(Optional.of(testSettlementMission));
 
     Optional<SettlementMission> maybeRetrieved = service.findMission(id);
     assertTrue(maybeRetrieved.isPresent());
@@ -57,7 +57,7 @@ public class SettlementServiceTest extends ASpringTest {
     SettlementMission testSettlementMission
         = TestDataGenerator.defaultSettlementMissionData().id(id).build();
 
-    given(this.mockSettlementMissionRpsy.findOne(id)).willReturn(testSettlementMission);
+    given(this.mockSettlementMissionRpsy.findById(id)).willReturn(Optional.of(testSettlementMission));
 
     Optional<SettlementMission> maybeRetrieved = service.findMission(id + 1); // not the same id!!!
     assertFalse(maybeRetrieved.isPresent());
@@ -73,7 +73,7 @@ public class SettlementServiceTest extends ASpringTest {
     List<SettlementMission> settlementMissions = Arrays.asList(
         settlementMission1, settlementMission2);
 
-    given(this.mockSettlementMissionRpsy.findAll(ids)).willReturn(settlementMissions);
+    given(this.mockSettlementMissionRpsy.findAllById(ids)).willReturn(settlementMissions);
 
     List<SettlementMission> actual = service.findMissions(ids);
     assertEquals(settlementMissions, actual);
@@ -87,7 +87,7 @@ public class SettlementServiceTest extends ASpringTest {
         .build();
     List<SettlementMission> settlementMissions = Collections.singletonList(settlementMission1);
 
-    given(this.mockSettlementMissionRpsy.findAll(ids)).willReturn(settlementMissions);
+    given(this.mockSettlementMissionRpsy.findAllById(ids)).willReturn(settlementMissions);
 
     try {
       service.findMissions(ids);
@@ -106,7 +106,7 @@ public class SettlementServiceTest extends ASpringTest {
     TradeAgreement testTradeAgreement = TradeAgreement.builder().id(45L).instrument("instr-1")
         .internalParty("icp-1").externalParty("ecp-1").buySell("B").qty(4500.0).build();
 
-    given(this.mockSettlementMissionRpsy.save(Mockito.anyList()))
+    given(this.mockSettlementMissionRpsy.saveAll(Mockito.anyList()))
         .willReturn(Collections.singletonList(testSettlementMission));
 
     Set<Long> missionIds = service.spawnMissions(Collections.singletonList(testTradeAgreement));

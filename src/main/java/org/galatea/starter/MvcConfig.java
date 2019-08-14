@@ -1,5 +1,6 @@
 package org.galatea.starter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -7,12 +8,9 @@ import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.http.converter.SettlementMissionCsvConverter;
 import org.galatea.starter.utils.http.converter.SettlementMissionXlsxConverter;
 import org.galatea.starter.utils.rest.FuseWebRequestTraceFilter;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.trace.TraceProperties;
-import org.springframework.boot.actuate.trace.WebRequestTraceFilter;
-import org.springframework.boot.autoconfigure.web.ErrorAttributes;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.actuate.trace.http.HttpExchangeTracer;
+import org.springframework.boot.actuate.trace.http.Include;
+import org.springframework.boot.actuate.web.trace.servlet.HttpTraceFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -27,7 +25,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Slf4j
 @Configuration
 @EnableWebMvc
-@EnableConfigurationProperties(TraceProperties.class)
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
   public static final MediaType TEXT_CSV = new MediaType("text", "csv");
@@ -42,30 +39,20 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
    * @return the trace filter
    */
   @Bean
-  public WebRequestTraceFilter webRequestLoggingFilter(final TraceProperties traceProperties,
-      final ObjectProvider<ErrorAttributes> errorAttributesProvider,
-      @Value("${mvc.max-size-trace-payload}") final int maxTracePayloadSize) {
-
-    // Trace everything!
-    traceProperties.setInclude(Sets.newHashSet(TraceProperties.Include.values()));
-
-    WebRequestTraceFilter filter = new FuseWebRequestTraceFilter(traceRepository(), traceProperties,
-        path -> path.startsWith("/trace"), maxTracePayloadSize);
-
-    ErrorAttributes errorAttributes = errorAttributesProvider.getIfAvailable();
-    if (errorAttributes != null) {
-      filter.setErrorAttributes(errorAttributes);
-    }
-
-    return filter;
+  public HttpTraceFilter httpTraceFilter() {
+    return new FuseWebRequestTraceFilter(fuseHttpTraceRepository(), httpExchangeTracer(),
+        path -> path.startsWith("/trace"));
   }
 
-  /**
-   * Repository for storing trace info.
-   */
   @Bean
-  public FuseTraceRepository traceRepository() {
-    return new FuseTraceRepository();
+  public FuseTraceRepository fuseHttpTraceRepository() {
+    return new FuseTraceRepository(new ObjectMapper());
+  }
+
+  @Bean
+  public HttpExchangeTracer httpExchangeTracer() {
+    // Trace everything!
+    return new HttpExchangeTracer(Sets.newHashSet(Include.values()));
   }
 
   @Override
