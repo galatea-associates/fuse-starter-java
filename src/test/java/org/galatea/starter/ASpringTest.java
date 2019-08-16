@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
 @Slf4j
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 public abstract class ASpringTest {
 
   @ClassRule

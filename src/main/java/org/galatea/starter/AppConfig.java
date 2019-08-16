@@ -1,10 +1,12 @@
 package org.galatea.starter;
 
+import feign.Logger;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.aspect.LogAspect;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.service.IAgreementTransformer;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -13,6 +15,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @Configuration
 @EnableAspectJAutoProxy
 @EnableCaching
+@EnableFeignClients
 public class AppConfig {
 
   /**
@@ -32,7 +35,17 @@ public class AppConfig {
   public IAgreementTransformer agreementTransformer() {
     return agreement -> SettlementMission.builder().instrument(agreement.getInstrument())
         .externalParty(agreement.getExternalParty()).depot("DTC").qty(agreement.getQty())
-        .direction("B".equals(agreement.getBuySell()) ? "REC" : "DEL").build();
-
+        .direction("B".equals(agreement.getBuySell()) ? "REC" : "DEL").version(0L).build();
   }
+
+  /**
+   * Set the Feign log level for interfaces annotated with @FeignClient.
+   *
+   * @return the Feign log level.
+   */
+  @Bean
+  public Logger.Level logLevel() {
+    return Logger.Level.BASIC;
+  }
+
 }

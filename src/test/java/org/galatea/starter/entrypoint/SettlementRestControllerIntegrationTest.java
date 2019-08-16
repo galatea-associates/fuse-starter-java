@@ -85,10 +85,10 @@ public class SettlementRestControllerIntegrationTest {
     double quantity2 = 4600d;
 
     TradeAgreementProtoMessages messages = TradeAgreementProtoMessages.newBuilder().addMessage(
-        TradeAgreementProtoMessage.newBuilder().setId(4000L).setInstrument(instrument)
+        TradeAgreementProtoMessage.newBuilder().setInstrument(instrument)
             .setInternalParty("icp-1")
             .setExternalParty(external1).setBuySell("B").setQty(quantity1).build()).addMessage(
-        TradeAgreementProtoMessage.newBuilder().setId(40001L).setInstrument(instrument)
+        TradeAgreementProtoMessage.newBuilder().setInstrument(instrument)
             .setInternalParty("icp-2")
             .setExternalParty(external2).setBuySell("B").setQty(quantity2).build()).build();
 
@@ -98,11 +98,11 @@ public class SettlementRestControllerIntegrationTest {
 
     SettlementMissionProtoMessage.Builder b1 = SettlementMissionProtoMessage.newBuilder()
         .setDepot("DTC").setInstrument(instrument).setExternalParty(external1).setDirection("REC")
-        .setQty(quantity1);
+        .setQty(quantity1).setVersion(0L);
 
     SettlementMissionProtoMessage.Builder b2 = SettlementMissionProtoMessage.newBuilder()
         .setDepot("DTC").setInstrument(instrument).setExternalParty(external2).setDirection("REC")
-        .setQty(quantity2);
+        .setQty(quantity2).setVersion(0L);
 
     assertEquals(2, missionPaths.getSpawnedMissionPathsList().size());
 
@@ -139,9 +139,9 @@ public class SettlementRestControllerIntegrationTest {
     double quantity2 = 4600d;
 
     TradeAgreementMessages messages = TradeAgreementMessages.builder().agreement(
-        TradeAgreementMessage.builder().id(4000L).instrument(instrument).internalParty("icp-1")
+        TradeAgreementMessage.builder().instrument(instrument).internalParty("icp-1")
             .externalParty(external1).buySell("B").qty(quantity1).build()).agreement(
-        TradeAgreementMessage.builder().id(40001L).instrument(instrument).internalParty("icp-2")
+        TradeAgreementMessage.builder().instrument(instrument).internalParty("icp-2")
             .externalParty(external2).buySell("B").qty(quantity2).build()).build();
 
     SettlementResponseMessage missionPaths = fuseServer.sendTradeAgreementJson(messages);
@@ -150,11 +150,11 @@ public class SettlementRestControllerIntegrationTest {
 
     SettlementMissionMessage.SettlementMissionMessageBuilder b1 = SettlementMissionMessage.builder()
         .depot("DTC").instrument(instrument).externalParty(external1).direction("REC")
-        .qty(quantity1);
+        .qty(quantity1).version(0L);
 
     SettlementMissionMessage.SettlementMissionMessageBuilder b2 = SettlementMissionMessage.builder()
         .depot("DTC").instrument(instrument).externalParty(external2).direction("REC")
-        .qty(quantity2);
+        .qty(quantity2).version(0L);
 
     assertEquals(2, missionPaths.getSpawnedMissions().size());
 

@@ -52,4 +52,23 @@ public abstract class BaseSettlementRestController extends BaseRestController {
   protected List<SettlementMission> getMissionsInternal(final List<Long> ids) {
     return settlementService.findMissions(ids);
   }
+
+  /**
+   * Updates settlement mission, if it exists.
+   */
+  protected Optional<SettlementMission> updateMissionInternal(final Long id,
+      final SettlementMission mission) {
+    if (settlementService.missionExists(id)) {
+      return settlementService.updateMission(id, mission);
+    } else {
+      return Optional.empty();
+    }
+  }
+
+  /**
+   * Deletes a settlement mission from the settlement service.
+   */
+  protected void deleteMissionInternal(final Long id) {
+    settlementService.deleteMission(id);
+  }
 }

@@ -25,7 +25,6 @@ public class TestDataGenerator {
    */
   public static TradeAgreement.TradeAgreementBuilder defaultTradeAgreementData() {
     return TradeAgreement.builder()
-        .id(0L)
         .instrument("IBM")
         .internalParty("INT-1")
         .externalParty("EXT-1")
@@ -56,6 +55,7 @@ public class TestDataGenerator {
         .externalParty("EXT-1")
         .instrument("IBM")
         .direction("REC")
-        .qty(100d);
+        .qty(100d)
+        .version(0L);
   }
 }

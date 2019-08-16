@@ -96,6 +96,14 @@ FUSE currently shows how to read from a queue (not a topic).
 `org.galatea.starter.JmsConfig` - is the spring java config related to jms
 `org.galatea.starter.entrypoint.SettlementJmsListenerTest` - shows you how to test a jms listener.  SpringBoot fires up an embedded ActiveMQ broker for the test.  It's important to look at the mentiod annotated with @After in ASpringTest.  You'll see that we tear down the jms connection after each test to ensure isolation between tests.  This is important.
 
+## JPA
+
+- **JPA (Java Persistence API)** is a Java specification for ORM (Object Relational Mapping) which is the process of converting objects to records in a relational database and vice versa. This abstracts developers from low level SQL code as well as the need to hand-map SQL result objects to Java POJOs.
+
+- **Hibernate** is an very popular implementation of the JPA specification that FUSE uses. It also offers other features not in the JPA specification. However, usage of these features will make it more challenging to switch to another JPA provider if needed.
+
+- **Spring Data** is a layer on top of a JPA provider that acts as an abstraction for JPA repositories to reduce boilerplate code. For example, Spring Data contains the `CrudRepository` interface which provides CRUD functionality, in very few lines of code, for an entity class being managed.
+
 ## Logging
 - FUSE uses Log4j2 for logging. See the "Automatic Configuration" section of <https://logging.apache.org/log4j/2.x/manual/configuration.html> for how Log4j2 decides which log config file to use.
 - For the main configuration see: src/main/resources/log4j2.yml

@@ -784,11 +784,6 @@ public final class ProtobufMessages {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int64 id = 1;</code>
-     */
-    long getId();
-
-    /**
      * <code>string instrument = 2;</code>
      */
     java.lang.String getInstrument();
@@ -850,7 +845,6 @@ public final class ProtobufMessages {
       super(builder);
     }
     private TradeAgreementProtoMessage() {
-      id_ = 0L;
       instrument_ = "";
       internalParty_ = "";
       externalParty_ = "";
@@ -887,11 +881,6 @@ public final class ProtobufMessages {
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
-              break;
-            }
-            case 8: {
-
-              id_ = input.readInt64();
               break;
             }
             case 18: {
@@ -945,15 +934,6 @@ public final class ProtobufMessages {
       return org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.internal_static_fuse_java_starter_TradeAgreementProtoMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.class, org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.Builder.class);
-    }
-
-    public static final int ID_FIELD_NUMBER = 1;
-    private long id_;
-    /**
-     * <code>int64 id = 1;</code>
-     */
-    public long getId() {
-      return id_;
     }
 
     public static final int INSTRUMENT_FIELD_NUMBER = 2;
@@ -1113,9 +1093,6 @@ public final class ProtobufMessages {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (id_ != 0L) {
-        output.writeInt64(1, id_);
-      }
       if (!getInstrumentBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, instrument_);
       }
@@ -1139,10 +1116,6 @@ public final class ProtobufMessages {
       if (size != -1) return size;
 
       size = 0;
-      if (id_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, id_);
-      }
       if (!getInstrumentBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, instrument_);
       }
@@ -1175,8 +1148,6 @@ public final class ProtobufMessages {
       org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage other = (org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage) obj;
 
       boolean result = true;
-      result = result && (getId()
-          == other.getId());
       result = result && getInstrument()
           .equals(other.getInstrument());
       result = result && getInternalParty()
@@ -1200,9 +1171,6 @@ public final class ProtobufMessages {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + ID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getId());
       hash = (37 * hash) + INSTRUMENT_FIELD_NUMBER;
       hash = (53 * hash) + getInstrument().hashCode();
       hash = (37 * hash) + INTERNAL_PARTY_FIELD_NUMBER;
@@ -1347,8 +1315,6 @@ public final class ProtobufMessages {
       }
       public Builder clear() {
         super.clear();
-        id_ = 0L;
-
         instrument_ = "";
 
         internalParty_ = "";
@@ -1381,7 +1347,6 @@ public final class ProtobufMessages {
 
       public org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage buildPartial() {
         org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage result = new org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage(this);
-        result.id_ = id_;
         result.instrument_ = instrument_;
         result.internalParty_ = internalParty_;
         result.externalParty_ = externalParty_;
@@ -1428,9 +1393,6 @@ public final class ProtobufMessages {
 
       public Builder mergeFrom(org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage other) {
         if (other == org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage.getDefaultInstance()) return this;
-        if (other.getId() != 0L) {
-          setId(other.getId());
-        }
         if (!other.getInstrument().isEmpty()) {
           instrument_ = other.instrument_;
           onChanged();
@@ -1474,32 +1436,6 @@ public final class ProtobufMessages {
             mergeFrom(parsedMessage);
           }
         }
-        return this;
-      }
-
-      private long id_ ;
-      /**
-       * <code>int64 id = 1;</code>
-       */
-      public long getId() {
-        return id_;
-      }
-      /**
-       * <code>int64 id = 1;</code>
-       */
-      public Builder setId(long value) {
-        
-        id_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int64 id = 1;</code>
-       */
-      public Builder clearId() {
-        
-        id_ = 0L;
-        onChanged();
         return this;
       }
 
@@ -2663,6 +2599,11 @@ public final class ProtobufMessages {
      * <code>double qty = 6;</code>
      */
     double getQty();
+
+    /**
+     * <code>int64 version = 7;</code>
+     */
+    long getVersion();
   }
   /**
    * <pre>
@@ -2687,6 +2628,7 @@ public final class ProtobufMessages {
       depot_ = "";
       direction_ = "";
       qty_ = 0D;
+      version_ = 0L;
     }
 
     @java.lang.Override
@@ -2752,6 +2694,11 @@ public final class ProtobufMessages {
             case 49: {
 
               qty_ = input.readDouble();
+              break;
+            }
+            case 56: {
+
+              version_ = input.readInt64();
               break;
             }
           }
@@ -2932,6 +2879,15 @@ public final class ProtobufMessages {
       return qty_;
     }
 
+    public static final int VERSION_FIELD_NUMBER = 7;
+    private long version_;
+    /**
+     * <code>int64 version = 7;</code>
+     */
+    public long getVersion() {
+      return version_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -2962,6 +2918,9 @@ public final class ProtobufMessages {
       if (qty_ != 0D) {
         output.writeDouble(6, qty_);
       }
+      if (version_ != 0L) {
+        output.writeInt64(7, version_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -2989,6 +2948,10 @@ public final class ProtobufMessages {
       if (qty_ != 0D) {
         size += com.google.protobuf.CodedOutputStream
           .computeDoubleSize(6, qty_);
+      }
+      if (version_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(7, version_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -3020,6 +2983,8 @@ public final class ProtobufMessages {
           java.lang.Double.doubleToLongBits(getQty())
           == java.lang.Double.doubleToLongBits(
               other.getQty()));
+      result = result && (getVersion()
+          == other.getVersion());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -3045,6 +3010,9 @@ public final class ProtobufMessages {
       hash = (37 * hash) + QTY_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           java.lang.Double.doubleToLongBits(getQty()));
+      hash = (37 * hash) + VERSION_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getVersion());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -3190,6 +3158,8 @@ public final class ProtobufMessages {
 
         qty_ = 0D;
 
+        version_ = 0L;
+
         return this;
       }
 
@@ -3218,6 +3188,7 @@ public final class ProtobufMessages {
         result.depot_ = depot_;
         result.direction_ = direction_;
         result.qty_ = qty_;
+        result.version_ = version_;
         onBuilt();
         return result;
       }
@@ -3280,6 +3251,9 @@ public final class ProtobufMessages {
         }
         if (other.getQty() != 0D) {
           setQty(other.getQty());
+        }
+        if (other.getVersion() != 0L) {
+          setVersion(other.getVersion());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -3632,6 +3606,32 @@ public final class ProtobufMessages {
       public Builder clearQty() {
         
         qty_ = 0D;
+        onChanged();
+        return this;
+      }
+
+      private long version_ ;
+      /**
+       * <code>int64 version = 7;</code>
+       */
+      public long getVersion() {
+        return version_;
+      }
+      /**
+       * <code>int64 version = 7;</code>
+       */
+      public Builder setVersion(long value) {
+        
+        version_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 version = 7;</code>
+       */
+      public Builder clearVersion() {
+        
+        version_ = 0L;
         onChanged();
         return this;
       }
@@ -4300,20 +4300,20 @@ public final class ProtobufMessages {
       "\n\026ProtobufMessages.proto\022\021fuse_java_star" +
       "ter\"]\n\033TradeAgreementProtoMessages\022>\n\007me" +
       "ssage\030\001 \003(\0132-.fuse_java_starter.TradeAgr" +
-      "eementProtoMessage\"\213\001\n\032TradeAgreementPro" +
-      "toMessage\022\n\n\002id\030\001 \001(\003\022\022\n\ninstrument\030\002 \001(" +
-      "\t\022\026\n\016internal_party\030\003 \001(\t\022\026\n\016external_pa" +
-      "rty\030\004 \001(\t\022\020\n\010buy_sell\030\005 \001(\t\022\013\n\003qty\030\006 \001(\001" +
-      "\"c\n\036SettlementMissionProtoMessages\022A\n\007me" +
-      "ssage\030\001 \003(\01320.fuse_java_starter.Settleme" +
-      "ntMissionProtoMessage\"\206\001\n\035SettlementMiss" +
-      "ionProtoMessage\022\n\n\002id\030\001 \001(\003\022\022\n\ninstrumen" +
-      "t\030\002 \001(\t\022\026\n\016external_party\030\003 \001(\t\022\r\n\005depot" +
-      "\030\004 \001(\t\022\021\n\tdirection\030\005 \001(\t\022\013\n\003qty\030\006 \001(\001\"=" +
-      "\n\036SettlementResponseProtoMessage\022\033\n\023spaw" +
-      "nedMissionPaths\030\001 \003(\tBC\n/org.galatea.sta" +
-      "rter.entrypoint.messagecontractsB\020Protob" +
-      "ufMessagesb\006proto3"
+      "eementProtoMessage\"\177\n\032TradeAgreementProt" +
+      "oMessage\022\022\n\ninstrument\030\002 \001(\t\022\026\n\016internal" +
+      "_party\030\003 \001(\t\022\026\n\016external_party\030\004 \001(\t\022\020\n\010" +
+      "buy_sell\030\005 \001(\t\022\013\n\003qty\030\006 \001(\001\"c\n\036Settlemen" +
+      "tMissionProtoMessages\022A\n\007message\030\001 \003(\01320" +
+      ".fuse_java_starter.SettlementMissionProt" +
+      "oMessage\"\227\001\n\035SettlementMissionProtoMessa" +
+      "ge\022\n\n\002id\030\001 \001(\003\022\022\n\ninstrument\030\002 \001(\t\022\026\n\016ex" +
+      "ternal_party\030\003 \001(\t\022\r\n\005depot\030\004 \001(\t\022\021\n\tdir" +
+      "ection\030\005 \001(\t\022\013\n\003qty\030\006 \001(\001\022\017\n\007version\030\007 \001" +
+      "(\003\"=\n\036SettlementResponseProtoMessage\022\033\n\023" +
+      "spawnedMissionPaths\030\001 \003(\tBC\n/org.galatea" +
+      ".starter.entrypoint.messagecontractsB\020Pr" +
+      "otobufMessagesb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4338,7 +4338,7 @@ public final class ProtobufMessages {
     internal_static_fuse_java_starter_TradeAgreementProtoMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fuse_java_starter_TradeAgreementProtoMessage_descriptor,
-        new java.lang.String[] { "Id", "Instrument", "InternalParty", "ExternalParty", "BuySell", "Qty", });
+        new java.lang.String[] { "Instrument", "InternalParty", "ExternalParty", "BuySell", "Qty", });
     internal_static_fuse_java_starter_SettlementMissionProtoMessages_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_fuse_java_starter_SettlementMissionProtoMessages_fieldAccessorTable = new
@@ -4350,7 +4350,7 @@ public final class ProtobufMessages {
     internal_static_fuse_java_starter_SettlementMissionProtoMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fuse_java_starter_SettlementMissionProtoMessage_descriptor,
-        new java.lang.String[] { "Id", "Instrument", "ExternalParty", "Depot", "Direction", "Qty", });
+        new java.lang.String[] { "Id", "Instrument", "ExternalParty", "Depot", "Direction", "Qty", "Version", });
     internal_static_fuse_java_starter_SettlementResponseProtoMessage_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_fuse_java_starter_SettlementResponseProtoMessage_fieldAccessorTable = new
