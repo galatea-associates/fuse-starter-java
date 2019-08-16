@@ -23,14 +23,13 @@ public abstract class BaseRestController {
     //Proper fix requires version 2.10.0 or higher of the log4j dependencies
     //See Issue #243 for more information.
     if (requestId != null) {
-      String cleanedRequestId = null;
+      String cleanedRequestId;
       try {
         cleanedRequestId = UriUtils.encode(requestId, "ISO-8859-1");
         log.info("Request received.  Cleaned id: {}", cleanedRequestId);
       } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
-        log.error("Unable to clean requestId, uncleaned version will be used in logs");
-        log.info("Request received with id: {}", cleanedRequestId);
+        log.error("Unable to clean requestId, uncleaned version will be used in logs", e);
+        log.info("Request received with id: {}", requestId);
         cleanedRequestId = requestId;
       }
       Tracer.setExternalRequestId(cleanedRequestId);
