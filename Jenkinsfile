@@ -59,7 +59,7 @@ pipeline {
                             configs: [
                                 fileContentReplaceItemConfig(
                                     search: 'GIT_COMMIT',
-                                    replace: '${env.GIT_COMMIT}',
+                                    replace: "${env.GIT_COMMIT}",
                                     matchCount: 0)
                                 ],
                             fileEncoding: 'UTF-8',
