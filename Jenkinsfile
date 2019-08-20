@@ -58,7 +58,7 @@ pipeline {
                         fileContentReplaceConfig(
                             configs: [
                                 fileContentReplaceItemConfig(
-                                    search: '\${GIT_COMMIT}',
+                                    search: 'GIT_COMMIT',
                                     replace: '${env.GIT_COMMIT}',
                                     matchCount: 0)
                                 ],
