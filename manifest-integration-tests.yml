@@ -5,7 +5,7 @@ applications:
   - name: fuse-rest-dev-GIT_COMMIT
     memory: 768M
     instances: 1
-    path: target\fuse-starter-java-0.0.1-SNAPSHOT.jar
+    path: target/fuse-starter-java-0.0.1-SNAPSHOT.jar
     health-check-timeout: 180
     env:
       SPRING_PROFILES_ACTIVE: dev
