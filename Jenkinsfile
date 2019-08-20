@@ -72,7 +72,7 @@ pipeline {
                     cloudSpace: "development",
                     credentialsId: "PIVOTAL-WEB",
                     manifestChoice: [
-                        value: "manifest-integration-tests"
+                        manifestFile: "manifest-integration-tests.yml"
                     ],
                     pluginTimeout: "240" // default value is 120
                 )
