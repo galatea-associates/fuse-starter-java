@@ -1,7 +1,7 @@
 # Used by Jenkins when pushing to CloudFoundry
 ---
 applications:
-  # ${GIT_COMMIT} is updated by the Variables Replace plugin in Jenkins
+  # ${GIT_COMMIT} is updated by the Content Replace plugin in Jenkins
   - name: fuse-rest-dev-${GIT_COMMIT}
     memory: 768M
     instances: 1

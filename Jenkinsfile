@@ -53,21 +53,18 @@ pipeline {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
                 sh 'mvn package -DskipTests'
 
-                variableReplace(
-                	configs: [
-                		variablesReplaceConfig(
-                			configs: [
-                				variablesReplaceItemConfig(
-                					name: 'GIT_COMMIT',
-                					value: 'fuse-rest-dev-${env.GIT_COMMIT}'
-                				)
-                			],
-                			fileEncoding: 'UTF-8',
-                			filePath: 'manifest-integration-tests.yml',
-                			variablesPrefix: '${',
-                			variablesSuffix: '}'
-                   )]
-                )
+                contentReplace(
+                    configs: [
+                        fileContentReplaceConfig(
+                            configs: [
+                                fileContentReplaceItemConfig(
+                                    search: '\${GIT_COMMIT}',
+                                    replace: '${env.GIT_COMMIT}',
+                                    matchCount: 0)
+                                ],
+                            fileEncoding: 'UTF-8',
+                            filePath: 'manifest-integration-tests.yml')
+                        ])
 
                 pushToCloudFoundry(
                     target: "https://api.run.pivotal.io/",
