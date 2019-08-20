@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.Charsets;
 import org.galatea.starter.MvcConfig;
 import org.galatea.starter.domain.SettlementMission;
+import org.galatea.starter.entrypoint.ApiError;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionList;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
@@ -18,7 +19,7 @@ import org.springframework.http.converter.AbstractHttpMessageConverter;
  */
 @Slf4j
 public class SettlementMissionCsvConverter
-    extends AbstractHttpMessageConverter<SettlementMissionList> {
+    extends AbstractHttpMessageConverter<Object> {
 
   /**
    * Construct a SettlementMissionCsvConverter that supports a CSV MediaType.
@@ -38,25 +39,33 @@ public class SettlementMissionCsvConverter
     // Use .isAssignableFrom() instead of .equals() if this converter can support subclasses
     // Be careful using .isAssignableFrom(), because new subclasses may be added in the future that
     // aren't supported by the conversion logic in this converter
-    return SettlementMissionList.class.equals(clazz);
+    return SettlementMissionList.class.equals(clazz) || ApiError.class.equals(clazz);
   }
 
   @Override
-  protected SettlementMissionList readInternal(
-      final Class<? extends SettlementMissionList> clazz,
+  protected Object readInternal(
+      final Class<? extends Object> clazz,
       final HttpInputMessage inputMessage) throws IOException {
     throw new UnsupportedOperationException(
         "Reading CSV to SettlementMissionList is not supported");
   }
 
   @Override
-  protected void writeInternal(final SettlementMissionList settlementMissionList,
+  protected void writeInternal(final Object settlementMissionList,
       final HttpOutputMessage outputMessage) throws IOException {
-    log.info("Converting SettlementMissionList to CSV for HTTP response");
-    outputMessage.getBody().write(CsvSerializer.serializeToCsv(
-        settlementMissionList.getSettlementMissions(), SettlementMission.class)
-        .getBytes(Charsets.UTF_8));
-    log.info("Converted SettlementMissionList to CSV");
+    if(settlementMissionList instanceof SettlementMissionList) {
+      log.info("Converting SettlementMissionList to CSV for HTTP response");
+      outputMessage.getBody().write(CsvSerializer.serializeToCsv(
+          ((SettlementMissionList) settlementMissionList).getSettlementMissions(), SettlementMission.class)
+          .getBytes(Charsets.UTF_8));
+      log.info("Converted SettlementMissionList to CSV");
+    } else if (settlementMissionList instanceof ApiError){
+      log.info("Converting ApiError to CSV for HTTP response");
+      outputMessage.getBody().write(CsvSerializer.serializeToCsv(
+          ((ApiError)settlementMissionList), ApiError.class)
+          .getBytes(Charsets.UTF_8));
+      log.info("Converted ApiError to CSV");
+    }
   }
 
   /**
@@ -66,7 +75,7 @@ public class SettlementMissionCsvConverter
   // needed when modifying headers
   @Override
   protected void addDefaultHeaders(final HttpHeaders headers,
-      final SettlementMissionList messages,
+      final Object messages,
       final MediaType contentType) throws IOException {
     super.addDefaultHeaders(headers, messages, contentType);
     // Adding this header tells the browser to automatically download the response body
