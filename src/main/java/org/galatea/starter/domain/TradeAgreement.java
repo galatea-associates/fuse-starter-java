@@ -1,9 +1,5 @@
 package org.galatea.starter.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,12 +15,7 @@ import org.galatea.starter.utils.validation.StringEnumeration;
 @Builder
 @Data
 @Slf4j
-@Entity
 public class TradeAgreement {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  protected Long id;
 
   @NonNull
   protected String instrument;
@@ -42,5 +33,4 @@ public class TradeAgreement {
   @DecimalMin(value = "0.0", inclusive = false, message = "Quantity must be greater than 0")
   @NonNull
   protected Double qty;
-
 }

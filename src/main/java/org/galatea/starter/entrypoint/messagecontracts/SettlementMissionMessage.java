@@ -20,4 +20,5 @@ public class SettlementMissionMessage {
   protected String depot;
   protected String direction;
   protected Double qty;
+  protected Long version;
 }

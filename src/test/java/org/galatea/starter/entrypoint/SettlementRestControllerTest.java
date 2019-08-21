@@ -8,15 +8,20 @@ import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import java.io.StringWriter;
@@ -50,8 +55,10 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -261,10 +268,10 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testGetMissionsFound_CSV() throws Exception {
     SettlementMission mission1 = SettlementMission.builder()
         .id(1L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
-        .qty(100.0).build();
+        .qty(100.0).version(0L).build();
     SettlementMission mission2 = SettlementMission.builder()
         .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
-        .qty(100.0).build();
+        .qty(100.0).version(0L).build();
 
     given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
@@ -284,10 +291,10 @@ public class SettlementRestControllerTest extends ASpringTest {
   public void testGetMissionsFound_XLSX() throws Exception {
     SettlementMission mission1 = SettlementMission.builder()
         .id(1L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
-        .qty(100.0).build();
+        .qty(100.0).version(0L).build();
     SettlementMission mission2 = SettlementMission.builder()
         .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
-        .qty(100.0).build();
+        .qty(100.0).version(0L).build();
 
     given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
@@ -330,6 +337,75 @@ public class SettlementRestControllerTest extends ASpringTest {
         .andExpect(jsonPath("$.status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())))
         .andExpect(jsonPath("$.message", is("An internal application error occurred.")));
   }
+
+  @Test
+  public void testUpdateMission() throws Exception {
+    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+    settlementMission.setId(MISSION_ID_1);
+
+    when(mockSettlementService.missionExists(MISSION_ID_1))
+        .thenReturn(true);
+    when(mockSettlementService.updateMission(MISSION_ID_1, settlementMission))
+        .thenReturn(Optional.of(settlementMission));
+
+    this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .content(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testUpdateNonExistentMission() throws Exception {
+    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+
+    when(mockSettlementService.missionExists(MISSION_ID_1))
+        .thenReturn(false);
+
+    this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .content(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void testUpdateMissionWithWrongVersion() throws Exception {
+    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+    settlementMission.setId(MISSION_ID_1);
+
+    when(mockSettlementService.missionExists(MISSION_ID_1))
+        .thenReturn(true);
+
+    when(mockSettlementService.updateMission(MISSION_ID_1, settlementMission)).thenThrow(
+        ObjectOptimisticLockingFailureException.class);
+
+    this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .content(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isConflict());
+  }
+
+  @Test
+  public void testDeleteMission() throws Exception {
+    doNothing().when(mockSettlementService).deleteMission(MISSION_ID_1);
+
+    this.mvc.perform(delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testDeleteFakeMission() throws Exception {
+    doThrow(EmptyResultDataAccessException.class).when(mockSettlementService)
+        .deleteMission(MISSION_ID_1);
+
+    this.mvc.perform(delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isNotFound());
+  }
+
 
   /**
    * Verifies required audit fields are present

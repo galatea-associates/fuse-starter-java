@@ -88,4 +88,39 @@ public class SettlementService {
 
     return retrievedMissions;
   }
+
+  /**
+   * Update the mission with the given ID.
+   *
+   * @param id identifier of the mission
+   * @param mission the mission to update
+   * @return optional containing the saved mission
+   */
+  public Optional<SettlementMission> updateMission(final Long id, final SettlementMission mission) {
+    mission.setId(id);
+    SettlementMission savedMission = missionrpsy.save(mission);
+    log.info("The following mission was updated: {}", savedMission);
+    return Optional.ofNullable(savedMission);
+  }
+
+  /**
+   * Return true if a mission with the given ID exists.
+   *
+   * @param id identifier of the mission
+   * @return does a mission with the id exist?
+   */
+  public boolean missionExists(final Long id) {
+    return missionrpsy.exists(id);
+  }
+
+  /**
+   * Delete the mission by ID.
+   * This removes the mission from the cache as well.
+   *
+   * @param id identifier of the mission to delete
+   */
+  public void deleteMission(final Long id) {
+    missionrpsy.delete(id);
+    log.info("Mission with id '{}' was deleted", id);
+  }
 }

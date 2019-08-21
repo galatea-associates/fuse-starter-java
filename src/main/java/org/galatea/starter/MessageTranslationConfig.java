@@ -25,7 +25,23 @@ public class MessageTranslationConfig {
         .externalParty(mission.getExternalParty())
         .direction(mission.getDirection())
         .depot(mission.getDepot())
-        .qty(mission.getQty()).build();
+        .qty(mission.getQty())
+        .version(mission.getVersion()).build();
+  }
+
+  /**
+   * Returns a translator to convert SettlementMissionMessages to SettlementMissions.
+   */
+  @Bean
+  public ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMsgTranslator() {
+    return message -> SettlementMission.builder()
+        .id(message.getId())
+        .instrument(message.getInstrument())
+        .externalParty(message.getExternalParty())
+        .direction(message.getDirection())
+        .depot(message.getDepot())
+        .qty(message.getQty())
+        .version(message.getVersion()).build();
   }
 
   /**
@@ -34,7 +50,6 @@ public class MessageTranslationConfig {
   @Bean
   public ITranslator<TradeAgreementMessage, TradeAgreement> tradeAgreementMessageTranslator() {
     return message -> TradeAgreement.builder()
-        .id(message.getId())
         .buySell(message.getBuySell())
         .externalParty(message.getExternalParty())
         .instrument(message.getInstrument())

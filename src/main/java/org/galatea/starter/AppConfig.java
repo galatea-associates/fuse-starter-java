@@ -35,8 +35,7 @@ public class AppConfig {
   public IAgreementTransformer agreementTransformer() {
     return agreement -> SettlementMission.builder().instrument(agreement.getInstrument())
         .externalParty(agreement.getExternalParty()).depot("DTC").qty(agreement.getQty())
-        .direction("B".equals(agreement.getBuySell()) ? "REC" : "DEL").build();
-
+        .direction("B".equals(agreement.getBuySell()) ? "REC" : "DEL").version(0L).build();
   }
 
   /**
