@@ -1,8 +1,11 @@
 package org.galatea.starter.utils.rest;
 
+import static org.galatea.starter.entrypoint.BaseRestController.EXTERNAL_REQUEST_ID;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Random;
 import java.util.function.Predicate;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -13,7 +16,6 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.galatea.starter.utils.Tracer;
 import org.slf4j.MDC;
 import org.springframework.boot.actuate.trace.http.HttpExchangeTracer;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
@@ -33,6 +35,10 @@ import org.springframework.web.util.WebUtils;
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
 public class FuseHttpTraceFilter extends HttpTraceFilter {
+
+  private static final String INTERNAL_REQUEST_ID = "internal-request-id";
+
+  private static final Random QUERY_ID_GENERATOR = new Random();
 
   @NonNull
   protected final Predicate<String> pathsToSkip;
@@ -55,7 +61,17 @@ public class FuseHttpTraceFilter extends HttpTraceFilter {
       final HttpServletResponse response, final FilterChain filterChain)
       throws ServletException, IOException {
 
-    Tracer.setInternalRequestId();
+    // generate the internal request Id
+    // we want positive numbers only, so use nextInt(upperBound)
+    String internallyGeneratedId =
+        Integer.toString(QUERY_ID_GENERATOR.nextInt(Integer.MAX_VALUE));
+
+    log.debug("Created internal request id: {}", internallyGeneratedId);
+
+    // And add to MDC so it will show up in the logs
+    // The key used here must align with the key defined in the logging
+    // config's log-pattern
+    MDC.put(INTERNAL_REQUEST_ID, internallyGeneratedId + " - ");
 
     // Skip paths that are not interesting to trace
     if (pathsToSkip.test(request.getRequestURI())) {
@@ -97,12 +113,12 @@ public class FuseHttpTraceFilter extends HttpTraceFilter {
   private void addAuditHeaders(final String requestReceivedTime,
       final HttpServletResponse response) {
     log.info("Attempting to add audit headers");
-    String internalQueryId = MDC.get(Tracer.INTERNAL_REQUEST_ID);
+    String internalQueryId = MDC.get(INTERNAL_REQUEST_ID);
     if (internalQueryId != null) {
       logAndAddAuditHeader(response, "internalQueryId",
           internalQueryId.replace(" - ", "")); // internalQueryId has a ' - ' in MDC
     }
-    String externalQueryId = MDC.get(Tracer.EXTERNAL_REQUEST_ID);
+    String externalQueryId = MDC.get(EXTERNAL_REQUEST_ID);
     if (externalQueryId != null) {
       logAndAddAuditHeader(response, "externalQueryId",
           externalQueryId.replace(" - ", "")); // externalQueryId has a ' - ' in MDC
