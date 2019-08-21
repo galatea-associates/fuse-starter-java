@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import net.sf.aspect4log.Log.Level;
-import org.galatea.starter.utils.Tracer;
+import org.slf4j.MDC;
 import org.springframework.web.util.UriUtils;
 
 /**
@@ -13,6 +13,8 @@ import org.springframework.web.util.UriUtils;
 @Slf4j
 @Log(enterLevel = Level.INFO, exitLevel = Level.INFO)
 public abstract class BaseRestController {
+
+  public static final String EXTERNAL_REQUEST_ID = "external-request-id";
 
   /**
    * Adds the specified requestId to the context for this request (if not null).
@@ -26,7 +28,9 @@ public abstract class BaseRestController {
     if (requestId != null) {
       String cleanedRequestId = UriUtils.encode(requestId, "UTF-8");
       log.info("Request received.  Cleaned id: {}", cleanedRequestId);
-      Tracer.setExternalRequestId(cleanedRequestId);
+      // And add to MDC so it will show up in the logs
+      // The key used here must align with the key defined in the logging config's log-pattern
+      MDC.put(EXTERNAL_REQUEST_ID, cleanedRequestId + " - ");
     }
   }
 }

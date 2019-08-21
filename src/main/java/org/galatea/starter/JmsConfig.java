@@ -4,7 +4,6 @@ import java.util.function.BiConsumer;
 import javax.jms.ConnectionFactory;
 import javax.jms.Message;
 import lombok.extern.slf4j.Slf4j;
-import org.galatea.starter.utils.FuseTraceRepository;
 import org.galatea.starter.utils.jms.FuseJmsListenerContainerFactory;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -48,18 +47,16 @@ public class JmsConfig implements JmsListenerConfigurer {
    *
    * @param queueConnectionFactory injected by spring
    * @param configurer injected by spring
-   * @param tracerRpsy injected by spring
    * @return the factory.
    */
   @Bean
   public JmsListenerContainerFactory<DefaultMessageListenerContainer> jmsListenerContainerFactory(
       final ConnectionFactory queueConnectionFactory,
       final DefaultJmsListenerContainerFactoryConfigurer configurer,
-      final FuseTraceRepository tracerRpsy,
       final BiConsumer<Message, Exception> failedMessageConsumer) {
 
     FuseJmsListenerContainerFactory listenerFactory =
-        new FuseJmsListenerContainerFactory(tracerRpsy, failedMessageConsumer);
+        new FuseJmsListenerContainerFactory(failedMessageConsumer);
 
     // This provides all boot's default to this factory, including the message converter
     // Note that we don't use a caching connection factory due to this:
