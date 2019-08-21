@@ -42,7 +42,7 @@ public class SettlementService {
   public Set<Long> spawnMissions(@Valid final List<TradeAgreement> agreements) {
 
     // Map each agreement to a mission, collect to a list, and then same in bulk
-    Iterable<SettlementMission> savedMissions = missionrpsy.save(agreements.stream()
+    Iterable<SettlementMission> savedMissions = missionrpsy.saveAll(agreements.stream()
         .map(agr -> agreementTransformer.transform(agr)).collect(Collectors.toList()));
     log.debug("The following missions were saved: {}", savedMissions);
 
@@ -63,7 +63,7 @@ public class SettlementService {
    */
   public Optional<SettlementMission> findMission(final Long id) {
     log.info("Retrieving settlement mission with id {}", id);
-    return Optional.ofNullable(missionrpsy.findOne(id));
+    return missionrpsy.findById(id);
   }
 
   /**
@@ -74,7 +74,7 @@ public class SettlementService {
   public List<SettlementMission> findMissions(final List<Long> ids) {
     log.info("Retrieving settlement missions with ids: {}", ids);
 
-    List<SettlementMission> retrievedMissions = Lists.newArrayList(missionrpsy.findAll(ids));
+    List<SettlementMission> retrievedMissions = Lists.newArrayList(missionrpsy.findAllById(ids));
 
     // CrudRepository.findAll(Iterable ids) succeeds even if some provided IDs aren't found, so
     // if we want to alert on any not-found IDs we have to manually check
@@ -110,7 +110,7 @@ public class SettlementService {
    * @return does a mission with the id exist?
    */
   public boolean missionExists(final Long id) {
-    return missionrpsy.exists(id);
+    return missionrpsy.existsById(id);
   }
 
   /**
@@ -120,7 +120,7 @@ public class SettlementService {
    * @param id identifier of the mission to delete
    */
   public void deleteMission(final Long id) {
-    missionrpsy.delete(id);
+    missionrpsy.deleteById(id);
     log.info("Mission with id '{}' was deleted", id);
   }
 }
