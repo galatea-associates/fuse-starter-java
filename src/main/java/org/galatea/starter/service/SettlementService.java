@@ -110,7 +110,7 @@ public class SettlementService {
    * @return does a mission with the id exist?
    */
   public boolean missionExists(final Long id) {
-    return missionrpsy.exists(id);
+    return missionrpsy.existsById(id);
   }
 
   /**
@@ -120,7 +120,7 @@ public class SettlementService {
    * @param id identifier of the mission to delete
    */
   public void deleteMission(final Long id) {
-    missionrpsy.delete(id);
+    missionrpsy.deleteById(id);
     log.info("Mission with id '{}' was deleted", id);
   }
 }

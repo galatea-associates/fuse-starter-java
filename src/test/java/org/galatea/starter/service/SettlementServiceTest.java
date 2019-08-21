@@ -133,7 +133,7 @@ public class SettlementServiceTest extends ASpringTest {
   @Test
   public void testMissionExists() {
 
-    given(this.mockSettlementMissionRpsy.exists(35L))
+    given(this.mockSettlementMissionRpsy.existsById(35L))
         .willReturn(true);
 
     SettlementService service =
@@ -146,7 +146,7 @@ public class SettlementServiceTest extends ASpringTest {
   @Test
   public void testDeleteMission() {
 
-    doNothing().when(this.mockSettlementMissionRpsy).delete(35L);
+    doNothing().when(this.mockSettlementMissionRpsy).deleteById(35L);
 
     SettlementService service =
         new SettlementService(this.mockSettlementMissionRpsy, this.mockAgreementTransformer);

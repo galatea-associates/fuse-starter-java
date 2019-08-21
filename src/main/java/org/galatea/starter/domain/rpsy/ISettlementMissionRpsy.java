@@ -20,7 +20,7 @@ public interface ISettlementMissionRpsy extends CrudRepository<SettlementMission
 
   @Override
   @CacheEvict(cacheNames = "missions")
-  void delete(Long id);
+  void deleteById(Long id);
 
   /**
    * 'p0' required in key because java does not retain parameter names during compilation unless
