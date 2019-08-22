@@ -2,6 +2,8 @@
 spring:
    profiles:
       active: test
+   main:
+      allow-bean-definition-overriding: true
    datasource:
       # this maps to an in-memory database that lives within a single VM.
       # in case you want to use H2 with a file persistence or as a service
@@ -12,7 +14,7 @@ spring:
    jpa:
       hibernate:
          ddl-auto: validate
-      database-platform: org.hibernate.dialect.H2Dialect
+      database-platform: org.hibernate.dialect.MySQL5Dialect
    flyway:
      url: jdbc:h2:mem:testtest
      locations: classpath:db/migration
@@ -34,6 +36,9 @@ jms:
 
 # Set debug level logging for the IEX Client so that Feign requests and responses are logged out
 log.level.org.galatea.starter.service.IEXClient: DEBUG
+# Set info level logging for the autoconfigure package so that it doesn't print out the entire
+# CONDITIONS EVALUATION REPORT on startup
+logging.level.org.springframework.boot.autoconfigure: INFO
 
 ---
 # Test properties go here

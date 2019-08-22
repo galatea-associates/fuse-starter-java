@@ -6,7 +6,7 @@ import net.sf.aspect4log.aspect.LogAspect;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.service.IAgreementTransformer;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
