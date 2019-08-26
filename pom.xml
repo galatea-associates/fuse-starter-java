@@ -350,7 +350,6 @@
 						value seems to magically default to false -->
 					<!-- See https://stackoverflow.com/questions/6612344/prevent-unit-tests-in-maven-but-allow-integration-tests -->
 					<skipTests>${skip.surefire.tests}</skipTests>
-					<argLine>--illegal-access=permit</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -361,7 +360,6 @@
 						<include>**/*.java</include>
 					</includes>
 					<groups>org.galatea.starter.IntegrationTestCategory</groups>
-					<argLine>--illegal-access=permit</argLine>
 				</configuration>
 				<executions>
 					<execution>
