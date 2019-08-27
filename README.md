@@ -6,8 +6,19 @@ This project serves two functions:
 This readme will contain an index to features and their location in code.
 
 ## Getting Started
+### Java
+- Download OpenJDK 11. https://jdk.java.net/java-se-ri/11
+- Unzip the archive. We recommend putting it in C:\Program Files\Java. It should create a folder called "jdk-11"
+- Add a system or user variable for JAVA_HOME
+  - Navigate to Control Panel -> System -> Edit environment variables for your account
+  - Under User Variables, click New and add the path for the jdk-11 folder
+- Add JAVA_HOME to your path
+  - Edit Path under User Variables and add a new entry for %JAVA_HOME%\bin
+
 ### Eclipse
 - Import as a maven project however you like. https://www.youtube.com/watch?v=BlkgrXb3L0c is one place to start if you're at a complete loss on this step.
+- Make sure Eclipse is set up to compile to Java 11
+  - This page should have the necessary details on how to set this up: https://www.baeldung.com/eclipse-change-java-version
 - Install lombok: https://projectlombok.org/setup/eclipse.  Note if you're doing this step last because you raced ahead and nothing compiles you'll have to do some cleans and re-compiles to get lombok involved in generating all the class files.
 - Set code style settings, which will allow auto-formatting of code to match the Google style guide
   - Navigate to Window -> Preferences -> Java -> Code Style -> Formatter
@@ -25,6 +36,11 @@ This readme will contain an index to features and their location in code.
 
 ### IntelliJ
 - Import as a maven project.  A simple way to do this is to Open File and select the pom.xml.
+- Make sure IntelliJ is set up to compile to Java 11
+  - In IntelliJ navigate to File -> Settings -> Build, Execution, Deployment -> Compiler -> Java Compiler and set the target bytecode version to 11
+  - Navigate to File -> Project Structure
+    - Under "Project", make sure both Project SDK and project language level are both set to Java 11
+    - Under "Module", make sure the language level is 11
 - Install lombok: https://projectlombok.org/setup/intellij.
 - Set code style settings, which will allow auto-formatting of code to match the Google style guide
   - In IntelliJ navigate to File -> Settings -> Editor -> Code Style -> Java

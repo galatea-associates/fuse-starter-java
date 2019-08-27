@@ -11,3 +11,4 @@ applications:
       SPRING_PROFILES_ACTIVE: dev
       JAVA_OPTS: '-Dapplication.name=my-fuse-app-GIT_COMMIT -Dlog4j.configurationFile=log4j2-stdout.yml'
       JBP_CONFIG_JAVA_MAIN: '{arguments: \"--server.port=8080\" }'
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+}}'
