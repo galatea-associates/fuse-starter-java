@@ -195,6 +195,13 @@
 			<version>5.2.4</version>
 		</dependency>
 
+    <!-- Automatically connects to binded cloudfoundry services (a MySql database in this case) -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-cloudfoundry-connector</artifactId>
+      <version>2.0.6.RELEASE</version>
+    </dependency>
+
 		<!-- Lombok for tostring, hashcode, etc -->
 		<!-- See: https://projectlombok.org/ -->
 		<!-- Eclipse plugin to recognizes the Lombok annotations: http://jnb.ociweb.com/jnb/jnbJan2010.html#installation -->

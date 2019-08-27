@@ -58,6 +58,9 @@ pipeline {
                     organization: "FUSE",
                     cloudSpace: "development",
                     credentialsId: "PIVOTAL-WEB",
+                    servicesToCreate: [
+                        [name: 'fuse-mysql-local-sean', type: 'cleardb', plan: 'spark', resetService: true]
+                    ],
                     manifestChoice: [
                         value: "jenkinsConfig",
                         appName: "fuse-rest-dev-${env.GIT_COMMIT}",
