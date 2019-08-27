@@ -2,6 +2,8 @@
 spring:
    profiles:
       active: test
+   main:
+      allow-bean-definition-overriding: true
 
 mvc:
    settleMissionPath: /settlementEngine
@@ -20,6 +22,9 @@ jms:
 
 # Set debug level logging for the IEX Client so that Feign requests and responses are logged out
 log.level.org.galatea.starter.service.IEXClient: DEBUG
+# Set info level logging for the autoconfigure package so that it doesn't print out the entire
+# CONDITIONS EVALUATION REPORT on startup
+logging.level.org.springframework.boot.autoconfigure: INFO
 
 ---
 # Test properties go here

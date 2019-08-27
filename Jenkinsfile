@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Unit tests') {
             steps {
-                sh 'mvn org.jacoco:jacoco-maven-plugin:0.8.0:prepare-agent test'
+                sh 'mvn org.jacoco:jacoco-maven-plugin:0.8.2:prepare-agent test'
             }
             post {
                 always {
@@ -53,6 +53,19 @@ pipeline {
                 // for the moment just re-do all the maven phases, I tried doing just jar:jar, but it wasn't working with cloud foundry
                 sh 'mvn package -DskipTests'
 
+                contentReplace(
+                    configs: [
+                        fileContentReplaceConfig(
+                            configs: [
+                                fileContentReplaceItemConfig(
+                                    search: 'GIT_COMMIT',
+                                    replace: "${env.GIT_COMMIT}",
+                                    matchCount: 0)
+                                ],
+                            fileEncoding: 'UTF-8',
+                            filePath: 'manifest-integration-tests.yml')
+                        ])
+
                 pushToCloudFoundry(
                     target: "https://api.run.pivotal.io/",
                     organization: "FUSE",
@@ -62,15 +75,7 @@ pipeline {
                         [name: 'fuse-mysql-local-sean', type: 'cleardb', plan: 'spark', resetService: true]
                     ],
                     manifestChoice: [
-                        value: "jenkinsConfig",
-                        appName: "fuse-rest-dev-${env.GIT_COMMIT}",
-                        memory: "768",
-                        instances: "1",
-                        appPath: "target/fuse-starter-java-0.0.1-SNAPSHOT.jar",
-                        envVars: [
-                          [key: "SPRING_PROFILES_ACTIVE", value: "dev"],
-                          [key: "JAVA_OPTS", value: "-Dapplication.name=my-fuse-app-${env.GIT_COMMIT} -Dlog4j.configurationFile=log4j2-stdout.yml -Dserver.port=8080"]
-                        ]
+                        manifestFile: "manifest-integration-tests.yml"
                     ],
                     pluginTimeout: "240" // default value is 120
                 )

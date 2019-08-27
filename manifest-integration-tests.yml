@@ -1,0 +1,14 @@
+# Used by Jenkins when pushing to CloudFoundry
+---
+applications:
+  # the git commit is updated by the Content Replace plugin in Jenkins
+  - name: fuse-rest-dev-GIT_COMMIT
+    memory: 768M
+    instances: 1
+    path: target/fuse-starter-java-0.0.1-SNAPSHOT.jar
+    timeout: 180
+    env:
+      SPRING_PROFILES_ACTIVE: dev
+      JAVA_OPTS: '-Dapplication.name=my-fuse-app-GIT_COMMIT -Dlog4j.configurationFile=log4j2-stdout.yml'
+      JBP_CONFIG_JAVA_MAIN: '{arguments: \"--server.port=8080\" }'
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+}}'
