@@ -3,6 +3,8 @@ package org.galatea.starter.entrypoint;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasXPath;
+import static org.hamcrest.Matchers.is;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
@@ -11,6 +13,7 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -25,7 +28,7 @@ import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
-import org.galatea.starter.utils.rest.FuseHttpTraceFilter;
+import org.galatea.starter.testutils.TestDataGenerator;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +48,7 @@ import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConvert
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @Slf4j
-@Import({MessageTranslationConfig.class, FuseHttpTraceFilter.class})
+@Import({MessageTranslationConfig.class})
 @RunWith(JUnitParamsRunner.class)
 //@TestPropertySource(locations="classpath:application.properties")
 //@ActiveProfiles("local-test")
@@ -85,6 +88,8 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
   private JacksonTester<TradeAgreementMessages> agreementJsonTester;
 
   private JacksonTester<List<Long>> missionIdJsonTester;
+
+  private static final Long MISSION_ID_1 = 1091L;
 
   @Before
   public void setup() {
@@ -150,8 +155,6 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
   @Test
   public void testSettleAgreement_XML() throws Exception {
-    final long expectedMissionId = 1091;
-
     TradeAgreementMessages messages = TradeAgreementMessages.builder().agreement(
         TradeAgreementMessage.builder().instrument("IBM").internalParty("INT-1")
             .externalParty("EXT-1").buySell("B").qty(100d).build())
@@ -165,12 +168,12 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
     log.info("Agreement xml to post {}", xml);
 
-    List<Long> expectedMissionIds = Collections.singletonList(expectedMissionId);
+    List<Long> expectedMissionIds = Collections.singletonList(MISSION_ID_1);
 
-    String expectedXmlEntry = "/settlementEngine/mission/" + expectedMissionId;
+    String expectedXmlEntry = "/settlementEngine/mission/" + MISSION_ID_1;
 
     log.info("Expected xml response {}", expectedXmlEntry);
-    
+
     BDDMockito.given(this.mockSettlementService.spawnMissions(toTradeAgreements(messages)))
         .willReturn(Sets.newTreeSet(expectedMissionIds));
 
@@ -191,6 +194,53 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     return tradeAgreementTranslator.translate(messages);
   }
 
+  @Test
+  public void testGetMissionFound_JSON() {
+    SettlementMission mission = TestDataGenerator.defaultSettlementMissionData().build();
+    log.info("Test mission: {}", mission);
+
+    BDDMockito.given(this.mockSettlementService.findMission(MISSION_ID_1))
+        .willReturn(Optional.of(mission));
+
+    //mission.getQty needed to be converted to float in order to be properly compared to qty.  Other primitives and types (string, int, double, BigDecimal) were failing.
+    //Found answer at https://stackoverflow.com/questions/44500643/rest-assured-json-path-body-doesnt-match-doubles
+    given().
+        log().ifValidationFails().
+        accept(ContentType.JSON).
+        when().
+        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        body("id", is(mission.getId().intValue())).
+        body("externalParty", is(mission.getExternalParty())).
+        body("instrument", is(mission.getInstrument())).
+        body("direction", is(mission.getDirection())).
+        body("qty", equalTo(mission.getQty().floatValue())).
+        statusCode(200);
+  }
+
+  @Test
+  public void testGetMissionFound_XML() {
+    SettlementMission mission = TestDataGenerator.defaultSettlementMissionData().build();
+    log.info("Test mission: {}", mission);
+
+    BDDMockito.given(this.mockSettlementService.findMission(MISSION_ID_1))
+        .willReturn(Optional.of(mission));
+
+    given().
+        log().ifValidationFails().
+        accept(ContentType.XML).
+        when().
+        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        body(hasXPath("//id", is(mission.getId().toString()))).
+        body(hasXPath("//externalParty", is(mission.getExternalParty()))).
+        body(hasXPath("//instrument", is(mission.getInstrument()))).
+        body(hasXPath("//direction", is(mission.getDirection()))).
+        body(hasXPath("//qty", is(mission.getQty().toString()))).
+        statusCode(200);
+  }
 
 
   @Configuration
