@@ -177,7 +177,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         then().
         log().ifValidationFails().
         body("spawnedMissions", equalTo(expectedResponseJsonList)).
-        statusCode(200);
+        statusCode(HttpStatus.OK.value());
   }
 
   @Test
@@ -214,7 +214,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         then().
         log().ifValidationFails().
         body("settlementResponse.spawnedMission", equalTo(expectedXmlEntry)).
-        statusCode(200);
+        statusCode(HttpStatus.OK.value());
   }
 
   private List<TradeAgreement> toTradeAgreements(TradeAgreementMessages messages) {
@@ -243,7 +243,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         body("instrument", is(mission.getInstrument())).
         body("direction", is(mission.getDirection())).
         body("qty", equalTo(mission.getQty().floatValue())).
-        statusCode(200);
+        statusCode(HttpStatus.OK.value());
   }
 
   @Test
@@ -266,7 +266,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         body(hasXPath("//instrument", is(mission.getInstrument()))).
         body(hasXPath("//direction", is(mission.getDirection()))).
         body(hasXPath("//qty", is(mission.getQty().toString()))).
-        statusCode(200);
+        statusCode(HttpStatus.OK.value());
   }
 
   @Test
@@ -281,7 +281,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
         then().
         log().ifValidationFails().
-        statusCode(404);
+        statusCode(HttpStatus.NOT_FOUND.value());
   }
 
   @Test
@@ -301,7 +301,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         get("/settlementEngine/missions?ids=1,2&format=json&requestId=1234").
         then().
         log().ifValidationFails().
-        statusCode(200).
+        statusCode(HttpStatus.OK.value()).
         content(equalTo(objectMapper.writeValueAsString(new SettlementMissionList(missions))));
   }
 
@@ -321,11 +321,11 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         get("/settlementEngine/missions?ids=1,2&format=xml&requestId=1234").
         then().
         log().ifValidationFails().
-        statusCode(200).
+        statusCode(HttpStatus.OK.value()).
         contentType("application/xml").
         // In XPath, [n] has a higher precedence than //foo, meaning //foo[n] is interpreted as
         // //(foo[n]). What we actually want is (//foo)[n], so write that explicitly.
-            body(hasXPath("(//id)[1]", is(mission1.getId().toString()))).
+        body(hasXPath("(//id)[1]", is(mission1.getId().toString()))).
         body(hasXPath("(//externalParty)[1]", is(mission1.getExternalParty()))).
         body(hasXPath("(//instrument)[1]", is(mission1.getInstrument()))).
         body(hasXPath("(//direction)[1]", is(mission1.getDirection()))).
@@ -423,7 +423,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
         then().
         log().ifValidationFails().
-        statusCode(500).
+        statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value()).
         body("status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())).
         body("message", is("An internal application error occurred."));
   }
@@ -447,7 +447,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
         then().
         log().ifValidationFails().
-        statusCode(200);
+        statusCode(HttpStatus.OK.value());
   }
 
   @Test
