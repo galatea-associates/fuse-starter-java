@@ -4,7 +4,6 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static java.util.Collections.singletonList;
 import static org.galatea.starter.MvcConfig.APPLICATION_EXCEL;
 import static org.galatea.starter.MvcConfig.TEXT_CSV;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasXPath;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
@@ -71,7 +70,7 @@ import org.springframework.web.accept.ParameterContentNegotiationStrategy;
 @Slf4j
 @Import({MessageTranslationConfig.class})
 @RunWith(JUnitParamsRunner.class)
-public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationContext
+public class SettlementRestControllerTest
     extends ASpringTest {
 
   @Value("${mvc.settleMissionPath}")
@@ -167,16 +166,16 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     BDDMockito.given(this.mockSettlementService.spawnMissions(singletonList(expectedAgreement)))
         .willReturn(Sets.newTreeSet(expectedMissionIds));
 
-    given().
-        log().ifValidationFails().
-        contentType(MediaType.APPLICATION_JSON_VALUE).
-        body(agreementJson).
-        when().
-        post("/settlementEngine?requestId=1234").
-        then().
-        log().ifValidationFails().
-        body("spawnedMissions", equalTo(expectedResponseJsonList)).
-        statusCode(HttpStatus.OK.value());
+    given()
+        .log().ifValidationFails()
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .body(agreementJson)
+        .when()
+        .post("/settlementEngine?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .body("spawnedMissions", is(expectedResponseJsonList))
+        .statusCode(HttpStatus.OK.value());
   }
 
   @Test
@@ -203,17 +202,17 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     BDDMockito.given(this.mockSettlementService.spawnMissions(toTradeAgreements(messages)))
         .willReturn(Sets.newTreeSet(expectedMissionIds));
 
-    given().
-        log().ifValidationFails().
-        contentType(MediaType.APPLICATION_XML_VALUE).
-        accept(MediaType.APPLICATION_XML_VALUE).
-        body(xml).
-        when().
-        post("/settlementEngine?requestId=1234").
-        then().
-        log().ifValidationFails().
-        body("settlementResponse.spawnedMission", equalTo(expectedXmlEntry)).
-        statusCode(HttpStatus.OK.value());
+    given()
+        .log().ifValidationFails()
+        .contentType(MediaType.APPLICATION_XML_VALUE)
+        .accept(MediaType.APPLICATION_XML_VALUE)
+        .body(xml)
+        .when()
+        .post("/settlementEngine?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .body("settlementResponse.spawnedMission", is(expectedXmlEntry))
+        .statusCode(HttpStatus.OK.value());
   }
 
   private List<TradeAgreement> toTradeAgreements(TradeAgreementMessages messages) {
@@ -230,19 +229,19 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
     //mission.getQty needed to be converted to float in order to be properly compared to qty.  Other primitives and types (string, int, double, BigDecimal) were failing.
     //Found answer at https://stackoverflow.com/a/44501724
-    given().
-        log().ifValidationFails().
-        accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
-        then().
-        log().ifValidationFails().
-        body("id", is(mission.getId().intValue())).
-        body("externalParty", is(mission.getExternalParty())).
-        body("instrument", is(mission.getInstrument())).
-        body("direction", is(mission.getDirection())).
-        body("qty", equalTo(mission.getQty().floatValue())).
-        statusCode(HttpStatus.OK.value());
+    given()
+        .log().ifValidationFails()
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .body("id", is(mission.getId().intValue()))
+        .body("externalParty", is(mission.getExternalParty()))
+        .body("instrument", is(mission.getInstrument()))
+        .body("direction", is(mission.getDirection()))
+        .body("qty", is(mission.getQty().floatValue()))
+        .statusCode(HttpStatus.OK.value());
   }
 
   @Test
@@ -253,19 +252,19 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     BDDMockito.given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(mission));
 
-    given().
-        log().ifValidationFails().
-        accept(MediaType.APPLICATION_XML_VALUE).
-        when().
-        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
-        then().
-        log().ifValidationFails().
-        body(hasXPath("//id", is(mission.getId().toString()))).
-        body(hasXPath("//externalParty", is(mission.getExternalParty()))).
-        body(hasXPath("//instrument", is(mission.getInstrument()))).
-        body(hasXPath("//direction", is(mission.getDirection()))).
-        body(hasXPath("//qty", is(mission.getQty().toString()))).
-        statusCode(HttpStatus.OK.value());
+    given()
+        .log().ifValidationFails()
+        .accept(MediaType.APPLICATION_XML_VALUE)
+        .when()
+        .get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .body(hasXPath("//id", is(mission.getId().toString())))
+        .body(hasXPath("//externalParty", is(mission.getExternalParty())))
+        .body(hasXPath("//instrument", is(mission.getInstrument())))
+        .body(hasXPath("//direction", is(mission.getDirection())))
+        .body(hasXPath("//qty", is(mission.getQty().toString())))
+        .statusCode(HttpStatus.OK.value());
   }
 
   @Test
@@ -273,14 +272,14 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     BDDMockito.given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.empty());
 
-    given().
-        log().ifValidationFails().
-        accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.NOT_FOUND.value());
+    given()
+        .log().ifValidationFails()
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.NOT_FOUND.value());
   }
 
   @Test
@@ -294,14 +293,14 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     BDDMockito.given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
 
-    given().
-        log().ifValidationFails().
-        when().
-        get("/settlementEngine/missions?ids=1,2&format=json&requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.OK.value()).
-        content(equalTo(objectMapper.writeValueAsString(new SettlementMissionList(missions))));
+    given()
+        .log().ifValidationFails()
+        .when()
+        .get("/settlementEngine/missions?ids=1,2&format=json&requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.OK.value())
+        .content(is(objectMapper.writeValueAsString(new SettlementMissionList(missions))));
   }
 
   @Test
@@ -314,26 +313,26 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     BDDMockito.given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
 
-    given().
-        log().ifValidationFails().
-        when().
-        get("/settlementEngine/missions?ids=1,2&format=xml&requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.OK.value()).
-        contentType(MediaType.APPLICATION_XML_VALUE).
+    given()
+        .log().ifValidationFails()
+        .when()
+        .get("/settlementEngine/missions?ids=1,2&format=xml&requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.OK.value())
+        .contentType(MediaType.APPLICATION_XML_VALUE)
         // In XPath, [n] has a higher precedence than //foo, meaning //foo[n] is interpreted as
         // //(foo[n]). What we actually want is (//foo)[n], so write that explicitly.
-        body(hasXPath("(//id)[1]", is(mission1.getId().toString()))).
-        body(hasXPath("(//externalParty)[1]", is(mission1.getExternalParty()))).
-        body(hasXPath("(//instrument)[1]", is(mission1.getInstrument()))).
-        body(hasXPath("(//direction)[1]", is(mission1.getDirection()))).
-        body(hasXPath("(//qty)[1]", is(String.valueOf(mission1.getQty())))).
-        body(hasXPath("(//id)[2]", is(mission2.getId().toString()))).
-        body(hasXPath("(//externalParty)[2]", is(mission2.getExternalParty()))).
-        body(hasXPath("(//instrument)[2]", is(mission2.getInstrument()))).
-        body(hasXPath("(//direction)[2]", is(mission2.getDirection()))).
-        body(hasXPath("(//qty)[2]", is(String.valueOf(mission2.getQty()))));
+        .body(hasXPath("(//id)[1]", is(mission1.getId().toString())))
+        .body(hasXPath("(//externalParty)[1]", is(mission1.getExternalParty())))
+        .body(hasXPath("(//instrument)[1]", is(mission1.getInstrument())))
+        .body(hasXPath("(//direction)[1]", is(mission1.getDirection())))
+        .body(hasXPath("(//qty)[1]", is(String.valueOf(mission1.getQty()))))
+        .body(hasXPath("(//id)[2]", is(mission2.getId().toString())))
+        .body(hasXPath("(//externalParty)[2]", is(mission2.getExternalParty())))
+        .body(hasXPath("(//instrument)[2]", is(mission2.getInstrument())))
+        .body(hasXPath("(//direction)[2]", is(mission2.getDirection())))
+        .body(hasXPath("(//qty)[2]", is(String.valueOf(mission2.getQty()))));
   }
 
   @Test
@@ -350,15 +349,15 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
     String expectedCsv = readData("SettlementMissions.csv");
 
-    given().
-        log().ifValidationFails().
-        when().
-        get("/settlementEngine/missions?ids=1,2&format=csv&requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.OK.value()).
-        contentType("text/csv").
-        body(equalTo(expectedCsv));
+    given()
+        .log().ifValidationFails()
+        .when()
+        .get("/settlementEngine/missions?ids=1,2&format=csv&requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.OK.value())
+        .contentType("text/csv")
+        .body(is(expectedCsv));
   }
 
   @Test
@@ -377,16 +376,16 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
 
     MockMvcResponse response =
-    given().
-        log().ifValidationFails().
-        when().
-        get("/settlementEngine/missions?ids=1,2&format=xlsx&requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.OK.value()).
-        contentType("application/vnd.ms-excel").
-        extract().
-        response();
+    given()
+        .log().ifValidationFails()
+        .when()
+        .get("/settlementEngine/missions?ids=1,2&format=xlsx&requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.OK.value())
+        .contentType("application/vnd.ms-excel")
+        .extract()
+        .response();
 
     // Directly comparing the spreadsheet bytes fails even when the expected spreadsheet appears to
     // be an exact copy of the actual result, so instead compare the spreadsheet contents logically
@@ -397,16 +396,16 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
   public void testIncorrectlyFormattedAgreement() {
     String expectedMessage = "Incorrectly formatted message.  Please consult the documentation.";
 
-    given().
-        log().ifValidationFails().
-        contentType(MediaType.APPLICATION_JSON_VALUE).
-        body("invalidAgreementBytes").
-        when().
-        post("/settlementEngine?requestId=1234").
-        then().
-        log().ifValidationFails().
-        body("status", is(HttpStatus.BAD_REQUEST.name())).
-        body("message", is(expectedMessage));
+    given()
+        .log().ifValidationFails()
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .body("invalidAgreementBytes")
+        .when()
+        .post("/settlementEngine?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .body("status", is(HttpStatus.BAD_REQUEST.name()))
+        .body("message", is(expectedMessage));
   }
 
   @Test
@@ -415,16 +414,16 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     };
     when(mockSettlementService.findMission(MISSION_ID_1)).thenThrow(exception);
 
-    given().
-        log().ifValidationFails().
-        accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value()).
-        body("status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())).
-        body("message", is("An internal application error occurred."));
+    given()
+        .log().ifValidationFails()
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        .body("status", is(HttpStatus.INTERNAL_SERVER_ERROR.name()))
+        .body("message", is("An internal application error occurred."));
   }
 
   @Test
@@ -437,16 +436,16 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     when(mockSettlementService.updateMission(MISSION_ID_1, settlementMission))
         .thenReturn(Optional.of(settlementMission));
 
-    given().
-        log().ifValidationFails().
-        contentType(MediaType.APPLICATION_JSON_VALUE).
-        body(objectMapper.convertValue(settlementMission, JsonNode.class).toString()).
-        accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-        put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.OK.value());
+    given()
+        .log().ifValidationFails()
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .body(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.OK.value());
   }
 
   @Test
@@ -456,16 +455,16 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     when(mockSettlementService.missionExists(MISSION_ID_1))
         .thenReturn(false);
 
-    given().
-        log().ifValidationFails().
-        contentType(MediaType.APPLICATION_JSON_VALUE).
-        body(objectMapper.convertValue(settlementMission, JsonNode.class).toString()).
-        accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-        put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.NOT_FOUND.value());
+    given()
+        .log().ifValidationFails()
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .body(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.NOT_FOUND.value());
   }
 
   @Test
@@ -479,30 +478,30 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     when(mockSettlementService.updateMission(MISSION_ID_1, settlementMission)).thenThrow(
         ObjectOptimisticLockingFailureException.class);
 
-    given().
-        log().ifValidationFails().
-        contentType(MediaType.APPLICATION_JSON_VALUE).
-        body(objectMapper.convertValue(settlementMission, JsonNode.class).toString()).
-        accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-        put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.CONFLICT.value());
+    given()
+        .log().ifValidationFails()
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .body(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.CONFLICT.value());
   }
 
   @Test
   public void testDeleteMission() {
     doNothing().when(mockSettlementService).deleteMission(MISSION_ID_1);
 
-    given().
-        log().ifValidationFails().
-        accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-        delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.OK.value());
+    given()
+        .log().ifValidationFails()
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.OK.value());
   }
 
   @Test
@@ -510,14 +509,14 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     doThrow(EmptyResultDataAccessException.class).when(mockSettlementService)
         .deleteMission(MISSION_ID_1);
 
-    given().
-        log().ifValidationFails().
-        accept(MediaType.APPLICATION_JSON_VALUE).
-        when().
-        delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
-        then().
-        log().ifValidationFails().
-        statusCode(HttpStatus.NOT_FOUND.value());
+    given()
+        .log().ifValidationFails()
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.NOT_FOUND.value());
   }
 
   @Configuration
