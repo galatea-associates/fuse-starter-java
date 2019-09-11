@@ -15,7 +15,6 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import java.io.StringWriter;
@@ -170,7 +169,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
     given().
         log().ifValidationFails().
-        contentType(ContentType.JSON).
+        contentType(MediaType.APPLICATION_JSON_VALUE).
         body(agreementJson).
         when().
         post("/settlementEngine?requestId=1234").
@@ -206,8 +205,8 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
     given().
         log().ifValidationFails().
-        contentType(ContentType.XML).
-        accept(ContentType.XML).
+        contentType(MediaType.APPLICATION_XML_VALUE).
+        accept(MediaType.APPLICATION_XML_VALUE).
         body(xml).
         when().
         post("/settlementEngine?requestId=1234").
@@ -233,7 +232,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     //Found answer at https://stackoverflow.com/a/44501724
     given().
         log().ifValidationFails().
-        accept(ContentType.JSON).
+        accept(MediaType.APPLICATION_JSON_VALUE).
         when().
         get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
         then().
@@ -256,7 +255,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
     given().
         log().ifValidationFails().
-        accept(ContentType.XML).
+        accept(MediaType.APPLICATION_XML_VALUE).
         when().
         get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
         then().
@@ -276,7 +275,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
     given().
         log().ifValidationFails().
-        accept(ContentType.JSON).
+        accept(MediaType.APPLICATION_JSON_VALUE).
         when().
         get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
         then().
@@ -322,7 +321,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         then().
         log().ifValidationFails().
         statusCode(HttpStatus.OK.value()).
-        contentType("application/xml").
+        contentType(MediaType.APPLICATION_XML_VALUE).
         // In XPath, [n] has a higher precedence than //foo, meaning //foo[n] is interpreted as
         // //(foo[n]). What we actually want is (//foo)[n], so write that explicitly.
         body(hasXPath("(//id)[1]", is(mission1.getId().toString()))).
@@ -418,7 +417,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
     given().
         log().ifValidationFails().
-        accept(ContentType.JSON).
+        accept(MediaType.APPLICATION_JSON_VALUE).
         when().
         get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
         then().
@@ -442,7 +441,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         log().ifValidationFails().
         contentType(MediaType.APPLICATION_JSON_VALUE).
         body(objectMapper.convertValue(settlementMission, JsonNode.class).toString()).
-        accept(ContentType.JSON).
+        accept(MediaType.APPLICATION_JSON_VALUE).
         when().
         put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
         then().
