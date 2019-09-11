@@ -67,9 +67,9 @@ import org.springframework.web.accept.ParameterContentNegotiationStrategy;
 @Slf4j
 @Import({MessageTranslationConfig.class})
 @RunWith(JUnitParamsRunner.class)
-//@TestPropertySource(locations="classpath:application.properties")
-//@ActiveProfiles("local-test")
-public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationContext extends ASpringTest {
+public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationContext
+    extends ASpringTest {
+
   @Value("${mvc.settleMissionPath}")
   private String settleMissionPath;
 
@@ -86,21 +86,19 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
   private String updateMissionPath;
 
   @Autowired
-  ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
+  private ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
 
   @Autowired
-  ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator;
+  private ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator;
 
   @Autowired
-  ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMsgTranslator;
-
+  private ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMsgTranslator;
 
   @MockBean
   private SettlementService mockSettlementService;
 
   @Autowired
-  SettlementRestController settlementRestController;
-
+  private SettlementRestController settlementRestController;
 
   private ObjectMapper objectMapper;
 
@@ -115,32 +113,17 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
     objectMapper = new ObjectMapper();
     JacksonTester.initFields(this, objectMapper);
 
-
-//    RestAssuredMockMvc.standaloneSetup(new SettlementRestController(mockSettlementService, tradeAgreementTranslator, settlementMissionTranslator, settlementMissionMsgTranslator));
-
-    //The properties are added to settlementRestController if we create it via autowiring with the line below and
-    //@Autowired
-    //SettlementRestController settlementRestController
-    //above, but not if we're creating "new SettlementRestController..."
-
-    //If we just have:
-    //RestAssuredMockMvc.standaloneSetup(settlementRestController)
-    //here then we have problems as the properties in @PostMapping and @GetMapping in SettlementRestController cannot be found.
-    //MockMvcBuilders.standaloneSetup(...) used based on https://stackoverflow.com/a/47221283
-    //We also needed to add the same converters as we use in practice (see MvcConfig.java) as the default MockMvc converters were having problems with posts with XML bodies.  More info at https://stackoverflow.com/questions/12514285/registrer-mappingjackson2httpmessageconverter-in-spring-3-1-2-with-jaxb-annotati
-
-
-    //Required in order for the format parameter in testGetMissionsFound_XML to be interpreted.
-    //Replicates the work done by MvcConfig.configureContentNegotiation
     Map<String, MediaType> mediaTypes = new HashMap<>();
     mediaTypes.put("json", MediaType.APPLICATION_JSON);
     mediaTypes.put("xml", MediaType.APPLICATION_XML);
     mediaTypes.put("csv", TEXT_CSV);
     mediaTypes.put("xlsx", APPLICATION_EXCEL);
 
-    ParameterContentNegotiationStrategy parameterContentNegotiationStrategy = new ParameterContentNegotiationStrategy(mediaTypes);
+    ParameterContentNegotiationStrategy parameterContentNegotiationStrategy =
+        new ParameterContentNegotiationStrategy(mediaTypes);
 
-    ContentNegotiationManager manager = new ContentNegotiationManager(parameterContentNegotiationStrategy);
+    ContentNegotiationManager manager =
+        new ContentNegotiationManager(parameterContentNegotiationStrategy);
 
     RestAssuredMockMvc.standaloneSetup(
         MockMvcBuilders.standaloneSetup(settlementRestController).
@@ -150,10 +133,9 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
             addPlaceholderValue("mvc.getMissionsPath", getMissionsPath).
             addPlaceholderValue("mvc.getMissionPath", getMissionPath).
             setContentNegotiationManager(manager).
-            setMessageConverters(new MappingJackson2HttpMessageConverter(), new Jaxb2RootElementHttpMessageConverter()).
+            setMessageConverters(new MappingJackson2HttpMessageConverter(),
+                new Jaxb2RootElementHttpMessageConverter()).
             setControllerAdvice(new RestExceptionHandler()));
-
-
   }
 
   @Test
@@ -241,7 +223,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         .willReturn(Optional.of(mission));
 
     //mission.getQty needed to be converted to float in order to be properly compared to qty.  Other primitives and types (string, int, double, BigDecimal) were failing.
-    //Found answer at https://stackoverflow.com/questions/44500643/rest-assured-json-path-body-doesnt-match-doubles
+    //Found answer at https://stackoverflow.com/a/44501724
     given().
         log().ifValidationFails().
         accept(ContentType.JSON).
@@ -282,7 +264,8 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
   @Test
   public void testGetMissionNotFound() {
-    BDDMockito.given(this.mockSettlementService.findMission(MISSION_ID_1)).willReturn(Optional.empty());
+    BDDMockito.given(this.mockSettlementService.findMission(MISSION_ID_1))
+        .willReturn(Optional.empty());
 
     given().
         log().ifValidationFails().
@@ -335,7 +318,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         contentType("application/xml").
         // In XPath, [n] has a higher precedence than //foo, meaning //foo[n] is interpreted as
         // //(foo[n]). What we actually want is (//foo)[n], so write that explicitly.
-        body(hasXPath("(//id)[1]", is(mission1.getId().toString()))).
+            body(hasXPath("(//id)[1]", is(mission1.getId().toString()))).
         body(hasXPath("(//externalParty)[1]", is(mission1.getExternalParty()))).
         body(hasXPath("(//instrument)[1]", is(mission1.getInstrument()))).
         body(hasXPath("(//direction)[1]", is(mission1.getDirection()))).
@@ -383,7 +366,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
   @Test
   public void testUpdateMission() {
-    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+    SettlementMission settlementMission = TestDataGenerator.defaultSettlementMissionData().build();
     settlementMission.setId(MISSION_ID_1);
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
@@ -405,7 +388,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
   @Test
   public void testUpdateNonExistentMission() {
-    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+    SettlementMission settlementMission = TestDataGenerator.defaultSettlementMissionData().build();
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
         .thenReturn(false);
@@ -424,7 +407,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
 
   @Test
   public void testUpdateMissionWithWrongVersion() {
-    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+    SettlementMission settlementMission = TestDataGenerator.defaultSettlementMissionData().build();
     settlementMission.setId(MISSION_ID_1);
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
@@ -477,9 +460,11 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
   @Configuration
   @Import(SettlementRestController.class)
   static class PropertyConfig {
+
     @Bean
     PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
-      PropertyPlaceholderConfigurer propertyPlaceholderConfigurer =  new PropertyPlaceholderConfigurer();
+      PropertyPlaceholderConfigurer propertyPlaceholderConfigurer =
+          new PropertyPlaceholderConfigurer();
       propertyPlaceholderConfigurer.setLocation(new ClassPathResource("application.properties"));
       return propertyPlaceholderConfigurer;
     }
