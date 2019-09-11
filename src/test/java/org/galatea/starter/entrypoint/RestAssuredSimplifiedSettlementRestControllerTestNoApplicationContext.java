@@ -77,11 +77,13 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
   @Autowired
   ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMsgTranslator;
 
+
   @MockBean
   private SettlementService mockSettlementService;
 
   @Autowired
   SettlementRestController settlementRestController;
+
 
   private ObjectMapper objectMapper;
 
@@ -95,6 +97,7 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
   public void setup() {
     objectMapper = new ObjectMapper();
     JacksonTester.initFields(this, objectMapper);
+
 
 //    RestAssuredMockMvc.standaloneSetup(new SettlementRestController(mockSettlementService, tradeAgreementTranslator, settlementMissionTranslator, settlementMissionMsgTranslator));
 
@@ -115,7 +118,8 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
             addPlaceholderValue("mvc.updateMissionPath", updateMissionPath).
             addPlaceholderValue("mvc.getMissionsPath", getMissionsPath).
             addPlaceholderValue("mvc.getMissionPath", getMissionPath).
-            setMessageConverters(new MappingJackson2HttpMessageConverter(), new Jaxb2RootElementHttpMessageConverter()));
+            setMessageConverters(new MappingJackson2HttpMessageConverter(), new Jaxb2RootElementHttpMessageConverter()).
+            setControllerAdvice(new RestExceptionHandler()));
   }
 
   @Test
@@ -240,6 +244,20 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         body(hasXPath("//direction", is(mission.getDirection()))).
         body(hasXPath("//qty", is(mission.getQty().toString()))).
         statusCode(200);
+  }
+
+  @Test
+  public void testGetMissionNotFound() {
+    BDDMockito.given(this.mockSettlementService.findMission(MISSION_ID_1)).willReturn(Optional.empty());
+
+    given().
+        log().ifValidationFails().
+        accept(ContentType.JSON).
+        when().
+        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(404);
   }
 
 
