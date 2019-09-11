@@ -1,0 +1,28 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Unit Tests" type="JUnit" factoryName="JUnit">
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+      <pattern>
+        <option name="PATTERN" value="org.galatea.starter.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <module name="fuse-starter-java" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <option name="PACKAGE_NAME" value="org.galatea.starter" />
+    <option name="MAIN_CLASS_NAME" value="org.galatea.starter.UnitTestRunner" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="class" />
+    <option name="VM_PARAMETERS" value="-Dapplication.name=my-fuse-app -Dserver.port=8080 -Dapplication.log-dir=logs -Dapplication.log-archive-root-dir=logs/archive" />
+    <option name="PARAMETERS" value="" />
+    <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+    <option name="ENV_VARIABLES" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <option name="TEST_SEARCH_SCOPE">
+      <value defaultName="singleModule" />
+    </option>
+    <envs />
+    <patterns />
+    <method />
+  </configuration>
+</component>

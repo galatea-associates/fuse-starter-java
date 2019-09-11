@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST Controller that listens to http endpoints and allows the caller to send text to be
- * processed
+ * processed.
  */
 @RequiredArgsConstructor
 @Slf4j
@@ -25,13 +25,14 @@ public class HalRestController extends BaseRestController {
   HalService halService;
 
   /**
-   * Send the received text to the HalService to be processed and send the result out
+   * Send the received text to the HalService to be processed and send the result out.
    */
   // @GetMapping to link http GET request to this method
   // @RequestParam to take a parameter from the url
   @GetMapping(value = "${webservice.halpath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public String halEndpoint(@RequestParam(value = "text") String text,
-      @RequestParam(value = "requestId", required = false) String requestId) {
+  public String halEndpoint(
+      @RequestParam(value = "text") final String text,
+      @RequestParam(value = "requestId", required = false) final String requestId) {
     processRequestId(requestId);
     return halService.processText(text);
   }

@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * A centralized REST handler that intercepts exceptions thrown by controller calls, enabling a
  * custom response to be returned.
  *
- * The returned ResponseEntity body object will be serialised into JSON (hence the need for the
+ * <p>The returned ResponseEntity body object will be serialised into JSON (hence the need for the
  * ApiError wrapper class).
  */
 @ControllerAdvice
@@ -63,7 +64,16 @@ public class RestExceptionHandler {
     return buildResponseEntity(error);
   }
 
-  private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
+  @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+  protected ResponseEntity<Object> handleOptimisticLockException(
+      final ObjectOptimisticLockingFailureException exception) {
+    log.debug("Outdated input data sent", exception);
+
+    ApiError error = new ApiError(HttpStatus.CONFLICT, exception.toString());
+    return buildResponseEntity(error);
+  }
+
+  private ResponseEntity<Object> buildResponseEntity(final ApiError apiError) {
     return new ResponseEntity<>(apiError, apiError.getStatus());
   }
 

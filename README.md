@@ -6,9 +6,27 @@ This project serves two functions:
 This readme will contain an index to features and their location in code.
 
 ## Getting Started
+### Java
+- Download OpenJDK 11. https://jdk.java.net/java-se-ri/11
+- Unzip the archive. We recommend putting it in C:\Program Files\Java. It should create a folder called "jdk-11"
+- Add a system or user variable for JAVA_HOME
+  - Navigate to Control Panel -> System -> Edit environment variables for your account
+  - Under User Variables, click New and add the path for the jdk-11 folder
+- Add JAVA_HOME to your path
+  - Edit Path under User Variables and add a new entry for %JAVA_HOME%\bin
+
 ### Eclipse
 - Import as a maven project however you like. https://www.youtube.com/watch?v=BlkgrXb3L0c is one place to start if you're at a complete loss on this step.
+- Make sure Eclipse is set up to compile to Java 11
+  - This page should have the necessary details on how to set this up: https://www.baeldung.com/eclipse-change-java-version
 - Install lombok: https://projectlombok.org/setup/eclipse.  Note if you're doing this step last because you raced ahead and nothing compiles you'll have to do some cleans and re-compiles to get lombok involved in generating all the class files.
+- Set code style settings, which will allow auto-formatting of code to match the Google style guide
+  - Navigate to Window -> Preferences -> Java -> Code Style -> Formatter
+  - Click Import and select <project_directory>/style/eclipse-java-google-style.xml
+  - Navigate to Window -> Preferences -> Java -> Code Style -> Organize Imports
+  - Click Import and select <project_directory>/style/eclipse-java-google-style.importorder
+  - Navigate to Window -> Preferences -> Java -> Editor -> Save Actions
+  - Select the "Perform the selected actions on save", "Format source code", "Format edited lines", and "Organize imports" options
 - Run stuff:
   - src/main/java/org/galatea/starter/Application.java -> r-click -> run as Java Application.  This will start a jms listener and REST services.  Note, there is an eclipse .launch file provided which configures some VM and Program args.  
     - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
@@ -18,19 +36,23 @@ This readme will contain an index to features and their location in code.
 
 ### IntelliJ
 - Import as a maven project.  A simple way to do this is to Open File and select the pom.xml.
+- Make sure IntelliJ is set up to compile to Java 11
+  - In IntelliJ navigate to File -> Settings -> Build, Execution, Deployment -> Compiler -> Java Compiler and set the target bytecode version to 11
+  - Navigate to File -> Project Structure
+    - Under "Project", make sure both Project SDK and project language level are both set to Java 11
+    - Under "Module", make sure the language level is 11
 - Install lombok: https://projectlombok.org/setup/intellij.
-- Download the [IntelliJ Google Java Style](https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml) file
-  - In IntelliJ Navigate to File -> Settings -> Editor -> Code Style -> Java
-  - Next to Scheme click the settings icon
-  - Import Scheme
-  - IntelliJ Idea Code Style as XML
-  - Choose the downloaded file and click OK
+- Set code style settings, which will allow auto-formatting of code to match the Google style guide
+  - In IntelliJ navigate to File -> Settings -> Editor -> Code Style -> Java
+  - Next to Scheme click the settings icon -> Import Scheme -> IntelliJ Idea code style XML
+  - Choose <project_directory>/style/intellij-java-google-style.xml, and hit OK a few times
 - Run stuff:
-  - src/main/java/org/galatea/starter/Application.java -> r-click -> Run Application.main().  This will start a jms listener and REST services.  Note, there is a supplied Run Configurations for this class in .idea/runConfigurations which sets up some VM and Program args for this class.  If IntelliJ didn't automatically find them you may have to manually set them.
-    - Note, logs will be written to C:/Users/your-user-name/logs and will not be written to stdout as is generally appropriate in a deployed setting.
+  - FUSE has some IntelliJ run configurations checked into the repository under .idea/runConfigurations. These run configs should be automatically imported by IntelliJ and listed in a drop-down in the top-right of the screen. Next to the drop-down are buttons to run the selected run configuration, to run in debug mode, or to run with coverage measurement. If the run configs are automatically found, they may need to be manually imported.
+  - To run FUSE, use the "Application" run config.  This will start a jms listener and REST services.
+    - Note, logs will be written to <project_directory>/logs and will not be written to stdout as is generally appropriate in a cloud-deployed setting. See Logging section for more info.
     - Note, the server port on which the application runs is set via program argument in the run configuration, --server.port=8080.  If you need to change which port to run on, change the argument in the run configuration.
-  - src/test/java/org/galatea/starter/UnitTestRunner.java -> r-click -> run UnitTestRunner to run just the unit tests.
-  - src/test/java/org/galatea/starter/AllTestRunner.java -> r-click -> run AllTestRunner to run the unit and integration tests.
+  - To run unit tests, use the "Unit Tests" run config. See Testing section below for more info.
+  - To validate code style, use the "Checkstyle" run config.
 
 ### A note on spring profiles
 - The project comes with support for 3 spring profiles:
@@ -90,9 +112,18 @@ FUSE currently shows how to read from a queue (not a topic).
 `org.galatea.starter.JmsConfig` - is the spring java config related to jms
 `org.galatea.starter.entrypoint.SettlementJmsListenerTest` - shows you how to test a jms listener.  SpringBoot fires up an embedded ActiveMQ broker for the test.  It's important to look at the mentiod annotated with @After in ASpringTest.  You'll see that we tear down the jms connection after each test to ensure isolation between tests.  This is important.
 
+## JPA
+
+- **JPA (Java Persistence API)** is a Java specification for ORM (Object Relational Mapping) which is the process of converting objects to records in a relational database and vice versa. This abstracts developers from low level SQL code as well as the need to hand-map SQL result objects to Java POJOs.
+
+- **Hibernate** is an very popular implementation of the JPA specification that FUSE uses. It also offers other features not in the JPA specification. However, usage of these features will make it more challenging to switch to another JPA provider if needed.
+
+- **Spring Data** is a layer on top of a JPA provider that acts as an abstraction for JPA repositories to reduce boilerplate code. For example, Spring Data contains the `CrudRepository` interface which provides CRUD functionality, in very few lines of code, for an entity class being managed.
+
 ## Logging
-- For the main configuration see: src/main/resources/log4j2.yml 
-- For configuring logging to the console and selectively enabling debug logging for local testing see: src/test/resources/log4j2-debug.yml 
+- FUSE uses Log4j2 for logging. See the "Automatic Configuration" section of <https://logging.apache.org/log4j/2.x/manual/configuration.html> for how Log4j2 decides which log config file to use.
+- For the main configuration see: src/main/resources/log4j2.yml
+- For configuring logging to the console and selectively enabling debug logging for local testing see: src/test/resources/log4j2-test.yml
 - For required dependencies see: pom.xml
 - For creation of internal request id see: Tracer.java
 - For creation of external request id for Rest requests see: SettlementRestController.java
@@ -115,7 +146,7 @@ We often struggle with the terms unit vs integration test.  For the purposes of 
 To run the FUSE unit tests:
 - **Eclipse**: r-click 'Run As -> JUnit Test' on src/test/java/org/galatea/starter/UnitTestRunner
 - **command line**: Run '$>mvn test'
-- **IntelliJ**: TBD 
+- **IntelliJ**: Run "Unit Tests" run configuration 
 
 Mocking is a good way to unit test (keeping in mind that your mock needs to be used in conjuction with a integration test).  FUSE has plenty of examples of how to use @MockBean.  See `org.galatea.starter.entrypoint.SettlementJmsListenerTest` and `org.galatea.starter.entrypoint.SettlementRestControllerTest` for some examples of how to mock.  Both of those tests mock out the settlement service using `given(...)` or `verify(...)` 
 

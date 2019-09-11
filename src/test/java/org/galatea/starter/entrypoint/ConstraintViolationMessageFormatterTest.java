@@ -4,13 +4,11 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.Test;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.junit.Test;
 
 public class ConstraintViolationMessageFormatterTest {
 

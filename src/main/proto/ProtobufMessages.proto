@@ -19,7 +19,6 @@ message TradeAgreementProtoMessages {
 
 /* defines the message format for trade agreements */
 message TradeAgreementProtoMessage {
-  int64 id = 1;
   string instrument = 2;
   string internal_party = 3;
   string external_party = 4;
@@ -39,6 +38,7 @@ message SettlementMissionProtoMessage {
   string depot = 4;
   string direction = 5;
   double qty = 6;
+  int64 version = 7;
 }
 
 message SettlementResponseProtoMessage {

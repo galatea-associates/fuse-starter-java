@@ -18,11 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 @Data
 @Slf4j
-@XmlRootElement(name="settlementResponse")
+@XmlRootElement(name = "settlementResponse")
 @XmlAccessorType(XmlAccessType.FIELD) // required if using lombok to avoid duplicate properties
 public class SettlementResponseMessage {
 
   @Singular
-  @XmlElement(name="spawnedMission")
+  @XmlElement(name = "spawnedMission")
   protected List<String> spawnedMissions;
 }

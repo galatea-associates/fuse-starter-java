@@ -1,0 +1,3 @@
+id,instrument,externalParty,depot,direction,qty,version
+1,ABC,EXT-1,DEPOT-1,REC,100.0,0
+2,ABC,EXT-1,DEPOT-1,REC,100.0,0

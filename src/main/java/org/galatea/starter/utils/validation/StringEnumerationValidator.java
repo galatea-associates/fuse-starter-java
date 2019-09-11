@@ -3,7 +3,6 @@ package org.galatea.starter.utils.validation;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 

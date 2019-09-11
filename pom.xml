@@ -12,16 +12,26 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
+		<jaxb.api.version>2.3.1</jaxb.api.version>
+		<!-- VM and application args used during maven steps, e.g. mvn test -->
+		<!-- Use log config that writes to stdout so that application logs during tests show up in Jenkins build logs -->
 		<argLine>
 			-Dapplication.name=${project.artifactId}
-			-Dapplication.log-dir=target/logs
-			-Dapplication.log-archive-root-dir=target/logs/archive
-			-Dlog4j.configurationFile=log4j2.yml,log4j2-debug.yml
+			-Dlog4j.configurationFile=log4j2-test.yml
 			-Dserver.port=8080
 		</argLine>
 		<sonar.exclusions>**/ProtobufMessages.java</sonar.exclusions>
-		<sonar.coverage.exclusions>**/FuseWebRequestTraceFilter.java,**/SettlementMission.java</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>
+			src/main/java/org/galatea/starter/domain/**,
+			src/main/java/org/galatea/starter/entrypoint/messagecontracts/**,
+			**/*Config.java,
+			**/*Exception.java,
+			**/FuseHttpTraceFilter.java,
+			**/FuseMessageListenerContainer.java,
+			**/Tracer.java,
+			**/Application.java
+		</sonar.coverage.exclusions>
 		<!-- Allow us to skip Unit Tests only, if need be, with -Dskip.surefire.tests, but retain the skip all tests functionality of -DskipTests -->
 		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
 	</properties>
@@ -29,9 +39,9 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.9.RELEASE</version>
+		<version>2.1.0.RELEASE</version>
 	</parent>
-	
+
 	<dependencies>
 		<!-- Spring boot starter -->
 		<dependency>
@@ -54,8 +64,8 @@
 
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-feign</artifactId>
-			<version>1.4.4.RELEASE</version>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<version>2.0.1.RELEASE</version>
 		</dependency>
 
 		<!-- Required for log4j to process log4j2.yml -->
@@ -84,6 +94,12 @@
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-broker</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Spring boot web for rest services -->
@@ -135,16 +151,54 @@
 			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
 
+		<!-- Converting between POJOs and CSV -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-csv</artifactId>
+			<version>2.8.8</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
-			<version>2.7.2</version>
+			<version>2.9.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.9.9</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.7.2</version>
+			<version>2.9.9.2</version>
+		</dependency>
+
+		<!-- JAXB - converting between POJOs and XML -->
+		<dependency>
+			<groupId>com.sun.activation</groupId>
+			<artifactId>javax.activation</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>${jaxb.api.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>${jaxb.api.version}</version>
 		</dependency>
 
 		<!-- Enable production-ready features with actuator -->
@@ -197,6 +251,18 @@
 			<version>2.0.1.Final</version>
 		</dependency>
 
+		<!-- Excel spreadsheet reading and writing -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+
 		<!-- Ehcache for caching. Having ehcache.xml in src/main/resources tells SpringBoot to use EhCache as the caching implementation for @Cacheable -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -207,14 +273,14 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.3.13.RELEASE</version>
+			<version>5.1.2.RELEASE</version>
 		</dependency>
 
 		<!-- Support for Ehcache and others -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>4.3.13.RELEASE</version>
+			<version>5.1.2.RELEASE</version>
 		</dependency>
 
     <dependency>
@@ -232,6 +298,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- WireMock import for stubbing external REST services, see IexRestControllerTest.java -->
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-jre8</artifactId>
+			<version>2.24.1</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Useful for waiting for an async task to complete -->
@@ -256,6 +329,14 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<extensions>
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>1.6.1</version>
+			</extension>
+		</extensions>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -264,12 +345,23 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.17</version>
+				<version>3.1.0</version>
 				<configuration>
-					<configLocation>google_checks.xml</configLocation>
+					<configLocation>style/google_checks_modified.xml</configLocation>
 					<violationSeverity>warning</violationSeverity>
-					<consoleOutput>true</consoleOutput>
+					<excludes>**/ProtobufMessages.java</excludes>
 				</configuration>
+				<executions>
+					<execution>
+						<!-- Run checkstyle as part of the validate phase -->
+						<phase>validate</phase>
+						<!-- See https://maven.apache.org/plugins/maven-checkstyle-plugin/plugin-info.html
+						     for the different checkstyle goals-->
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -299,6 +391,28 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.xolstice.maven.plugins</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<version>0.6.1</version>
+				<configuration>
+					<protocArtifact>
+						com.google.protobuf:protoc:3.3.0:exe:${os.detected.classifier}
+					</protocArtifact>
+					<pluginId>grpc-java</pluginId>
+					<pluginArtifact>
+						io.grpc:protoc-gen-grpc-java:1.4.0:exe:${os.detected.classifier}
+					</pluginArtifact>
+				</configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>compile-custom</goal>
+            </goals>
+          </execution>
+        </executions>
 			</plugin>
 		</plugins>
 	</build>
