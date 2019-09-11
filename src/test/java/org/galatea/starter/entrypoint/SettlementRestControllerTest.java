@@ -1,86 +1,108 @@
 package org.galatea.starter.entrypoint;
 
-
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.galatea.starter.MvcConfig.APPLICATION_EXCEL;
+import static org.galatea.starter.MvcConfig.TEXT_CSV;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasXPath;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import io.restassured.module.mockmvc.response.MockMvcResponse;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import junitparams.FileParameters;
 import junitparams.JUnitParamsRunner;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.MessageTranslationConfig;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionList;
+import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.testutils.TestDataGenerator;
 import org.galatea.starter.testutils.XlsxComparator;
+import org.galatea.starter.utils.http.converter.SettlementMissionCsvConverter;
+import org.galatea.starter.utils.http.converter.SettlementMissionXlsxConverter;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.accept.ContentNegotiationManager;
+import org.springframework.web.accept.ParameterContentNegotiationStrategy;
 
-@RequiredArgsConstructor
 @Slf4j
-// We don't load the entire spring application context for this test.
-@WebMvcTest(SettlementRestController.class)
-// Import Beans from Configuration, enabling them to be Autowired
 @Import({MessageTranslationConfig.class})
-// Use this runner since we want to parameterize certain tests.
-// See runner's javadoc for more usage.
 @RunWith(JUnitParamsRunner.class)
-public class SettlementRestControllerTest extends ASpringTest {
+public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationContext
+    extends ASpringTest {
+
+  @Value("${mvc.settleMissionPath}")
+  private String settleMissionPath;
+
+  @Value("${mvc.getMissionPath}")
+  private String getMissionPath;
+
+  @Value("${mvc.getMissionsPath}")
+  private String getMissionsPath;
+
+  @Value("${mvc.deleteMissionPath}")
+  private String deleteMissionPath;
+
+  @Value("${mvc.updateMissionPath}")
+  private String updateMissionPath;
 
   @Autowired
-  ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
+  private ITranslator<TradeAgreementMessages, List<TradeAgreement>> tradeAgreementTranslator;
 
   @Autowired
-  private MockMvc mvc;
+  private ITranslator<SettlementMission, SettlementMissionMessage> settlementMissionTranslator;
+
+  @Autowired
+  private ITranslator<SettlementMissionMessage, SettlementMission> settlementMissionMsgTranslator;
 
   @MockBean
   private SettlementService mockSettlementService;
+
+  @Autowired
+  private SettlementRestController settlementRestController;
 
   private ObjectMapper objectMapper;
 
@@ -88,13 +110,38 @@ public class SettlementRestControllerTest extends ASpringTest {
 
   private JacksonTester<List<Long>> missionIdJsonTester;
 
-
   private static final Long MISSION_ID_1 = 1091L;
 
   @Before
   public void setup() {
     objectMapper = new ObjectMapper();
     JacksonTester.initFields(this, objectMapper);
+
+    Map<String, MediaType> mediaTypes = new HashMap<>();
+    mediaTypes.put("json", MediaType.APPLICATION_JSON);
+    mediaTypes.put("xml", MediaType.APPLICATION_XML);
+    mediaTypes.put("csv", TEXT_CSV);
+    mediaTypes.put("xlsx", APPLICATION_EXCEL);
+
+    ParameterContentNegotiationStrategy parameterContentNegotiationStrategy =
+        new ParameterContentNegotiationStrategy(mediaTypes);
+
+    ContentNegotiationManager manager =
+        new ContentNegotiationManager(parameterContentNegotiationStrategy);
+
+    RestAssuredMockMvc.standaloneSetup(
+        MockMvcBuilders.standaloneSetup(settlementRestController).
+            addPlaceholderValue("mvc.settleMissionPath", settleMissionPath).
+            addPlaceholderValue("mvc.deleteMissionPath", deleteMissionPath).
+            addPlaceholderValue("mvc.updateMissionPath", updateMissionPath).
+            addPlaceholderValue("mvc.getMissionsPath", getMissionsPath).
+            addPlaceholderValue("mvc.getMissionPath", getMissionPath).
+            setContentNegotiationManager(manager).
+            setMessageConverters(new MappingJackson2HttpMessageConverter(),
+                new Jaxb2RootElementHttpMessageConverter(),
+                new SettlementMissionCsvConverter(),
+                new SettlementMissionXlsxConverter()).
+            setControllerAdvice(new RestExceptionHandler()));
   }
 
   @Test
@@ -117,22 +164,23 @@ public class SettlementRestControllerTest extends ASpringTest {
     TradeAgreementMessages agreementMessages = agreementJsonTester.parse(agreementJson).getObject();
     log.info("Agreement objects that the service will expect {}", agreementMessages);
 
-    given(this.mockSettlementService.spawnMissions(singletonList(expectedAgreement)))
+    BDDMockito.given(this.mockSettlementService.spawnMissions(singletonList(expectedAgreement)))
         .willReturn(Sets.newTreeSet(expectedMissionIds));
 
-    ResultActions resultActions = this.mvc
-        .perform(post("/settlementEngine?requestId=1234")
-            .contentType(MediaType.APPLICATION_JSON_VALUE).content(agreementJson))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.spawnedMissions",
-            containsInAnyOrder(expectedResponseJsonList.toArray())));
-
-    verifyAuditHeaders(resultActions);
+    given().
+        log().ifValidationFails().
+        contentType(MediaType.APPLICATION_JSON_VALUE).
+        body(agreementJson).
+        when().
+        post("/settlementEngine?requestId=1234").
+        then().
+        log().ifValidationFails().
+        body("spawnedMissions", equalTo(expectedResponseJsonList)).
+        statusCode(HttpStatus.OK.value());
   }
 
   @Test
   public void testSettleAgreement_XML() throws Exception {
-
     TradeAgreementMessages messages = TradeAgreementMessages.builder().agreement(
         TradeAgreementMessage.builder().instrument("IBM").internalParty("INT-1")
             .externalParty("EXT-1").buySell("B").qty(100d).build())
@@ -144,16 +192,28 @@ public class SettlementRestControllerTest extends ASpringTest {
     m.marshal(messages, writer);
     String xml = writer.toString();
 
-    given(this.mockSettlementService.spawnMissions(toTradeAgreements(messages)))
-        .willReturn(Sets.newTreeSet(singletonList(1L)));
+    log.info("Agreement xml to post {}", xml);
 
-    ResultActions resultActions = this.mvc.perform(post("/settlementEngine?requestId=1234")
-        .contentType(MediaType.APPLICATION_XML)
-        .accept(MediaType.APPLICATION_XML)
-        .content(xml))
-        .andExpect(status().isOk());
+    List<Long> expectedMissionIds = Collections.singletonList(MISSION_ID_1);
 
-    verifyAuditHeaders(resultActions);
+    String expectedXmlEntry = "/settlementEngine/mission/" + MISSION_ID_1;
+
+    log.info("Expected xml response {}", expectedXmlEntry);
+
+    BDDMockito.given(this.mockSettlementService.spawnMissions(toTradeAgreements(messages)))
+        .willReturn(Sets.newTreeSet(expectedMissionIds));
+
+    given().
+        log().ifValidationFails().
+        contentType(MediaType.APPLICATION_XML_VALUE).
+        accept(MediaType.APPLICATION_XML_VALUE).
+        body(xml).
+        when().
+        post("/settlementEngine?requestId=1234").
+        then().
+        log().ifValidationFails().
+        body("settlementResponse.spawnedMission", equalTo(expectedXmlEntry)).
+        statusCode(HttpStatus.OK.value());
   }
 
   private List<TradeAgreement> toTradeAgreements(TradeAgreementMessages messages) {
@@ -161,57 +221,66 @@ public class SettlementRestControllerTest extends ASpringTest {
   }
 
   @Test
-  public void testGetMissionFound_JSON() throws Exception {
+  public void testGetMissionFound_JSON() {
     SettlementMission mission = TestDataGenerator.defaultSettlementMissionData().build();
     log.info("Test mission: {}", mission);
 
-    given(this.mockSettlementService.findMission(MISSION_ID_1))
+    BDDMockito.given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(mission));
 
-    ResultActions resultActions =
-        this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-            .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(mission.getId().intValue())))
-            .andExpect(jsonPath("$.externalParty", is(mission.getExternalParty())))
-            .andExpect(jsonPath("$.instrument", is(mission.getInstrument())))
-            .andExpect(jsonPath("$.direction", is(mission.getDirection())))
-            .andExpect(jsonPath("$.qty", is(mission.getQty())));
-
-    verifyAuditHeaders(resultActions);
+    //mission.getQty needed to be converted to float in order to be properly compared to qty.  Other primitives and types (string, int, double, BigDecimal) were failing.
+    //Found answer at https://stackoverflow.com/a/44501724
+    given().
+        log().ifValidationFails().
+        accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        body("id", is(mission.getId().intValue())).
+        body("externalParty", is(mission.getExternalParty())).
+        body("instrument", is(mission.getInstrument())).
+        body("direction", is(mission.getDirection())).
+        body("qty", equalTo(mission.getQty().floatValue())).
+        statusCode(HttpStatus.OK.value());
   }
 
-
   @Test
-  public void testGetMissionFound_XML() throws Exception {
+  public void testGetMissionFound_XML() {
     SettlementMission mission = TestDataGenerator.defaultSettlementMissionData().build();
     log.info("Test mission: {}", mission);
 
-    given(this.mockSettlementService.findMission(MISSION_ID_1))
+    BDDMockito.given(this.mockSettlementService.findMission(MISSION_ID_1))
         .willReturn(Optional.of(mission));
 
-    ResultActions resultActions =
-        this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-            .accept(MediaType.APPLICATION_XML)).andExpect(status().isOk())
-            .andExpect(xpath("//id").string(mission.getId().toString()))
-            .andExpect(xpath("//externalParty").string(mission.getExternalParty()))
-            .andExpect(xpath("//instrument").string(mission.getInstrument()))
-            .andExpect(xpath("//direction").string(mission.getDirection()))
-            .andExpect(xpath("//qty").string(String.valueOf(mission.getQty())));
-
-    verifyAuditHeaders(resultActions);
+    given().
+        log().ifValidationFails().
+        accept(MediaType.APPLICATION_XML_VALUE).
+        when().
+        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        body(hasXPath("//id", is(mission.getId().toString()))).
+        body(hasXPath("//externalParty", is(mission.getExternalParty()))).
+        body(hasXPath("//instrument", is(mission.getInstrument()))).
+        body(hasXPath("//direction", is(mission.getDirection()))).
+        body(hasXPath("//qty", is(mission.getQty().toString()))).
+        statusCode(HttpStatus.OK.value());
   }
 
   @Test
-  public void testGetMissionNotFound() throws Exception {
-    long msnId = 1091L;
+  public void testGetMissionNotFound() {
+    BDDMockito.given(this.mockSettlementService.findMission(MISSION_ID_1))
+        .willReturn(Optional.empty());
 
-    given(this.mockSettlementService.findMission(msnId)).willReturn(Optional.empty());
-
-    ResultActions resultActions = this.mvc
-        .perform(get("/settlementEngine/mission/" + msnId + "?requestId=1234")
-            .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isNotFound());
-    verifyAuditHeaders(resultActions);
+    given().
+        log().ifValidationFails().
+        accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.NOT_FOUND.value());
   }
 
   @Test
@@ -222,46 +291,49 @@ public class SettlementRestControllerTest extends ASpringTest {
         .id(2L).build();
     List<SettlementMission> missions = Arrays.asList(mission1, mission2);
 
-    given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
+    BDDMockito.given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
 
-    ResultActions resultActions = this.mvc
-        .perform(get("/settlementEngine/missions?ids=1,2&format=json&requestId=1234"))
-        .andExpect(status().isOk())
-        .andExpect(content().json(
-            objectMapper.writeValueAsString(new SettlementMissionList(missions))));
-
-    verifyAuditHeaders(resultActions);
+    given().
+        log().ifValidationFails().
+        when().
+        get("/settlementEngine/missions?ids=1,2&format=json&requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.OK.value()).
+        content(equalTo(objectMapper.writeValueAsString(new SettlementMissionList(missions))));
   }
 
   @Test
-  public void testGetMissionsFound_XML() throws Exception {
+  public void testGetMissionsFound_XML() {
     SettlementMission mission1 = TestDataGenerator.defaultSettlementMissionData()
         .id(1L).build();
     SettlementMission mission2 = TestDataGenerator.defaultSettlementMissionData()
         .id(2L).build();
 
-    given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
+    BDDMockito.given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
 
-    ResultActions resultActions = this.mvc
-        .perform(get("/settlementEngine/missions?ids=1,2&format=xml&requestId=1234"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType("application/xml"))
+    given().
+        log().ifValidationFails().
+        when().
+        get("/settlementEngine/missions?ids=1,2&format=xml&requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.OK.value()).
+        contentType(MediaType.APPLICATION_XML_VALUE).
         // In XPath, [n] has a higher precedence than //foo, meaning //foo[n] is interpreted as
         // //(foo[n]). What we actually want is (//foo)[n], so write that explicitly.
-        .andExpect(xpath("(//id)[1]").string(mission1.getId().toString()))
-        .andExpect(xpath("(//externalParty)[1]").string(mission1.getExternalParty()))
-        .andExpect(xpath("(//instrument)[1]").string(mission1.getInstrument()))
-        .andExpect(xpath("(//direction)[1]").string(mission1.getDirection()))
-        .andExpect(xpath("(//qty)[1]").string(String.valueOf(mission1.getQty())))
-        .andExpect(xpath("(//id)[2]").string(mission2.getId().toString()))
-        .andExpect(xpath("(//externalParty)[2]").string(mission2.getExternalParty()))
-        .andExpect(xpath("(//instrument)[2]").string(mission2.getInstrument()))
-        .andExpect(xpath("(//direction)[2]").string(mission2.getDirection()))
-        .andExpect(xpath("(//qty)[2]").string(String.valueOf(mission2.getQty())));
-
-    verifyAuditHeaders(resultActions);
+        body(hasXPath("(//id)[1]", is(mission1.getId().toString()))).
+        body(hasXPath("(//externalParty)[1]", is(mission1.getExternalParty()))).
+        body(hasXPath("(//instrument)[1]", is(mission1.getInstrument()))).
+        body(hasXPath("(//direction)[1]", is(mission1.getDirection()))).
+        body(hasXPath("(//qty)[1]", is(String.valueOf(mission1.getQty())))).
+        body(hasXPath("(//id)[2]", is(mission2.getId().toString()))).
+        body(hasXPath("(//externalParty)[2]", is(mission2.getExternalParty()))).
+        body(hasXPath("(//instrument)[2]", is(mission2.getInstrument()))).
+        body(hasXPath("(//direction)[2]", is(mission2.getDirection()))).
+        body(hasXPath("(//qty)[2]", is(String.valueOf(mission2.getQty()))));
   }
 
   @Test
@@ -273,18 +345,20 @@ public class SettlementRestControllerTest extends ASpringTest {
         .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
         .qty(100.0).version(0L).build();
 
-    given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
+    BDDMockito.given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
 
     String expectedCsv = readData("SettlementMissions.csv");
 
-    ResultActions resultActions = this.mvc
-        .perform(get("/settlementEngine/missions?ids=1,2&format=csv&requestId=1234"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType("text/csv"))
-        .andExpect(content().string(expectedCsv));
-
-    verifyAuditHeaders(resultActions);
+    given().
+        log().ifValidationFails().
+        when().
+        get("/settlementEngine/missions?ids=1,2&format=csv&requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.OK.value()).
+        contentType("text/csv").
+        body(equalTo(expectedCsv));
   }
 
   @Test
@@ -296,51 +370,66 @@ public class SettlementRestControllerTest extends ASpringTest {
         .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
         .qty(100.0).version(0L).build();
 
-    given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
+    BDDMockito.given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
         .willReturn(Arrays.asList(mission1, mission2));
 
     byte[] expectedXlsx = readBytes("SettlementMissions.xlsx");
 
-    ResultActions resultActions = this.mvc
-        .perform(get("/settlementEngine/missions?ids=1,2&format=xlsx&requestId=1234"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType("application/vnd.ms-excel"));
+
+    MockMvcResponse response =
+    given().
+        log().ifValidationFails().
+        when().
+        get("/settlementEngine/missions?ids=1,2&format=xlsx&requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.OK.value()).
+        contentType("application/vnd.ms-excel").
+        extract().
+        response();
 
     // Directly comparing the spreadsheet bytes fails even when the expected spreadsheet appears to
     // be an exact copy of the actual result, so instead compare the spreadsheet contents logically
-    byte[] actualXlsx = resultActions.andReturn().getResponse().getContentAsByteArray();
-    assertTrue(XlsxComparator.equals(expectedXlsx, actualXlsx));
-
-    verifyAuditHeaders(resultActions);
+    assertTrue(XlsxComparator.equals(expectedXlsx, response.asByteArray()));
   }
 
   @Test
-  public void testIncorrectlyFormattedAgreement() throws Exception {
+  public void testIncorrectlyFormattedAgreement() {
     String expectedMessage = "Incorrectly formatted message.  Please consult the documentation.";
 
-    this.mvc.perform(post("/settlementEngine?requestId=1234")
-        .contentType(MediaType.APPLICATION_JSON).content("invalidAgreementBytes"))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.name())))
-        .andExpect(jsonPath("$.message", is(expectedMessage)));
+    given().
+        log().ifValidationFails().
+        contentType(MediaType.APPLICATION_JSON_VALUE).
+        body("invalidAgreementBytes").
+        when().
+        post("/settlementEngine?requestId=1234").
+        then().
+        log().ifValidationFails().
+        body("status", is(HttpStatus.BAD_REQUEST.name())).
+        body("message", is(expectedMessage));
   }
 
   @Test
-  public void testDataAccessFailure() throws Exception {
+  public void testDataAccessFailure() {
     DataAccessException exception = new DataAccessException("msg") {
     };
     when(mockSettlementService.findMission(MISSION_ID_1)).thenThrow(exception);
 
-    this.mvc.perform(get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-        .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().is5xxServerError())
-        .andExpect(jsonPath("$.status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())))
-        .andExpect(jsonPath("$.message", is("An internal application error occurred.")));
+    given().
+        log().ifValidationFails().
+        accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+        get("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value()).
+        body("status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())).
+        body("message", is("An internal application error occurred."));
   }
 
   @Test
-  public void testUpdateMission() throws Exception {
-    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+  public void testUpdateMission() {
+    SettlementMission settlementMission = TestDataGenerator.defaultSettlementMissionData().build();
     settlementMission.setId(MISSION_ID_1);
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
@@ -348,30 +437,40 @@ public class SettlementRestControllerTest extends ASpringTest {
     when(mockSettlementService.updateMission(MISSION_ID_1, settlementMission))
         .thenReturn(Optional.of(settlementMission));
 
-    this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-        .content(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
-        .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isOk());
+    given().
+        log().ifValidationFails().
+        contentType(MediaType.APPLICATION_JSON_VALUE).
+        body(objectMapper.convertValue(settlementMission, JsonNode.class).toString()).
+        accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+        put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.OK.value());
   }
 
   @Test
-  public void testUpdateNonExistentMission() throws Exception {
-    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+  public void testUpdateNonExistentMission() {
+    SettlementMission settlementMission = TestDataGenerator.defaultSettlementMissionData().build();
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
         .thenReturn(false);
 
-    this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-        .content(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
-        .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isNotFound());
+    given().
+        log().ifValidationFails().
+        contentType(MediaType.APPLICATION_JSON_VALUE).
+        body(objectMapper.convertValue(settlementMission, JsonNode.class).toString()).
+        accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+        put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.NOT_FOUND.value());
   }
 
   @Test
-  public void testUpdateMissionWithWrongVersion() throws Exception {
-    SettlementMission settlementMission =  TestDataGenerator.defaultSettlementMissionData().build();
+  public void testUpdateMissionWithWrongVersion() {
+    SettlementMission settlementMission = TestDataGenerator.defaultSettlementMissionData().build();
     settlementMission.setId(MISSION_ID_1);
 
     when(mockSettlementService.missionExists(MISSION_ID_1))
@@ -380,45 +479,57 @@ public class SettlementRestControllerTest extends ASpringTest {
     when(mockSettlementService.updateMission(MISSION_ID_1, settlementMission)).thenThrow(
         ObjectOptimisticLockingFailureException.class);
 
-    this.mvc.perform(put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-        .content(objectMapper.convertValue(settlementMission, JsonNode.class).toString())
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
-        .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isConflict());
+    given().
+        log().ifValidationFails().
+        contentType(MediaType.APPLICATION_JSON_VALUE).
+        body(objectMapper.convertValue(settlementMission, JsonNode.class).toString()).
+        accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+        put("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.CONFLICT.value());
   }
 
   @Test
-  public void testDeleteMission() throws Exception {
+  public void testDeleteMission() {
     doNothing().when(mockSettlementService).deleteMission(MISSION_ID_1);
 
-    this.mvc.perform(delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-        .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isOk());
+    given().
+        log().ifValidationFails().
+        accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+        delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.OK.value());
   }
 
   @Test
-  public void testDeleteFakeMission() throws Exception {
+  public void testDeleteFakeMission() {
     doThrow(EmptyResultDataAccessException.class).when(mockSettlementService)
         .deleteMission(MISSION_ID_1);
 
-    this.mvc.perform(delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234")
-        .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(status().isNotFound());
+    given().
+        log().ifValidationFails().
+        accept(MediaType.APPLICATION_JSON_VALUE).
+        when().
+        delete("/settlementEngine/mission/" + MISSION_ID_1 + "?requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.NOT_FOUND.value());
   }
 
+  @Configuration
+  @Import(SettlementRestController.class)
+  static class PropertyConfig {
 
-  /**
-   * Verifies required audit fields are present
-   *
-   * @param resultActions The resultActions object wrapping the response
-   * @throws Exception On any validation exception
-   */
-  private void verifyAuditHeaders(ResultActions resultActions) throws Exception {
-    resultActions.andExpect(header().string("requestReceivedTime", not(isEmptyOrNullString())));
-    resultActions
-        .andExpect(header().string("requestElapsedTimeMillis", not(isEmptyOrNullString())));
-    resultActions.andExpect(header().string("externalQueryId", not(isEmptyOrNullString())));
-    resultActions.andExpect(header().string("internalQueryId", not(isEmptyOrNullString())));
+    @Bean
+    PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
+      PropertyPlaceholderConfigurer propertyPlaceholderConfigurer =
+          new PropertyPlaceholderConfigurer();
+      propertyPlaceholderConfigurer.setLocation(new ClassPathResource("application.properties"));
+      return propertyPlaceholderConfigurer;
+    }
   }
-
 }
