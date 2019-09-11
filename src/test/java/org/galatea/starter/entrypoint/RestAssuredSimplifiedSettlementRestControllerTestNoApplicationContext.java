@@ -7,6 +7,7 @@ import static org.galatea.starter.MvcConfig.TEXT_CSV;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasXPath;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import io.restassured.module.mockmvc.response.MockMvcResponse;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,6 +41,9 @@ import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.testutils.TestDataGenerator;
+import org.galatea.starter.testutils.XlsxComparator;
+import org.galatea.starter.utils.http.converter.SettlementMissionCsvConverter;
+import org.galatea.starter.utils.http.converter.SettlementMissionXlsxConverter;
 import org.galatea.starter.utils.translation.ITranslator;
 import org.junit.Before;
 import org.junit.Test;
@@ -134,7 +139,9 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
             addPlaceholderValue("mvc.getMissionPath", getMissionPath).
             setContentNegotiationManager(manager).
             setMessageConverters(new MappingJackson2HttpMessageConverter(),
-                new Jaxb2RootElementHttpMessageConverter()).
+                new Jaxb2RootElementHttpMessageConverter(),
+                new SettlementMissionCsvConverter(),
+                new SettlementMissionXlsxConverter()).
             setControllerAdvice(new RestExceptionHandler()));
   }
 
@@ -328,6 +335,63 @@ public class RestAssuredSimplifiedSettlementRestControllerTestNoApplicationConte
         body(hasXPath("(//instrument)[2]", is(mission2.getInstrument()))).
         body(hasXPath("(//direction)[2]", is(mission2.getDirection()))).
         body(hasXPath("(//qty)[2]", is(String.valueOf(mission2.getQty()))));
+  }
+
+  @Test
+  public void testGetMissionsFound_CSV() throws Exception {
+    SettlementMission mission1 = SettlementMission.builder()
+        .id(1L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).version(0L).build();
+    SettlementMission mission2 = SettlementMission.builder()
+        .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).version(0L).build();
+
+    BDDMockito.given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
+        .willReturn(Arrays.asList(mission1, mission2));
+
+    String expectedCsv = readData("SettlementMissions.csv");
+
+    given().
+        log().ifValidationFails().
+        when().
+        get("/settlementEngine/missions?ids=1,2&format=csv&requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.OK.value()).
+        contentType("text/csv").
+        body(equalTo(expectedCsv));
+  }
+
+  @Test
+  public void testGetMissionsFound_XLSX() throws Exception {
+    SettlementMission mission1 = SettlementMission.builder()
+        .id(1L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).version(0L).build();
+    SettlementMission mission2 = SettlementMission.builder()
+        .id(2L).instrument("ABC").externalParty("EXT-1").depot("DEPOT-1").direction("REC")
+        .qty(100.0).version(0L).build();
+
+    BDDMockito.given(this.mockSettlementService.findMissions(Arrays.asList(1L, 2L)))
+        .willReturn(Arrays.asList(mission1, mission2));
+
+    byte[] expectedXlsx = readBytes("SettlementMissions.xlsx");
+
+
+    MockMvcResponse response =
+    given().
+        log().ifValidationFails().
+        when().
+        get("/settlementEngine/missions?ids=1,2&format=xlsx&requestId=1234").
+        then().
+        log().ifValidationFails().
+        statusCode(HttpStatus.OK.value()).
+        contentType("application/vnd.ms-excel").
+        extract().
+        response();
+
+    // Directly comparing the spreadsheet bytes fails even when the expected spreadsheet appears to
+    // be an exact copy of the actual result, so instead compare the spreadsheet contents logically
+    assertTrue(XlsxComparator.equals(expectedXlsx, response.asByteArray()));
   }
 
   @Test
