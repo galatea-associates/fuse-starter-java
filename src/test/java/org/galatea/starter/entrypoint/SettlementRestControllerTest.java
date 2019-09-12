@@ -50,6 +50,7 @@ import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
@@ -521,6 +522,7 @@ public class SettlementRestControllerTest
 
   @Configuration
   @Import(SettlementRestController.class)
+  @ConditionalOnNotWebApplication
   static class PropertyConfig {
 
     @Bean
