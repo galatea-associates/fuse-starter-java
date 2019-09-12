@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+  updateCheck="false">
+
+  <!-- Look here for how to configure this file: http://www.ehcache.org/ehcache.xml -->
+
+  <diskStore path="java.io.tmpdir" />
+
+  <!-- Default Cache Configuration, with name 'default' -->
+  <defaultCache maxElementsInMemory="4096"
+    timeToLiveSeconds="1200" overflowToDisk="false"
+    memoryStoreEvictionPolicy="LRU" />
+
+  <cache name="missions" maxElementsInMemory="16384"
+    timeToLiveSeconds="1200" overflowToDisk="false"
+    memoryStoreEvictionPolicy="LRU" />
+
+</ehcache>

@@ -23,9 +23,6 @@ import org.springframework.core.io.ClassPathResource;
 @EnableFeignClients
 public class AppConfig {
 
-  @Value("${cache-config}")
-  public String cacheConfig;
-
   /**
    * Create a LogAspect for use with the SpringAOP @Log annotation.
    */
@@ -51,8 +48,8 @@ public class AppConfig {
    * cache annotations are used.
    */
   @Bean
-  public CacheManager cacheManager() {
-    return new EhCacheCacheManager(ehCacheCacheManager().getObject());
+  public CacheManager cacheManager(final EhCacheManagerFactoryBean ehCacheCacheManager) {
+    return new EhCacheCacheManager(ehCacheCacheManager.getObject());
   }
 
   /**
@@ -61,7 +58,8 @@ public class AppConfig {
    * @return factory bean for the EhCache to be passed to EhCacheCacheManager.
    */
   @Bean
-  public EhCacheManagerFactoryBean ehCacheCacheManager() {
+  public EhCacheManagerFactoryBean ehCacheCacheManager(
+          @Value("${cache-config}") final String cacheConfig) {
     EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
     cmfb.setConfigLocation(new ClassPathResource(cacheConfig));
     cmfb.setShared(true);
