@@ -300,30 +300,6 @@
 			<version>2.0.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!--rest-assured if definitely required.
-		Once I've written all the tests try removing json-path, xml-path, json-schema-validator and spring-mock-mvc and see if anything breaks-->
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>3.3.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>json-path</artifactId>
-			<version>3.3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>xml-path</artifactId>
-			<version>3.3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>json-schema-validator</artifactId>
-			<version>3.3.0</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>spring-mock-mvc</artifactId>
