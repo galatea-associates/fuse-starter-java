@@ -68,6 +68,13 @@
 			<version>2.0.1.RELEASE</version>
 		</dependency>
 
+		<!--Spring Cloud Sleuth for distributed log tracing-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
+			<version>2.2.1.RELEASE</version>
+		</dependency>
+
 		<!-- Required for log4j to process log4j2.yml -->
 		<!-- See: springframework.guru/log4j-2-configuration-using-yaml -->
 		<dependency>
@@ -312,6 +319,12 @@
 			<groupId>com.googlecode.junit-toolbox</groupId>
 			<artifactId>junit-toolbox</artifactId>
 			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.zipkin.brave</groupId>
+			<artifactId>brave-context-log4j2</artifactId>
+			<version>5.9.1</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 	<build>
