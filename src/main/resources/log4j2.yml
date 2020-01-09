@@ -27,7 +27,7 @@ Configuration:
         value: "%d{yyyyMMdd.HH}.%i.log.gz"
         # Log throwables (exceptions) on one line, split by the pipe delimiter
       - name: log-pattern
-        value: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level %logger{1.} - %X{internal-request-id}%X{external-request-id}%msg%n%xThrowable{separator(|)}"
+        value: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level [%X{X-B3-TraceId}/%X{X-B3-SpanId}] %logger{1.} - %X{internal-request-id}%X{external-request-id}%msg%n%xThrowable{separator(|)}"
 
 # Create some appenders
   Appenders:

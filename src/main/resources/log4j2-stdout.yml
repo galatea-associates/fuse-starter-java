@@ -15,7 +15,7 @@ Configuration:
       name: Console
       target: SYSTEM_OUT
       PatternLayout:
-        Pattern: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level %logger{1.} - %X{internal-request-id}%X{external-request-id}%msg%n%xThrowable{separator(|)}"
+        Pattern: "%d{yyyy.MM.dd HH:mm:ss.SSS} [%t] %-5level [%X{X-B3-TraceId}/%X{X-B3-SpanId}] %logger{1.} - %X{internal-request-id}%X{external-request-id}%msg%n%xThrowable{separator(|)}"
           
   Loggers:
     # Define some defaults
