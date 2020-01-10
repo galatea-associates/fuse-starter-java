@@ -300,6 +300,12 @@
 			<version>2.24.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<artifactId>spring-cloud-contract-wiremock</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<scope>test</scope>
+			<version>2.0.1.RELEASE</version>
+		</dependency>
 		<!-- Useful for waiting for an async task to complete -->
 		<dependency>
 			<groupId>org.awaitility</groupId>
