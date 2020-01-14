@@ -68,6 +68,13 @@
 			<version>2.0.1.RELEASE</version>
 		</dependency>
 
+		<!--Spring Cloud Sleuth for distributed log tracing-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
+			<version>2.2.1.RELEASE</version>
+		</dependency>
+
 		<!-- Required for log4j to process log4j2.yml -->
 		<!-- See: springframework.guru/log4j-2-configuration-using-yaml -->
 		<dependency>
@@ -173,7 +180,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.9.9.2</version>
+			<version>2.9.10.1</version>
 		</dependency>
 
 		<!-- JAXB - converting between POJOs and XML -->
