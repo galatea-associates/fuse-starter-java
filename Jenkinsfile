@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Unit tests') {
             steps {
-                sh 'mvn org.jacoco:jacoco-maven-plugin:0.8.2:prepare-agent test'
+                sh 'mvn org.jacoco:jacoco-maven-plugin:0.8.4:prepare-agent test'
             }
             post {
                 always {
