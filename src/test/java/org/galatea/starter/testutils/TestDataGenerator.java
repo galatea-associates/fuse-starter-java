@@ -1,8 +1,6 @@
 package org.galatea.starter.testutils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.galatea.starter.domain.SettlementMission;
-import org.galatea.starter.domain.TradeAgreement;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages;
 
 /**

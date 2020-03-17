@@ -6,7 +6,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 import org.galatea.starter.ASpringTest;
-import org.galatea.starter.service.HalService.Coin;
 import org.junit.Test;
 
 public class HalServiceTest extends ASpringTest {
