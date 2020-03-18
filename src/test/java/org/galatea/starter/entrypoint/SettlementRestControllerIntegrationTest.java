@@ -15,11 +15,6 @@ import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.Settleme
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.SettlementResponseProtoMessage;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
 import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessages;
-import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionList;
-import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
-import org.galatea.starter.entrypoint.messagecontracts.SettlementResponseMessage;
-import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
-import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.ObjectFactory;
