@@ -13,23 +13,19 @@ import lombok.Data;
 
 public class PriceData {
 
-  //Within each Date object, we have variables for the values of each price and the volume
+  @JsonProperty("1. open")
   private BigDecimal open;
+
+  @JsonProperty("2. high")
   private BigDecimal high;
+
+  @JsonProperty("3. low")
   private BigDecimal low;
+
+  @JsonProperty("4. close")
   private BigDecimal close;
+
+  @JsonProperty("5. volume")
   private BigInteger volume;
 
-  public PriceData (
-      @JsonProperty("1. open") BigDecimal open,
-      @JsonProperty("2. high") BigDecimal high,
-      @JsonProperty("3. low") BigDecimal low,
-      @JsonProperty("4. close") BigDecimal close,
-      @JsonProperty("5. volume") BigInteger volume) {
-    this.open = open;
-    this.high = high;
-    this.low = low;
-    this.close = close;
-    this.volume = volume;
-  }
 }
