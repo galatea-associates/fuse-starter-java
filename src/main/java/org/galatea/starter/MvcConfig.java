@@ -5,7 +5,6 @@ import com.google.common.collect.Sets;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.utils.FuseHttpTraceRepository;
-import org.galatea.starter.utils.rest.FuseHttpTraceFilter;
 import org.springframework.boot.actuate.trace.http.HttpExchangeTracer;
 import org.springframework.boot.actuate.trace.http.Include;
 import org.springframework.boot.actuate.web.trace.servlet.HttpTraceFilter;
