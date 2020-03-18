@@ -18,12 +18,7 @@ public class TimeSeriesData {
   @JsonFormat(
       shape = Shape.STRING,
       pattern = "yyyy-MM-dd")
+  @JsonProperty("yyyy-MM-dd")
   private Date priceDate;
-
-  public TimeSeriesData (
-      @JsonProperty("yyyy-MM-dd") Date priceDate)
-  {
-    this.priceDate = priceDate;
-  }
 
 }
