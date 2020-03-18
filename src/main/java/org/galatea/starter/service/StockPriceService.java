@@ -30,8 +30,8 @@ public class StockPriceService {
    * @param //symbol the symbol to get open, high, low and close prices for.
    * @return a list of prices objects for that symbol for only the specified.
    */
-  public List<AlphaVantageResponse> getPricesForSymbolForLastNDays(final List<String> symbol, final List<Integer> days) {
-    return StockPriceClient.getPricesForSymbolForLastNDays(symbol.toArray(new String[0]), days.toArray(new String[0]));
+  public AlphaVantageResponse getPricesForSymbolForLastNDays(final String symbol, final Integer days) {
+    return StockPriceClient.getPricesForSymbolForLastNDays(symbol, days);
   }
 
 }
@@ -81,4 +81,4 @@ public class StockPriceService {
     //return StockPriceClient.getPricesForSymbolForLastNDays(symbol.toArray(new String[0]));
   }
   //}
-}
+}*/
