@@ -17,22 +17,11 @@ spring:
       database-platform: org.hibernate.dialect.MySQL5Dialect
 
 mvc:
-   settleMissionPath: /settlementEngine
-   updateMissionPath: /settlementEngine/mission/
-   getMissionPath: /settlementEngine/mission/
-   getMissionsPath: /settlementEngine/missions
-   deleteMissionPath: /settlementEngine/mission/
-   iex:
-      getAllSymbolsPath: /iex/symbols
-      getLastTradedPricePath: /iex/lastTradedPrice
-   max-size-trace-payload: 50000
-jms:
-   listener-concurrency: 1-5
-   agreement-queue-json: sandbox.agreement
-   agreement-queue-proto: sandbox.agreement.proto
+av:
+   getAllPricesPath: /prices
 
-# Set debug level logging for the IEX Client so that Feign requests and responses are logged out
-log.level.org.galatea.starter.service.IEXClient: DEBUG
+# Set debug level logging for the Stock Price Client so that Feign requests and responses are logged out
+log.level.org.galatea.starter.service.StockPriceClient: DEBUG
 # Set info level logging for the autoconfigure package so that it doesn't print out the entire
 # CONDITIONS EVALUATION REPORT on startup
 logging.level.org.springframework.boot.autoconfigure: INFO
@@ -46,7 +35,7 @@ spring:
       password:
    rest:
       # this points at the local WireMock server in the test environment.
-      iexBasePath: http://localhost:${wiremock.server.port}/
+      alphaVantageBasePath: http://localhost:${wiremock.server.port}/
 
 ---
 # Dev properties go here
@@ -56,7 +45,7 @@ spring:
       username: sa
       password:
    rest:
-      iexBasePath: https://api.iextrading.com/1.0
+      alphaVantageBasePath: https://www.alphavantage.co/query?
 # set debug to get spring to log the classpath (and other things) on startup
 debug: true
 
@@ -69,6 +58,3 @@ spring:
       password:
 
 ---
-# Mappings for Rest Controllers
-webservice:
-  halpath: /hal
