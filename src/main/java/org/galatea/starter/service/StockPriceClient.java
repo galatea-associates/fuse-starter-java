@@ -4,8 +4,6 @@ import java.util.List;
 import org.galatea.starter.domain.AlphaVantageResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -26,6 +24,6 @@ public interface StockPriceClient {
    */
 
   @GetMapping("function=TIME_SERIES_DAILY")
-  List<AlphaVantageResponse> getPricesForSymbolForLastNDays(@RequestParam("symbol") String[] symbol, @RequestParam("days") String[] days);
+  AlphaVantageResponse getPricesForSymbolForLastNDays(@RequestParam("symbol") String symbol, @RequestParam("days") Integer days);
 
 }
