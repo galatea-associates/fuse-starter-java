@@ -180,7 +180,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.9.10.1</version>
+			<version>2.9.10.3</version>
 		</dependency>
 
 		<!-- JAXB - converting between POJOs and XML -->
@@ -325,6 +325,12 @@
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
 			<version>2.0.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>spring-mock-mvc</artifactId>
+			<version>3.3.0</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Allows us to parameterize tests -->
