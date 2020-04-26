@@ -48,8 +48,8 @@ public class AppConfig {
    * cache annotations are used.
    */
   @Bean
-  public CacheManager cacheManager(final EhCacheManagerFactoryBean ehCacheCacheManager) {
-    return new EhCacheCacheManager(ehCacheCacheManager.getObject());
+  public CacheManager cacheManager(final EhCacheManagerFactoryBean ehCacheCacheManagerFactoryBean) {
+    return new EhCacheCacheManager(ehCacheCacheManagerFactoryBean.getObject());
   }
 
   /**
@@ -58,7 +58,7 @@ public class AppConfig {
    * @return factory bean for the EhCache to be passed to EhCacheCacheManager.
    */
   @Bean
-  public EhCacheManagerFactoryBean ehCacheCacheManager(
+  public EhCacheManagerFactoryBean ehCacheCacheManagerFactoryBean(
           @Value("${cache-config}") final String cacheConfig) {
     EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
     cmfb.setConfigLocation(new ClassPathResource(cacheConfig));
