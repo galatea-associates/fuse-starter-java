@@ -166,16 +166,15 @@ public class XlsxSerializer {
    * Populate the rows of the given sheet using the given row data.
    */
   @SneakyThrows(IllegalAccessException.class)
-  private static <T> void populateSingleDataRow(final Sheet sheet, final List<Field> fieldsToSerialize,
-      final T row) {
+  private static <T> void populateSingleDataRow(final Sheet sheet,
+      final List<Field> fieldsToSerialize, final T row) {
     int rowIndex = 1; // header is row 0
-      Row dataRow = sheet.createRow(rowIndex);
-      rowIndex++;
-      for (int col = 0; col < fieldsToSerialize.size(); col++) {
-        Cell dataCell = dataRow.createCell(col);
-        Object cellObject = FieldUtils.readField(fieldsToSerialize.get(col), row, true);
-        dataCell.setCellValue(stringify(cellObject));
-      }
+    Row dataRow = sheet.createRow(rowIndex);
+    for (int col = 0; col < fieldsToSerialize.size(); col++) {
+      Cell dataCell = dataRow.createCell(col);
+      Object cellObject = FieldUtils.readField(fieldsToSerialize.get(col), row, true);
+      dataCell.setCellValue(stringify(cellObject));
+    }
   }
 
   /*

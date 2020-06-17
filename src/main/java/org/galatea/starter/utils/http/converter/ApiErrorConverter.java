@@ -16,8 +16,9 @@ import org.springframework.http.converter.AbstractHttpMessageConverter;
 public class ApiErrorConverter extends AbstractHttpMessageConverter<ApiError> {
 
   /**
-   * Construct an ApiErrorCsvConverter that handles error response when the requested format is CSV.
-   * Instead of returning CSV, it returns a JSON representation of the error.
+   * Construct an ApiErrorCsvConverter that handles error response when the requested format is
+   * XML, CSV, or XLSX.
+   * Instead of returning the requested format, it returns a JSON representation of the error.
    */
   public ApiErrorConverter() {
     super(MediaType.APPLICATION_XML, MvcConfig.TEXT_CSV, MvcConfig.APPLICATION_EXCEL);
