@@ -1,2 +1,0 @@
-status,message
-NOT_FOUND,"org.galatea.starter.entrypoint.exception.EntityNotFoundException: Entities [1, 2] of type SettlementMission were not found"

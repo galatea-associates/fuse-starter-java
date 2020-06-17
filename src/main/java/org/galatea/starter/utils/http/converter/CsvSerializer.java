@@ -39,4 +39,18 @@ public class CsvSerializer {
     // See CsvWriterTest for examples of Jackson CSV behavior
   }
 
+  public static <T> String serializeToCsv(final T row, final Class<T> clazz)
+      throws IOException {
+    // Note that Jackson CSV doesn't work on objects with fields that hold complex objects
+    // See https://github.com/FasterXML/jackson-dataformat-csv/issues/9
+    CsvMapper mapper = new CsvMapper();
+    mapper.disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
+    // Jackson CSV uses the property names for the header row by default. To have a custom header
+    // for one or more columns, see
+    // https://stackoverflow.com/questions/40221223/jackson-dataformat-csv-are-custom-column-names-possible
+    CsvSchema schema = mapper.schemaFor(clazz).withHeader();
+    return mapper.writer(schema).writeValueAsString(row);
+    // See CsvWriterTest for examples of Jackson CSV behavior
+  }
+
 }

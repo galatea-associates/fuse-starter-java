@@ -5,8 +5,7 @@ import com.google.common.collect.Sets;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.utils.FuseHttpTraceRepository;
-import org.galatea.starter.utils.http.converter.ApiErrorCsvConverter;
-import org.galatea.starter.utils.http.converter.ApiErrorXlsxConverter;
+import org.galatea.starter.utils.http.converter.ApiErrorConverter;
 import org.galatea.starter.utils.http.converter.SettlementMissionCsvConverter;
 import org.galatea.starter.utils.http.converter.SettlementMissionXlsxConverter;
 import org.galatea.starter.utils.rest.FuseHttpTraceFilter;
@@ -91,9 +90,9 @@ public class MvcConfig implements WebMvcConfigurer {
     converters.add(new MappingJackson2HttpMessageConverter()); // JSON
     converters.add(new Jaxb2RootElementHttpMessageConverter()); // XML
     converters.add(new SettlementMissionCsvConverter()); // SettlementMissionList -> CSV
-    converters.add(new ApiErrorCsvConverter()); // ApiError -> CSV
     converters.add(new SettlementMissionXlsxConverter()); // SettlementMissionList -> XLSX
-    converters.add(new ApiErrorXlsxConverter()); // ApiError -> XLSX
+    // ApiError -> JSON when requested format is XML, CSV, or XLSX
+    converters.add(new ApiErrorConverter());
   }
 
 }

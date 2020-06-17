@@ -7,10 +7,8 @@ import static org.hamcrest.Matchers.hasXPath;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.restassured.module.mockmvc.response.MockMvcResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,13 +20,10 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.MessageTranslationConfig;
-import org.galatea.starter.MvcConfig;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
 import org.galatea.starter.service.SettlementService;
-import org.galatea.starter.testutils.XlsxComparator;
-import org.galatea.starter.utils.http.converter.ApiErrorCsvConverter;
-import org.galatea.starter.utils.http.converter.ApiErrorXlsxConverter;
+import org.galatea.starter.utils.http.converter.ApiErrorConverter;
 import org.galatea.starter.utils.http.converter.SettlementMissionCsvConverter;
 import org.galatea.starter.utils.http.converter.SettlementMissionXlsxConverter;
 import org.junit.Before;
@@ -39,7 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
-import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -103,8 +97,7 @@ public class ApiErrorTest extends ASpringTest {
             setContentNegotiationManager(manager).
             setMessageConverters(new MappingJackson2HttpMessageConverter(),
                 new Jaxb2RootElementHttpMessageConverter(),
-                new ApiErrorCsvConverter(),
-                new ApiErrorXlsxConverter(),
+                new ApiErrorConverter(),
                 new SettlementMissionCsvConverter(),
                 new SettlementMissionXlsxConverter()).
             setControllerAdvice(new RestExceptionHandler()));
@@ -154,14 +147,14 @@ public class ApiErrorTest extends ASpringTest {
 
     given()
         .log().ifValidationFails()
-        .contentType(MediaType.APPLICATION_XML_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .when()
         .get("/settlementEngine/missions?ids=1,2&format=xml&requestId=1234")
         .then()
         .log().ifValidationFails()
         .statusCode(HttpStatus.NOT_FOUND.value())
-        .body(hasXPath("(//status)[1]", is(HttpStatus.NOT_FOUND.name())))
-        .body(hasXPath("(//message)[1]", is(exception.toString())));
+        .body("status", is(HttpStatus.NOT_FOUND.name()))
+        .body("message", is(exception.toString()));
   }
 
   @SneakyThrows
@@ -178,17 +171,18 @@ public class ApiErrorTest extends ASpringTest {
     BDDMockito.given(mockSettlementService.findMissions(ids))
         .willThrow(new EntityNotFoundException(SettlementMission.class, missingMissions));
 
-    String expectedCsv = readData("ApiError.csv");
+    EntityNotFoundException exception = new EntityNotFoundException(SettlementMission.class, missingMissions);
 
     given()
         .log().ifValidationFails()
-        .contentType(MvcConfig.TEXT_CSV_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .when()
         .get("/settlementEngine/missions?ids=1,2&format=csv&requestId=1234")
         .then()
         .log().ifValidationFails()
         .statusCode(HttpStatus.NOT_FOUND.value())
-        .body(is(expectedCsv));
+        .body("status", is(HttpStatus.NOT_FOUND.name()))
+        .body("message", is(exception.toString()));
   }
 
   @SneakyThrows
@@ -205,23 +199,18 @@ public class ApiErrorTest extends ASpringTest {
     BDDMockito.given(mockSettlementService.findMissions(ids))
         .willThrow(new EntityNotFoundException(SettlementMission.class, missingMissions));
 
-    byte[] expectedXlsx = readBytes("ApiError.xlsx");
+    EntityNotFoundException exception = new EntityNotFoundException(SettlementMission.class, missingMissions);
 
-    MockMvcResponse response =
-        given()
-            .log().ifValidationFails()
-            .contentType(MvcConfig.APPLICATION_EXCEL_VALUE)
-            .when()
-            .get("/settlementEngine/missions?ids=1,2&format=xlsx&requestId=1234")
-            .then()
-            .log().ifValidationFails()
-            .statusCode(HttpStatus.NOT_FOUND.value())
-            .extract()
-            .response();
-
-    // Directly comparing the spreadsheet bytes fails even when the expected spreadsheet appears to
-    // be an exact copy of the actual result, so instead compare the spreadsheet contents logically
-    assertTrue(XlsxComparator.equals(expectedXlsx, response.asByteArray()));
+    given()
+        .log().ifValidationFails()
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/settlementEngine/missions?ids=1,2&format=xlsx&requestId=1234")
+        .then()
+        .log().ifValidationFails()
+        .statusCode(HttpStatus.NOT_FOUND.value())
+        .body("status", is(HttpStatus.NOT_FOUND.name()))
+        .body("message", is(exception.toString()));
   }
 
   @Configuration
