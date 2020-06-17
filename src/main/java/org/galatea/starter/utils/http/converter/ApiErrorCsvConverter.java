@@ -5,9 +5,7 @@ import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.Charsets;
 import org.galatea.starter.MvcConfig;
-import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.entrypoint.ApiError;
-import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionList;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -60,6 +58,6 @@ public class ApiErrorCsvConverter extends AbstractHttpMessageConverter<ApiError>
     super.addDefaultHeaders(headers, messages, contentType);
     // Adding this header tells the browser to automatically download the response body
     // You may or may not want this depending on what your front end or other consumer wants
-    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=SettlementMissions.csv");
+    headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=ApiError.csv");
   }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.utils.FuseHttpTraceRepository;
 import org.galatea.starter.utils.http.converter.ApiErrorCsvConverter;
+import org.galatea.starter.utils.http.converter.ApiErrorXlsxConverter;
 import org.galatea.starter.utils.http.converter.SettlementMissionCsvConverter;
 import org.galatea.starter.utils.http.converter.SettlementMissionXlsxConverter;
 import org.galatea.starter.utils.rest.FuseHttpTraceFilter;
@@ -91,7 +92,8 @@ public class MvcConfig implements WebMvcConfigurer {
     converters.add(new Jaxb2RootElementHttpMessageConverter()); // XML
     converters.add(new SettlementMissionCsvConverter()); // SettlementMissionList -> CSV
     converters.add(new ApiErrorCsvConverter()); // ApiError -> CSV
-    converters.add(new SettlementMissionXlsxConverter());
+    converters.add(new SettlementMissionXlsxConverter()); // SettlementMissionList -> XLSX
+    converters.add(new ApiErrorXlsxConverter()); // ApiError -> XLSX
   }
 
 }

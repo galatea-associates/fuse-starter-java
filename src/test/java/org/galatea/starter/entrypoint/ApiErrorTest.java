@@ -28,6 +28,8 @@ import org.galatea.starter.entrypoint.exception.EntityNotFoundException;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.testutils.XlsxComparator;
 import org.galatea.starter.utils.http.converter.ApiErrorCsvConverter;
+import org.galatea.starter.utils.http.converter.ApiErrorXlsxConverter;
+import org.galatea.starter.utils.http.converter.SettlementMissionCsvConverter;
 import org.galatea.starter.utils.http.converter.SettlementMissionXlsxConverter;
 import org.junit.Before;
 import org.junit.Test;
@@ -102,7 +104,8 @@ public class ApiErrorTest extends ASpringTest {
             setMessageConverters(new MappingJackson2HttpMessageConverter(),
                 new Jaxb2RootElementHttpMessageConverter(),
                 new ApiErrorCsvConverter(),
-//                new SettlementMissionCsvConverter(),
+                new ApiErrorXlsxConverter(),
+                new SettlementMissionCsvConverter(),
                 new SettlementMissionXlsxConverter()).
             setControllerAdvice(new RestExceptionHandler()));
   }
@@ -202,7 +205,7 @@ public class ApiErrorTest extends ASpringTest {
     BDDMockito.given(mockSettlementService.findMissions(ids))
         .willThrow(new EntityNotFoundException(SettlementMission.class, missingMissions));
 
-    byte[] expectedXlsx = readBytes("SettlementMissions.xlsx");
+    byte[] expectedXlsx = readBytes("ApiError.xlsx");
 
     MockMvcResponse response =
         given()
