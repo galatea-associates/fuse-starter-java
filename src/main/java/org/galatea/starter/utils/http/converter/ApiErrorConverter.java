@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.MvcConfig;
 import org.galatea.starter.entrypoint.ApiError;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -14,6 +15,8 @@ import org.springframework.http.converter.AbstractHttpMessageConverter;
 
 @Slf4j
 public class ApiErrorConverter extends AbstractHttpMessageConverter<ApiError> {
+
+  private static final ObjectMapper objectMapper = new ObjectMapper();
 
   /**
    * Construct an ApiErrorCsvConverter that handles error response when the requested format is
@@ -41,7 +44,7 @@ public class ApiErrorConverter extends AbstractHttpMessageConverter<ApiError> {
   protected void writeInternal(final ApiError apiError,
       final HttpOutputMessage outputMessage) {
     log.info("Converting ApiError to JSON for HTTP response");
-    outputMessage.getBody().write(new ObjectMapper().writeValueAsBytes(apiError));
+    outputMessage.getBody().write(objectMapper.writeValueAsBytes(apiError));
     log.info("Converted ApiError to JSON");
   }
 
