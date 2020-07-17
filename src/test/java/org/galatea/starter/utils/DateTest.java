@@ -3,6 +3,7 @@ package org.galatea.starter.utils;
 import static org.junit.Assert.assertEquals;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -78,5 +79,23 @@ public class DateTest {
     // here is an example Instant.parse() doesn't work, because timestamp is not in UTC
     Instant instantFromTimestampInSystemTimeZone = ZonedDateTime.parse(timestampInSystemTimeZone).toInstant();
     assertEquals(now, instantFromTimestampInSystemTimeZone);
+
+    // now what's the deal with LocalDateTime?
+    LocalDateTime localDateTime = LocalDateTime.now();
+
+    // LocalDateTime is the current time in your system, and doesn't have a timezone associated with
+    // it, so you should see something output that matches the clock on your computer
+    log.info("localDateTime = {}", localDateTime);
+
+    // In general, LocalDateTime are not preferred because they cary no timezone.
+    // Instead, do this, to get the current system time with a timezone associated with it
+    ZonedDateTime zonedDateTime = ZonedDateTime.now();
+    log.info("zonedDateTime = {}", zonedDateTime);
+
+    // if you need to, you can convert a localDateTime to a ZonedDateTime, but you must supply the
+    // timezone, which in the case will be the system default
+    ZonedDateTime zonedDateTimeFromLocalDateTime = localDateTime.atZone(ZoneId.systemDefault());
+    log.info("zonedDateTimeFromLocalDateTime = {}", zonedDateTimeFromLocalDateTime);
+
   }
 }
