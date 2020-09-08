@@ -72,3 +72,5 @@ spring:
 # Mappings for Rest Controllers
 webservice:
   halpath: /hal
+  quotepath: /prices
+
