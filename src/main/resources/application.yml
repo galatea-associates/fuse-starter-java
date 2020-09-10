@@ -71,6 +71,9 @@ spring:
 ---
 # Mappings for Rest Controllers
 webservice:
-  halpath: /hal
-  quotepath: /prices
+   halpath: /hal #webservice.halpath
+   quotepath: /prices #webservice.quotepath
 
+# Hide API keys
+api:
+   alphavantage: TAO2NOU4US1AHXQX
