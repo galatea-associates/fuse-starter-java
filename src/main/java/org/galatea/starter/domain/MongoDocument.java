@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
   @JsonProperty(value = "2. high")private Double high;
   @JsonProperty(value = "3. low")private Double low;
   @JsonProperty(value = "4. close")private Double close;
-  @JsonProperty(value = "5. volume")private Integer volume;
 }

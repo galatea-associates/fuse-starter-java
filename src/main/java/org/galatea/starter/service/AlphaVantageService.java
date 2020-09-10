@@ -64,20 +64,6 @@ public class AlphaVantageService {
       log.error("ObjectMapper failed trying to parse JsonTree from response body");
     }
     //JACKSON TEST BLOCK
-
-    /*
-    JsonParser jsonParser = new JsonParser();
-    JsonElement jsonElement = jsonParser.parse(response.getBody());
-    log.info("Confirming that GSON is properly parsing the response body: {}",
-        jsonElement.toString());
-    JsonObject weeklyTimeSeries = jsonElement.getAsJsonObject()
-        .getAsJsonObject("Time Series (Daily)"); //grabs member of the root JSON object
-    assert weeklyTimeSeries != null; //is this causing trouble?
-    log.info("Logging contents of 'weeklyTimeSeries' JsonObject: {}", weeklyTimeSeries);
-    Type dailyStock = new TypeToken<TreeMap<String, MongoDocument>>(){}.getType();
-     = gson.fromJson(weeklyTimeSeries, dailyStock);
-    //maps each element in the array of JSON Daily Reports to 'MongoDocument' POJO
-    */
     log.info("Testing output and @Data annotation of MongoDocuments:\n{}", mongoDocumentMap);
 
     return mongoDocumentMap;
