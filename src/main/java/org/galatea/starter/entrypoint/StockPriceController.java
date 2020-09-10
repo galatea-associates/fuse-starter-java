@@ -17,50 +17,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-public class StockPriceController extends BaseRestController{
+public class StockPriceController extends BaseRestController {
   @NonNull
   PriceRequestService priceRequestService;
 
   @NonNull
   AlphaVantageService alphaVantageService;
-  @GetMapping(value ="${webservice.quotepath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public String quoteEndpoint(@RequestParam(value="ticker") String ticker,
-      @RequestParam(value="days") int days) {
+
+  /**
+   * Pulls 'ticker' and 'days' params from GET request to '/prices' entrypoint and pass along
+   * to alphavantge API.
+   * @param ticker String, stock symbol user wants to find the prices of
+   * @param days int, the number of days of stock price data to return
+   * @return String, JSON repr of the data requested
+   */
+  @GetMapping(value = "${webservice.quotepath}", produces = {MediaType.APPLICATION_JSON_VALUE})
+  public String quoteEndpoint(@RequestParam(value = "ticker") final String ticker,
+      @RequestParam(value = "days") final int days) {
     if (days < 1) {
       throw new IllegalArgumentException(
           String.format("'days' parameter should be greater than 1. Was %d", days));
     }
 
     TreeMap<String, MongoDocument> processed = alphaVantageService.access(ticker, days);
-    StringBuilder sb = new StringBuilder();
-    JsonObject response = new JsonObject();
-
-    sb.append("output size: ");
-    sb.append(processed.size());
-    sb.append(System.getProperty("line.separator"));
-    String key = processed.lastKey();
-    JsonObject entry = new JsonObject();
-    MongoDocument value = processed.get(key);
-    entry.addProperty("open", value.getOpen());
-    entry.addProperty("high", value.getHigh());
-    entry.addProperty("low", value.getLow());
-    entry.addProperty("close", value.getClose());
-    entry.addProperty("volume", value.getVolume());
-    response.add(key, entry);
-    sb.append(key)
-        .append(":")
-        .append(System.getProperty("line.separator"))
-        .append(value)
-        .append(System.getProperty("line.separator"));
-    while ((key = processed.lowerKey(key)) != null) {
-      entry = new JsonObject();
-      entry.addProperty("open", value.getOpen());
-      entry.addProperty("high", value.getHigh());
-      entry.addProperty("low", value.getLow());
-      entry.addProperty("close", value.getClose());
-      entry.addProperty("volume", value.getVolume());
-      response.add(key, entry);
-    }
-    return response.getAsString();
+    return processed.descendingMap().toString();
   }
 }

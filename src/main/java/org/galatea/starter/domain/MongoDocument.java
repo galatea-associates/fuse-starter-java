@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data public class MongoDocument {
-  @JsonProperty(value="1. open") private Double open;
-  @JsonProperty(value="2. high")private Double high;
-  @JsonProperty(value="3. low")private Double low;
-  @JsonProperty(value="4. close")private Double close;
-  @JsonProperty(value="5. volume")private Integer volume;
+  @JsonProperty(value = "1. open") private Double open;
+  @JsonProperty(value = "2. high")private Double high;
+  @JsonProperty(value = "3. low")private Double low;
+  @JsonProperty(value = "4. close")private Double close;
+  @JsonProperty(value = "5. volume")private Integer volume;
 }
