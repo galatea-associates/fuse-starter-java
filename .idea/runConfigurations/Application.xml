@@ -6,7 +6,7 @@
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
-    <option name="MAIN_CLASS_NAME" value="org.galatea.starter.Application" />
+    <option name="MAIN_CLASS_NAME" value="org.galatea.starter.Appliation" />
     <option name="VM_PARAMETERS" value="-Dapplication.name=my-fuse-app -Dapplication.log-dir=logs -Dapplication.log-archive-root-dir=logs/archive" />
     <option name="PROGRAM_PARAMETERS" value="--spring.profiles.active=dev --server.port=8080" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
