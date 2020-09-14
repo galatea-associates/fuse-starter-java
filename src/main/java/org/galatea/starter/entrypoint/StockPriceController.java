@@ -50,7 +50,7 @@ public class StockPriceController extends BaseRestController {
     // serializes each entry as a JSON object, up to iterations
     for (int i = 0; i < iterations; i++) {
       ObjectNode objectNode = objectMapper.createObjectNode();
-      objectNode.putPOJO("prices", processed.get(key)); // converts MongoDoc to JSON
+      objectNode.putPOJO("prices (USD)", processed.get(key)); // converts MongoDoc to JSON
       jsonArrayRoot.add(objectNode);
       key = processed.lowerKey(key);
     }
