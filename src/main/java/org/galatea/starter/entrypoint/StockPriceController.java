@@ -43,8 +43,8 @@ public class StockPriceController extends BaseRestController {
     }
 
     TreeMap<String, MongoDocument> processed = alphaVantageService.access(ticker, days);
+    log.info("Returned from AlphaVantageService with map of MongoDocuments.");
     assert processed != null && !processed.isEmpty();
-    log.info("Returned successfully from service.");
     // constructing the array of 'days'-limited stock price results
     ObjectMapper objectMapper = new ObjectMapper();
     ObjectNode root = objectMapper.createObjectNode();
@@ -55,19 +55,16 @@ public class StockPriceController extends BaseRestController {
     // serializes each entry as a JSON object, up to iterations
     for (int i = 0; i < iterations; i++) {
       ObjectNode objectNode = objectMapper.createObjectNode();
-      objectNode.put("date", key);
-      MongoDocument md = processed.get(key);
-      md.setDate(key);
-      objectNode.putPOJO("prices (USD)", md); // converts MongoDoc to JSON
+      objectNode.putPOJO("prices (USD)", processed.get(key)); // converts MongoDoc to JSON
       jsonArrayRoot.add(objectNode);
       key = processed.lowerKey(key);
     }
     try {
       return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
     } catch (JsonProcessingException jpe) {
-      log.error("Failed to process prettily.", jpe);
-      return "{ \"sorry\" : \"Something failed internally. Please try again.\" }";
+      log.error("Failed in pretty-printing Json tree with ObjectMapper.");
     }
 
+    return "{ \"sorry\" : \"Something failed internally. Please try again.\" }";
   }
 }

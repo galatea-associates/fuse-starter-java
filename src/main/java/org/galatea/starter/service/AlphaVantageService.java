@@ -71,7 +71,9 @@ public class AlphaVantageService {
     while (dates.hasNext()) {
       String date = dates.next();
       JsonNode value = timeSeriesField.get(date);
-      tMap.put(date, objectMapper.treeToValue(value, MongoDocument.class));
+      MongoDocument md = objectMapper.treeToValue(value, MongoDocument.class);
+      md.setDate(date);
+      tMap.put(date, md);
     }
 
     return tMap;
