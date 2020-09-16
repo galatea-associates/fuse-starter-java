@@ -24,6 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.ContentResultMatchers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
@@ -59,9 +61,7 @@ public class StockPriceControllerTest extends ASpringTest {
     InputStream resource = classLoader
         .getResourceAsStream("stockOutputTsla.json");
     assert resource != null;
-    String tree = new String(resource.readAllBytes());
-    log.debug(tree);
-    JsonNode jn = objectMapper.readTree(tree);
+    JsonNode jn = objectMapper.readTree(resource);
     //standardized to remove any potential mistakes in format
     String formattedJson = objectMapper.writeValueAsString(jn);
     log.info(formattedJson);
@@ -69,7 +69,7 @@ public class StockPriceControllerTest extends ASpringTest {
         .param("ticker", "tsla")
         .param("days", "1")
         .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(jsonPath("$", is(formattedJson)));
+        .andExpect(MockMvcResultMatchers.content().json(formattedJson));
   }
 
   @Test
@@ -97,7 +97,7 @@ public class StockPriceControllerTest extends ASpringTest {
         .param("ticker", "amd")
         .param("days", "3")
         .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(jsonPath("$", is(formattedJson)));
+        .andExpect(MockMvcResultMatchers.content().json(formattedJson));
   }
 
   @Test
@@ -125,7 +125,7 @@ public class StockPriceControllerTest extends ASpringTest {
         .param("ticker", "nvda")
         .param("days", "5")
         .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(jsonPath("$", is(formattedJson)));
+        .andExpect(MockMvcResultMatchers.content().json(formattedJson));
   }
 
   @Test
@@ -153,6 +153,6 @@ public class StockPriceControllerTest extends ASpringTest {
         .param("ticker", "intc")
         .param("days", "7")
         .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(jsonPath("$", is(formattedJson)));
+        .andExpect(MockMvcResultMatchers.content().json(formattedJson));
   }
 }
