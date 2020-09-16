@@ -1,9 +1,12 @@
 package org.galatea.starter.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.galatea.starter.utils.MongoDocSerializer;
 
+@JsonSerialize(using = MongoDocSerializer.class)
 @NoArgsConstructor
 @Data public class MongoDocument {
   private String date;
