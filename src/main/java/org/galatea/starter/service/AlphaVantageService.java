@@ -3,23 +3,15 @@ package org.galatea.starter.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.TreeMap;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import org.galatea.starter.domain.MongoDocument;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +26,9 @@ public class AlphaVantageService {
   @Value("${api.alphavantage}")
   private String key;
 
+  @Autowired
+  RestTemplate restTemplate;
+
   @NonNull
   private ObjectMapper objectMapper;
 
@@ -44,7 +39,6 @@ public class AlphaVantageService {
    * @return a String, gross mashup of proper JSON {in process of fixing}
    */
   public TreeMap<String,MongoDocument> access(final String symbol, final int days) {
-    RestTemplate restTemplate = new RestTemplate();
     String alphaVantageUrl
         = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol;
     String output = days > 100 ? "full" : "compact";
