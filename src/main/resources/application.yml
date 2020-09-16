@@ -1,5 +1,8 @@
 # Global properties go here
 spring:
+   data:
+      mongodb:
+         uri: mongodb+srv://Lord:%s@fusecluster.kvz3u.gcp.mongodb.net/FuseCluster?retryWrites=true&w=majority
    profiles:
       active: test
    main:

@@ -7,20 +7,18 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.TreeMap;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.MongoDocument;
 import org.galatea.starter.service.AlphaVantageService;
-import org.galatea.starter.service.PriceRequestService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
+@Slf4j
 @RestController
 public class StockPriceController extends BaseRestController {
-  @NonNull
-  PriceRequestService priceRequestService;
-
   @NonNull
   AlphaVantageService alphaVantageService;
 
@@ -40,6 +38,8 @@ public class StockPriceController extends BaseRestController {
     }
 
     TreeMap<String, MongoDocument> processed = alphaVantageService.access(ticker, days);
+    log.info("Returned from AlphaVantageService with map of MongoDocuments.");
+    assert processed != null && !processed.isEmpty();
     // constructing the array of 'days'-limited stock price results
     ObjectMapper objectMapper = new ObjectMapper();
     ObjectNode root = objectMapper.createObjectNode();
@@ -57,7 +57,7 @@ public class StockPriceController extends BaseRestController {
     try {
       return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
     } catch (JsonProcessingException jpe) {
-      //too lazy to add logger for this part.
+      log.error("Failed in pretty-printing Json tree with ObjectMapper.");
     }
 
     return "{ \"sorry\" : \"Something failed internally. Please try again.\" }";
