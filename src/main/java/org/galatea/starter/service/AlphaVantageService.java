@@ -9,11 +9,13 @@ import java.util.TreeMap;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.build.Plugin.Factory.Simple;
 import net.sf.aspect4log.Log;
 import org.galatea.starter.MyProps;
 import org.galatea.starter.domain.MongoDocument;
 import org.galatea.starter.domain.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -58,6 +60,8 @@ public class AlphaVantageService {
       log.error("Failed to process JSON into MongoDocument in mapJsonGraph().");
     } catch (IOException ioe) {
       log.error("ObjectMapper failed trying to parse JsonTree from response body");
+    } catch (ParseException pe) {
+      log.error("Thrown exception while parsing date for a MongoDocument", pe);
     }
     //JACKSON TEST BLOCK
     log.info("Testing output and @Data annotation of MongoDocuments:\n{}", mongoDocumentMap);
@@ -65,9 +69,9 @@ public class AlphaVantageService {
 
     return mongoDocumentMap;
   }
-
-  private TreeMap<String, MongoDocument> mapJsonGraph(final JsonNode root) throws
-      JsonProcessingException {
+  
+  private TreeMap<String, MongoDocument> mapJsonGraph(JsonNode root) throws
+      JsonProcessingException, ParseException {
     JsonNode timeSeriesField = root.get("Time Series (Daily)");
     Iterator<String> dates = timeSeriesField.fieldNames();
     TreeMap<String, MongoDocument> treeMap = new TreeMap<>();
@@ -75,8 +79,8 @@ public class AlphaVantageService {
       String date = dates.next();
       JsonNode value = timeSeriesField.get(date);
       MongoDocument md = objectMapper.treeToValue(value, MongoDocument.class);
-      md.setDate(date);
-      treeMap.put(date, md);
+      md.setDate(Instant.from(LocalDate.parse(date).atTime(MongoDocument.NYSE_CLOSE_TIME_OFFSET)));
+      tMap.put(date, md);
     }
 
     return treeMap;
