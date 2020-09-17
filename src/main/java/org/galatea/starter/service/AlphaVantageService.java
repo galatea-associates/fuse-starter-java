@@ -4,10 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.TreeMap;
 import lombok.NonNull;
@@ -15,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.build.Plugin.Factory.Simple;
 import net.sf.aspect4log.Log;
+import org.galatea.starter.MyProps;
 import org.galatea.starter.domain.MongoDocument;
+import org.galatea.starter.domain.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,8 +26,8 @@ import org.springframework.web.client.RestTemplate;
 @Log
 @Service
 public class AlphaVantageService {
-  @Value("${api.alphavantage}")
-  private String key;
+  /*@Autowired
+  StockRepository repository;*/
 
   @Autowired
   RestTemplate restTemplate;
@@ -43,11 +41,11 @@ public class AlphaVantageService {
    * @param days int, the number of days of stock price data to return
    * @return a String, gross mashup of proper JSON {in process of fixing}
    */
-  TreeMap<String,MongoDocument> access(final String symbol, final int days) {
+  public TreeMap<String,MongoDocument> access(final String symbol, final int days) {
     String alphaVantageUrl
         = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol;
     String output = days > 100 ? "full" : "compact";
-    String requestUrl = alphaVantageUrl + "&outputsize=" + output + "&apikey=" + key;
+    String requestUrl = alphaVantageUrl + "&outputsize=" + output + "&apikey=" + MyProps.apiKey;
     ResponseEntity<String> response = restTemplate.getForEntity(requestUrl, String.class);
 
     assert response.getStatusCode() == HttpStatus.OK; // makes sure we got a clean response
@@ -57,6 +55,7 @@ public class AlphaVantageService {
     //JACKSON TEST BLOCK
     try {
       mongoDocumentMap = mapJsonGraph(objectMapper.readTree(response.getBody()));
+      //repository.insertMany(mongoDocumentMap.values(), symbol);
     } catch (JsonProcessingException jpe) {
       log.error("Failed to process JSON into MongoDocument in mapJsonGraph().");
     } catch (IOException ioe) {
@@ -67,14 +66,15 @@ public class AlphaVantageService {
     //JACKSON TEST BLOCK
     log.info("Testing output and @Data annotation of MongoDocuments:\n{}", mongoDocumentMap);
 
+
     return mongoDocumentMap;
   }
-
+  
   private TreeMap<String, MongoDocument> mapJsonGraph(JsonNode root) throws
       JsonProcessingException, ParseException {
     JsonNode timeSeriesField = root.get("Time Series (Daily)");
     Iterator<String> dates = timeSeriesField.fieldNames();
-    TreeMap<String, MongoDocument> tMap = new TreeMap<>();
+    TreeMap<String, MongoDocument> treeMap = new TreeMap<>();
     while (dates.hasNext()) {
       String date = dates.next();
       JsonNode value = timeSeriesField.get(date);
@@ -83,6 +83,6 @@ public class AlphaVantageService {
       tMap.put(date, md);
     }
 
-    return tMap;
+    return treeMap;
   }
 }

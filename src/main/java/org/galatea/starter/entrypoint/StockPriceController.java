@@ -55,7 +55,7 @@ public class StockPriceController extends BaseRestController {
       key = processed.lowerKey(key);
     }
     try {
-      return objectMapper.writeValueAsString(root);
+      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
     } catch (JsonProcessingException jpe) {
       log.error("Failed in pretty-printing Json tree with ObjectMapper.");
     }
