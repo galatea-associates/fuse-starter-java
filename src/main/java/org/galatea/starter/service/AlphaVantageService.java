@@ -38,7 +38,7 @@ public class AlphaVantageService {
    * @param days int, the number of days of stock price data to return
    * @return a String, gross mashup of proper JSON {in process of fixing}
    */
-  public TreeMap<String,MongoDocument> access(final String symbol, final int days) {
+  TreeMap<String,MongoDocument> access(final String symbol, final int days) {
     String alphaVantageUrl
         = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol;
     String output = days > 100 ? "full" : "compact";

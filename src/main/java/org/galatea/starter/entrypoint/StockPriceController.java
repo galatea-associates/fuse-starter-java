@@ -5,13 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.TreeMap;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.MongoDocument;
-import org.galatea.starter.service.AlphaVantageService;
 import org.galatea.starter.service.PriceRequestService;
-import org.galatea.starter.utils.MongoDocSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,11 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 public class StockPriceController extends BaseRestController {
-  @NonNull
+  @Autowired
   PriceRequestService priceRequestService;
-
-  @NonNull
-  AlphaVantageService alphaVantageService;
 
   /**
    * Pulls 'ticker' and 'days' params from GET request to '/prices' entrypoint and pass along
@@ -42,7 +37,7 @@ public class StockPriceController extends BaseRestController {
           String.format("'days' parameter should be greater than 1. Was %d", days));
     }
 
-    TreeMap<String, MongoDocument> processed = alphaVantageService.access(ticker, days);
+    TreeMap<String, MongoDocument> processed = priceRequestService.access(ticker, days);
     log.info("Returned from AlphaVantageService with map of MongoDocuments.");
     assert processed != null && !processed.isEmpty();
     // constructing the array of 'days'-limited stock price results
@@ -60,7 +55,7 @@ public class StockPriceController extends BaseRestController {
       key = processed.lowerKey(key);
     }
     try {
-      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
+      return objectMapper.writeValueAsString(root);
     } catch (JsonProcessingException jpe) {
       log.error("Failed in pretty-printing Json tree with ObjectMapper.");
     }
