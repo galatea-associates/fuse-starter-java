@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import org.galatea.starter.domain.MongoDocument;
 
 public class MongoDocSerializer extends StdSerializer<MongoDocument> {
@@ -27,7 +29,9 @@ public class MongoDocSerializer extends StdSerializer<MongoDocument> {
   public void serialize(final MongoDocument value, final JsonGenerator gen,
       final SerializerProvider provider) throws IOException {
     gen.writeStartObject();
-    gen.writeStringField("date", value.getDate().toString());
+    gen.writeStringField("date",
+        ZonedDateTime.ofInstant(value.getDate(), ZoneId.systemDefault())
+            .toString());
     gen.writeNumberField("open", value.getOpen());
     gen.writeNumberField("high", value.getHigh());
     gen.writeNumberField("low", value.getLow());

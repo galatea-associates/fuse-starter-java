@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.TreeMap;
 import lombok.NonNull;
@@ -73,12 +75,11 @@ public class AlphaVantageService {
     JsonNode timeSeriesField = root.get("Time Series (Daily)");
     Iterator<String> dates = timeSeriesField.fieldNames();
     TreeMap<String, MongoDocument> tMap = new TreeMap<>();
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     while (dates.hasNext()) {
       String date = dates.next();
       JsonNode value = timeSeriesField.get(date);
       MongoDocument md = objectMapper.treeToValue(value, MongoDocument.class);
-      md.setDate(formatter.parse(date));
+      md.setDate(Instant.from(LocalDate.parse(date).atTime(MongoDocument.NYSE_CLOSE_TIME_OFFSET)));
       tMap.put(date, md);
     }
 
