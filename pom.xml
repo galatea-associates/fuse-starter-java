@@ -347,11 +347,11 @@
 			<version>2.2</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
+		<!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-core -->
 		<dependency>
 			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>3.12.7</version>
+			<artifactId>mongodb-driver-core</artifactId>
+			<version>4.0.4</version>
 		</dependency>
 
 		<!-- MongoDB -->
