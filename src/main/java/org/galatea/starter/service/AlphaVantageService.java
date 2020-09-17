@@ -12,13 +12,10 @@ import java.util.TreeMap;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.build.Plugin.Factory.Simple;
 import net.sf.aspect4log.Log;
 import org.galatea.starter.MyProps;
 import org.galatea.starter.domain.MongoDocument;
-import org.galatea.starter.domain.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,8 +26,6 @@ import org.springframework.web.client.RestTemplate;
 @Log
 @Service
 public class AlphaVantageService {
-  /*@Autowired
-  StockRepository repository;*/
 
   @Autowired
   RestTemplate restTemplate;

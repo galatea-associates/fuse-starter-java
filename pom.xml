@@ -346,14 +346,6 @@
 			<artifactId>junit-toolbox</artifactId>
 			<version>2.2</version>
 		</dependency>
-
-		<!-- MongoDB for Spring -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-mongodb</artifactId>
-		</dependency>
-
-
 	</dependencies>
 	<build>
 		<extensions>
