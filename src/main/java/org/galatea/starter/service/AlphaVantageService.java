@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.TreeMap;
 import lombok.NonNull;
@@ -80,7 +83,7 @@ public class AlphaVantageService {
       JsonNode value = timeSeriesField.get(date);
       MongoDocument md = objectMapper.treeToValue(value, MongoDocument.class);
       md.setDate(Instant.from(LocalDate.parse(date).atTime(MongoDocument.NYSE_CLOSE_TIME_OFFSET)));
-      tMap.put(date, md);
+      treeMap.put(date, md);
     }
 
     return treeMap;
