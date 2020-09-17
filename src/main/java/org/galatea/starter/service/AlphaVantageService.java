@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import org.galatea.starter.MyProps;
 import org.galatea.starter.domain.MongoDocument;
+import org.galatea.starter.domain.rpsy.StockPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,9 @@ public class AlphaVantageService {
 
   @Autowired
   RestTemplate restTemplate;
+
+  @Autowired
+  StockPriceRepository stockPriceRepository;
 
   @NonNull
   private ObjectMapper objectMapper;
@@ -52,8 +56,9 @@ public class AlphaVantageService {
     TreeMap<String, MongoDocument> mongoDocumentMap = null;
     //JACKSON TEST BLOCK
     try {
-      mongoDocumentMap = mapJsonGraph(objectMapper.readTree(response.getBody()));
-      //repository.insertMany(mongoDocumentMap.values(), symbol);
+      mongoDocumentMap = mapJsonGraph(objectMapper.readTree(response.getBody()), symbol);
+      stockPriceRepository.saveAll(mongoDocumentMap.values());
+
     } catch (JsonProcessingException jpe) {
       log.error("Failed to process JSON into MongoDocument in mapJsonGraph().");
     } catch (IOException ioe) {
@@ -68,8 +73,8 @@ public class AlphaVantageService {
     return mongoDocumentMap;
   }
   
-  private TreeMap<String, MongoDocument> mapJsonGraph(final JsonNode root) throws
-      JsonProcessingException, ParseException {
+  private TreeMap<String, MongoDocument> mapJsonGraph(final JsonNode root, final String symbol)
+      throws JsonProcessingException, ParseException {
     JsonNode timeSeriesField = root.get("Time Series (Daily)");
     Iterator<String> dates = timeSeriesField.fieldNames();
     TreeMap<String, MongoDocument> treeMap = new TreeMap<>();
@@ -78,7 +83,8 @@ public class AlphaVantageService {
       JsonNode value = timeSeriesField.get(date);
       MongoDocument md = objectMapper.treeToValue(value, MongoDocument.class);
       md.setDate(Instant.from(LocalDate.parse(date).atTime(MongoDocument.NYSE_CLOSE_TIME_OFFSET)));
-      treeMap.put(date, md);
+      md.setTicker(symbol.toUpperCase());
+      treeMap.put(md.getDate().toString(), md);
     }
 
     return treeMap;

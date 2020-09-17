@@ -346,6 +346,21 @@
 			<artifactId>junit-toolbox</artifactId>
 			<version>2.2</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>3.12.7</version>
+		</dependency>
+
+		<!-- MongoDB -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>3.0.3.RELEASE</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<extensions>
