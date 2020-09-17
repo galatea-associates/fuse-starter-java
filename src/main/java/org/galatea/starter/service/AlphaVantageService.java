@@ -4,11 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.TreeMap;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.build.Plugin.Factory.Simple;
 import net.sf.aspect4log.Log;
 import org.galatea.starter.domain.MongoDocument;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,8 @@ public class AlphaVantageService {
       log.error("Failed to process JSON into MongoDocument in mapJsonGraph().");
     } catch (IOException ioe) {
       log.error("ObjectMapper failed trying to parse JsonTree from response body");
+    } catch (ParseException pe) {
+      log.error("Thrown exception while parsing date for a MongoDocument", pe);
     }
     //JACKSON TEST BLOCK
     log.info("Testing output and @Data annotation of MongoDocuments:\n{}", mongoDocumentMap);
@@ -64,15 +69,16 @@ public class AlphaVantageService {
   }
 
   private TreeMap<String, MongoDocument> mapJsonGraph(JsonNode root) throws
-      JsonProcessingException {
+      JsonProcessingException, ParseException {
     JsonNode timeSeriesField = root.get("Time Series (Daily)");
     Iterator<String> dates = timeSeriesField.fieldNames();
     TreeMap<String, MongoDocument> tMap = new TreeMap<>();
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     while (dates.hasNext()) {
       String date = dates.next();
       JsonNode value = timeSeriesField.get(date);
       MongoDocument md = objectMapper.treeToValue(value, MongoDocument.class);
-      md.setDate(date);
+      md.setDate(formatter.parse(date));
       tMap.put(date, md);
     }
 

@@ -38,8 +38,8 @@ public class StockPriceController extends BaseRestController {
     }
 
     TreeMap<String, MongoDocument> processed = priceRequestService.access(ticker, days);
-    log.info("Returned from AlphaVantageService with map of MongoDocuments.");
-    assert processed != null && !processed.isEmpty();
+    log.info("Returned from PriceRequestService with map of MongoDocuments.");
+    assert processed != null && !processed.isEmpty(); //this might not be assertable in the future
     // constructing the array of 'days'-limited stock price results
     ObjectMapper objectMapper = new ObjectMapper();
     ObjectNode root = objectMapper.createObjectNode();
