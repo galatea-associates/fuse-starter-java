@@ -77,6 +77,11 @@ public class AppConfig {
     return Logger.Level.BASIC;
   }
 
+  /**
+   * Creates bean for RestTemplate.
+   *
+   * @return
+   */
   @Bean
   public RestTemplate restTemplate() {
     return new RestTemplate();

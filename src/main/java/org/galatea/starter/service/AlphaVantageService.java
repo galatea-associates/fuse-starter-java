@@ -73,7 +73,7 @@ public class AlphaVantageService {
     return mongoDocumentMap;
   }
   
-  private TreeMap<String, MongoDocument> mapJsonGraph(JsonNode root) throws
+  private TreeMap<String, MongoDocument> mapJsonGraph(final JsonNode root) throws
       JsonProcessingException, ParseException {
     JsonNode timeSeriesField = root.get("Time Series (Daily)");
     Iterator<String> dates = timeSeriesField.fieldNames();

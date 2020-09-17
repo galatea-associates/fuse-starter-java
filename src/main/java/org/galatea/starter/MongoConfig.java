@@ -4,6 +4,8 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import java.util.Collection;
+import java.util.Collections;
 import org.galatea.starter.domain.repository.StockRepository;
 import org.galatea.starter.domain.repository.StockRepositoryImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +35,16 @@ public class MongoConfig  extends AbstractMongoClientConfiguration {
     return "FuseCluster";
   }
 
+  @Override
+  public Collection getMappingBasePackages() {
+    return Collections.singleton("org.galatea.starter");
+  }
+
+  /**
+   * Creates a bean of the StockRepository.
+   *
+   * @return instance of the StockRepository
+   */
   @Bean
   public StockRepository stockRepository() {
     return new StockRepositoryImpl();

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
 import org.galatea.starter.MyProps;
 import org.galatea.starter.service.AlphaVantageService;
+import org.galatea.starter.service.PriceRequestService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @Slf4j
-@WebMvcTest({StockPriceController.class, AlphaVantageService.class})
+@WebMvcTest({StockPriceController.class, PriceRequestService.class, AlphaVantageService.class})
 @RunWith(JUnitParamsRunner.class)
 public class StockPriceControllerTest extends ASpringTest {
 
@@ -35,6 +37,9 @@ public class StockPriceControllerTest extends ASpringTest {
 
   @MockBean
   private RestTemplate mockRestTemplate;
+
+  @Autowired
+  private PriceRequestService priceRequestService;
 
   @Autowired
   private AlphaVantageService alphaVantageService;
@@ -60,7 +65,7 @@ public class StockPriceControllerTest extends ASpringTest {
     JsonNode jn = objectMapper.readTree(resource);
     //standardized to remove any potential mistakes in format
     String formattedJson = objectMapper.writeValueAsString(jn);
-    log.info(formattedJson);
+    log.info("formatted:\n" + formattedJson);
     mvc.perform(get("/prices")
         .param("ticker", "tsla")
         .param("days", "1")
@@ -88,7 +93,7 @@ public class StockPriceControllerTest extends ASpringTest {
     log.debug(tree);
     JsonNode jn = objectMapper.readTree(tree);
     String formattedJson = objectMapper.writeValueAsString(jn);
-    log.info(formattedJson);
+    log.info("formatted:\n" + formattedJson);
     mvc.perform(get("/prices")
         .param("ticker", "amd")
         .param("days", "3")
@@ -116,7 +121,7 @@ public class StockPriceControllerTest extends ASpringTest {
     log.debug(tree);
     JsonNode jn = objectMapper.readTree(tree);
     String formattedJson = objectMapper.writeValueAsString(jn);
-    log.info(formattedJson);
+    log.info("formatted:\n" + formattedJson);
     mvc.perform(get("/prices")
         .param("ticker", "nvda")
         .param("days", "5")
@@ -144,11 +149,12 @@ public class StockPriceControllerTest extends ASpringTest {
     log.debug(tree);
     JsonNode jn = objectMapper.readTree(tree);
     String formattedJson = objectMapper.writeValueAsString(jn);
-    log.debug(formattedJson);
+    log.info("formatted:\n" + formattedJson);
+    ResultMatcher resultMatcher = MockMvcResultMatchers.content().json(formattedJson);
     mvc.perform(get("/prices")
         .param("ticker", "intc")
         .param("days", "7")
         .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(MockMvcResultMatchers.content().json(formattedJson));
+        .andExpect(resultMatcher);
   }
 }
