@@ -347,12 +347,35 @@
 			<version>2.2</version>
 		</dependency>
 
+		<!-- matched group of MongoD-pendencies -->
 		<!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-core -->
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongodb-driver-core</artifactId>
-			<version>4.0.4</version>
+			<version>4.1.0</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-sync</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-reactivestreams -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-reactivestreams</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mongodb/bson -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>bson</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+		<!-- matched group of MongoD-pendencies -->
 
 		<!-- MongoDB -->
 		<dependency>

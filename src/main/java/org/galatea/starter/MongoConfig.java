@@ -21,8 +21,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 
   @Override
   public MongoClient mongoClient() {
-    boolean useAtlas = true; //placeholder
-    MongoClientFact
+    boolean useAtlas = false; //placeholder
     String uri;
     if (useAtlas) {
       String password = "merrylittle";

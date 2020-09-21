@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import org.galatea.starter.MyProps;
-import org.galatea.starter.domain.MongoDocument;
+import org.galatea.starter.domain.StockData;
 import org.galatea.starter.domain.rpsy.StockPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,7 @@ public class AlphaVantageService {
    * @param days int, the number of days of stock price data to return
    * @return a String, gross mashup of proper JSON {in process of fixing}
    */
-  public TreeMap<String,MongoDocument> access(final String symbol, final int days) {
+  public TreeMap<String, StockData> access(final String symbol, final int days) {
     String alphaVantageUrl
         = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol;
     String output = days > 100 ? "full" : "compact";
@@ -53,7 +53,7 @@ public class AlphaVantageService {
     assert response.getStatusCode() == HttpStatus.OK; // makes sure we got a clean response
     log.info("Logging the full request url: {}", requestUrl);
 
-    TreeMap<String, MongoDocument> mongoDocumentMap = null;
+    TreeMap<String, StockData> mongoDocumentMap = null;
     //JACKSON TEST BLOCK
     try {
       mongoDocumentMap = mapJsonGraph(objectMapper.readTree(response.getBody()), symbol);
@@ -73,16 +73,16 @@ public class AlphaVantageService {
     return mongoDocumentMap;
   }
   
-  private TreeMap<String, MongoDocument> mapJsonGraph(final JsonNode root, final String symbol)
+  private TreeMap<String, StockData> mapJsonGraph(final JsonNode root, final String symbol)
       throws JsonProcessingException, ParseException {
     JsonNode timeSeriesField = root.get("Time Series (Daily)");
     Iterator<String> dates = timeSeriesField.fieldNames();
-    TreeMap<String, MongoDocument> treeMap = new TreeMap<>();
+    TreeMap<String, StockData> treeMap = new TreeMap<>();
     while (dates.hasNext()) {
       String date = dates.next();
       JsonNode value = timeSeriesField.get(date);
-      MongoDocument md = objectMapper.treeToValue(value, MongoDocument.class);
-      md.setDate(Instant.from(LocalDate.parse(date).atTime(MongoDocument.NYSE_CLOSE_TIME_OFFSET)));
+      StockData md = objectMapper.treeToValue(value, StockData.class);
+      md.setDate(Instant.from(LocalDate.parse(date).atTime(StockData.NYSE_CLOSE_TIME_OFFSET)));
       md.setTicker(symbol.toUpperCase());
       treeMap.put(md.getDate().toString(), md);
     }

@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @JsonSerialize(using = MongoDocSerializer.class)
 @NoArgsConstructor
 @Document
-@Data public class MongoDocument {
+@Data public class StockData {
   //including extended hours
   public static OffsetTime NYSE_CLOSE_TIME_OFFSET = OffsetTime.parse("20:00:00-05:00");
 
