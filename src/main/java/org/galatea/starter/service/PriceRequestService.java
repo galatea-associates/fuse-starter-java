@@ -44,8 +44,10 @@ public class PriceRequestService {
       for (StockData document : documents) {
         treeMap.put(document.getDate().toString(), document);
       }
+      log.info("Request was serviced entirely internally by MongoDB.");
       return treeMap;
     } else {
+      log.info("Request will be passed to external service.");
       return null; //default response that tells caller to poke AlphaVantage for info
     }
   }

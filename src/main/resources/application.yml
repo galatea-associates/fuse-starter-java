@@ -2,9 +2,9 @@
 spring:
    data:
       mongodb:
-         uri: mongodb+srv://Lord:%s@fusecluster.kvz3u.gcp.mongodb.net/FuseCluster?retryWrites=true&w=majority
-   profiles:
-      active: test
+         uri: mongodb://localhost:27017/stock_price_data
+#   profiles:
+#      active: test
    main:
       allow-bean-definition-overriding: true
    datasource:
@@ -14,10 +14,10 @@ spring:
       # http://www.h2database.com/html/tutorial.html#using_server
       url: jdbc:h2:mem:testtest
       driver-class-name: org.h2.Driver
-   jpa:
-      hibernate:
-         ddl-auto: update
-      database-platform: org.hibernate.dialect.MySQL5Dialect
+#   jpa:
+#      hibernate:
+#         ddl-auto: update
+#      database-platform: org.hibernate.dialect.MySQL5Dialect
 
 mvc:
    settleMissionPath: /settlementEngine

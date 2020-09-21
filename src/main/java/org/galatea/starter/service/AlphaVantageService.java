@@ -48,6 +48,7 @@ public class AlphaVantageService {
         = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol;
     String output = days > 100 ? "full" : "compact";
     String requestUrl = alphaVantageUrl + "&outputsize=" + output + "&apikey=" + MyProps.apiKey;
+    log.info("Request serviced externally by AlphaVantage.");
     ResponseEntity<String> response = restTemplate.getForEntity(requestUrl, String.class);
 
     assert response.getStatusCode() == HttpStatus.OK; // makes sure we got a clean response

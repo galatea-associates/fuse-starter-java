@@ -4,10 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.Collection;
+import java.util.List;
 import java.util.TreeMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.StockData;
+import org.galatea.starter.domain.rpsy.StockPriceRepository;
 import org.galatea.starter.service.PriceRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,6 +25,9 @@ public class StockPriceController extends BaseRestController {
   @Autowired
   PriceRequestService priceRequestService;
 
+  @Autowired
+  StockPriceRepository stockPriceRepository;
+
   /**
    * Pulls 'ticker' and 'days' params from GET request to '/prices' entrypoint and pass along
    * to alphavantge API.
@@ -30,7 +36,7 @@ public class StockPriceController extends BaseRestController {
    * @return String, JSON repr of the data requested
    */
   @GetMapping(value = "${webservice.quotepath}", produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ObjectNode quoteEndpoint(@RequestParam(value = "ticker") final String ticker,
+  public Collection<StockData> quoteEndpoint(@RequestParam(value = "ticker") final String ticker,
       @RequestParam(value = "days") final int days) {
     if (days < 1) {
       throw new IllegalArgumentException(
@@ -40,21 +46,16 @@ public class StockPriceController extends BaseRestController {
     TreeMap<String, StockData> processed = priceRequestService.access(ticker, days);
     log.info("Returned from PriceRequestService with map of MongoDocuments.");
     assert processed != null && !processed.isEmpty(); //this might not be assertable in the future
-    // constructing the array of 'days'-limited stock price results
-    ObjectMapper objectMapper = new ObjectMapper();
-    ObjectNode root = objectMapper.createObjectNode();
-    int iterations = days > processed.size() ? processed.size() : days;
-    ArrayNode jsonArrayRoot = root.putArray(String.format("%s Daily Stock Prices (%d)",
-        ticker.toUpperCase(), iterations));
-    String key = processed.lastKey();
-    // serializes each entry as a JSON object, up to iterations
-    for (int i = 0; i < iterations; i++) {
-      ObjectNode objectNode = objectMapper.createObjectNode();
-      objectNode.putPOJO("prices (USD)", processed.get(key)); // converts MongoDoc to JSON
-      jsonArrayRoot.add(objectNode);
-      key = processed.lowerKey(key);
-    }
 
-    return root;
+
+    return processed.descendingMap().values();
+  }
+
+  @GetMapping(value = "/test", produces = {MediaType.APPLICATION_JSON_VALUE})
+  public Collection<StockData> quoteEndpoint() {
+    List<StockData> result = stockPriceRepository.findAll();
+
+
+    return result;
   }
 }
