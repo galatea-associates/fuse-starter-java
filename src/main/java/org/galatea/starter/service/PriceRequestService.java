@@ -1,7 +1,6 @@
 package org.galatea.starter.service;
 
 import java.util.List;
-import java.util.TreeMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
@@ -28,24 +27,19 @@ public class PriceRequestService {
   @Autowired
   private StockPriceRepository stockPriceRepository;
 
-  protected TreeMap<String, StockData> externalRequest(final String ticker, final int days) {
+  protected List<StockData> externalRequest(final String ticker, final int days) {
     return alphaVantageService.access(ticker, days);
   }
 
-  protected TreeMap<String, StockData> internalRequest(final String ticker, final int days) {
+  protected List<StockData> internalRequest(final String ticker, final int days) {
     Slice<StockData> documentSlice = stockPriceRepository
         .findByTicker(ticker,
             PageRequest.of(0, days, Sort.by(Direction.DESC, "date")));
     //checks if the info we're looking for exists in the repo
     if (documentSlice.hasContent()) {
       List<StockData> documents = documentSlice.getContent();
-      TreeMap<String, StockData> treeMap = new TreeMap<>();
-
-      for (StockData document : documents) {
-        treeMap.put(document.getDate().toString(), document);
-      }
-      log.info("Request was serviced entirely internally by MongoDB.");
-      return treeMap;
+      log.info("Request was serviced internally by MongoDB.");
+      return documents;
     } else {
       log.info("Request will be passed to external service.");
       return null; //default response that tells caller to poke AlphaVantage for info
@@ -61,9 +55,9 @@ public class PriceRequestService {
    * @param days int, number of days to be returned if possible
    * @return TreeMap, date of info as a String key; prices info for that day as MongoDocument values
    */
-  public TreeMap<String, StockData> access(final String ticker, final int days) {
+  public List<StockData> access(final String ticker, final int days) {
     //check if can get map from internal repo
-    TreeMap<String, StockData> result = internalRequest(ticker, days);
+    List<StockData> result = internalRequest(ticker, days);
     if (result == null) {
       return externalRequest(ticker, days); //query AlphaVantage and serve
     } else {

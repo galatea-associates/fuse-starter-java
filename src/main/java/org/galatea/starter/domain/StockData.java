@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 @Data public class StockData {
   //including extended hours
-  public static OffsetTime NYSE_CLOSE_TIME_OFFSET = OffsetTime.parse("20:00:00-05:00");
+  public static OffsetTime NYSE_CLOSE_TIME_OFFSET = OffsetTime.parse("20:00:00-04:00");
 
   @Id
   private String id;

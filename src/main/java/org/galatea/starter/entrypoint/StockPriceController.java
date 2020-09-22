@@ -1,12 +1,7 @@
 package org.galatea.starter.entrypoint;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Collection;
 import java.util.List;
-import java.util.TreeMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.StockData;
@@ -43,18 +38,15 @@ public class StockPriceController extends BaseRestController {
           String.format("'days' parameter should be greater than 1. Was %d", days));
     }
 
-    TreeMap<String, StockData> processed = priceRequestService.access(ticker, days);
-    log.info("Returned from PriceRequestService with map of MongoDocuments.");
+    List<StockData> processed = priceRequestService.access(ticker.toUpperCase(), days);
+    log.info("Returned from PriceRequestService with list of StockData.");
     assert processed != null && !processed.isEmpty(); //this might not be assertable in the future
-
-
-    return processed.descendingMap().values();
+    return processed;
   }
 
   @GetMapping(value = "/test", produces = {MediaType.APPLICATION_JSON_VALUE})
   public Collection<StockData> quoteEndpoint() {
     List<StockData> result = stockPriceRepository.findAll();
-
 
     return result;
   }
