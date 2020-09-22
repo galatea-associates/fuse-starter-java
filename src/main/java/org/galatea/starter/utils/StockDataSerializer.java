@@ -8,12 +8,12 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import org.galatea.starter.domain.StockData;
 
-public class MongoDocSerializer extends StdSerializer<StockData> {
+public class StockDataSerializer extends StdSerializer<StockData> {
 
   /**
    * Blank default constructor.
    */
-  public MongoDocSerializer() {
+  public StockDataSerializer() {
     this(null);
   }
 
@@ -21,7 +21,7 @@ public class MongoDocSerializer extends StdSerializer<StockData> {
    * Constructor for custom serializer for MongoDocument into JSON.
    * @param md MongoDocument
    */
-  public MongoDocSerializer(final Class<StockData> md) {
+  public StockDataSerializer(final Class<StockData> md) {
     super(md);
   }
 

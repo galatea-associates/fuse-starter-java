@@ -6,11 +6,11 @@ import java.time.Instant;
 import java.time.OffsetTime;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.galatea.starter.utils.MongoDocSerializer;
+import org.galatea.starter.utils.StockDataSerializer;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@JsonSerialize(using = MongoDocSerializer.class)
+@JsonSerialize(using = StockDataSerializer.class)
 @NoArgsConstructor
 @Document
 @Data public class StockData {
