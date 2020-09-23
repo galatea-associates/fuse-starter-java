@@ -1,6 +1,10 @@
 package org.galatea.starter.service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
@@ -27,8 +31,9 @@ public class PriceRequestService {
   @Autowired
   private StockPriceRepository stockPriceRepository;
 
-  protected List<StockData> externalRequest(final String ticker, final int days) {
-    return alphaVantageService.access(ticker, days);
+  protected List<StockData> externalRequest(final String ticker, final long days,
+      final int retrievalNum) {
+    return alphaVantageService.access(ticker, days, retrievalNum);
   }
 
   protected List<StockData> internalRequest(final String ticker, final int days) {
@@ -42,7 +47,7 @@ public class PriceRequestService {
       return documents;
     } else {
       log.info("Request will be passed to external service.");
-      return null; //default response that tells caller to poke AlphaVantage for info
+      return new ArrayList<>(); //default response that tells caller to poke AlphaVantage for info
     }
   }
 
@@ -56,12 +61,22 @@ public class PriceRequestService {
    * @return TreeMap, date of info as a String key; prices info for that day as MongoDocument values
    */
   public List<StockData> access(final String ticker, final int days) {
-    //check if can get map from internal repo
-    List<StockData> result = internalRequest(ticker, days);
-    if (result == null) {
-      return externalRequest(ticker, days); //query AlphaVantage and serve
+    Slice<StockData> mostRecent = stockPriceRepository.findByTicker(ticker,
+        PageRequest.of(0, days, Sort.by(Direction.DESC, "date")));
+    long daysDifference = days; //default value to grab the entire record, if doesn't exist in db
+    if (mostRecent.hasContent()) {
+       daysDifference = mostRecent.getContent().get(0).getDate()
+           .until(Instant.now(), ChronoUnit.DAYS);
+       log.info("Queried Mongo; Most recent data is {} days old.", daysDifference);
     } else {
-      return result;
+      log.info("Queried Mongo; No data exists for symbol({})", ticker);
+    }
+
+    //check if can get map from internal repo
+    if (daysDifference == 0) {
+      return internalRequest(ticker, days);
+    } else {
+      return externalRequest(ticker, daysDifference, days); //query AlphaVantage and serve
     }
   }
 }

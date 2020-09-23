@@ -46,10 +46,10 @@ public class AlphaVantageService {
    * @param days int, the number of days of stock price data to return
    * @return a String, gross mashup of proper JSON {in process of fixing}
    */
-  public List<StockData> access(final String symbol, final int days) {
+  public List<StockData> access(final String symbol, final long days, final int retrievalNum) {
     String alphaVantageUrl
         = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol;
-    String output = days > 100 ? "full" : "compact";
+    String output = days > 100L ? "full" : "compact";
     String requestUrl = alphaVantageUrl + "&outputsize=" + output + "&apikey=" + MyProps.apiKey;
     ResponseEntity<String> response = restTemplate.getForEntity(requestUrl, String.class);
 
@@ -60,7 +60,7 @@ public class AlphaVantageService {
     try {
       List<StockData> stockDocs = mapJsonGraph(objectMapper.readTree(response.getBody()), symbol);
       result = stockDocs.stream()
-          .limit(days)
+          .limit(retrievalNum)
           .collect(Collectors.toList());
       List<StockData> succeed = stockPriceRepository.insert(stockDocs);
       log.info("Successfully stored external data in repo: {}", !succeed.isEmpty());

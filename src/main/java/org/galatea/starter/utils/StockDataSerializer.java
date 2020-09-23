@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import org.galatea.starter.domain.StockData;
@@ -30,7 +31,7 @@ public class StockDataSerializer extends StdSerializer<StockData> {
       final SerializerProvider provider) throws IOException {
     gen.writeStartObject();
     gen.writeStringField("date",
-        ZonedDateTime.ofInstant(value.getDate(), ZoneId.systemDefault())
+        LocalDate.ofInstant(value.getDate(), ZoneId.systemDefault())
             .toString());
     gen.writeNumberField("open", value.getOpen());
     gen.writeNumberField("high", value.getHigh());
