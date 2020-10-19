@@ -2,11 +2,15 @@ package org.galatea.starter.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapIterator;
 import org.galatea.starter.domain.AVDay;
 import org.galatea.starter.domain.AVStock;
+import org.galatea.starter.domain.AVTimeSeries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,42 +23,42 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PriceFinderService implements PriceFinderClient{
+public class PriceFinderService {
 
   final static String AVQueryURL = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&";
   final static String AVApikey = "XNRUM1DDXGFTDL82";
 
-  @Autowired
+  @NonNull
   private ObjectMapper objectMapper;
-  @Autowired
+  @NonNull
   private RestTemplate restTemplate;
 
 /**
  * Get all available data regarding requested stock from AlphaVantage and requested N days
  *
- * @return
+ * @return A ResponseEntity with a body of java objects containing N days price information for the
+ * requested stock
  */
-  public ResponseEntity<AVStock> processText(final String text, int n) {
+  public ResponseEntity<AVStock> getPriceInformation(final String text, int numberOfDays) {
     String AVGetRequest = (new StringBuilder()).append(AVQueryURL).append("symbol=")
         .append(text).append("&apikey=").append(AVApikey).toString();
     ResponseEntity<AVStock> data = restTemplate.getForEntity(AVGetRequest, AVStock.class);
-    data = data.ok(getNDays(data.getBody(), n));
-    ResponseEntity dataDesiredFormat = new ResponseEntity(data.getBody().getAVTimeSeries(), data.getStatusCode());
-
+    AVStock nDaysOfData = getNDays(data.getBody(), numberOfDays);
+    ResponseEntity dataDesiredFormat = data.ok(nDaysOfData.getAVTimeSeries());
     return dataDesiredFormat;
   }
 
 
-
-  public AVStock getNDays (AVStock allData, int n) {
-    HashMap<String, AVDay> nDaysOfData = new HashMap();
-    for (Map.Entry<String, AVDay> entry : allData.getAVTimeSeries().entrySet()) {
-      if (n <= 0) break;
+  public AVStock getNDays (AVStock allData, int numberOfDays) {
+    HashMap<String, AVDay> nDaysOfData = new HashMap<String, AVDay>();
+    AVStock result = new AVStock();
+    Iterator<Map.Entry<String, AVDay>> entries = allData.getAVTimeSeries().entrySet().iterator();
+    while (entries.hasNext() && numberOfDays > 0) {
+      Map.Entry<String, AVDay> entry = entries.next();
       nDaysOfData.put(entry.getKey(), entry.getValue());
-      n -= 1;
+      numberOfDays -= 1;
     }
-    AVStock nStock = new AVStock();
-    nStock.setAVTimeSeries(nDaysOfData);
-    return nStock;
+    result.setAVTimeSeries(nDaysOfData);
+    return result;
   }
 }

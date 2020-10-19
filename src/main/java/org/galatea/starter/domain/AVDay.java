@@ -2,9 +2,11 @@ package org.galatea.starter.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Data;
 
 //reference: https://stackoverflow.com/questions/47263236/how-to-parse-json-object-array-with-jackson-into-dto-in-springboot
-
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AVDay{
 
@@ -25,41 +27,5 @@ public class AVDay{
 
   public double getOpen() {
     return open;
-  }
-
-  public void setOpen(double open) {
-    this.open = open;
-  }
-
-  public double getHigh() {
-    return high;
-  }
-
-  public void setHigh(double high) {
-    this.high = high;
-  }
-
-  public double getLow() {
-    return low;
-  }
-
-  public void setLow(double low) {
-    this.low = low;
-  }
-
-  public double getClose() {
-    return close;
-  }
-
-  public void setClose(double close) {
-    this.close = close;
-  }
-
-  public double getVolume() {
-    return volume;
-  }
-
-  public void setVolume(double volume) {
-    this.volume = volume;
   }
 }
