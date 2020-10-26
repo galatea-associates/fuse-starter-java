@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-//sample call: 'http://localhost:8080/pricefinder?text=IBM&quantity=10'
+//sample call: 'http://localhost:8080/pricefinder?text=IBM&number-of-days=10'
 
 /**
  * REST Controller that listens to http endpoints and allows the caller to send text to be

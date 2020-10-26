@@ -26,4 +26,5 @@ public class AVStock {
   public void setAVTimeSeries(HashMap<String, AVDay> AVTimeSeries) {
     this.AVTimeSeries = AVTimeSeries;
   }
+
 }
