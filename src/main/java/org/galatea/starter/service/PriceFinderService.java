@@ -1,7 +1,5 @@
 package org.galatea.starter.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,12 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.AVDay;
 import org.galatea.starter.domain.AVStock;
 import org.galatea.starter.domain.PriceFinderStock;
-
 import org.galatea.starter.domain.DateAndPrice;
 import org.galatea.starter.domain.PriceFinderResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -53,12 +49,11 @@ public class PriceFinderService {
         List<String> allDatesSorted = sortDates(allDatesUnsorted);
         List<String> nDatesSorted = getNDates(allDatesSorted, numberOfDays);
         AVStock nData = getNdata(nDatesSorted, data.getBody());
-
         TreeMap<String, AVDay> nDataSorted = sortNData(nData.getAVTimeSeries());
         ResponseEntity dataDesiredFormat = data.ok(generateResponseFormat("test", nDataSorted));
         return dataDesiredFormat;
       } catch (IllegalArgumentException e) {
-        System.out.println("invalid parameter");
+        log.debug("failed to gather data");
       }
     return null;
   }
@@ -102,7 +97,6 @@ public class PriceFinderService {
       dsAndPs.add(x);
     }
     PriceFinderStock stock = new PriceFinderStock(metadata, dsAndPs);
-
     PriceFinderResponse result = new PriceFinderResponse(stock);
     return result;
   }

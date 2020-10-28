@@ -10,6 +10,9 @@ import org.galatea.starter.domain.DateAndPrice;
 import org.galatea.starter.domain.PriceFinderResponse;
 
 
+/**
+ * tests for PriceFinderService. These involve real get requests to AV
+ * */
 public class PriceFinderServiceTest extends ASpringTest {
 
   RestTemplate restTemplate = new RestTemplate();
@@ -20,7 +23,6 @@ public class PriceFinderServiceTest extends ASpringTest {
     int p2 = 1; //valid
 
     PriceFinderService service = new PriceFinderService(restTemplate);
-
     ResponseEntity result = service.getPriceInformation(p1, p2);
   }
 
@@ -30,7 +32,6 @@ public class PriceFinderServiceTest extends ASpringTest {
     int p2 = 1; //valid
 
     PriceFinderService service = new PriceFinderService(restTemplate);
-
     ResponseEntity result = service.getPriceInformation(p1, p2);
   }
 
@@ -52,9 +53,7 @@ public class PriceFinderServiceTest extends ASpringTest {
     int p2 = 4;
 
     PriceFinderService service = new PriceFinderService(restTemplate);
-
     ResponseEntity<PriceFinderResponse> result = service.getPriceInformation(p1, p2);
-
     assertEquals(4, result.getBody().getStock().getPrices().size());
 
     DateAndPrice last = new DateAndPrice("3000-1-1", 0);
