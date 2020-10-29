@@ -1,5 +1,6 @@
 package org.galatea.starter.entrypoint;
 
+import javax.validation.constraints.Min;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,13 +9,15 @@ import net.sf.aspect4log.Log.Level;
 import org.galatea.starter.domain.AVStock;
 import org.galatea.starter.service.PriceFinderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-//sample call: 'http://localhost:8080/pricefinder?text=IBM&quantity=10'
+
+//sample call: 'http://localhost:8080/pricefinder?text=IBM&number-of-days=10'
 
 /**
  * REST Controller that listens to http endpoints and allows the caller to send text to be
@@ -36,8 +39,12 @@ public class PriceFinderRestController extends BaseRestController {
  */
   @GetMapping(value = "${webservice.priceFinderPath}", produces = {MediaType.APPLICATION_JSON_VALUE})
   public ResponseEntity priceFinderEndpoint(
+
       @RequestParam(value = "text") final String text,
-      @RequestParam(value = "number-of-days") final int numberOfDays){
+      @RequestParam(value = "number-of-days") @Min(1) final int numberOfDays){
+
+    if ((numberOfDays < 1) || (text == ""))
+      return ResponseEntity.badRequest().body("invalid parameter");
 
     return priceFinderService.getPriceInformation(text, numberOfDays);
   }

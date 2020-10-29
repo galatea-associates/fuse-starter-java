@@ -1,17 +1,18 @@
 package org.galatea.starter.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
+import java.util.TreeMap;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.MapIterator;
 import org.galatea.starter.domain.AVDay;
 import org.galatea.starter.domain.AVStock;
-import org.galatea.starter.domain.AVTimeSeries;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.galatea.starter.domain.PriceFinderStock;
+import org.galatea.starter.domain.DateAndPrice;
+import org.galatea.starter.domain.PriceFinderResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -29,8 +30,6 @@ public class PriceFinderService {
   final static String AVApikey = "XNRUM1DDXGFTDL82";
 
   @NonNull
-  private ObjectMapper objectMapper;
-  @NonNull
   private RestTemplate restTemplate;
 
 /**
@@ -39,26 +38,67 @@ public class PriceFinderService {
  * @return A ResponseEntity with a body of java objects containing N days price information for the
  * requested stock
  */
-  public ResponseEntity<AVStock> getPriceInformation(final String text, int numberOfDays) {
+  public ResponseEntity getPriceInformation(final String stockName, int numberOfDays) {
     String AVGetRequest = (new StringBuilder()).append(AVQueryURL).append("symbol=")
-        .append(text).append("&apikey=").append(AVApikey).toString();
-    ResponseEntity<AVStock> data = restTemplate.getForEntity(AVGetRequest, AVStock.class);
-    AVStock nDaysOfData = getNDays(data.getBody(), numberOfDays);
-    ResponseEntity dataDesiredFormat = data.ok(nDaysOfData.getAVTimeSeries());
-    return dataDesiredFormat;
+        .append(stockName).append("&apikey=").append(AVApikey)
+        .toString();
+
+      try {
+        ResponseEntity<AVStock> data = restTemplate.getForEntity(AVGetRequest, AVStock.class);
+        List<String> allDatesUnsorted = new ArrayList(data.getBody().getAVTimeSeries().keySet());
+        List<String> allDatesSorted = sortDates(allDatesUnsorted);
+        List<String> nDatesSorted = getNDates(allDatesSorted, numberOfDays);
+        AVStock nData = getNdata(nDatesSorted, data.getBody());
+        TreeMap<String, AVDay> nDataSorted = sortNData(nData.getAVTimeSeries());
+        ResponseEntity dataDesiredFormat = data.ok(generateResponseFormat("test", nDataSorted));
+        return dataDesiredFormat;
+      } catch (IllegalArgumentException e) {
+        log.debug("failed to gather data");
+      }
+    return null;
   }
 
+  public List<String> sortDates (List<String> keys) {
+    Collections.sort(keys, Collections.reverseOrder());
+    return keys;
+  }
 
-  public AVStock getNDays (AVStock allData, int numberOfDays) {
+  public List<String> getNDates(List<String> allDates, int n) {
+    if (n < allDates.size()) {
+      List<String> nDates = allDates.subList(0, n);
+      return nDates;
+    }
+    return allDates;
+  }
+
+  public AVStock getNdata(List<String> nDates, AVStock data) {
     HashMap<String, AVDay> nDaysOfData = new HashMap<String, AVDay>();
     AVStock result = new AVStock();
-    Iterator<Map.Entry<String, AVDay>> entries = allData.getAVTimeSeries().entrySet().iterator();
-    while (entries.hasNext() && numberOfDays > 0) {
-      Map.Entry<String, AVDay> entry = entries.next();
-      nDaysOfData.put(entry.getKey(), entry.getValue());
-      numberOfDays -= 1;
+    HashMap<String, AVDay> dataMap = new HashMap<>(data.getAVTimeSeries());
+
+    for (String date : nDates) {
+      nDaysOfData.put(date, dataMap.get(date));
     }
     result.setAVTimeSeries(nDaysOfData);
     return result;
   }
+
+  public TreeMap<String, AVDay> sortNData (HashMap<String, AVDay> data) {
+    TreeMap<String, AVDay> sorted = new TreeMap<>(Collections.reverseOrder());
+    sorted.putAll(data);
+    return sorted;
+  }
+
+  public PriceFinderResponse generateResponseFormat (String metadata, TreeMap<String, AVDay> data) {
+
+    List<DateAndPrice> dsAndPs = new ArrayList<>();
+    for (String date : data.keySet()) {
+      DateAndPrice x = new DateAndPrice(date, data.get(date).getPrice());
+      dsAndPs.add(x);
+    }
+    PriceFinderStock stock = new PriceFinderStock(metadata, dsAndPs);
+    PriceFinderResponse result = new PriceFinderResponse(stock);
+    return result;
+  }
+
 }
