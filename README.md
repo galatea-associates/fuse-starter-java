@@ -25,8 +25,9 @@ This readme will contain an index to features and their location in code.
 ##### Git Clone to Intellij
 1. Open Intellij IDEA
 2. You will be greeted with a welcome screen. Click "Check out from Version Control" and then "Git".
+    - If you don't see welcome screen, choose "File" -> "New" -> "Project from Version Control" -> "Git" from menu
 3. In your browser of choice go this [project's page](https://github.com/galatea-associates/fuse-starter-java)
-4. Towards the top of the page click the drop down with the test "Code".
+4. Towards the top of the page click the drop down with the text "Code".
 5. Copy the URL in the text box under "HTTPS"
 3. Back in Intellij paste the URL you copied into the "Git Repository URL" field.
 4. Click the "clone" button.
