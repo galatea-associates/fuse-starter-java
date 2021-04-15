@@ -67,7 +67,7 @@ pipeline {
                         ])
 
                 pushToCloudFoundry(
-                    target: "https://fuse-test-twell.us-south.cf.appdomain.cloud/",
+                    target: "https://api.us-south.cf.cloud.ibm.com",
                     organization: "todd.wellman@galatea-associates.com",
                     cloudSpace: "dev",
                     credentialsId: "IBMCLOUD_ACCOUNT",
@@ -129,17 +129,17 @@ pipeline {
     // whether the branch is a deploy branch before sending the message.
     // alertChannel - indicates whether a mention to @channel needs to be included in the message. Currently
     // done only for failed builds only.
-    post {
-        success {
-            notifySlack("Successful!", 'fuse-java-builds', "good", false)
-        }
-        failure {
-            notifySlack("Failed", 'fuse-java-builds', "danger", true)
-        }
-        aborted {
-            notifySlack("Aborted", 'fuse-java-builds', "#d3d3d3", false)
-        }
-    }
+//     post {
+//         success {
+//             notifySlack("Successful!", 'fuse-java-builds', "good", false)
+//         }
+//         failure {
+//             notifySlack("Failed", 'fuse-java-builds', "danger", true)
+//         }
+//         aborted {
+//             notifySlack("Aborted", 'fuse-java-builds', "#d3d3d3", false)
+//         }
+//     }
 }
 
 def isDeployBranch() {
