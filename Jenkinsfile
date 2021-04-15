@@ -67,10 +67,10 @@ pipeline {
                         ])
 
                 pushToCloudFoundry(
-                    target: "https://api.run.pivotal.io/",
-                    organization: "FUSE",
-                    cloudSpace: "development",
-                    credentialsId: "PIVOTAL-WEB",
+                    target: "https://fuse-test-twell.us-south.cf.appdomain.cloud/",
+                    organization: "todd.wellman@galatea-associates.com",
+                    cloudSpace: "dev",
+                    credentialsId: "IBMCLOUD_ACCOUNT",
                     manifestChoice: [
                         manifestFile: "manifest-integration-tests.yml"
                     ],
