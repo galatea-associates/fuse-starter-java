@@ -101,6 +101,6 @@ public class SettlementProtoRestController extends BaseSettlementRestController 
     // See issue #272
     // Originally an EntityNotFoundException was thrown here, but it was changed to this so that we
     // could add a test for the not-found case in order to meet coverage requirements
-    return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 }
