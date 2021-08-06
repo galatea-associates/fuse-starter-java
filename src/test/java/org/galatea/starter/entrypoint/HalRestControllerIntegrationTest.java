@@ -11,6 +11,7 @@ import feign.jackson.JacksonEncoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.ASpringTest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Slf4j
 @Category(org.galatea.starter.IntegrationTestCategory.class)
 @SpringBootTest
+@Ignore
 public class HalRestControllerIntegrationTest extends ASpringTest {
 
   @Value("${fuse-host.url}")
