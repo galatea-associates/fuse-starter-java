@@ -1,0 +1,52 @@
+{
+  "id": "45e1b01f-9627-4935-8559-bb44878534da",
+  "name": "world_time-time_in_america_new_york",
+  "request": {
+    "url": "/timezone/America/New_York",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "abbreviation": "EST",
+      "client_ip": "71.184.121.119",
+      "datetime": "2021-12-21T16:27:43.737629-05:00",
+      "day_of_week": 2,
+      "day_of_year": 355,
+      "dst": false,
+      "dst_from": null,
+      "dst_offset": 0,
+      "dst_until": null,
+      "raw_offset": -18000,
+      "timezone": "America/New_York",
+      "unixtime": 1640122063,
+      "utc_datetime": "2021-12-21T21:27:43.737629+00:00",
+      "utc_offset": "-05:00",
+      "week_number": 51
+    },
+    "headers": {
+      "access-control-allow-credentials": "true",
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "",
+      "cache-control": "max-age=0, private, must-revalidate",
+      "content-encoding": "gzip",
+      "content-type": "application/json; charset=utf-8",
+      "cross-origin-window-policy": "deny",
+      "date": "Tue, 21 Dec 2021 21:27:43 GMT",
+      "server": "Fly/8fd4924 (2021-12-20)",
+      "x-content-type-options": "nosniff",
+      "x-download-options": "noopen",
+      "x-frame-options": "SAMEORIGIN",
+      "x-permitted-cross-domain-policies": "none",
+      "x-request-id": "FsLiU8VYnEG_YE44uBRB",
+      "x-runtime": "385Âµs",
+      "x-xss-protection": "1; mode=block",
+      "transfer-encoding": "chunked",
+      "via": "1.1 fly.io",
+      "fly-request-id": "01FQFE96VRYA1XBA0FZPGTK9G8"
+    }
+  },
+  "uuid": "45e1b01f-9627-4935-8559-bb44878534da",
+  "persistent": true,
+  "insertionIndex": 4
+}

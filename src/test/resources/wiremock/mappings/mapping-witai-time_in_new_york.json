@@ -1,0 +1,109 @@
+{
+  "id": "d535f492-aba6-4aef-8cba-15b617fa76d7",
+  "name": "wit_ai-time_in_new_york",
+  "request": {
+    "url": "/message?v=20211220&q=Time+in+New+York",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "text": "What time is it in New York",
+      "intents": [
+        {
+          "id": "3099071590373283",
+          "name": "timeAtLocation",
+          "confidence": 1
+        }
+      ],
+      "entities": {
+        "wit$location:location": [
+          {
+            "id": "1074005520088333",
+            "name": "wit$location",
+            "role": "location",
+            "start": 19,
+            "end": 27,
+            "body": "New York",
+            "confidence": 0.9337,
+            "entities": [],
+            "resolved": {
+              "values": [
+                {
+                  "name": "New York City",
+                  "domain": "locality",
+                  "coords": {
+                    "lat": 40.71427154541,
+                    "long": -74.005966186523
+                  },
+                  "timezone": "America/New_York",
+                  "external": {
+                    "geonames": "5128581",
+                    "wikidata": "Q60",
+                    "wikipedia": "New York City"
+                  },
+                  "attributes": {}
+                },
+                {
+                  "name": "New York",
+                  "domain": "region",
+                  "coords": {
+                    "lat": 43.000350952148,
+                    "long": -75.499900817871
+                  },
+                  "timezone": "America/New_York",
+                  "external": {
+                    "geonames": "5128638",
+                    "wikidata": "Q1384",
+                    "wikipedia": "New York (state)"
+                  },
+                  "attributes": {}
+                },
+                {
+                  "name": "New York County",
+                  "domain": "region",
+                  "coords": {
+                    "lat": 40.774269104004,
+                    "long": -73.96981048584
+                  },
+                  "timezone": "America/New_York",
+                  "external": {
+                    "geonames": "5128594",
+                    "wikidata": "Q500416",
+                    "wikipedia": "New York County"
+                  },
+                  "attributes": {}
+                }
+              ]
+            },
+            "type": "resolved"
+          }
+        ]
+      },
+      "traits": {}
+    },
+    "headers": {
+      "Content-Encoding": "br",
+      "ETag": "\"608e715396bb0fee41625a6da2ed0e7ddb697bbc\"",
+      "Content-Type": "application/json; charset=UTF-8",
+      "Vary": "Origin",
+      "Vary": "Accept-Encoding",
+      "wit-api-version": "v1.0",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; preload; includeSubDomains",
+      "Pragma": "no-cache",
+      "Cache-Control": "private, no-cache, no-store, must-revalidate",
+      "Expires": "Sat, 01 Jan 2000 00:00:00 GMT",
+      "x-fb-request-id": "AOM7qg7JeiodPB786RA5BR5",
+      "x-fb-trace-id": "Fz1kIIzMplP",
+      "x-fb-rev": "1004892108",
+      "X-FB-Debug": "AfHfSq35a6ZlZBUCffgWL6r1Ys9TvxNdLFJChX7JGiYSyuQel9fqDdduVBKAfLOjXbFxNdwCd1U8hWNeAY2fug==",
+      "Date": "Tue, 21 Dec 2021 15:55:55 GMT",
+      "Connection": "keep-alive",
+      "Content-Length": "221"
+    }
+  },
+  "uuid": "d535f492-aba6-4aef-8cba-15b617fa76d7",
+  "persistent": true,
+  "insertionIndex": 4
+}

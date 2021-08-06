@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
@@ -78,12 +79,14 @@ public class MvcConfig implements WebMvcConfigurer {
     configurer.mediaType("xml", MediaType.APPLICATION_XML);
     configurer.mediaType("csv", TEXT_CSV);
     configurer.mediaType("xlsx", APPLICATION_EXCEL);
-
   }
 
   @Override
   public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
-    // The Protobuf converter MUST be added first, otherwise Jackson will try and handle our
+    // Hal Endpoints return a String. The String converter must be specified first otherwise Jackson
+    // will add on additional double quotes when returning the response.
+    converters.add(new StringHttpMessageConverter());
+    // The Protobuf converter MUST be added next, otherwise Jackson will try and handle our
     // protobuf to JSON conversion (and will of course, fail).
     converters.add(new ProtobufHttpMessageConverter()); // Protobuf, XML & JSON supported
     converters.add(new MappingJackson2HttpMessageConverter()); // JSON
