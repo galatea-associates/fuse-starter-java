@@ -52,22 +52,24 @@ public class IexRestController {
 
   /**
    * Exposes an endpoint to get historical prices for a specific symbol passed in,
-   * on a specific date and optionally for a specific range
+   * on a specific date and optionally for a specific range.
    *
    * @param symbol symbol to get historical prices for.
    * @param range range of prices to get
    * @param date date for price to get
    *
    * @return a List of IexHistoricalPrices objects for the given symbol,
-   * from the given date until the given date plus range
+   *         from the given date until the given date plus range
    */
-  @GetMapping(value = "${mvc.iex.getHistoricalPricesPath}", produces = {MediaType.APPLICATION_JSON_VALUE})
+  @GetMapping(value = "${mvc.iex.getHistoricalPricesPath}", produces = {
+      MediaType.APPLICATION_JSON_VALUE})
   public List<IexHistoricalPrices> getHistoricalPrices(
       @RequestParam(value = "symbol") final String symbol,
-      @RequestParam(value = "range") final String range,
-      @RequestParam(value = "date") final String date
-  ){
-    return iexService.getHistoricalPrices(symbol,range,date);
+      @RequestParam(value = "range", required = false) final String range,
+      @RequestParam(value = "date", required = false) final String date,
+      @RequestParam(value = "token") final String token) {
+    //Any other ways rather than passing null??
+    return iexService.getHistoricalPrices(symbol,range,date,token);
   }
 
 }

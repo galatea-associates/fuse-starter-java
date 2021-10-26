@@ -25,9 +25,39 @@ public interface IexClientToken {
    *
    * @return a list of the last traded price for each of the symbols passed in.
    */
-  @GetMapping("/stock/{symbol}/chart/{range}/{date}")
+  @GetMapping("/stock/{symbol}/chart/{range}/{date}?chartByDay=true")
+  List<IexHistoricalPrices> getHistoricalPricesByDate(
+      @PathVariable("symbol") String symbol,
+      @PathVariable("range") String range,
+      @PathVariable("date") String date,
+      @RequestParam("token") String token);
+
+  // CASE WHERE: DATE IS MISSING
+  /**
+   * Get the historical Prices for . See https://iextrading.com/developer/docs/#last.
+   *
+   * @param symbol symbol to get historical prices for.
+   * @param range range of prices to get
+   *
+   *
+   * @return a list of the last traded price for each of the symbols passed in.
+   */
+  @GetMapping("/stock/{symbol}/chart/{range}")
   List<IexHistoricalPrices> getHistoricalPrices(
       @PathVariable("symbol") String symbol,
       @PathVariable("range") String range,
-      @PathVariable("date") String date);
+      @RequestParam("token") String token);
+
+  // CASE WHERE: RANGE & DATE ARE MISSING
+  /**
+   * Get the historical Prices for . See https://iextrading.com/developer/docs/#last.
+   *
+   * @param symbol symbol to get historical prices for.
+   *
+   * @return a list of the last traded price for each of the symbols passed in.
+   */
+  @GetMapping("/stock/{symbol}/chart")
+  List<IexHistoricalPrices> getHistoricalPricesBySymbol(
+      @PathVariable("symbol") String symbol,
+      @RequestParam("token") String token);
 }
