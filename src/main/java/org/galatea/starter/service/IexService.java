@@ -69,7 +69,9 @@ public class IexService {
       final String token) {
     // Add API Token form IEX_TOKEN env variable
     // pass it along to the client (passed as input for now)
-    if (symbol.isEmpty() || token.isEmpty()) {
+    if (symbol == null || token == null) {
+      return Collections.emptyList();
+    } else if (symbol.isEmpty() || token.isEmpty()) {
       return Collections.emptyList();
     } else if (range == null || range.isEmpty()) {
       return iexClientToken.getHistoricalPricesBySymbol(symbol, token);

@@ -1,0 +1,52 @@
+{
+  "id" : "b9335dfe-f680-4d18-8f8b-848d7cac4529",
+  "name" : "a_chart_date_20200420",
+  "request" : {
+    "url" : "/stock/A/chart/date/20200420?chartByDay=true&token=pk_05d61965a1eb493a82af2953cfdb01ba",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "jsonBody" : [{"close" : 77.37,
+"high" : 79.05,
+"low" : 76.98,
+"open" : 79.05,
+"symbol" : "A",
+"volume" : 1679446,
+"id" : "HISTORICAL_PRICES",
+"key" : "A",
+"subkey" : "",
+"date" : "2020-04-20",
+"updated" : 1633400212000,
+"changeOverTime" : 0,
+"marketChangeOverTime" : 0,
+"uOpen" : 79.05,
+"uClose" : 77.37,
+"uHigh" : 79.05,
+"uLow" : 76.98,
+"uVolume" : 1679446,
+"fOpen" : 78.2935,
+"fClose" : 76.6296,
+"fHigh" : 78.2935,
+"fLow" : 76.2433,
+"fVolume" : 1679446,
+"label" : "Apr 20, 20",
+"change" : 0,
+"changePercent" : 0}],
+    "headers" : {
+      "Server" : "nginx",
+      "Date" : "Thu, 28 Oct 2021 18 : 19 : 52 GMT",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Set-Cookie" : "ctoken=f6739d8dab174837a4eb861a80c95a21; Max-Age=43200; Path=/; Expires=Fri, 29 Oct 2021 06 : 19 : 52 GMT",
+      "iexcloud-messages-used" : "51",
+      "iexcloud-credits-used" : "51",
+      "iexcloud-premium-messages-used" : "0",
+      "iexcloud-premium-credits-used" : "0",
+      "X-Content-Type-Options" : "nosniff",
+      "Strict-Transport-Security" : "max-age=15768000"
+    }
+  },
+  "uuid" : "b9335dfe-f680-4d18-8f8b-848d7cac4529",
+  "persistent" : true,
+  "insertionIndex" : 7
+}
