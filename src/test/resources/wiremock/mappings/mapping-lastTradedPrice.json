@@ -6,7 +6,7 @@
     "method" : "GET"
   },
   "response" : {
-    "status" : 404,
+    "status" : 200,
     "jsonBody" : [{"symbol":"FB","price":186.3011,"size":100,"time":1565273330617}],
     "headers" : {
       "Server" : "nginx",
