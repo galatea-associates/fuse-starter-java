@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.galatea.starter.domain.IexHistoricalPrices;
 import org.galatea.starter.domain.IexLastTradedPrice;
 import org.galatea.starter.domain.IexSymbol;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -59,6 +60,7 @@ public class IexService {
    *
    * @return a list of all Stock Symbols from IEX.
    */
+  @Cacheable(cacheNames = "historical", sync = true)
   public List<IexSymbol> getAllSymbols() {
     return iexClient.getAllSymbols();
   }
@@ -69,6 +71,7 @@ public class IexService {
    * @param symbols the list of symbols to get a last traded price for.
    * @return a list of last traded price objects for each Symbol that is passed in.
    */
+  @Cacheable(cacheNames = "historical", sync = true)
   public List<IexLastTradedPrice> getLastTradedPriceForSymbols(final List<String> symbols) {
     if (CollectionUtils.isEmpty(symbols)) {
       return Collections.emptyList();
@@ -89,10 +92,12 @@ public class IexService {
    * @return a List of IexHistoricalPrices objects for the given symbol,
    *         from the given date until the given date plus range
    */
+  @Cacheable(cacheNames = "historical", sync = true)
   public List<IexHistoricalPrices> getHistoricalPrices(
       final String symbol,
       final String range,
       final String date) {
+    log.info("DID NOT HIT CACHE");
     String token = getToken();
     if (StringUtils.isBlank(symbol) || StringUtils.isBlank(token)) {
       return Collections.emptyList();
