@@ -2,8 +2,6 @@ package org.galatea.starter.service;
 
 import java.util.List;
 import org.galatea.starter.domain.IexHistoricalPrices;
-import org.galatea.starter.domain.IexLastTradedPrice;
-import org.galatea.starter.domain.IexSymbol;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +30,6 @@ public interface IexClientToken {
       @PathVariable("date") String date,
       @RequestParam("token") String token);
 
-  // CASE WHERE: DATE IS MISSING
   /**
    * Get the historical Prices for . See https://iextrading.com/developer/docs/#last.
    *
@@ -48,7 +45,6 @@ public interface IexClientToken {
       @PathVariable("range") String range,
       @RequestParam("token") String token);
 
-  // CASE WHERE: RANGE & DATE ARE MISSING
   /**
    * Get the historical Prices for . See https://iextrading.com/developer/docs/#last.
    *

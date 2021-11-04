@@ -1,5 +1,6 @@
 package org.galatea.starter.entrypoint;
 
+import java.io.IOException;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,6 @@ public class IexRestController {
     return iexService.getAllSymbols();
   }
 
-
   /**
    * Get the last traded price for each of the symbols passed in.
    *
@@ -66,10 +66,8 @@ public class IexRestController {
   public List<IexHistoricalPrices> getHistoricalPrices(
       @RequestParam(value = "symbol") final String symbol,
       @RequestParam(value = "range", required = false) final String range,
-      @RequestParam(value = "date", required = false) final String date,
-      @RequestParam(value = "token") final String token) {
-    //Any other ways rather than passing null??
-    return iexService.getHistoricalPrices(symbol,range,date,token);
+      @RequestParam(value = "date", required = false) final String date) {
+    return iexService.getHistoricalPrices(symbol, range, date);
   }
 
 }
