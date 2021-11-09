@@ -60,7 +60,6 @@ public class IexService {
    *
    * @return a list of all Stock Symbols from IEX.
    */
-  @Cacheable(cacheNames = "historical", sync = true)
   public List<IexSymbol> getAllSymbols() {
     return iexClient.getAllSymbols();
   }
@@ -71,7 +70,6 @@ public class IexService {
    * @param symbols the list of symbols to get a last traded price for.
    * @return a list of last traded price objects for each Symbol that is passed in.
    */
-  @Cacheable(cacheNames = "historical", sync = true)
   public List<IexLastTradedPrice> getLastTradedPriceForSymbols(final List<String> symbols) {
     if (CollectionUtils.isEmpty(symbols)) {
       return Collections.emptyList();
@@ -92,12 +90,12 @@ public class IexService {
    * @return a List of IexHistoricalPrices objects for the given symbol,
    *         from the given date until the given date plus range
    */
-  @Cacheable(cacheNames = "historical", sync = true)
+  @Cacheable(cacheNames = "historical")
   public List<IexHistoricalPrices> getHistoricalPrices(
       final String symbol,
       final String range,
       final String date) {
-    log.info("DID NOT HIT CACHE");
+    log.info("Query did not hit the cache");
     String token = getToken();
     if (StringUtils.isBlank(symbol) || StringUtils.isBlank(token)) {
       return Collections.emptyList();
