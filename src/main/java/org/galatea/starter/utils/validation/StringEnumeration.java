@@ -47,6 +47,7 @@ public @interface StringEnumeration {
   /**
    * Returns the enum holding the set of valid values for the target String.
    */
+  @SuppressWarnings("squid:S1452")
   Class<? extends Enum<?>> enumClass();
 
 }
