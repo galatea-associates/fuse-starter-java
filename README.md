@@ -57,6 +57,72 @@ This readme will contain an index to features and their location in code.
  - Add a new key "host" with a value of "localhost:8080"
  - Save the changes and select "Local" in the drop down menu on the top right
  
+## Spring Annotations:
+Annotations are used to provide supplemental information about a program. They allow you to direct the framework to do your bidding, taking control and overriding its defaults when needed.
+Annotations are quick, easy to use, and orders of magnitude faster than building the equivalent functionality yourself.
+
+For a detailed list of annotations check (https://lightrun.com/java/the-complete-list-of-spring-boot-annotations-you-must-know/)
+
+
+- Basic setup:
+  - @Bean: 
+    - It is a method-level annotation. It is an alternative of XML <bean> tag. It tells the method to produce a bean to be managed by Spring Container. 
+  - @Configuration: 
+    - Mark a configuration class that declares one or more @Bean methods
+  - @ComponentScan: 
+    - It is used when we want to scan a package for beans.
+  - @EnableAutoConfiguration:
+    - It auto-configures the bean that is present in the classpath and configures it to run the methods.
+  - @SpringBootApplication: 
+    - It is a combination of three annotations @EnableAutoConfiguration, @ComponentScan, and @Configuration 
+  
+  - https://www.javatpoint.com/spring-boot-annotations#:~:text=%7D%C2%A0%C2%A0-,Spring,-Boot%20Annotations for more information
+
+
+- Stereotype Annotations:
+  - @Component: class-level annotation
+  - @Service
+  - @Repository
+  - @Controller
+  - @RestController
+  
+  - Allows Spring to automatically detect our custom beans. (For more visit https://www.baeldung.com/spring-component-annotation#component)
+      
+
+- REST Annotations:
+  - @RequestMapping: 
+    - It is used to map the web requests. It has many optional elements like consumes, header, method, name, params, path, produces, and value. We use it with the class as well as the method.
+  - @GetMapping
+  - @RequestParam
+  - @PathVariable..
+  - https://www.javatpoint.com/spring-boot-annotations#:~:text=ComponentScan%2C%20and%20%40Configuration.-,Spring,-MVC%20and%20REST for more
+
+
+- Testing:
+  - @SpringBootTest:
+    - Test out the whole application
+  - @MockBean
+    - Create a temporary version of a service for testing
+  - @Test
+    - Define a Test Method
+
+
+- Msc:
+  - @Autowired:
+    - Annotation in spring automatically injects the dependent beans into the associated references of a POJO class. This annotation will inject the dependent beans by matching the data-type.
+  - Lombok Annotations:
+    - @Data
+    - @Builder
+    - @AllArgsConstructor/@NoArgsConstructor/@RequiredArgsConstructor
+    - @Getter/@Setter...
+    - https://projectlombok.org/features/all
+
+
+
+
+
+
+
 ## Branching model
 We use this branching model in fuse-starter-java:  http://nvie.com/posts/a-successful-git-branching-model/
 
