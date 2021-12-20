@@ -30,7 +30,7 @@ jms:
    listener-concurrency: 1-5
    agreement-queue-json: sandbox.agreement
    agreement-queue-proto: sandbox.agreement.proto
-
+cache-config: ehcache.xml
 # Set debug level logging for the IEX Client so that Feign requests and responses are logged out
 log.level.org.galatea.starter.service.IEXClient: DEBUG
 # Set info level logging for the autoconfigure package so that it doesn't print out the entire
