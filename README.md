@@ -15,6 +15,17 @@ This readme will contain an index to features and their location in code.
 - Add JAVA_HOME to your path
   - Edit Path under User Variables and add a new entry for %JAVA_HOME%\bin
 
+### Maven
+- For help installing Apache Maven visit: https://maven.apache.org/
+- Download Maven. https://maven.apache.org/download.cgi
+- Unzip the archive.  We recomment putting it in C:\Program Files\Maven.  It should create a folder called "apache-maven-3.8.1" (Or whichever version you downloaded)
+- Add a system or user variable for Maven
+  - Navigate to Control Panel -> System -> Edit environment variables for your account
+  - Under User Variables, click New. For variable name, type MAVEN_HOME.  Click Browse Directory and add the path for the apache-maven-3.8.1 folder
+- Add MAVEN_HOME to your path
+  - Select the Path variable under User variables and click Edit...
+  - Click new and type %MAVEN_HOME%\bin
+
 ### Git
 - Git is a [Version Control System](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control) and it used with this project.
 - [Download Git](https://git-scm.com/downloads) and install it with the default options.
