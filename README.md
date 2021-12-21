@@ -137,7 +137,7 @@ We use this branching model in fuse-starter-java:  http://nvie.com/posts/a-succe
 - Feature branches should be created under feature/
 - Release candidate branches should be created under release/
 - Develop is the main development branch
-- Master should mirror what is running in "production"
+- Main should mirror what is running in "production"
 
 ## SonarQube integration
 - Sonar: https://sonarcloud.io/dashboard?id=org.galatea%3Afuse-starter-java (can login using GitHub account)

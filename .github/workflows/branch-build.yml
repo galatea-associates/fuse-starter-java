@@ -1,15 +1,11 @@
-name: Build
+name: Branch Build
+# Note: this differs only in name and triggers ("on") from pr-build.yml, since we want to build and
+# sonar-scan branches and prs equivalently.  Any changes to this file should also be reflected there
 on:
-  push:
-    branches:
-      - master
-      - develop
-      - feature/341_github-ci
-  pull_request:
-    types: [opened, synchronize, reopened]
+  push
 jobs:
   build:
-    name: Build
+    name: Branch Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
