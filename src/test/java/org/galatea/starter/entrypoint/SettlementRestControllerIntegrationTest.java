@@ -20,6 +20,7 @@ import org.galatea.starter.entrypoint.messagecontracts.SettlementMissionMessage;
 import org.galatea.starter.entrypoint.messagecontracts.SettlementResponseMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessages;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.ObjectFactory;
@@ -34,6 +35,7 @@ import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 @RequiredArgsConstructor
 @Slf4j
 @Category(org.galatea.starter.IntegrationTestCategory.class)
+@Ignore
 public class SettlementRestControllerIntegrationTest {
 
 

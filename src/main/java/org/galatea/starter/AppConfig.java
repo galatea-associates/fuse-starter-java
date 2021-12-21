@@ -5,11 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.aspect.LogAspect;
 import org.galatea.starter.domain.SettlementMission;
 import org.galatea.starter.service.IAgreementTransformer;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.io.ClassPathResource;
 
 @Slf4j
 @Configuration
@@ -36,6 +41,29 @@ public class AppConfig {
     return agreement -> SettlementMission.builder().instrument(agreement.getInstrument())
         .externalParty(agreement.getExternalParty()).depot("DTC").qty(agreement.getQty())
         .direction("B".equals(agreement.getBuySell()) ? "REC" : "DEL").version(0L).build();
+  }
+
+  /**
+   * CacheManager that contains the Cache Configuration. Spring will use this cache if any
+   * cache annotations are used.
+   */
+  @Bean
+  public CacheManager cacheManager(final EhCacheManagerFactoryBean ehCacheCacheManagerFactoryBean) {
+    return new EhCacheCacheManager(ehCacheCacheManagerFactoryBean.getObject());
+  }
+
+  /**
+   * Creates factory bean for cache manager using a cache config file.
+   *
+   * @return factory bean for the EhCache to be passed to EhCacheCacheManager.
+   */
+  @Bean
+  public EhCacheManagerFactoryBean ehCacheCacheManagerFactoryBean(
+          @Value("${cache-config}") final String cacheConfig) {
+    EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
+    cmfb.setConfigLocation(new ClassPathResource(cacheConfig));
+    cmfb.setShared(true);
+    return cmfb;
   }
 
   /**

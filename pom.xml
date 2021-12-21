@@ -32,6 +32,8 @@
 			**/Tracer.java,
 			**/Application.java
 		</sonar.coverage.exclusions>
+		<sonar.organization>galatea-associates</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<!-- Allow us to skip Unit Tests only, if need be, with -Dskip.surefire.tests, but retain the skip all tests functionality of -DskipTests -->
 		<skip.surefire.tests>${skipTests}</skip.surefire.tests>
 	</properties>
@@ -180,7 +182,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.9.10.1</version>
+			<version>2.9.10.8</version>
 		</dependency>
 
 		<!-- JAXB - converting between POJOs and XML -->
@@ -276,6 +278,20 @@
 			<artifactId>ehcache</artifactId>
 		</dependency>
 
+		<!-- Spring caching framework inside this -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>5.1.2.RELEASE</version>
+		</dependency>
+
+		<!-- Support for Ehcache and others -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>5.1.2.RELEASE</version>
+		</dependency>
+
     <dependency>
       <groupId>io.github.openfeign</groupId>
       <artifactId>feign-core</artifactId>
@@ -311,6 +327,12 @@
 			<groupId>org.awaitility</groupId>
 			<artifactId>awaitility</artifactId>
 			<version>2.0.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>spring-mock-mvc</artifactId>
+			<version>3.3.0</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Allows us to parameterize tests -->
