@@ -3,6 +3,8 @@ This project serves two functions:
 - Provides reference implementations for various features using our best-practices
 - Provides a starting point for new galatea java projects
 
+Fuse is designed primarily to mock a securities settlement service, along with some other smaller service components. 
+Settlements involve processing a trade request, and spawning relevant 'missions' that interact with various agents and counterparties to handle the delivery and receipt of securities and cash.
 This readme will contain an index to features and their location in code.
 
 ## Getting Started
@@ -18,7 +20,7 @@ This readme will contain an index to features and their location in code.
 ### Maven
 - For help installing Apache Maven visit: https://maven.apache.org/
 - Download Maven. https://maven.apache.org/download.cgi
-- Unzip the archive.  We recomment putting it in C:\Program Files\Maven.  It should create a folder called "apache-maven-3.8.1" (Or whichever version you downloaded)
+- Unzip the archive.  We recommend putting it in C:\Program Files\Maven.  It should create a folder called "apache-maven-3.8.1" (Or whichever version you downloaded)
 - Add a system or user variable for Maven
   - Navigate to Control Panel -> System -> Edit environment variables for your account
   - Under User Variables, click New. For variable name, type MAVEN_HOME.  Click Browse Directory and add the path for the apache-maven-3.8.1 folder
