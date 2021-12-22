@@ -41,7 +41,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.0.RELEASE</version>
+		<version>2.6.2</version>
 	</parent>
 
 	<dependencies>
@@ -67,14 +67,14 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
-			<version>2.0.1.RELEASE</version>
+			<version>3.1.0</version>
 		</dependency>
 
 		<!--Spring Cloud Sleuth for distributed log tracing-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-sleuth</artifactId>
-			<version>2.2.1.RELEASE</version>
+			<version>3.1.0</version>
 		</dependency>
 
 		<!-- Required for log4j to process log4j2.yml -->
@@ -83,7 +83,6 @@
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-yaml</artifactId>
 		</dependency>
-
 
 		<!-- Use spring-aop and aspectj for our aspects -->
 		<dependency>
@@ -99,16 +98,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-activemq</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-broker</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!-- Spring boot web for rest services -->
@@ -131,28 +120,22 @@
 
 		<!-- SWAGGER for API documentation -->
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.2</version>
 		</dependency>
 
 		<!-- Web content negotiation -->
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>3.5.1</version>
+			<version>3.19.1</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.googlecode.protobuf-java-format</groupId>
-			<artifactId>protobuf-java-format</artifactId>
-			<version>1.4</version>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java-util</artifactId>
+			<version>3.19.1</version>
 		</dependency>
 
 		<dependency>
@@ -164,25 +147,25 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-csv</artifactId>
-			<version>2.8.8</version>
+			<version>2.13.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
-			<version>2.9.9</version>
+			<version>2.13.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
-			<version>2.9.9</version>
+			<version>2.13.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.9.10.8</version>
+			<version>2.13.1</version>
 		</dependency>
 
 		<!-- JAXB - converting between POJOs and XML -->
@@ -255,9 +238,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>2.0.1.Final</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>31.0.1-jre</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
 		<!-- Excel spreadsheet reading and writing -->
@@ -282,7 +270,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>5.1.2.RELEASE</version>
+			<version>5.3.14</version>
 		</dependency>
 
 		<!-- Support for Ehcache and others -->
@@ -295,12 +283,12 @@
     <dependency>
       <groupId>io.github.openfeign</groupId>
       <artifactId>feign-core</artifactId>
-      <version>9.5.1</version>
+      <version>11.7</version>
     </dependency>
     <dependency>
       <groupId>io.github.openfeign</groupId>
       <artifactId>feign-jackson</artifactId>
-      <version>9.5.1</version>
+      <version>11.7</version>
     </dependency>
 
 		<!-- Testing dependencies -->
@@ -320,7 +308,7 @@
 			<artifactId>spring-cloud-contract-wiremock</artifactId>
 			<groupId>org.springframework.cloud</groupId>
 			<scope>test</scope>
-			<version>2.0.1.RELEASE</version>
+			<version>3.1.0</version>
 		</dependency>
 		<!-- Useful for waiting for an async task to complete -->
 		<dependency>
@@ -332,7 +320,7 @@
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>spring-mock-mvc</artifactId>
-			<version>3.3.0</version>
+			<version>4.4.0</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Allows us to parameterize tests -->

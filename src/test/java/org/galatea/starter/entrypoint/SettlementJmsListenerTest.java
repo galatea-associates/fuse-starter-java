@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import javax.jms.BytesMessage;
 import javax.jms.TextMessage;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +86,11 @@ public class SettlementJmsListenerTest extends ASpringTest {
     List<TradeAgreement> agreements = Collections.singletonList(agreement);
     log.info("Agreement objects that the service will expect {}", agreements);
 
-    jmsTemplate.convertAndSend(protoQueueName, message.toByteArray());
+    // We would ideally (and did in an earlier version) not send just the raw object, but with
+    // the upgrade to spring-boot 2.6.2 (or probably one of its dependencies) the JmsListener can
+    // no longer read the body from the result of
+    // jmsTemplate.convertAndSend(protoQueueName, message.toByteArray())
+    jmsTemplate.convertAndSend(protoQueueName, message);
 
     verify(mockSettlementService, timeout(10000)).spawnMissions(agreements);
   }

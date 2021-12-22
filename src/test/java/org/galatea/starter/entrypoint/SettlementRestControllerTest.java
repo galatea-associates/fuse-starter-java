@@ -49,13 +49,13 @@ import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -301,7 +301,7 @@ public class SettlementRestControllerTest
         .then()
         .log().ifValidationFails()
         .statusCode(HttpStatus.OK.value())
-        .content(is(objectMapper.writeValueAsString(new SettlementMissionList(missions))));
+        .body(is(objectMapper.writeValueAsString(new SettlementMissionList(missions))));
   }
 
   @Test
@@ -375,18 +375,17 @@ public class SettlementRestControllerTest
 
     byte[] expectedXlsx = readBytes("SettlementMissions.xlsx");
 
-
     MockMvcResponse response =
-    given()
-        .log().ifValidationFails()
-        .when()
-        .get("/settlementEngine/missions?ids=1,2&format=xlsx&requestId=1234")
-        .then()
-        .log().ifValidationFails()
-        .statusCode(HttpStatus.OK.value())
-        .contentType("application/vnd.ms-excel")
-        .extract()
-        .response();
+        given()
+            .log().ifValidationFails()
+            .when()
+            .get("/settlementEngine/missions?ids=1,2&format=xlsx&requestId=1234")
+            .then()
+            .log().ifValidationFails()
+            .statusCode(HttpStatus.OK.value())
+            .contentType("application/vnd.ms-excel")
+            .extract()
+            .response();
 
     // Directly comparing the spreadsheet bytes fails even when the expected spreadsheet appears to
     // be an exact copy of the actual result, so instead compare the spreadsheet contents logically
@@ -526,9 +525,9 @@ public class SettlementRestControllerTest
   static class PropertyConfig {
 
     @Bean
-    PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
-      PropertyPlaceholderConfigurer propertyPlaceholderConfigurer =
-          new PropertyPlaceholderConfigurer();
+    PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+      PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer =
+          new PropertySourcesPlaceholderConfigurer();
       propertyPlaceholderConfigurer.setLocation(new ClassPathResource("application.properties"));
       return propertyPlaceholderConfigurer;
     }
