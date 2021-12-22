@@ -159,7 +159,9 @@ For a detailed list of annotations check (https://lightrun.com/java/the-complete
 
 - Basic setup:
   - @Bean:
+    - A bean is an object that is instantiated, assembled, and otherwise managed by a Spring IoC container. A bean defines its dependencies in a config class without creating them. This object (bean) delegates the job of constructing such dependencies to an IoC container.
     - It is a method-level annotation. It is an alternative of XML <bean> tag. It tells the method to produce a bean to be managed by Spring Container.
+    - When defining a bean, and its dependencies, a better practice is to take advantage of stereotype annotations when possible
   - @Configuration:
     - Mark a configuration class that declares one or more @Bean methods
   - @ComponentScan:
@@ -173,18 +175,18 @@ For a detailed list of annotations check (https://lightrun.com/java/the-complete
 
 
 - Stereotype Annotations:
-  - @Component: class-level annotation
+  - @Component
   - @Service
   - @Repository
   - @Controller
   - @RestController
 
-  - Allows Spring to automatically detect our custom beans. (For more visit https://www.baeldung.com/spring-component-annotation#component)
+  - These are class-level annotations that will result in spring creating an instance of the class as a bean without us needing to define the bean in a configuration class. (For more visit https://www.baeldung.com/spring-component-annotation#component)
 
 
 - REST Annotations:
   - @RequestMapping:
-    - It is used to map the web requests. It has many optional elements like consumes, header, method, name, params, path, produces, and value. We use it with the class as well as the method.
+    - It is used to map the web requests, i.e. translate between a url path like fuse.domain/endpoint?param=value and the endpoint method that will handle it.
   - @GetMapping
   - @RequestParam
   - @PathVariable
@@ -204,6 +206,7 @@ For a detailed list of annotations check (https://lightrun.com/java/the-complete
   - @Autowired:
     - Annotation in spring automatically injects the dependent beans into the associated references of a POJO class. This annotation will inject the dependent beans by matching the data-type.
   - Lombok Annotations:
+    - Lombok library will spice up your Java code by automating the creation of accessor, equals, hashcode, toString methods, and even help you to implement the builder pattern on a class with just one annotation, thus avoiding boilerplate code.
     - @Data
     - @Builder
     - @AllArgsConstructor/@NoArgsConstructor/@RequiredArgsConstructor
