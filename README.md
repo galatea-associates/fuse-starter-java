@@ -15,6 +15,50 @@ This readme will contain an index to features and their location in code.
 - Add JAVA_HOME to your path
   - Edit Path under User Variables and add a new entry for %JAVA_HOME%\bin
 
+### Maven
+- For help installing Apache Maven visit: https://maven.apache.org/
+- Download Maven. https://maven.apache.org/download.cgi
+- Unzip the archive.  We recomment putting it in C:\Program Files\Maven.  It should create a folder called "apache-maven-3.8.1" (Or whichever version you downloaded)
+- Add a system or user variable for Maven
+  - Navigate to Control Panel -> System -> Edit environment variables for your account
+  - Under User Variables, click New. For variable name, type MAVEN_HOME.  Click Browse Directory and add the path for the apache-maven-3.8.1 folder
+- Add MAVEN_HOME to your path
+  - Select the Path variable under User variables and click Edit...
+  - Click new and type %MAVEN_HOME%\bin
+
+### Git
+- Git is a [Version Control System](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control) and it used with this project.
+- [Download Git](https://git-scm.com/downloads) and install it with the default options.
+- When the installation is finished open the newly installed "Git Bash" application and paste the following commands (with your name and work email):
+   > git config --global user.name "Firstname Lastname"
+   
+   > git config --global user.email "lastname@galatea-associates.com"
+##### Git Clone to Intellij
+1. Open Intellij IDEA
+2. You will be greeted with a welcome screen. Click "Check out from Version Control" and then "Git".
+    - If you don't see welcome screen, choose "File" -> "New" -> "Project from Version Control" -> "Git" from menu
+3. In your browser of choice go this [project's page](https://github.com/galatea-associates/fuse-starter-java)
+4. Towards the top of the page click the drop down with the text "Code".
+5. Copy the URL in the text box under "HTTPS"
+3. Back in Intellij paste the URL you copied into the "Git Repository URL" field.
+4. Click the "clone" button.
+
+This will create a new project in Intellij and download a copy of this project into it.
+
+##### Git Clone to Eclipse
+1. Open Eclipse.
+2. "File" -> "Import" -> "Git" -> "Projects from Git"
+3. Click "Next", select "Clone URI" and then click "Next" again.
+4. In your browser of choice go this [project's page](https://github.com/galatea-associates/fuse-starter-java)
+5. Towards the top of the page click the drop down with the text "Code"
+6. Copy the URL in the text box under "HTTPS"
+7. Back in Eclipse, past the URL you copied into the "URI" field.
+8. At the bottom of the window enter your gitlab username and password.
+9. Click "Next" three more times until you have the option to select "Import as General Project".
+10. Click "Finish"
+
+This will create a new project in Eclipse and download a copy of this project into it.
+
 ### Eclipse
 - Import as a maven project however you like. https://www.youtube.com/watch?v=BlkgrXb3L0c is one place to start if you're at a complete loss on this step.
 - Make sure Eclipse is set up to compile to Java 11
@@ -68,14 +112,25 @@ This readme will contain an index to features and their location in code.
 - mvn verify will run the unit and integration tests
 
 ### Postman
+ - Postman is a popular API client that makes it easy for developers to create, share, test and document APIs. This is done by allowing users to create and save simple and complex HTTP/s requests, as well as read their responses.
  - You can import our Postman collection (src/postman/Fuse-Starter-Java.postman_collection.json) for sample REST calls that can be made to the application once it has been started.
+#### Installing
+ - Navigate to https://www.postman.com/downloads/ and click "Download the App"
+   - Note that you can also try the Web Version of postman, but you will have to make an account
+ - Run the Postman-Setup executable
 #### Create a new Environment
- - Click on the Cog in the top right
- - Click Add.
- - Make the Environment Name "Local"
- - Add a new key "host" with a value of "localhost:8080"
+ - On the tab on the left side, select Environments
+ - Click the "+" to create a new environment
+ - Set the environment name to "Local"
+ - Add a new variable "host" with a value of "localhost:8080"
  - Save the changes and select "Local" in the drop down menu on the top right
- 
+#### Running Sample REST Calls 
+ - Select Import in the top left corner
+ - Select Upload Files and upload fuse-starter-java/src/postman/Fuse-Starter-Java.postman_collection.json 
+ - You should now see a collection called Fuse-Starter-Java with 7 different Post, Get, and Put requests
+ - Run Fuse and send a request through Postman to test a response
+   - Note that if you're getting a NOT FOUND error, make sure that the {{host}} in the request is pointing to the Local environment you created.  Host should be written in all lowercase.
+
 ## Branching model
 We use this branching model in fuse-starter-java:  http://nvie.com/posts/a-successful-git-branching-model/
 
@@ -166,3 +221,24 @@ We have a Jenkins server hosted on AWS that handles the FUSE continuous integrat
 The build process is handled via a [Jenkins pipeline build](https://jenkins.io/doc/book/pipeline/), with the pipeline managed via the *Jenkins* file in the root of the project.  We recommend that all of your build steps are captured in the *Jeninks* file.  You should not define any build steps directly within the Jenkins server.
 
 We currently don't have a recommendation for how to handle this in TeamCity and would love someone who is familiar with TeamCity to recommend an equivalent model.
+
+## Application and Thread Monitoring
+In order to view the status of a running FUSE application you can use [VisualVM](https://visualvm.github.io/index.html). Downloads and installation instructions are available at <https://visualvm.github.io/download.html>.
+Basic Instructions
+* Download zip file from the location mentioned above and extract the contents.
+* In the unzipped files find and run `visualvm_206/bin/visualvm.exe`
+    - If the following error appears "Cannot find Java 1.8 or higher" you will need to specify the location of the jdk to use.
+    - example: `./visualvm.exe --jdkhome "C:/Program Files/Java/jdk-11"`
+* Once VisualVM is running, if FUSE is also running locally on the same machine, there should be an application with a name similar to the following "org.galatea.starter.Application (pid XXXXX)"
+    - If the fuse application does not automatically appear you can connect to it manually by going to File -> Add JMX Connection and entering the host and port of the Fuse instance's JMX server
+    - To find the JMX server port for your FUSE instance you can search through the log to find a line similar to the following `INFO  o.a.a.b.j.ManagementContext - JMX consoles can connect to service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi`
+
+Using VisualVM
+Once the application is opened in VisualVM there are several tabs filled with different information about the application
+* Overview - provides basic details about the application's process and the JVM running it.
+* Monitor - shows real time information about the application including CPU usage, memory usage, and number of running threads.
+* Threads - provides a list of all the currently running threads and has the ability to make a thread dump for any selected threads.
+    - If you want to be able to get realtime stack traces from any thread you can install the VisualVM Threads Inspector plugin
+    - To install go to Tools -> Plugins, then select the Available Plugins tab. Find "Threads Inspector" in the list of plugins and click install.
+* Sampler - Gives the option to see a more detailed view of CPU and memory usage by the app including a by thread breakdown
+* Profiler - Allows enabling CPU or memory profiling and viewing the results.
