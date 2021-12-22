@@ -4,7 +4,9 @@ This project serves two functions:
 - Provides a starting point for new galatea java projects
 
 Fuse is designed primarily to mock a securities settlement service, along with some other smaller service components. 
+
 Settlements involve processing a trade request, and spawning relevant 'missions' that interact with various agents and counterparties to handle the delivery and receipt of securities and cash.
+
 This readme will contain an index to features and their location in code.
 
 ## Getting Started
