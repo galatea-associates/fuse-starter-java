@@ -2,10 +2,15 @@ name: Deploy and Integration Test
 concurrency: ibm-cloud
 on:
   workflow-call:
-  push:
-    branches:
-      - develop
-      - main
+    secrets:
+      IBM_CLOUD_API_KEY:
+        required: true
+      IBM_CLOUD_CF_API:
+        required: true
+      IBM_CLOUD_CF_ORG:
+        required: true
+      IBM_CLOUD_CF_SPACE:
+        required: true
 jobs:
   build-deploy-and-test:
     name: Build, Deploy, and Test

@@ -1,7 +1,10 @@
 name: Build
 
 on:
-  workflow_call
+  workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        required: true
 jobs:
   build:
     name: Build
