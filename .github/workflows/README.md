@@ -4,15 +4,14 @@ documentation of the available features.
 
 We want the following behavior:
 - Pushes to a branch trigger build and sonar-scan (branch-build.yml)
-- PRs and updates thereto trigger build and sonar-scan (pr-build.yml)
-- PRs and updates thereto additionally trigger build, deployment to cloud foundry, execution of 
-integration tests, and shutdown of the cloud foundry deployment
+- PRs and updates thereto trigger build and sonar-scan, and additionally build, deployment to cloud 
+foundry, execution of integration tests, and shutdown of the cloud foundry deployment (pr-build.yml)
 - Pushes to develop or main additionally trigger build, deployment to cloud foundry, execution of 
-integration tests, and shutdown of the cloud foundry deployment
+integration tests, and shutdown of the cloud foundry deployment (develop-build.yml)
 
 We have defined branch protection rules requiring success in the above workflows prior to merge to 
 develop or main.  
-
+ 
 Note:
 - These workflows require manual intervention from an admin to run on PRs from forks or from Dependabot
 (which is an automatic dependency update tool). See 
