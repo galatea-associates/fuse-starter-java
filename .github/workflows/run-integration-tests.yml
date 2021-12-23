@@ -1,5 +1,5 @@
 name: Test IBM cloud deploy
-concurrency: ibm-cloud # probably actually want this at the job lvl?
+concurrency: ibm-cloud
 on:
   push # todo only for develop and main, and prs
 jobs:
@@ -40,4 +40,4 @@ jobs:
         run: |
           ibmcloud cf stop fuse-rest-dev-GIT_COMMIT
           ibmcloud cf delete fuse-rest-dev-GIT_COMMIT -r -f
-          ibmcloud cf logout
+          ibmcloud logout
