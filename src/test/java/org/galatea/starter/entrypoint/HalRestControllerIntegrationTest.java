@@ -21,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Slf4j
 @Category(org.galatea.starter.IntegrationTestCategory.class)
 @SpringBootTest
-@Ignore
 public class HalRestControllerIntegrationTest extends ASpringTest {
 
   @Value("${fuse-host.url}")
