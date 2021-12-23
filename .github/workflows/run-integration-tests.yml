@@ -1,5 +1,5 @@
 name: Deploy and Integration Test
-concurrency: ibm-cloud
+
 on:
   workflow-call:
     secrets:
