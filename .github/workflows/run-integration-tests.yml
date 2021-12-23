@@ -1,7 +1,7 @@
 name: Deploy and Integration Test
 concurrency: ibm-cloud
 on:
-  workflow-call
+  workflow-call:
   push:
     branches:
       - develop
