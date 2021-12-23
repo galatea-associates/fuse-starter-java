@@ -4,4 +4,4 @@ on:
   push
 jobs:
   build:
-    uses: galatea-associates/fuse-starter-java/.github/workflows/build.yml
+    uses: galatea-associates/fuse-starter-java/.github/workflows/build.yml@46e5d70fd988169772dfafd2c59d920c5aced0cb
