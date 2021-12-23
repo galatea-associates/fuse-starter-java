@@ -34,5 +34,5 @@ jobs:
       - name: Run integration tests
         run: mvn verify -Dskip.surefire.tests -Dfuse.sandbox.url=http://fuse-rest-dev-gitcommit.us-east.mybluemix.net
       - name: Run performance tests
-        echo "performance tests are not yet implemented"
+        run: echo "performance tests are not yet implemented"
       # - name: Shutdown
