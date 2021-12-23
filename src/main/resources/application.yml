@@ -14,7 +14,12 @@ spring:
    jpa:
       hibernate:
          ddl-auto: update
-      database-platform: org.hibernate.dialect.MySQL5Dialect
+      database-platform: org.hibernate.dialect.H2Dialect
+   activemq:
+      packages:
+         # ideally this would be something more precise, see comment in
+         # SettlementJmsListenerTest.testSettleOneAgreementProto()
+         trusted: com.google.protobuf,org.galatea.starter.entrypoint.messagecontracts
 
 mvc:
    settleMissionPath: /settlementEngine
