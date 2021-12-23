@@ -1,7 +1,7 @@
 name: Deploy and Integration Test
 
 on:
-  workflow-call:
+  workflow_call:
     secrets:
       IBM_CLOUD_API_KEY:
         required: true
@@ -11,6 +11,7 @@ on:
         required: true
       IBM_CLOUD_CF_SPACE:
         required: true
+
 jobs:
   build-deploy-and-test:
     name: Build, Deploy, and Test
