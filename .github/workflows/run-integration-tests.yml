@@ -22,7 +22,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build artifact
         run: mvn package -DskipTests
-      # - name: Update manifest file (env.GIT_COMMIT)
+      # - name: Update manifest file (env.GIT_COMMIT) 
       - name: Deploy
         uses: IBM/cloudfoundry-deploy@v2.1
         with:
@@ -35,4 +35,6 @@ jobs:
         run: mvn verify -Dskip.surefire.tests -Dfuse.sandbox.url=http://fuse-rest-dev-gitcommit.us-east.mybluemix.net
       - name: Run performance tests
         run: echo "performance tests are not yet implemented"
-      # - name: Shutdown
+      - name: Shutdown
+        if: ${{ always() }} # shutdown the cf instance whether or not testing succeeded
+        run: ibmcloud cf stop fuse-rest-dev-GIT_COMMIT
