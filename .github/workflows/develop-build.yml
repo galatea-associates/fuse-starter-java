@@ -1,14 +1,11 @@
-name: PR Build
+name: Develop Build
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - develop
+      - main
 jobs:
-  build:
-    uses: galatea-associates/fuse-starter-java/.github/workflows/build.yml@5eb53e5072ab55ea8892751325400cddb54c452a
-    with:
-      secrets:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   integration-tests:
     uses: galatea-associates/fuse-starter-java/.github/workflows/run-integration-tests.yml@5eb53e5072ab55ea8892751325400cddb54c452a
     with:

@@ -4,4 +4,7 @@ on:
   push
 jobs:
   build:
-    uses: galatea-associates/fuse-starter-java/.github/workflows/build.yml@46e5d70fd988169772dfafd2c59d920c5aced0cb
+    uses: galatea-associates/fuse-starter-java/.github/workflows/build.yml@5eb53e5072ab55ea8892751325400cddb54c452a
+    with:
+      secrets:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
