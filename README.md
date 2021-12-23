@@ -162,6 +162,7 @@ For a detailed list of annotations check (https://lightrun.com/java/the-complete
     - A bean is an object that is instantiated, assembled, and otherwise managed by a Spring IoC container. A bean defines its dependencies in a config class without creating them. This object (bean) delegates the job of constructing such dependencies to an IoC container.
     - It is a method-level annotation. It is an alternative of XML <bean> tag. It tells the method to produce a bean to be managed by Spring Container.
     - When defining a bean, and its dependencies, a better practice is to take advantage of stereotype annotations when possible
+    - https://www.baeldung.com/spring-bean
   - @Configuration:
     - Mark a configuration class that declares one or more @Bean methods
   - @ComponentScan:
