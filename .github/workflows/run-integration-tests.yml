@@ -37,6 +37,7 @@ jobs:
         run: echo "performance tests are not yet implemented"
       - name: Shutdown
         if: ${{ always() }} # shutdown the cf instance whether or not testing succeeded
-        run: ibmcloud cf stop fuse-rest-dev-GIT_COMMIT
+        run: |
+          ibmcloud cf stop fuse-rest-dev-GIT_COMMIT
           ibmcloud cf delete fuse-rest-dev-GIT_COMMIT -r -f
-          ibmcloud cf logout 
+          ibmcloud cf logout
