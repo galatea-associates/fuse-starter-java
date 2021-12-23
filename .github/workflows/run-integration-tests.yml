@@ -21,7 +21,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build artifact
-        run: mvn package -DskipTests # how do we make the artifact available later?
+        run: mvn package -DskipTests
       # - name: Update manifest file (env.GIT_COMMIT)
       - name: Deploy
         uses: IBM/cloudfoundry-deploy@v2.1
@@ -31,8 +31,8 @@ jobs:
           IBM_CLOUD_CF_ORG: ${{ secrets.IBM_CLOUD_CF_ORG }}
           IBM_CLOUD_CF_SPACE: ${{ secrets.IBM_CLOUD_CF_SPACE }}
           APP_MANIFEST_FILE: manifest-integration-tests.yml
-      # - name: Run integration tests
-      # - name: Run performance tests
+      - name: Run integration tests
+        run: mvn verify -Dskip.surefire.tests -Dfuse.sandbox.url=http://fuse-rest-dev-gitcommit.us-east.mybluemix.net
+      - name: Run performance tests
+        echo "performance tests are not yet implemented"
       # - name: Shutdown
-
-# why isn't git acknowledging changes here?
