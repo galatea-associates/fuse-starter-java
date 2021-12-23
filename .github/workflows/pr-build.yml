@@ -9,7 +9,7 @@ jobs:
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   integration-tests:
-    uses: galatea-associates/fuse-starter-java/.github/workflows/run-integration-tests.yml@de09277d9bd4cd62123b81cf8965d9837ff1004f
+    uses: galatea-associates/fuse-starter-java/.github/workflows/run-integration-tests.yml@a1a0aaf463ffc9daa4773b6e42a27b5cb7d582bb
     secrets:
       IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
       IBM_CLOUD_CF_API: ${{ secrets.IBM_CLOUD_CF_API }}
