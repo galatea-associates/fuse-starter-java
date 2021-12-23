@@ -335,8 +335,16 @@
 			<groupId>com.googlecode.junit-toolbox</groupId>
 			<artifactId>junit-toolbox</artifactId>
 			<version>2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- avoid needing to upgrade all tests to junit 5 immediately -->
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<extensions>
 			<extension>
