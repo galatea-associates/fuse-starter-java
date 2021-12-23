@@ -7,10 +7,9 @@ on:
       - main
 jobs:
   integration-tests:
-    uses: galatea-associates/fuse-starter-java/.github/workflows/run-integration-tests.yml@5eb53e5072ab55ea8892751325400cddb54c452a
-    with:
-      secrets:
-        IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
-        IBM_CLOUD_CF_API: ${{ secrets.IBM_CLOUD_CF_API }}
-        IBM_CLOUD_CF_ORG: ${{ secrets.IBM_CLOUD_CF_ORG }}
-        IBM_CLOUD_CF_SPACE: ${{ secrets.IBM_CLOUD_CF_SPACE }}
+    uses: galatea-associates/fuse-starter-java/.github/workflows/run-integration-tests.yml@de09277d9bd4cd62123b81cf8965d9837ff1004f
+    secrets:
+      IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+      IBM_CLOUD_CF_API: ${{ secrets.IBM_CLOUD_CF_API }}
+      IBM_CLOUD_CF_ORG: ${{ secrets.IBM_CLOUD_CF_ORG }}
+      IBM_CLOUD_CF_SPACE: ${{ secrets.IBM_CLOUD_CF_SPACE }}
