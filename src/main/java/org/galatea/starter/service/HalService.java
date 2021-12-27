@@ -21,7 +21,7 @@ public class HalService {
   private WitAiService witAiService;
 
   @NonNull
-  private WorldTimeService worldTimeService;
+  private TimeService timeService;
 
   private static final String IM_SORRY_DAVE = "I'm sorry Dave, I'm afraid I can't do that.";
 
@@ -96,7 +96,7 @@ public class HalService {
     // The timezone (eg. America/New_York) is contained in the location data from wit.ai. Look up
     // the current time for that timezone.
     String currentTimeForTimezone =
-        worldTimeService.getCurrentTimeForTimezone(witAiResolvedEntityWrapper.getTimezone());
+        timeService.getCurrentTimeForTimezone(witAiResolvedEntityWrapper.getTimezone());
 
     // Format the response
     return "It is currently " + currentTimeForTimezone + " in " + topEntity.getBody();

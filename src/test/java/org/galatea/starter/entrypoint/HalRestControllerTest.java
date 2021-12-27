@@ -1,5 +1,6 @@
 package org.galatea.starter.entrypoint;
 
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,7 +55,8 @@ public class HalRestControllerTest extends ASpringTest {
                 .get("/hal?text=Time in New York")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
-        .andExpect(content().string("It is currently Tue, Dec 21 2021 4:27 PM in New York"))
+        .andExpect(content().string(matchesPattern(
+            "It is currently [A-Z][a-z][a-z], [A-Z][a-z][a-z] \\d+ \\d+ \\d+:\\d+ (AM|PM) in New York")))
         .andReturn();
   }
 

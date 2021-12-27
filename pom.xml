@@ -135,7 +135,7 @@
 			<artifactId>springfox-swagger2</artifactId>
 			<version>2.9.2</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
@@ -342,6 +342,15 @@
 			<version>1.0.5</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.hamcrest/java-hamcrest -->
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>java-hamcrest</artifactId>
+			<version>2.0.0.0</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Allows us to run test suites that include/exclude junit categories -->
 		<dependency>
 			<groupId>com.googlecode.junit-toolbox</groupId>
@@ -389,7 +398,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<excludedGroups>org.galatea.starter.IntegrationTestCategory</excludedGroups>
-					<!-- skips surefire tests without skipping failsafe tests. Property 
+					<!-- skips surefire tests without skipping failsafe tests. Property
 						value seems to magically default to false -->
 					<!-- See https://stackoverflow.com/questions/6612344/prevent-unit-tests-in-maven-but-allow-integration-tests -->
 					<skipTests>${skip.surefire.tests}</skipTests>
