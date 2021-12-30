@@ -43,9 +43,8 @@ public class HalRestControllerTest extends ASpringTest {
   private MockMvc mvc;
 
   /*
-    Note that we were are testing the fuse REST end points here, not the wit.ai or world time api
-    end points. The fuse end point in turn calls the wit.ai and world time apiend points, which are
-    both WireMocked for this test.
+    Note that we were are testing the fuse REST end points here, not the wit.ai api endpoints.
+    The fuse end point in turn calls the wit.ai endpoint, which is WireMocked for this test.
    */
 
   @Test
@@ -72,7 +71,39 @@ public class HalRestControllerTest extends ASpringTest {
     List<String> expected = Arrays.asList("Heads", "Tails");
 
     Assert.assertTrue(expected.contains(result.getResponse().getContentAsString()));
+  }
 
+  @Test
+  public void testHalEndpointWithEmptyIntentsResponseFromWitAi() throws Exception {
+    MvcResult result = this.mvc.perform(
+            MockMvcRequestBuilders
+                .get("/hal?text=empty intents")
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andExpect(content().string("I'm sorry Dave, I'm afraid I can't do that."))
+        .andReturn();
+  }
+
+  @Test
+  public void testHalEndpointWithNonHandledIntent() throws Exception {
+    MvcResult result = this.mvc.perform(
+            MockMvcRequestBuilders
+                .get("/hal?text=non handled intent")
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andExpect(content().string("I'm sorry Dave, I'm afraid I can't do that."))
+        .andReturn();
+  }
+
+  @Test
+  public void testHalEndpointDerp() throws Exception {
+    MvcResult result = this.mvc.perform(
+            MockMvcRequestBuilders
+                .get("/hal?text=derp")
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andExpect(content().string("derp!"))
+        .andReturn();
   }
 
 }

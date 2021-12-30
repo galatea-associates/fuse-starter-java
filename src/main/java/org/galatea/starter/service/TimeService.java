@@ -20,12 +20,13 @@ public class TimeService {
       DateTimeFormatter.ofPattern("EEE, MMM dd yyyy h:mm a");
 
   /**
-   * Get the current time for the given timezone from the World Time API (see WorldTimeClient).
+   * Get the current time for the given timezone using java.time.ZonedDateTime.
    *
    * @param timezone the timezone to return the current time for.
    * @return A string of the current time (see DATE_TIME_FORMATTER field for format).
    */
-  public String getCurrentTimeForTimezone(final String timezone) {
+  public String getCurrentTimeStringForTimezone(final String timezone) {
+    // Assuming this JVM is running in the America/New_York timezone.
     ZonedDateTime zonedNewYork = LocalDateTime.now().atZone(ZoneId.of("America/New_York"));
     return zonedNewYork.withZoneSameInstant(ZoneId.of(timezone)).format(DATE_TIME_FORMATTER);
   }

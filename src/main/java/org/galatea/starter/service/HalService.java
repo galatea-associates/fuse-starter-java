@@ -96,7 +96,7 @@ public class HalService {
     // The timezone (eg. America/New_York) is contained in the location data from wit.ai. Look up
     // the current time for that timezone.
     String currentTimeForTimezone =
-        timeService.getCurrentTimeForTimezone(witAiResolvedEntityWrapper.getTimezone());
+        timeService.getCurrentTimeStringForTimezone(witAiResolvedEntityWrapper.getTimezone());
 
     // Format the response
     return "It is currently " + currentTimeForTimezone + " in " + topEntity.getBody();
