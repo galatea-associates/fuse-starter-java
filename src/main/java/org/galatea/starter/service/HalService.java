@@ -1,14 +1,21 @@
 package org.galatea.starter.service;
 
+import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.aspect4log.Log;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.galatea.starter.domain.HalData;
 import org.galatea.starter.domain.WitAiEntity;
 import org.galatea.starter.domain.WitAiResolvedEntity;
 import org.galatea.starter.domain.WitAiResponse;
+import org.galatea.starter.domain.rpsy.IHalRepository;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -22,6 +29,9 @@ public class HalService {
 
   @NonNull
   private TimeService timeService;
+
+  @NonNull
+  private IHalRepository halRepository;
 
   private static final String IM_SORRY_DAVE = "I'm sorry Dave, I'm afraid I can't do that.";
 
@@ -67,12 +77,88 @@ public class HalService {
         return coinFlip();
       case "derp":
         return getDerp();
+
+      case "lessonLearned":
+        return recordLessonLearned(witAiResponse);
+
+      case "showLessonsLearned":
+        return queryLessonsLearned(witAiResponse);
+
+//      case "metWith":
+//        return recordMeeting();
+//      case "showMeetings":
+//        return queryMeetings();
+
       default:
         // Wit.ai was able to determine intents, but we do not have handling for the given intent.
         log.warn("Intent [{}] returned from wit.ai, but we don't have any handling for it", name);
         return IM_SORRY_DAVE;
     }
   }
+
+  private String recordLessonLearned(final WitAiResponse witAiResponse) {
+    // TODO handle for when there is no entity identified
+    List<WitAiEntity> topicEntities =
+        witAiService.getEntitiesForEntityType(witAiResponse, "topic:topic");
+
+    List<String> topicStrings =
+        topicEntities.stream().map(WitAiEntity::getBody)
+            .map(String::toLowerCase)
+            .collect(Collectors.toList());
+
+    HalData halData = HalData.builder()
+        .user("cebbs") // TODO should pull from Slack integration on who triggered the /hal command
+        .intent("lessonLearned")
+        .entities(topicStrings)
+        // TODO uncomment, requires serializing map as a json clob
+//        .traits(witAiResponse.getTraits())
+        .data(witAiResponse.getText())
+        .build();
+
+    halRepository.save(halData);
+
+    return "Recorded lesson learned with tag(s): " + StringUtils.join(topicStrings, ',');
+
+  }
+
+  private String queryLessonsLearned(final WitAiResponse witAiResponse) {
+
+    List<WitAiEntity> topicEntities =
+        witAiService.getEntitiesForEntityType(witAiResponse, "topic:topic");
+
+    // Show me my lessons ( do we want to limit all responses to what the same user recorded? )
+    // Show me all lessons ( see question above)
+    // Show me lessons learned about spring
+
+    ArrayList<HalData> allHalData =
+        Lists.newArrayList(halRepository.findAllByIntent("lessonLearned"));
+
+    if (CollectionUtils.isEmpty(topicEntities)) {
+      return allHalData.toString();
+    } else {
+      return allHalData.stream()
+          .filter(hd -> listContainsOneOf(hd.getEntities(), topicEntities))
+          .collect(Collectors.toList()).toString();
+    }
+  }
+
+  // TODO make generic
+  private boolean listContainsOneOf(List<String> entities, List<WitAiEntity> topicEntities) {
+    for (WitAiEntity entity : topicEntities) {
+      if (entities.contains(entity.getBody().toLowerCase())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+//  private String recordMeeting() {
+//  }
+//
+//  private String queryMeetings() {
+//  }
+
 
   /**
    * Get the current time for a given location (contained in the wit.ai response).

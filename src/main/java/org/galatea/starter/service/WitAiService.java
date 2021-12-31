@@ -47,9 +47,21 @@ public class WitAiService {
    */
   public WitAiEntity getTopEntityForEntityType(final WitAiResponse witAiResponse,
       final String entityType) {
+    return getEntitiesForEntityType(witAiResponse, entityType).get(0);
+  }
+
+  /**
+   * Get all of the entities for the given entity type from a WitAiResponse.
+   *
+   * @param witAiResponse the response from wit.ai to retrieve the top entity from.
+   * @param entityType the type of entity to return the top entity of (eg.
+   *     wit$location:location)
+   * @return a List of WitAiEntity which our wit.ai app has some degree of certainty of.
+   */
+  public List<WitAiEntity> getEntitiesForEntityType(final WitAiResponse witAiResponse,
+      final String entityType) {
     Map<String, List<WitAiEntity>> entities = witAiResponse.getEntities();
-    List<WitAiEntity> witAiQueryEntities = entities.get(entityType);
-    return witAiQueryEntities.get(0);
+    return entities.get(entityType);
   }
 
   /**

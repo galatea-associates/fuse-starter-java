@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class WitAiTrait {
 
-  private Long id;
+  private String id;
   private String value;
   private BigDecimal confidence;
 
