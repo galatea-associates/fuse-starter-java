@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.domain.TradeAgreement;
+import org.galatea.starter.entrypoint.messagecontracts.ProtobufMessages.TradeAgreementProtoMessage;
 import org.galatea.starter.entrypoint.messagecontracts.TradeAgreementMessage;
 import org.galatea.starter.service.SettlementService;
 import org.galatea.starter.utils.translation.ITranslator;
@@ -21,7 +22,7 @@ public class SettlementJmsListener {
   protected SettlementService settlementService;
 
   @NonNull
-  protected ITranslator<byte[], TradeAgreement> tradeAgreementProtoTranslator;
+  protected ITranslator<TradeAgreementProtoMessage, TradeAgreement> tradeAgreementProtoTranslator;
 
   @NonNull
   protected ITranslator<TradeAgreementMessage, TradeAgreement> tradeAgreementMessageTranslator;
@@ -44,7 +45,7 @@ public class SettlementJmsListener {
    */
   @JmsListener(destination = "${jms.agreement-queue-proto}",
       concurrency = "${jms.listener-concurrency}")
-  public void settleAgreementProto(final byte[] message) {
+  public void settleAgreementProto(final TradeAgreementProtoMessage message) {
     log.info("Received message. Translating.");
     TradeAgreement agreement = tradeAgreementProtoTranslator.translate(message);
 

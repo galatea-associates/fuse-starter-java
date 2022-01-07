@@ -1,0 +1,53 @@
+name: Deploy and Integration Test
+
+on:
+  workflow_call:
+    secrets:
+      IBM_CLOUD_API_KEY:
+        required: true
+      IBM_CLOUD_CF_API:
+        required: true
+      IBM_CLOUD_CF_ORG:
+        required: true
+      IBM_CLOUD_CF_SPACE:
+        required: true
+
+jobs:
+  build-deploy-and-test:
+    name: Build, Deploy, and Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build artifact
+        run: mvn package -DskipTests
+      # - name: Update manifest file (env.GIT_COMMIT)
+      - name: Deploy
+        uses: IBM/cloudfoundry-deploy@v2.1
+        with:
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+          IBM_CLOUD_CF_API: ${{ secrets.IBM_CLOUD_CF_API }}
+          IBM_CLOUD_CF_ORG: ${{ secrets.IBM_CLOUD_CF_ORG }}
+          IBM_CLOUD_CF_SPACE: ${{ secrets.IBM_CLOUD_CF_SPACE }}
+          APP_MANIFEST_FILE: manifest-integration-tests.yml
+      - name: Run integration tests
+        run: mvn verify -Dskip.surefire.tests -Dfuse.sandbox.url=http://fuse-rest-dev-gitcommit.us-east.mybluemix.net
+      - name: Run performance tests
+        run: echo "performance tests are not yet implemented"
+      - name: Shutdown
+        if: ${{ always() }} # shutdown the cf instance whether or not testing succeeded
+        run: |
+          ibmcloud cf stop fuse-rest-dev-GIT_COMMIT
+          ibmcloud cf delete fuse-rest-dev-GIT_COMMIT -r -f
+          ibmcloud logout

@@ -1,5 +1,6 @@
 package org.galatea.starter;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 import javax.jms.ConnectionFactory;
 import javax.jms.Message;
@@ -13,8 +14,10 @@ import org.springframework.jms.annotation.JmsListenerConfigurer;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerEndpointRegistrar;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
+import org.springframework.messaging.converter.CompositeMessageConverter;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
+import org.springframework.messaging.converter.ProtobufMessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 
@@ -37,7 +40,8 @@ public class JmsConfig implements JmsListenerConfigurer {
    */
   @Bean
   public MessageConverter jacksonJmsMessageConverter() {
-    return new MappingJackson2MessageConverter();
+    return new CompositeMessageConverter(
+        List.of(new MappingJackson2MessageConverter(), new ProtobufMessageConverter()));
   }
 
   /**

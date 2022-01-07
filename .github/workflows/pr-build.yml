@@ -1,0 +1,17 @@
+name: PR Build
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    uses: galatea-associates/fuse-starter-java/.github/workflows/build.yml@5eb53e5072ab55ea8892751325400cddb54c452a
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  integration-tests:
+    uses: galatea-associates/fuse-starter-java/.github/workflows/run-integration-tests.yml@a1a0aaf463ffc9daa4773b6e42a27b5cb7d582bb
+    secrets:
+      IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+      IBM_CLOUD_CF_API: ${{ secrets.IBM_CLOUD_CF_API }}
+      IBM_CLOUD_CF_ORG: ${{ secrets.IBM_CLOUD_CF_ORG }}
+      IBM_CLOUD_CF_SPACE: ${{ secrets.IBM_CLOUD_CF_SPACE }}

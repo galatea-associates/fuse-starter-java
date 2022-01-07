@@ -21,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Slf4j
 @Category(org.galatea.starter.IntegrationTestCategory.class)
 @SpringBootTest
-@Ignore
 public class HalRestControllerIntegrationTest extends ASpringTest {
 
   @Value("${fuse-host.url}")
@@ -35,7 +34,7 @@ public class HalRestControllerIntegrationTest extends ASpringTest {
     }
 
     FuseServer fuseServer =
-        Feign.builder().decoder(new JacksonDecoder()).encoder(new JacksonEncoder())
+        Feign.builder().encoder(new JacksonEncoder())
             .target(FuseServer.class, fuseHostName);
 
     String halResponse = fuseServer.halEndpoint("coin-flip");
@@ -52,7 +51,7 @@ public class HalRestControllerIntegrationTest extends ASpringTest {
     }
 
     FuseServer fuseServer =
-        Feign.builder().decoder(new JacksonDecoder()).encoder(new JacksonEncoder())
+        Feign.builder().encoder(new JacksonEncoder())
             .target(FuseServer.class, fuseHostName);
 
     String expResult = "derp!";

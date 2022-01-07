@@ -35,9 +35,7 @@ import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 @RequiredArgsConstructor
 @Slf4j
 @Category(org.galatea.starter.IntegrationTestCategory.class)
-@Ignore
 public class SettlementRestControllerIntegrationTest {
-
 
   @Value("${fuse-host.url}")
   private String FuseHostName;

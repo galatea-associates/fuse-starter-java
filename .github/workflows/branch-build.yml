@@ -1,0 +1,9 @@
+name: Branch Build
+
+on:
+  push
+jobs:
+  build:
+    uses: galatea-associates/fuse-starter-java/.github/workflows/build.yml@5eb53e5072ab55ea8892751325400cddb54c452a
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
