@@ -34,6 +34,6 @@ public class HalRestController extends BaseRestController {
       @RequestParam(value = "text") final String text,
       @RequestParam(value = "requestId", required = false) final String requestId) {
     processRequestId(requestId);
-    return halService.processText(text);
+    return halService.queryForMeaningAndProcessText(text);
   }
 }

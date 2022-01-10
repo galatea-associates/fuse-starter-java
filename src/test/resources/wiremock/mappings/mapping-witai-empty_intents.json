@@ -1,0 +1,40 @@
+{
+  "id": "60e9370f-dd80-4a3b-b03e-9ac308ac62e1",
+  "name": "wit_ai-empty_intents",
+  "request": {
+    "url": "/message?v=20211220&q=empty+intents",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "text": "empty intents",
+      "intents": [],
+      "entities": {},
+      "traits": {}
+    },
+    "headers": {
+      "Content-Encoding": "br",
+      "ETag": "\"608e715396bb0fee41625a6da2ed0e7ddb697bbc\"",
+      "Content-Type": "application/json; charset=UTF-8",
+      "Vary": "Origin",
+      "Vary": "Accept-Encoding",
+      "wit-api-version": "v1.0",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; preload; includeSubDomains",
+      "Pragma": "no-cache",
+      "Cache-Control": "private, no-cache, no-store, must-revalidate",
+      "Expires": "Sat, 01 Jan 2000 00:00:00 GMT",
+      "x-fb-request-id": "AOM7qg7JeiodPB786RA5BR5",
+      "x-fb-trace-id": "Fz1kIIzMplP",
+      "x-fb-rev": "1004892108",
+      "X-FB-Debug": "AfHfSq35a6ZlZBUCffgWL6r1Ys9TvxNdLFJChX7JGiYSyuQel9fqDdduVBKAfLOjXbFxNdwCd1U8hWNeAY2fug==",
+      "Date": "Tue, 21 Dec 2021 15:55:55 GMT",
+      "Connection": "keep-alive",
+      "Content-Length": "221"
+    }
+  },
+  "uuid": "60e9370f-dd80-4a3b-b03e-9ac308ac62e1",
+  "persistent": true,
+  "insertionIndex": 4
+}
