@@ -227,13 +227,17 @@ The build process is handled via a [Jenkins pipeline build](https://jenkins.io/d
 We currently don't have a recommendation for how to handle this in TeamCity and would love someone who is familiar with TeamCity to recommend an equivalent model.
 
 ## Application and Thread Monitoring
-In order to view the status of a running FUSE application you can use [VisualVM](https://visualvm.github.io/index.html). Downloads and installation instructions are available at <https://visualvm.github.io/download.html>.
-Basic Instructions
-* Download zip file from the location mentioned above and extract the contents.
-* In the unzipped files find and run `visualvm_206/bin/visualvm.exe`
-    - If the following error appears "Cannot find Java 1.8 or higher" you will need to specify the location of the jdk to use.
-    - example: `./visualvm.exe --jdkhome "C:/Program Files/Java/jdk-11"`
-* Once VisualVM is running, if FUSE is also running locally on the same machine, there should be an application with a name similar to the following "org.galatea.starter.Application (pid XXXXX)"
+In order to view the status of a running FUSE application you can use [VisualVM](https://visualvm.github.io/index.html). Here are set up instructions:
+- Download VisualVM - Standalone version.  https://visualvm.github.io/
+- Unzip the archive. We recommend putting it in C:\Program Files\visualvm. It should create a folder called "visualvm_211"
+- Add VisualVM Launcher as a plugin on IntelliJ
+    - Navigate to File -> Settings -> Plugins. Search for VisualVM launcher and download. Click OK to save changes and restart IDE.
+    - Navigate to File -> Settings -> VisualVMLauncher (left hand menu).
+        - Add executable location. Following the instructions above, it should be C:\Program Files\visualvm\visualvm_211\bin. 
+        - Add JDK home location. Following the java home set up instructions above, it should be C:\Program Files\Java\jdk-11. Note: VisualVM 2.1.1 is compatible with OpenJDK 8-17
+        - Click OK to save changes.
+- Run tests and launch Visual VM tool. The should be two new orange icons to the left of Debug: "Run with Visual VM" and "Debug with Visual VM". Click on one of them to run tests and launch Visual VM.
+- Once VisualVM is running, if FUSE is also running locally on the same machine, there should be an application with a name similar to the following "org.galatea.starter.Application (pid XXXXX)"
     - If the fuse application does not automatically appear you can connect to it manually by going to File -> Add JMX Connection and entering the host and port of the Fuse instance's JMX server
     - To find the JMX server port for your FUSE instance you can search through the log to find a line similar to the following `INFO  o.a.a.b.j.ManagementContext - JMX consoles can connect to service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi`
 
