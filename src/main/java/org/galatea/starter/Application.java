@@ -1,5 +1,6 @@
 package org.galatea.starter;
 
+import java.net.InetAddress;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.galatea.starter.utils.exception.MissingOptionException;
@@ -25,7 +26,10 @@ public class Application implements ApplicationRunner {
   public static void main(final String[] args) {
     log.info("Starting spring application {}", System.getProperty("application.name"));
     SpringApplication.run(Application.class, args);
-
+    String a = args[1];
+    log.info("Started successfully, you can view swagger UI here: {}:{}/",
+        InetAddress.getLoopbackAddress().getHostName(),
+        a.substring(14,18));
   }
 
   /**
