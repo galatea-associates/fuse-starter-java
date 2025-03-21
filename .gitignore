@@ -1,5 +1,163 @@
-/target/
-.idea/*
-!.idea/runConfigurations
+*.class
+target/
+build/
+out/
+bin/
+dist/
+
+# Package files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+# Include necessary libs
+!/lib/blpapi-3.25.2-1.jar
+
+# Maven specific
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle specific
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Node.js specific
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.pnp/
+.pnp.js
+coverage/
+.next/
+.DS_Store
+*.pem
+
+# IDE specific files
+# IntelliJ IDEA
+.idea/
+*.iws
 *.iml
-logs/*
+*.ipr
+.idea_modules/
+
+# Eclipse
+.classpath
+.project
+.settings/
+tmp/
+.metadata
+.loadpath
+.recommenders
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+.history/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.*
+!.env.example
+!.env.sample
+secrets.yaml
+secrets.yml
+*.key
+*.p12
+*.pfx
+
+# Testing
+.nyc_output/
+cypress/videos/
+cypress/screenshots/
+
+# Docker
+.docker/data/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+override.tf
+override.tf.json
+.terraformrc
+terraform.rc
+
+# Kubernetes
+kubeconfig
+
+# OS specific
+# macOS
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Application specific
+# Temporary files
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Build artifacts
+src/web/build/
+src/web/dist/
+src/backend/*/build/
+
+# Generated files
+generated/
+*.generated.*
+
+# Cache directories
+.cache/
+.parcel-cache/
+.npm/
+.eslintcache
+.stylelintcache
+
+# Miscellaneous
+*.pyc
+.atom/
+.buildlog/
+.history
+.svn/
